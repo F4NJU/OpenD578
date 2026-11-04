@@ -1,0 +1,22 @@
+{
+  "firmware_sha256": "02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a",
+  "instructions": 110200000,
+  "stop": {
+    "kind": "stopped by simulator user",
+    "pc": "0x0808AA60",
+    "step": 110200000
+  },
+  "initial_inputs": [
+    "P4",
+    "DIAL_PUSH"
+  ],
+  "normal_application_observed": true,
+  "test_mode_text_observed": false,
+  "test_mode_render_path_observed": false,
+  "buttons_released_after_normal_screen": true,
+  "mode_permission_flags_determined": false,
+  "physical_radio_accessed": false,
+  "original_calibration_values_in_public_report": false,
+  "calibration_table_present": true,
+  "source": "OEM instruction execution with external button stimuli and text-render observations"
+}

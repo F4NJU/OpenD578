@@ -1,0 +1,25 @@
+[
+  {
+    "after_instructions": 5500000,
+    "command": {
+      "control": "MIC_CONNECT",
+      "connected": true
+    }
+  },
+  {
+    "after_instructions": 5600000,
+    "command": {
+      "control": "MIC_KEYS",
+      "keys": [
+        "PTT"
+      ]
+    }
+  },
+  {
+    "after_instructions": 7500000,
+    "command": {
+      "control": "MIC_KEYS",
+      "keys": []
+    }
+  }
+]

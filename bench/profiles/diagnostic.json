@@ -1,0 +1,6 @@
+{
+  "kind": "synthetic",
+  "name": "Diagnostic par canal, valeurs distinctes sans signification physique",
+  "repeat": true,
+  "channels": {"6": 262, "8": 520, "9": 777, "10": 1034, "11": 1291, "12": 1548, "15": 1807}
+}

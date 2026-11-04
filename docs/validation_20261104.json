@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-04",
+  "host": "Linux x86_64",
+  "unit_tests": 125,
+  "unit_test_status": "passed",
+  "contract_probe": {
+    "instructions": 12000,
+    "stop": {
+      "kind": "instruction_budget",
+      "step": 12000,
+      "pc": "0x8007e66",
+      "category": "control"
+    },
+    "image": {
+      "load_address": "0x8006000",
+      "bytes": 7784,
+      "sha256": "3a9d6d05071e5999da4143d7e2dfd7e9e428165d0ed0c620c087cede7d1b6a60",
+      "initial_stack": "0x20017df0",
+      "reset_vector": "0x8006201",
+      "OEM_reference_required": false
+    },
+    "LCD_pixels": 2,
+    "minimum_SP": "0x20017df0",
+    "OEM_PC_hooks": false,
+    "OEM_RAM_observers": false,
+    "radio_frames": [
+      {
+        "step": 1215,
+        "bank": 0,
+        "page": 0,
+        "register": 68,
+        "direction": "write",
+        "value": 4660,
+        "source": "OEM GPIO bits"
+      },
+      {
+        "step": 1709,
+        "bank": 0,
+        "page": 0,
+        "register": 12,
+        "direction": "read",
+        "value": 2,
+        "source": "explicit synthetic receiver/decoder status input"
+      },
+      {
+        "step": 2203,
+        "bank": 0,
+        "page": 0,
+        "register": 96,
+        "direction": "read",
+        "value": 3072,
+        "source": "explicit synthetic receiver/decoder status input"
+      }
+    ],
+    "SRAM_watch": [
+      {
+        "start": "0x20017e00",
+        "size": 512,
+        "CPU_reads": 0,
+        "CPU_writes": 36,
+        "model_writes": 0,
+        "bytes_read": 0,
+        "bytes_written": 144
+      }
+    ]
+  },
+  "physical_radio_tested": false,
+  "usable_radio_firmware_available": false,
+  "first_version_target": [
+    "simple VFO",
+    "PC read/write of analog memories",
+    "retained radio-specific calibration",
+    "FM RX/TX",
+    "CTCSS RX/TX",
+    "APRS TX"
+  ],
+  "second_stage": [
+    "APRS RX",
+    "DMR hotspot operation"
+  ],
+  "legacy_input_resolver": {
+    "version": "V11.1",
+    "unit_tests_added": 10,
+    "extracted_route_replayed": true,
+    "empty_initial_cache": true,
+    "original_archives_required": false,
+    "source_files_unchanged": true,
+    "replay_instructions": 100000,
+    "physical_radio_certified": false
+  },
+  "web_launcher": {
+    "rejects_old_version": true,
+    "rejects_stale_build": true,
+    "keeps_other_servers_running": true,
+    "release_folder": "D578_BANC_WEB_V11_1"
+  }
+}

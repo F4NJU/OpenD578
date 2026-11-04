@@ -1,0 +1,6 @@
+{
+  "kind": "synthetic",
+  "name": "Facade au repos, touches relachees, alimentation et volumes synthetiques",
+  "repeat": true,
+  "channels": {"6": 262, "8": 4095, "9": 4095, "10": 1034, "11": 2600, "12": 1800, "15": 1800}
+}
