@@ -68,15 +68,17 @@ STORIES = (
         'bench': "bien séparer le câblage des touches et les fonctions qui leur sont attribuées dans le CPS.",
     },
     {
+        # Keep the existing anchor so published links to #reset still work.
         'id': 'reset',
-        'kind': 'Proposition à vérifier',
-        'title': 'Schéma de remise à zéro : statut non testé',
+        'kind': 'Accès au débogage',
+        'title': 'Accès à NRST du GD32F303 : récupération SWD',
         'images': ('RAZ-ANYTONE.png',),
         'docs': (),
         'paragraphs': (
-            "Guy proposait ce schéma de remise à zéro, en précisant qu'il ne l'avait pas essayé. Nous le conservons pour mémoire, sans conseiller de le reproduire tel quel.",
+            "Sous le nom historique RAZ-ANYTONE, ce schéma concerne l'accès à la broche NRST du microcontrôleur GD32F303. La broche permet bien de réinitialiser le processeur, mais l'intérêt pour nos essais n'est pas d'ajouter un bouton de remise à zéro au poste.",
+            "En cas de firmware défectueux qui empêche le démarrage ou perturbe l'accès au débogage, NRST pourrait permettre de connecter une sonde SWD en maintenant le microcontrôleur sous reset (connect under reset). Le raccordement proposé doit être vérifié sur la carte avant toute intervention.",
         ),
-        'bench': "garder ce dessin comme piste historique, mais utiliser le câblage réellement relevé pour émuler RESET.",
+        'bench': "prévoir une méthode de récupération d'un firmware bloqué par SWD. NRST seul ne suffit pas : il faut également SWDIO, SWCLK et GND, ainsi qu'une référence de tension selon la sonde. La récupération dépend aussi de l'état de l'interface de débogage et des protections du microcontrôleur.",
     },
     {
         'id': 'cps',
