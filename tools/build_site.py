@@ -118,6 +118,8 @@ def discover_docs():
 
 
 def category(rel:str):
+    if rel.startswith('docs/external/'):
+        return 'Sources externes et archives'
     if rel.startswith('docs/evidence/'):
         return 'Preuves et tracabilite'
     if rel.startswith('docs/peripherals/'):
@@ -138,7 +140,7 @@ def category(rel:str):
 
 
 def nav(dest:Path,active:str=''):
-    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('firmware.html','Firmware'),('photos.html','Photos'),('sources.html','Code source')]
+    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('sources.html','Code source')]
     out=['<nav class="nav" aria-label="Navigation">']
     for name,label in links:
         clazz=' class="active"' if name==active else ''

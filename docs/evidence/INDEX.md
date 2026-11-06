@@ -60,3 +60,7 @@ Les 100 broches `GD32F303VKT6` sont definis dans `hardware/pinmaps/GD32F303VKT6_
 - `qa-mapping-unknown` / `qa-tx-not-qualified`: les impossibilités actuelles sont conservées dans `CLAIMS.json`.
 
 Aucune capture RF authentifiée portant deux fréquences RX/TX n'a été intégrée. Les tests ne sont que numériques et sans émission.
+
+## Audit RadioFoundry ajouté le 6 novembre
+
+Le [registre d’affirmations RadioFoundry](../external/radiofoundry/AUDIT_AFFIRMATIONS.md) compare les données du D868, D878 et D578 à nos preuves OEM et physiques. Les [21 approfondissements DB1IG](../external/db1ig/approfondissements/INDEX.md) conservent les références aux analyses précédentes.

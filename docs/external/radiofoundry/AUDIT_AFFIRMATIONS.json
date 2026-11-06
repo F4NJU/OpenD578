@@ -1,0 +1,1292 @@
+[
+  {
+    "id": "RF-001",
+    "section": "1",
+    "sujet": "MCU de notre D578",
+    "apport": "GD32F303VKT6 présent sur les unités PRO et PLUS examinées",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Identité notée sur les deux cartes",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-002",
+    "section": "1",
+    "sujet": "Autres générations D578",
+    "apport": "Certaines séries tardives utilisent AT32F435/437 et requièrent une autre branche",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Ne pas changer la cible GD32 de l'utilisateur",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-003",
+    "section": "1",
+    "sujet": "MCU portables D868",
+    "apport": "Versions VET6/VGT6 et 64/96 Kio de SRAM selon révision",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas transposer au VKT6",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-004",
+    "section": "1",
+    "sujet": "MCU D878",
+    "apport": "GD32F303VGT6 documenté pour D878 classique",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "878UVII non identifié par la source",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-005",
+    "section": "1",
+    "sujet": "SCT3258 DMR",
+    "apport": "Baseband Sicomm présent, vocoder AMBE+2 intégré",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D578_OEM",
+    "commentaire": "Présent dans l'architecture DMR OEM",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-006",
+    "section": "1",
+    "sujet": "Codec",
+    "apport": "TLV320AIC3204 relié au SCT en audio numérique I2S",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "D578_OEM",
+    "commentaire": "Commandes de codec via SCT déjà modélisées",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-007",
+    "section": "1",
+    "sujet": "RF D578",
+    "apport": "Quatre QA4818N, deux oscillateurs locaux et deux récepteurs après FI",
+    "document_OpenD578": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Quatre boîtiers relevés, fonctions recoupées VK7ZJA",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-008",
+    "section": "1",
+    "sujet": "Référence QA",
+    "apport": "Oscillateur 26 MHz des étages QA4818N",
+    "document_OpenD578": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Quartz 26.00 observé",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-009",
+    "section": "1",
+    "sujet": "Radio portative RF",
+    "apport": "AT1846S sur les D868/D878, et non quatre QA comme D578",
+    "document_OpenD578": "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+    "statut": "FAMILLE",
+    "commentaire": "Différence de topologie",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-010",
+    "section": "1",
+    "sujet": "NAND D578",
+    "apport": "TC58CVG1S3HRAIG 2 Gbit externe",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Marquage et dump observés",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-011",
+    "section": "1",
+    "sujet": "NAND 868/878",
+    "apport": "1 Gbit sur générations 868/878, 2 Gbit sur 878UVII",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Ne pas généraliser les offsets",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-012",
+    "section": "1",
+    "sujet": "Récepteur FM broadcast",
+    "apport": "RDA5802N présent et piloté via le bus de commande",
+    "document_OpenD578": "docs/hardware/RDA5802N_RECEPTION_FM.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Présence relevée sur le PCB",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-013",
+    "section": "1",
+    "sujet": "PA VHF/UHF",
+    "apport": "Deux transistors AFT05MP075N",
+    "document_OpenD578": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Observation utilisateur des boîtiers",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-014",
+    "section": "1",
+    "sujet": "Amplification haut-parleur",
+    "apport": "La source cite des YD1517P; notre PRO a YD1517P et notre PLUS PA1517G",
+    "document_OpenD578": "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+    "statut": "DIFFERENCE_VERSION",
+    "commentaire": "Ne pas assimiler deux boîtiers à deux puces sans photo",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-015",
+    "section": "1",
+    "sujet": "GPS D578",
+    "apport": "Module ATGM336H reçu par notre utilisateur",
+    "document_OpenD578": "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+    "statut": "D578_PHYS",
+    "commentaire": "Génération familiale peut différer",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-016",
+    "section": "1",
+    "sujet": "Bluetooth",
+    "apport": "Cartes annexes et firmware Bluetooth/APRS selon variantes",
+    "document_OpenD578": "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+    "statut": "FAMILLE",
+    "commentaire": "Carte utilisateur marquée D868BT-SP; ne pas déduire BK3260 exact",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-017",
+    "section": "1",
+    "sujet": "Écran D578",
+    "apport": "Contrôleur déclaré non identifié par RadioFoundry, alors que notre banc décode le bus LCD",
+    "document_OpenD578": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+    "statut": "D578_OEM",
+    "commentaire": "Notre analyse complète ce manque de leur étude",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-018",
+    "section": "1",
+    "sujet": "Capteur accéléromètre",
+    "apport": "MMA8653FC à 0x1D trouvé par analyse du D868, non prouvé pour D578",
+    "document_OpenD578": "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas ajouter un accéléromètre fictif au D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-019",
+    "section": "2.1",
+    "sujet": "Boîtier SCT",
+    "apport": "SCT3258 annoncé en QFN64",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Spécification fabricant à recouper pour la variante physique",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-020",
+    "section": "2.1",
+    "sujet": "Tensions SCT",
+    "apport": "Coeur 1,2 V, I/O 2,5–3,3 V",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Aucune mesure de rail sur notre carte",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-021",
+    "section": "2.1",
+    "sujet": "Horloge SCT",
+    "apport": "Entrée 12,288 MHz et PLL interne montant à 110,592 MHz",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Ne pas confondre avec quartz GD32 12 MHz et QA 26 MHz",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-022",
+    "section": "2.1",
+    "sujet": "Port HPI",
+    "apport": "Bus parallèle asynchrone 8 bits, timings Intel ou Motorola",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D578_OEM",
+    "commentaire": "PD2–PD5, PD8–PD15 dans modèle D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-023",
+    "section": "2.1",
+    "sujet": "Strap de HPI",
+    "apport": "PIO1 au reset choisit le mode Intel quand à l'état bas",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Strap GPIO D578 non mesuré",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-024",
+    "section": "2.1",
+    "sujet": "HOBIB",
+    "apport": "Ligne de disponibilité FIFO/interrupt host",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D578_OEM",
+    "commentaire": "PD5 dans modèle D578, niveaux à conserver",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-025",
+    "section": "2.1",
+    "sujet": "FIFO SCT",
+    "apport": "Files internes décrites comme 64 mots",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Gérer overflow, backpressure et timeout",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-026",
+    "section": "2.1",
+    "sujet": "Audio numérique SCT",
+    "apport": "Port codec I2S 16 bits stéréo, 24 kHz selon datasheet",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Le codec est configuré via le baseband",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-027",
+    "section": "2.1",
+    "sujet": "Port vocoder supplémentaire",
+    "apport": "Un deuxième port série permet un vocoder externe",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Pas de vocoder externe séparé prouvé",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-028",
+    "section": "2.1",
+    "sujet": "Firmware SCT",
+    "apport": "UserFlash + images vocoder internes chargées séparément",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Ne pas confondre avec application GD32 ou NAND",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-029",
+    "section": "2.1",
+    "sujet": "Activation vocoder",
+    "apport": "Procédure d'activation et voix par fichiers distincts",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Dépend du fabricant et des droits",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-030",
+    "section": "2.1",
+    "sujet": "Signal de créneau",
+    "apport": "PIO3 peut signaler les slots DMR sur une période de 60 ms",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Attribution PD0 seulement hypothèse 868",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-031",
+    "section": "2.2",
+    "sujet": "Charge initiale SCT",
+    "apport": "1024 mots de 16 bits soit 2048 octets chargés après reset",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Cadre du bootstrap SCT",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-032",
+    "section": "2.2",
+    "sujet": "Ordre des octets",
+    "apport": "Ordre faible octet avant fort durant le transfert bootstrap",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Vérifier routine d'envoi V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-033",
+    "section": "2.2",
+    "sujet": "Accusé SCT",
+    "apport": "Séquence de réponse 84 A9 61 00 02 20 17 01",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Déjà décrite par la fiche OpenD578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-034",
+    "section": "2.2",
+    "sujet": "Localisation du bootstrap",
+    "apport": "Bloc dans la Flash application MCU, pas dans la NAND",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Comparer hash du firmware PRO V1.21 propriétaire local",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-035",
+    "section": "2.2",
+    "sujet": "Hash bootstrap",
+    "apport": "Empreinte SHA-256 743515b9f7cd90737c1fff29b652b7558bc5a56487ec38df4fdea8877e7a619a",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Empreinte de plusieurs images étudiées par RadioFoundry, pas calcul local V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-036",
+    "section": "2.2",
+    "sujet": "Patching bootstrap",
+    "apport": "Quatre modes de patch avec offsets 0x34C,0x352 ou 0x45C–0x45D",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Sens des modes non identifié",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-037",
+    "section": "2.2",
+    "sujet": "Séparation DMR/dPMR",
+    "apport": "Images d'amorçage distinctes selon mode SCT",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "EXT_SCT",
+    "commentaire": "Ne pas supposer sélection sur nos postes",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-038",
+    "section": "2.3",
+    "sujet": "Interface paquets détaillée",
+    "apport": "Le chapitre du protocole HPI doit être confronté au manuel Packet Interface v1.0; son contenu détaillé n'est pas récupéré de façon autonome dans cet audit",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Ne pas inventer les champs absents de la récupération",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-039",
+    "section": "2.4",
+    "sujet": "DMR Layer2 potentiel",
+    "apport": "Mode couche 2 permet des données structurées et liaison vocale selon protocole",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Mode OEM vocal décrit ailleurs en easy mode",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-040",
+    "section": "2.4",
+    "sujet": "Data services Layer2",
+    "apport": "CSBK et taux 1/2,3/4,1 via DIGC_DATA_FRAME sont envisagés",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Tester les types de données séparément",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-041",
+    "section": "2.4",
+    "sujet": "Privacy voix",
+    "apport": "La confidentialité appliquée aux bits AMBE exige leur accès ou une fonction intégrée du SCT",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Ni impossibilité absolue ni support complet prouvés",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-042",
+    "section": "2.4",
+    "sujet": "Hotspot",
+    "apport": "Pont MMDVM vocal soumis au format et au timing des flux CHAN_D",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Démonstration de principe, pas fonctionnalité en exploitation",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-043",
+    "section": "2.4",
+    "sujet": "Vocoder interne",
+    "apport": "Le port doit déclarer que le vocoder est hébergé dans le baseband",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Évite de recréer une conversion logicielle inutile",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-044",
+    "section": "2.5",
+    "sujet": "Mode vocal OEM",
+    "apport": "Firmware configure SCT avec mode Layer3 easy",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Source analyses OEM RadioFoundry, confirmer variante V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-045",
+    "section": "2.5",
+    "sujet": "Champs identification DMR",
+    "apport": "DMR_FLC, DMR_CC, DMR_CALLED_ID_BCD, DMR_OWN_ID_BCD, DMR_CALL_OPTION, DMR_CALL_SLOT, DMR_OFFSET",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Table exacte à comparer aux transactions V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-046",
+    "section": "2.5",
+    "sujet": "Commande début appel",
+    "apport": "DMR_CALL_START pilote le démarrage d'une session",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Sécuriser les états TX avant tout portage",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-047",
+    "section": "2.5",
+    "sujet": "Trames data",
+    "apport": "DIGC_DATA_FRAME est employé par un groupe limité de routines de données",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Ce n'est pas le chemin audio principal OEM",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-048",
+    "section": "2.5",
+    "sujet": "Sélecteur vocoder",
+    "apport": "VOCODER_IO_SET valeurs 04,08,10,20,40 et zéro final",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Nouveaux paramètres précis à tester",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-049",
+    "section": "2.5",
+    "sujet": "Canal vocal",
+    "apport": "CHAN_D transporte une charge de 36 octets depuis ou vers le MCU",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Format interne non démontré pour V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-050",
+    "section": "2.5",
+    "sujet": "Enregistrement vers NAND",
+    "apport": "Données CHAN_D enregistrées et lues dans la NAND pour lecture vocale",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Rattacher aux zones recording, pas codeplug",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-051",
+    "section": "2.5",
+    "sujet": "Routage vers modulateur",
+    "apport": "Valeur 0x40 de VOCODER_IO_SET peut utiliser flux MCU comme source",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Risque TX, ne pas expérimenter sur antenne",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-052",
+    "section": "2.5",
+    "sujet": "Hypothèse paquet AMBE",
+    "apport": "36 octets pourraient correspondre à quatre cadres de 72 bits codés sur ~80ms",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "La source elle-même marque cette interprétation incertaine",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-053",
+    "section": "2.5",
+    "sujet": "Codec via baseband",
+    "apport": "CODEC_SELECT, SET_I2C_ADDRESS et I2C_OPERATION plus paquets bypass TYPE bit 6",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "FAMILLE",
+    "commentaire": "Peut accélérer pilote AIC3204",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-054",
+    "section": "2.5",
+    "sujet": "Gains",
+    "apport": "MOD_GAIN, DEMOD_GAIN, DIGI_MIC_GAIN, DIGI_SPEAKER_GAIN, MISC_GAIN",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Noms de champs, unités encore absentes",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-055",
+    "section": "2.5",
+    "sujet": "Radio analogique et squelch",
+    "apport": "ANALOG_CONFIG, CTC_PARAM, ANALOG_SUBAUDIO, SQ_LEVEL",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Confronter au mode FM déjà simulé",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-056",
+    "section": "2.5",
+    "sujet": "Corrections analogiques",
+    "apport": "DC_OFFSET, IQCOMP_COEF, AFC_CONFIG, MODOUT_CONFIG, EQUALIZER_FILTER",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Lien calibrations et champ HPI à relever",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-057",
+    "section": "2.5",
+    "sujet": "Indicateurs numériques",
+    "apport": "BER_REPORT, PARITY_ENABLE",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Test DMR passif",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-058",
+    "section": "2.5",
+    "sujet": "Champs sans nom",
+    "apport": "Identifiants 0x2B et 0x3B absents du manuel SCT v1.0",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Conserver les IDs bruts",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-059",
+    "section": "2.5",
+    "sujet": "Scrambler",
+    "apport": "SCRAMBLER_SEED envoyé dans certaines conditions",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "Ne pas déduire l'algorithme de la commande seule",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-060",
+    "section": "3",
+    "sujet": "USB interface",
+    "apport": "Device USB CDC ACM, débit de ligne série virtuel pas cadence USB",
+    "document_OpenD578": "docs/cps/USB_CDC_GD32_V121.md",
+    "statut": "D578_OEM",
+    "commentaire": "Conservé dans OpenD578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-061",
+    "section": "3",
+    "sujet": "Entrée MCU UPDATE D578",
+    "apport": "MENU+EXIT sur génération documentée",
+    "document_OpenD578": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+    "statut": "FAMILLE",
+    "commentaire": "Différencier de P4+DIAL TEST",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-062",
+    "section": "3",
+    "sujet": "Entrée MCU UPDATE 868/878",
+    "apport": "PTT+PF3 sur portatifs de la famille",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Pas une touche D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-063",
+    "section": "3",
+    "sujet": "Outil mise à jour",
+    "apport": "QX_Firmware_Update reçoit un conteneur .spi",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "CPS Tool -> Firmware et Icon Update",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-064",
+    "section": "3",
+    "sujet": "Triplet update",
+    "apport": ".spi manifest, .CDI métadonnées et .CDD image binaire",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "Les tailles dépendent du modèle",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-065",
+    "section": "3",
+    "sujet": "Tailles manifestes",
+    "apport": ".spi de 14 ou 51 octets selon lot; .CDI ~278 octets firmware",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "À classifier par version",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-066",
+    "section": "3",
+    "sujet": "Image D578 PLUS GD 2.08",
+    "apport": "La source mentionne un CDD de 1 020 408 octets",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "À garder séparé du PRO GD 1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-067",
+    "section": "3",
+    "sujet": "Image D578 PLUS AT 2.08",
+    "apport": "CDD de 1 040 008 octets",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Pas pour PRO/PLUS GD utilisateur",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-068",
+    "section": "3",
+    "sujet": "Transaction UPDATE",
+    "apport": "Commande texte UPDATE, blocs de 32 octets et checksum additif",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "À comparer au bootloader propre au PRO V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-069",
+    "section": "3",
+    "sujet": "Staging image",
+    "apport": "Mise en scène sur NAND puis installation au reboot selon RadioFoundry",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "FAMILLE",
+    "commentaire": "Notre image 24 Kio et limite 1 Mio à prendre en compte",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-070",
+    "section": "3",
+    "sujet": "Sélection MCU",
+    "apport": "Différence d'identité GD/AT vérifiée par le CPS constructeur",
+    "document_OpenD578": "docs/cps/COMPATIBILITE_PRO_PLUS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Rester sur GD",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-071",
+    "section": "3",
+    "sujet": "Images non chiffrées étudiées",
+    "apport": "CDD contiennent une table de vecteurs ARM claire",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "D578_OEM",
+    "commentaire": "Ne démontre pas toutes les protections au chargement",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-072",
+    "section": "3",
+    "sujet": "Boot 868",
+    "apport": "Boot 16 Kio, application 0x08004000 sur éditions citées",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "DIFFERENCE_VERSION",
+    "commentaire": "Ne pas recopier vers PRO V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-073",
+    "section": "3",
+    "sujet": "Boot PRO V1.21",
+    "apport": "Notre lecture SWD donne boot 24 Kio et application 0x08006000",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "D578_OEM",
+    "commentaire": "Preuve supérieure pour le modèle testé",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-074",
+    "section": "3",
+    "sujet": "SWD D868",
+    "apport": "Unité D868 documentée accessible via AF pads et ST-LINK",
+    "document_OpenD578": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+    "statut": "FAMILLE",
+    "commentaire": "Pour D578 nos propres pads SWD ont été identifiés",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-075",
+    "section": "3",
+    "sujet": "SWJ AFIO",
+    "apport": "Application de certains portables désactive SWJ au lancement",
+    "document_OpenD578": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Pour D578 l'accès est validé dans MCU UPDATE",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-076",
+    "section": "3",
+    "sujet": "Mode flash SCT",
+    "apport": "SCT3258 dispose d'une procédure de mise à jour distincte",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D578_OEM",
+    "commentaire": "Voir MENU+DIAL et écran Boot Mode for SCT",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-077",
+    "section": "3",
+    "sujet": "Passerelle USB-HPI",
+    "apport": "En mode update SCT le MCU peut relayer des données USB vers SCT sans les décoder",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "FAMILLE",
+    "commentaire": "À comparer aux routines du boot SCT",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-078",
+    "section": "3",
+    "sujet": "BOOT0",
+    "apport": "Accessibilité du BOOT0 et ROM recovery de certaines cartes non prouvée",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Pas un chemin de récupération prêt à l'emploi",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-079",
+    "section": "4.1",
+    "sujet": "Bus D868 HPI",
+    "apport": "PD8–PD15 D0..D7 et PD2..PD5 HCS/HWR/HRD/HOBIB",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D578_OEM",
+    "commentaire": "Même attribution dans notre modèle D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-080",
+    "section": "4.1",
+    "sujet": "Contrôle SCT 868",
+    "apport": "PD6 reset, PC12 strap, PA8/PC6 enables",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Pas de correspondance OEM D578 établie pour toute la ligne",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-081",
+    "section": "4.1",
+    "sujet": "D868 LCD",
+    "apport": "PE7–PE14 data, PB10/PB11/PB12/PB13 contrôle, PE15 RD",
+    "document_OpenD578": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+    "statut": "D578_OEM",
+    "commentaire": "Sous-ensemble PE7..PE14 et PB10..PB13 confirmé par banc OEM D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-082",
+    "section": "4.1",
+    "sujet": "D868 keypad scan",
+    "apport": "Partage lignes LCD PE7..PE14 avec scan clavier et PA10/PA14/PE1/PB1/PB2/PC5",
+    "document_OpenD578": "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+    "statut": "DIFFERENCE_VERSION",
+    "commentaire": "Notre D578 utilise PB0/PB1 ADC et PA0/PA1; ne pas substituer",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-083",
+    "section": "4.1",
+    "sujet": "D868 encodeur",
+    "apport": "PC8/PC9 en quadrature",
+    "document_OpenD578": "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+    "statut": "D578_OEM",
+    "commentaire": "Idem côté D578 documenté",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-084",
+    "section": "4.1",
+    "sujet": "D868 RF 3 fils",
+    "apport": "PB3 SCLK, PB4 SDIO, PB5 SEN",
+    "document_OpenD578": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+    "statut": "D578_OEM",
+    "commentaire": "D578 possède quatre sélections supplémentaires",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-085",
+    "section": "4.1",
+    "sujet": "D868 NAND pins",
+    "apport": "PB8 CS, PB14 CLK, PB15 IO0, PA15 IO1",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "D578_OEM",
+    "commentaire": "Comparer sens des broches dans la fiche propre au D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-086",
+    "section": "4.1",
+    "sujet": "NAND dual output",
+    "apport": "Lecture dual IO0/IO1, MOSI et MISO commutent direction",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "D578_OEM",
+    "commentaire": "Pilotage bus documenté",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-087",
+    "section": "4.1",
+    "sujet": "IDs NAND",
+    "apport": "Fabricants 0x98 Toshiba, 0xC8 GigaDevice selon tables OEM portables",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "FAMILLE",
+    "commentaire": "Notre NAND Toshiba confirmée",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-088",
+    "section": "4.1",
+    "sujet": "D868 I2C",
+    "apport": "PB6/PB7 et récepteur RDA5802N à adresse 0x10",
+    "document_OpenD578": "docs/hardware/RDA5802N_RECEPTION_FM.md",
+    "statut": "D578_OEM",
+    "commentaire": "Présence et modèle D578 à 0x10",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-089",
+    "section": "4.1",
+    "sujet": "D868 MMA8653",
+    "apport": "Accéléromètre candidat adresse 0x1D",
+    "document_OpenD578": "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Aucune présence confirmée sur D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-090",
+    "section": "4.1",
+    "sujet": "GPS D868",
+    "apport": "USART1 PA2/PA3, 9600 bps et NMEA",
+    "document_OpenD578": "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas attribuer le pinout D868 au D578 sans trace",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-091",
+    "section": "4.1",
+    "sujet": "USB FS",
+    "apport": "PA11/PA12",
+    "document_OpenD578": "docs/cps/USB_CDC_GD32_V121.md",
+    "statut": "D578_OEM",
+    "commentaire": "USB D578 identifié",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-092",
+    "section": "4.1",
+    "sujet": "Codec pas sur I2C MCU",
+    "apport": "Contrôle AIC3204 transitant via baseband SCT",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "D578_OEM",
+    "commentaire": "Commandes SCT de bypass documentées",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-093",
+    "section": "4.2",
+    "sujet": "LCD 868",
+    "apport": "Séquence ST7735S SLPOUT, B1..B4, C0..C5, E0/E1, COLMOD=55",
+    "document_OpenD578": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Notre moteur D578 possède ses commandes vérifiées, ne pas substituer ces timings",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-094",
+    "section": "4.2",
+    "sujet": "Format pixels",
+    "apport": "RGB565 sur bus parallèle 8 bits",
+    "document_OpenD578": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+    "statut": "D578_OEM",
+    "commentaire": "Décodeur LCD testé",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-095",
+    "section": "4.2",
+    "sujet": "Résolution LCD 868",
+    "apport": "128×160 sur portrait; écran D578 différent",
+    "document_OpenD578": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+    "statut": "DIFFERENCE_VERSION",
+    "commentaire": "Dimensions D578 dans notre fiche",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-096",
+    "section": "4.3",
+    "sujet": "DAC 868 PA4",
+    "apport": "Sortie DAC CH1 pour puissance PA avec interpolation calibration",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas imposer ce réglage au D578 et BH2226",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-097",
+    "section": "4.3",
+    "sujet": "DAC 868 PA5",
+    "apport": "DAC CH2 configuré mais usage non retrouvé",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Sur notre D578 PA5 participe à éclairage selon banc",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-098",
+    "section": "4.3",
+    "sujet": "PWM 868",
+    "apport": "PA6 TIMER2_CH0, PB0 TIMER2_CH2, PB9 TIMER3_CH3",
+    "document_OpenD578": "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Notre D578 PB0 ADC touches, conflit de variantes à éviter",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-099",
+    "section": "4.3",
+    "sujet": "ADC 868",
+    "apport": "PC0/PC1/PC2 candidats ADC alimentation et autres",
+    "document_OpenD578": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Notre D578 PC2 correspond volume identifié",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-100",
+    "section": "4.3",
+    "sujet": "Slot TDMA 868",
+    "apport": "PD0 entrée IRQ pilotant PC4/PE6 et DAC dans le code",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Interprétation PIO3 non démontrée pour D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-101",
+    "section": "4.3",
+    "sujet": "PA7 868",
+    "apport": "Sortie probable activation ampli audio",
+    "document_OpenD578": "docs/hardware/AUDIO.md",
+    "statut": "FAMILLE",
+    "commentaire": "Notre D578 PA7 candidat mute dans modèle",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-102",
+    "section": "4.3",
+    "sujet": "GPIO inconnus 868",
+    "apport": "PA1,PC3/PC4/PC13,PD1/PD7,PC7,PE2..PE6",
+    "document_OpenD578": "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas faire reculer cartographie D578 validée",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-103",
+    "section": "4.4",
+    "sujet": "Copies alignement NAND 868",
+    "apport": "Calibration primaire 0x02F60000, secours 0x02F80000",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas supposer identiques aux offsets D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-104",
+    "section": "4.4",
+    "sujet": "Volume alignement 868",
+    "apport": "Blocs de ~1,5 Kio selon modèle",
+    "document_OpenD578": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+    "statut": "D868_SEUL",
+    "commentaire": "D578 secteur externe plus large",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-105",
+    "section": "4.4",
+    "sujet": "Tables puissance 868",
+    "apport": "Quatre tables UHF 81 octets et VHF 39 octets par niveau",
+    "document_OpenD578": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne pas assigner à calibration D578 sans décodage",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-106",
+    "section": "4.4",
+    "sujet": "Enregistrement options 868",
+    "apport": "Deux copies d'un enregistrement 34 octets à 0x02501000 et 0x02521000",
+    "document_OpenD578": "docs/cps/CODEPLUG_CANAL_OEM_V121.md",
+    "statut": "D868_SEUL",
+    "commentaire": "NAND différent, pas un offset PRO V1.21",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-107",
+    "section": "4.4",
+    "sujet": "Calibration lecture seule",
+    "apport": "Portage recommande lecture conservatrice avec repli sur copie intacte",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Ne jamais appliquer table 868 à PA D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-108",
+    "section": "4.5",
+    "sujet": "AT1846S commun",
+    "apport": "Registres table commune, variantes bande/bande passante et gain AGC page 1",
+    "document_OpenD578": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+    "statut": "FAMILLE",
+    "commentaire": "Recouper les quatre QA, ne pas imposer table 868",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-109",
+    "section": "4.5",
+    "sujet": "Bascule TX/RX 868",
+    "apport": "Registre 0x30 commande changement d'état sur AT1846S",
+    "document_OpenD578": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Déterminer écriture exacte pour QA D578",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-110",
+    "section": "5",
+    "sujet": "Port GD32F30x",
+    "apport": "Besoin d'horloges, GPIO, interruptions, timers, USB, ADC, DAC et UART",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Notre base GD32 prioritaire",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-111",
+    "section": "5",
+    "sujet": "Port AT32F43x",
+    "apport": "Plateforme séparée pour variantes non GD32",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "PORTAGE",
+    "commentaire": "Pas une cible présente dans les unités utilisateur",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-112",
+    "section": "5",
+    "sujet": "Pilote HPI",
+    "apport": "Reset, charge boot, FIFO, paquets, protocole SCT, timing 60ms",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Réutiliser nos trames OEM",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-113",
+    "section": "5",
+    "sujet": "Pilote QA",
+    "apport": "Transport GPIO 3 fils et tables par variante",
+    "document_OpenD578": "docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md",
+    "statut": "PORTAGE",
+    "commentaire": "Ne pas utiliser le I2C hardware à la place",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-114",
+    "section": "5",
+    "sujet": "Pilote AIC",
+    "apport": "Configuration via SCT I2C_OPERATION/codec bypass",
+    "document_OpenD578": "docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md",
+    "statut": "PORTAGE",
+    "commentaire": "Tracer l'ordre de 20 paquets",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-115",
+    "section": "5",
+    "sujet": "NAND",
+    "apport": "Pilote SPI NAND dual output, ECC et bad blocks",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Conserver les captures de l'unité",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-116",
+    "section": "5",
+    "sujet": "LCD",
+    "apport": "Transport parallèle 8080 8 bits",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "LCD D578 OEM acquis",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-117",
+    "section": "5",
+    "sujet": "Programmation",
+    "apport": "USB CDC ou SWD, aucun binaire flashable fourni",
+    "document_OpenD578": "docs/firmware/VALIDATION.md",
+    "statut": "PORTAGE",
+    "commentaire": "Préserver boot 24 Kio",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-118",
+    "section": "5",
+    "sujet": "Calibration",
+    "apport": "Lire et vérifier sans jamais écraser l'alignement de l'unité",
+    "document_OpenD578": "docs/firmware/VALIDATION.md",
+    "statut": "PORTAGE",
+    "commentaire": "Conserver empreinte d'archives",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-119",
+    "section": "5",
+    "sujet": "Modes voix",
+    "apport": "Capacité HAL selon disponibilité effective de trames CHAN_D",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "PORTAGE",
+    "commentaire": "Conditionner hotspot plutôt que le déclarer impossible",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-120",
+    "section": "6",
+    "sujet": "Questions MCU 868",
+    "apport": "Pinout variante VET6/VGT6 et pull-ups/downs à recouper",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Ne remet pas en cause notre GD32 VKT6",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-121",
+    "section": "6",
+    "sujet": "GPIO non identifiés 868",
+    "apport": "Rôles DAC/PWM/I/O partiellement inconnus sur le D868",
+    "document_OpenD578": "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+    "statut": "D868_SEUL",
+    "commentaire": "Nos broches D578 OEM prévalent",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-122",
+    "section": "6",
+    "sujet": "Cartographie 578 chez RF",
+    "apport": "Source indique cartographie 578 non complète",
+    "document_OpenD578": "docs/hardware/CONNEXIONS.md",
+    "statut": "D578_OEM",
+    "commentaire": "Notre banc D578 documente des GPIO supplémentaires",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-123",
+    "section": "6",
+    "sujet": "CDD format",
+    "apport": "Cortex-M clair, D578 à 0x08006000 dans leur liste de questions",
+    "document_OpenD578": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+    "statut": "D578_OEM",
+    "commentaire": "App V1.21 confirmée par dump SWD",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-124",
+    "section": "6",
+    "sujet": "Modes boot SCT",
+    "apport": "Sens des quatre modes de patch du bloc inconnu",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Garder valeur brute",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-125",
+    "section": "6",
+    "sujet": "CHAN_D temps réel",
+    "apport": "Format DMR du flux 36 octets et synchronisation DMR à démontrer",
+    "document_OpenD578": "docs/firmware/ARCHITECTURE.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Ne pas confondre enregistrement et hotspot qualifié",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-126",
+    "section": "6",
+    "sujet": "Types de paquet DMR",
+    "apport": "Valider chaque data type DIGC_DATA_FRAME en mode layer2",
+    "document_OpenD578": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Conserver les trames non reconnues",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-127",
+    "section": "6",
+    "sujet": "Accès calibrations via USB",
+    "apport": "Indéterminé si le protocole CPS expose toute la NAND",
+    "document_OpenD578": "docs/cps/PROTOCOLE_OEM_V121.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "Ne pas supposer bypass d'écriture",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-128",
+    "section": "6",
+    "sujet": "BOOT0 et RDP",
+    "apport": "Accès BOOT0 et protections sur autres variantes non garantis",
+    "document_OpenD578": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+    "statut": "HYPOTHESE",
+    "commentaire": "SWD fonctionne en MCU UPDATE sur notre unité",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  },
+  {
+    "id": "RF-129",
+    "section": "6",
+    "sujet": "MCU D878UVII/AT32",
+    "apport": "Identité précise de certaines révisions non établie",
+    "document_OpenD578": "docs/hardware/VERSIONS.md",
+    "statut": "FAMILLE",
+    "commentaire": "Sans incidence sur les deux D578 GD observés",
+    "source": "https://radiofoundry.org/docs/spec/hardware-anytone"
+  }
+]

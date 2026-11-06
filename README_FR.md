@@ -71,3 +71,15 @@ Voir [la méthode et les limites](docs/QUALIFICATION_ANALOGIQUE.md) et
 - L'Airband du PLUS figure dans la zone RF, et non dans la façade.
 - Les GPIO et bus identifiés en exécutant le firmware OEM sont affichés comme résultats de reverse engineering valides. Les mesures de continuité physique restantes sont documentées séparément.
 - [Correspondances et règles de validation](docs/hardware/VALIDATION_FONCTIONS_OEM.md).
+
+## Sauvegardes de documentation externe
+
+Consulter [le centre de sources F1DMG et VK7ZJA](docs/external/INDEX.md). Il fournit 60 rubriques indexees, une synthese technique, les versions de miroirs et un utilitaire Windows de sauvegarde privee des HTML/images/documents originaux avec SHA-256. Le site source de F1DMG ne repondait pas lors des essais du 6 novembre 2026 ; son contenu est marque a recuperer, pas invente.
+
+## Audit des informations DB1IG
+
+Une [revue croisee des sources DB1IG et VK7ZJA](docs/external/db1ig/INDEX.md) recense 60 rubriques historiques et precise les informations nouvelles par rapport a OpenD578. Elle conserve les travaux deja realises et distingue les constats issus du firmware OEM des references historiques d'autres revisions.
+
+## Nouveaux travaux de recherche : RadioFoundry et DB1IG
+
+La documentation du projet conserve désormais une [comparaison détaillée RadioFoundry](docs/external/radiofoundry/INDEX.md) et [21 fiches d’approfondissement VK7ZJA/DB1IG](docs/external/db1ig/approfondissements/INDEX.md), en plus des dossiers précédents. Les résultats OEM V1.21 restent prioritaires pour la cartographie de notre carte GD32.

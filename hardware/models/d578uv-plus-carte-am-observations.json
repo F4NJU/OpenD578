@@ -158,7 +158,9 @@
       "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
-        "docs/hardware/VERSIONS.md"
+        "docs/hardware/VERSIONS.md",
+        "docs/external/radiofoundry/GPIO_868_VS_578.md",
+        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md"
       ]
     },
     {
@@ -254,7 +256,8 @@
       "description": "Programmation du PLUS GD32 V2.xx ; protocole et zones memoire à vérifier sur ce matériel.",
       "confidence": "partial",
       "docs": [
-        "docs/cps/COMPATIBILITE_PRO_PLUS.md"
+        "docs/cps/COMPATIBILITE_PRO_PLUS.md",
+        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md"
       ]
     },
     {
@@ -286,7 +289,8 @@
       "confidence": "candidate",
       "docs": [
         "docs/cps/COMPATIBILITE_PRO_PLUS.md",
-        "docs/cps/CODEPLUG_CANAL_OEM_V121.md"
+        "docs/cps/CODEPLUG_CANAL_OEM_V121.md",
+        "docs/external/radiofoundry/CALIBRATIONS_ET_VARIANTES.md"
       ]
     },
     {
@@ -365,7 +369,8 @@
       "docs": [
         "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/external/radiofoundry/GPIO_868_VS_578.md"
       ]
     },
     {
@@ -382,7 +387,9 @@
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/external/db1ig/approfondissements/INDEX.md",
+        "docs/external/radiofoundry/GPIO_868_VS_578.md"
       ]
     },
     {

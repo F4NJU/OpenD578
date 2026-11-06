@@ -1,0 +1,37 @@
+{
+  "review_date": "2026-11-06",
+  "baseline": "OpenD578_COMPLET_SOURCES_F1DMG_VK7ZJA_20261106.zip",
+  "baseline_sha256": "7979659602bf66a217cd904ab6d44e92e3772f5efc942a26647904f206d349a9",
+  "existing_file_deletions": 0,
+  "existing_files_modified": [
+    "README_FR.md",
+    "README_SITE.md",
+    "docs/external/INDEX.md"
+  ],
+  "new_source_files": [
+    "NOTICE_IMPORT_DB1IG_20261106.md",
+    "docs/external/db1ig/AUDIT_CROISE_SOURCES.md",
+    "docs/external/db1ig/COMPLEMENTS_TECHNIQUES_D578.md",
+    "docs/external/db1ig/INDEX.md",
+    "docs/external/db1ig/MATRICE_60_THEMES.csv",
+    "docs/external/db1ig/MATRICE_60_THEMES.md",
+    "docs/external/db1ig/PLAN_EXPERIMENTAL.md",
+    "docs/external/db1ig/SOURCES_ET_DECOUVERTES.json"
+  ],
+  "patch_file_count": 11,
+  "patch_sha256": {
+    "NOTICE_IMPORT_DB1IG_20261106.md": "20b9d1fa4e87974d5128a7fc41d2f46857bcc8e1494890e8b705ae01084fbaa8",
+    "README_FR.md": "68189ce445827b2f8cb5a18296409418ec8a6c58d96dc9a1dd8eec3a3326c696",
+    "README_SITE.md": "3d26349a7180b28d5b72c0a8536fa25a4999c2dec1e8a3ebe7b2d697b62705c9",
+    "docs/external/INDEX.md": "439c7c0637dff986f12946d05ce8f3c41c2a54bf662b591635de0797f806e897",
+    "docs/external/db1ig/AUDIT_CROISE_SOURCES.md": "1ea3c29529fce8f60d8aa0ed126b730ffe7e3788e611ca7657afc41e0785adc4",
+    "docs/external/db1ig/COMPLEMENTS_TECHNIQUES_D578.md": "7bf69a3a0ed76d70fade96d47675fe38adb2f00bfbfcc219d8c8aa9e96109fe5",
+    "docs/external/db1ig/INDEX.md": "067211eea6aa36a2f8efaa8a975e5672458ae1baeedd423d6289a15905af928b",
+    "docs/external/db1ig/MATRICE_60_THEMES.csv": "38700c2564a072dcdb6cc123e68b40688ae3c5ac77d08b3f91af197af488296e",
+    "docs/external/db1ig/MATRICE_60_THEMES.md": "3ff0bd06e6c48f8bf943c64e1695d7bf4474e67593280a91f51595f18437c2a1",
+    "docs/external/db1ig/PLAN_EXPERIMENTAL.md": "906a259ba124c3cf3f0b8d61c8b5f58cc183c8e5d6dce8654c73430bbf7d4403",
+    "docs/external/db1ig/SOURCES_ET_DECOUVERTES.json": "b7c8c827350be9d0f732fcc731c994937b25148540ddfeadb33a3e8c26f77036"
+  },
+  "github_repo_access": "not_available_this_turn",
+  "source_copyright": "no full third party text, photos or vendor binary files included"
+}

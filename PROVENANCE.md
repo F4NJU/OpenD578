@@ -49,3 +49,7 @@ Reconstructed peripheral documentation, GD32F303VKT6 pin map and *unwired* KiCad
 ## QA4818N : analyse du 6 novembre 2026
 
 Source externe: guide de programmation AT1846S et documentation de VK7ZJA. Source locale: banc `bench/rf_spi.py` V11.7 et index des routines V1.21. Le code C est entièrement nouveau et utilise seulement une formule de codage de fréquence de référence. Il ne réutilise ni firmware OEM ni routine OEM, et ne peut pas piloter directement les GPIO. Les valeurs de démonstration sont étiquetées `synthetic` ; aucune capture originale constructeur du changement de fréquence n'est embarquée. Une copie officielle de V1.21 est référencée dans les précédents travaux par SHA-256 `02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a`, mais l'image n'est pas incluse ici.
+
+## Ajout documentaire F1DMG / VK7ZJA du 06/11/2026
+
+Nos syntheses originales des sites tiers sont conservees sous `docs/external/`, avec auteurs, URL, edition et distinction des versions. Le programme `tools/archive_sources_privees.py` permet au proprietaire du poste de sauvegarder localement l'HTML et les photos historiques **en dehors du depot public**. Les copies physiques de ces sites ne sont pas integrees a OpenD578. Ne pas confondre les anciennes caracteristiques RF et les cartes PRO/PLUS constatees par l'utilisateur ; les observations OEM executable et les mesures directes ont leur propre niveau de preuve.

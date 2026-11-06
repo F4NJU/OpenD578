@@ -27,3 +27,8 @@ native_gate*.build.json
 *.sigmf-data
 *.sigmf-meta
 *.wav
+# Sauvegardes locales de contenus tiers, jamais suivies par Git
+archives_privees/
+private-archives/
+captures_web_privees/
+OpenD578_archives_privees/

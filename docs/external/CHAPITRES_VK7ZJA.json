@@ -1,0 +1,542 @@
+[
+  {
+    "number": 1,
+    "category": "Contexte",
+    "title_fr": "Présentation générale",
+    "summary_fr": "Inventaire de la famille D578 et limites de transposition entre révisions.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 2,
+    "category": "CPS / mémoire",
+    "title_fr": "Erreurs de bande",
+    "summary_fr": "Le MODE inscrit dans le codeplug doit correspondre à celui du poste ; une mauvaise combinaison peut empêcher la programmation.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 3,
+    "category": "Variantes",
+    "title_fr": "Comparaison D578 et D878",
+    "summary_fr": "Fonctions partagées et circuits spécifiques au mobile ; les deux firmwares ne sont pas interchangeables.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 4,
+    "category": "Variantes",
+    "title_fr": "Comparaison D578 et Alinco DR-MD500/520",
+    "summary_fr": "Même famille matérielle, avec différences de commandes, profils et menus constructeur.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 5,
+    "category": "CPS / mémoire",
+    "title_fr": "Conseils d'utilisation du CPS",
+    "summary_fr": "Choix du logiciel selon la version firmware et relecture des paramètres après changement de branche.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 6,
+    "category": "CPS / mémoire",
+    "title_fr": "Alertes antivirus sur le CPS",
+    "summary_fr": "Documenter la provenance, les empreintes, les signatures et les faux positifs éventuels ; ne pas désactiver aveuglément les protections.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 7,
+    "category": "Façade / audio",
+    "title_fr": "Sélecteur des touches micro",
+    "summary_fr": "La position du commutateur du microphone conditionne les commandes montée/descente.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 8,
+    "category": "Maintenance",
+    "title_fr": "Mise à jour du firmware principal",
+    "summary_fr": "Distinguer sauvegarde codeplug, passage en mode update, écriture et restauration des données.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 9,
+    "category": "CPS / mémoire",
+    "title_fr": "Pilotes USB sous Windows",
+    "summary_fr": "Identifier le mode USB et la correspondance avec le périphérique virtuel attendu par CPS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 10,
+    "category": "Maintenance",
+    "title_fr": "Diagnostics des erreurs écran",
+    "summary_fr": "Messages Band Error, données incompatibles, icônes absentes et cas de corruption au démarrage.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 11,
+    "category": "Contexte",
+    "title_fr": "Répertoire d'autres documentations",
+    "summary_fr": "Archiver les liens sortants et vérifier leur pérennité.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 12,
+    "category": "GPS / APRS",
+    "title_fr": "Paramétrage APRS",
+    "summary_fr": "Comparer réglages de trames et capacités du D578, sans mélanger TX APRS et RX APRS propre au PLUS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 13,
+    "category": "Façade / audio",
+    "title_fr": "Répondre pendant un balayage",
+    "summary_fr": "Préciser le retour sur le canal actif et les états de scan.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 14,
+    "category": "Maintenance",
+    "title_fr": "Réinitialisation du poste",
+    "summary_fr": "Séparer remise à zéro utilisateur, calibrations et récupération après erreur.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 15,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Compatibilité des modes de confidentialité DMR",
+    "summary_fr": "Les formats entre constructeurs et modes ne sont pas tous interopérables ; le firmware alternatif n'a pas vocation à reproduire la fonction encryption.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 16,
+    "category": "Façade / audio",
+    "title_fr": "Écran et façade déportés",
+    "summary_fr": "Étudier le câble plat de la façade et les contraintes de longueur, EMI et intégrité des signaux.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 17,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Microphones Bluetooth",
+    "summary_fr": "Évolution historique vers les BT01 et accessoires compatibles ; distinguer audio et commandes.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 18,
+    "category": "Contexte",
+    "title_fr": "Étiquettes et repères des touches",
+    "summary_fr": "Informations ergonomiques utiles mais sans incidence sur le pilote MCU.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 19,
+    "category": "Façade / audio",
+    "title_fr": "Deux sorties haut-parleur",
+    "summary_fr": "L'une coupe le haut-parleur interne et l'autre le laisse actif ; noter la différence mécanique.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 20,
+    "category": "Façade / audio",
+    "title_fr": "Prise micro et microphone de table",
+    "summary_fr": "Connecteur RJ et adaptation PTT par résistance sur certaines révisions et selon option HandOpMode.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 21,
+    "category": "Contexte",
+    "title_fr": "Console d'alimentation et bureau",
+    "summary_fr": "Accessoire d'intégration mécanique, non composant embarqué.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 22,
+    "category": "Façade / audio",
+    "title_fr": "Entrées/sorties audio via micro filaire",
+    "summary_fr": "Pistes de modification pour interfaces numériques externes ; ne pas confondre niveau micro et niveau haut-parleur.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 23,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Audio externe par module Bluetooth",
+    "summary_fr": "Chemin audio et profil Bluetooth historique à qualifier face à la carte D868BT-SP/ET12.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 24,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Télécommande PTT via oreillette",
+    "summary_fr": "Des boutons de certains casques produisent des commandes exploitables ; tester réellement les événements BT01/BP-02.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 25,
+    "category": "Affichage",
+    "title_fr": "Images de fond personnalisées",
+    "summary_fr": "Données graphiques en NAND et exigences de format pour l'affichage.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 26,
+    "category": "Façade / audio",
+    "title_fr": "Traitement du microphone",
+    "summary_fr": "Vérifier dans le TLV320AIC3204 les gains, filtres et parcours audio permis par le firmware.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 27,
+    "category": "Façade / audio",
+    "title_fr": "Tonalités de signalisation",
+    "summary_fr": "Table de sons et générateurs audio du firmware OEM, hors application RF principale.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 28,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Numérotation et carnets EchoLink",
+    "summary_fr": "Interaction CPS et base contacts, sans fonction nécessaire au pilote RF.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 29,
+    "category": "Maintenance",
+    "title_fr": "Combinaisons de touches au démarrage",
+    "summary_fr": "Cartographier MCU update, icons, test mode, SCT update, reset séparément par génération.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 30,
+    "category": "CPS / mémoire",
+    "title_fr": "Sélection des bandes d'exploitation",
+    "summary_fr": "MODE présent dans les zones configuration/codeplug, attention aux limites réglementaires.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 31,
+    "category": "RF",
+    "title_fr": "Extension historique de la réception",
+    "summary_fr": "Firmware modifié ancien ; ne prouve pas les performances ni la présence de filtres RF sur toutes les versions.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 32,
+    "category": "RF",
+    "title_fr": "Mesures de sensibilité et de puissance",
+    "summary_fr": "Des mesures historiques existent ; associer fréquence, niveau, déviation et appareil avant réutilisation.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 33,
+    "category": "RF",
+    "title_fr": "Réception de la bande aéronautique",
+    "summary_fr": "Le PLUS possède une carte RF supplémentaire ; les anciens modèles ne reçoivent pas de manière équivalente.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 34,
+    "category": "RF",
+    "title_fr": "Balayage FM et DMR",
+    "summary_fr": "Contraintes d'écoute, détection des porteuses et suivi des slots en DMR.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 35,
+    "category": "RF",
+    "title_fr": "Découpages de réception FM",
+    "summary_fr": "Étudier les seuils RSSI, squelch et hystérésis plutôt que les seuls symptômes.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 36,
+    "category": "RF",
+    "title_fr": "Plage élargie du récepteur FM broadcast",
+    "summary_fr": "RDA5802N distinct de la chaîne voix VHF/UHF ; plages à valider contre la datasheet.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 37,
+    "category": "Affichage",
+    "title_fr": "Polices et icônes",
+    "summary_fr": "Polices et icônes stockées dans des plages NAND spécifiques, utiles au site et au futur firmware.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 38,
+    "category": "Affichage",
+    "title_fr": "Iconographie GPS",
+    "summary_fr": "Fichiers graphiques distincts des transactions de position GPS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 39,
+    "category": "Maintenance",
+    "title_fr": "Mode test et étalonnages",
+    "summary_fr": "Paramètres puissance, squelch, alignement fréquence, courbe RSSI ; risque de dérégler le poste.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 40,
+    "category": "Maintenance",
+    "title_fr": "Utilitaire AT Options de G4EML",
+    "summary_fr": "Lecture/écriture de réglages locaux historiques ; ne pas l'assimiler au protocole CPS complet.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 41,
+    "category": "Maintenance",
+    "title_fr": "Mot de passe au démarrage",
+    "summary_fr": "Procédures de récupération historique ; garder les données de configuration séparées du code applicatif.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 42,
+    "category": "CPS / mémoire",
+    "title_fr": "Mot de passe de programmation CPS",
+    "summary_fr": "Option de verrouillage de lecture/écriture distincte du mot de passe de démarrage.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 43,
+    "category": "Contexte",
+    "title_fr": "Documents d'homologation FCC",
+    "summary_fr": "Photos internes et essais pour comparer révisions, sans traiter des schémas confidentiels comme disponibles.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 44,
+    "category": "RF",
+    "title_fr": "Photos de démontage de la carte",
+    "summary_fr": "Vue CPU sous LCD, PCB RF dessus/dessous, filtres 38 MHz, carte Bluetooth et GPS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 45,
+    "category": "GPS / APRS",
+    "title_fr": "Réserves d'alimentation RTC et GPS",
+    "summary_fr": "Deux condensateurs de sauvegarde séparés sur la carte CPU historique ; rôle recoupé avec le relevé utilisateur.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 46,
+    "category": "Façade / audio",
+    "title_fr": "Modification du haut-parleur interne",
+    "summary_fr": "Mesures historiques de gain sonore ; à replacer dans le contexte mécanique et électrique.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 47,
+    "category": "RF",
+    "title_fr": "Connecteur antenne SO-239 / N",
+    "summary_fr": "Modification mécanique du connecteur de sortie RF, hors périmètre du firmware.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 48,
+    "category": "GPS / APRS",
+    "title_fr": "Antennes GPS internes",
+    "summary_fr": "Connecteurs u.FL et volume libre dans la façade historique ; GPS externe demeure la référence de sensibilité.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 49,
+    "category": "RF",
+    "title_fr": "Refroidissement et circulation d'air",
+    "summary_fr": "Orientation ventilateur, carénage et piste F1DMG /578a ; mesurer l'échauffement avant modification.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 50,
+    "category": "RF",
+    "title_fr": "Blindage complémentaire de réception",
+    "summary_fr": "Empreintes de blindages et risque de déplacement des réglages de filtres à varactors.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 51,
+    "category": "RF",
+    "title_fr": "Liste des circuits et topologie du D578",
+    "summary_fr": "GD32, SCT3258, TLV320AIC3204, QA4818N x4, RDA5802N, NAND, PA RF et GPS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 52,
+    "category": "CPS / mémoire",
+    "title_fr": "Carte des plages NAND",
+    "summary_fr": "Plages polices, fonds, contacts, codeplug, alignement et enregistrements à distinguer du brut OOB.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 53,
+    "category": "CPS / mémoire",
+    "title_fr": "Utilitaire de sauvegarde NAND",
+    "summary_fr": "Readback des zones, métadonnées, granularités et décalages de certains outils historiques.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 54,
+    "category": "CPS / mémoire",
+    "title_fr": "Sauvegarde d'alignement propre au poste",
+    "summary_fr": "Sauvegarder avant toute écriture les données RF non interchangeables entre unités.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 55,
+    "category": "Maintenance",
+    "title_fr": "Récupération d'un poste bloqué",
+    "summary_fr": "Différencier rechargement d'un codeplug propre et effacement destructeur de la NAND.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 56,
+    "category": "Maintenance",
+    "title_fr": "Prévention des blocages",
+    "summary_fr": "Version CPS/codeplug, charge GPS/roaming et comportements sur trames DMR atypiques.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 57,
+    "category": "CPS / mémoire",
+    "title_fr": "Structure des conteneurs CDD/CDI/SPI",
+    "summary_fr": "Formats de mise à jour et alignement des écritures ; aucune écriture automatique fournie ici.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 58,
+    "category": "CPS / mémoire",
+    "title_fr": "Aide CPS en français",
+    "summary_fr": "Anciennes aides English.HPT et pistes F1DMG ; versionner par CPS.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 59,
+    "category": "DMR / Bluetooth",
+    "title_fr": "Mise à jour interne SCT3258",
+    "summary_fr": "Firmwares DMR propres au DSP/baseband, indépendants de l'application principale GD32.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  },
+  {
+    "number": 60,
+    "category": "Contexte",
+    "title_fr": "Pistes de développement futur",
+    "summary_fr": "Traitement audio DSP, interface LCD, extensions de protocole ; projets non confondus avec des fonctions validées.",
+    "source_url": "https://radio.carstenbauer.net/578techmods.htm",
+    "source_version": "7.4 (2022-10-20)",
+    "is_original_rewrite": true
+  }
+]

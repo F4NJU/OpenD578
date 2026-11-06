@@ -31,6 +31,7 @@ jobs:
           python tools/generate_gd32_pinout.py
           python tools/build_evidence_catalog.py
           python tools/validate_hardware_model.py
+          python tools/check_research_coverage.py
           python -m unittest discover -s tools -p test_evidence.py -v
           python tools/build_site.py
           python tools/test_site.py
