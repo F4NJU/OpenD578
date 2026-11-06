@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>04 - Sicomm SCT3258/CT3258 : boot, HPI, paquets, DMR, codec et memoires - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>04 - Sicomm SCT3258/CT3258 : boot, HPI, paquets, DMR, codec et memoires</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md</code></p>
+<article class="markdown-body"><h1 id="04---sicomm-sct3258ct3258-boot-hpi-paquets-dmr-codec-et-memoires">04 - Sicomm SCT3258/CT3258 : boot, HPI, paquets, DMR, codec et memoires</h1>
+<blockquote>
+<p><strong>RECONSTITUTION du 05/11/2026.</strong> Ce fichier n'est pas l'original homonyme. Les donnees sont qualifiees <code>datasheet</code>, <code>analyse OEM</code>, <code>simulation</code> ou <code>a verifier sur le PCB</code>, sans faire passer le banc pour le moteur DMR interne.</p>
+</blockquote>
+<h2 id="1-perimetre-materiel">1. Perimetre materiel</h2>
+<p>Le circuit Sicomm <strong>SCT3258TD</strong> integre le traitement DMR (couches basses) et la fonction vocoder <strong>AMBE+2</strong> exploitee par l'application OEM. C'est un processeur <strong>distinct</strong> du GD32F303. Selon les datasheets Sicomm consultees par RadioFoundry, il utilise une horloge d'environ <strong>12,288 MHz</strong>, son propre firmware et une <strong>Host Port Interface 8 bits</strong> asynchrone avec FIFO et ligne HOBIB de synchronisation. L'audio codec ↔ SCT passe par un flux numerique serie, pas par les conversions lentes de l'ADC0 du GD32.</p>
+<p>Il faut distinguer : (1) programme GD32 dans sa Flash interne, (2) petit <strong>boot block</strong> de 2048 octets envoye au SCT apres reset, (3) firmware applicatif et vocoder conserves dans la Flash interne propre au SCT (selon datasheet/portage), (4) parametres utilisateurs et calibrations dans la NAND du poste, (5) configuration volatile/temporisations de session DMR.</p>
+<h2 id="2-hpi-dans-le-modele-gd32-v121">2. HPI dans le modele GD32 V1.21</h2>
+<p><code>bench/sct_hpi.py</code> decrit le bus reconstruit depuis des ecritures GPIO OEM :</p>
+<table>
+<thead>
+<tr>
+  <th>Fonction SCT</th>
+  <th>Ligne GD32 candidate</th>
+  <th style="text-align:right">Broche LQFP100 MCU</th>
+  <th>Preuve actuelle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>HCSN (chip select actif bas)</td>
+  <td><code>PD2</code></td>
+  <td style="text-align:right">83</td>
+  <td>Decodage GPIO en simulation OEM</td>
+</tr>
+<tr>
+  <td>HWRN (write strobe)</td>
+  <td><code>PD3</code></td>
+  <td style="text-align:right">84</td>
+  <td>Decodage GPIO en simulation OEM</td>
+</tr>
+<tr>
+  <td>HRDN (read strobe)</td>
+  <td><code>PD4</code></td>
+  <td style="text-align:right">85</td>
+  <td>Decodage GPIO en simulation OEM</td>
+</tr>
+<tr>
+  <td>HOBIB (data ready / handshake)</td>
+  <td><code>PD5</code></td>
+  <td style="text-align:right">86</td>
+  <td>Role deduit par le modele, continuite inconnue</td>
+</tr>
+<tr>
+  <td>HPI DATA0..7</td>
+  <td><code>PD8..PD15</code></td>
+  <td style="text-align:right">55..62</td>
+  <td>Mode GPIO 8 bits observe dans le modele</td>
+</tr>
+<tr>
+  <td>Reset, alimentation, 12,288 MHz, PIO</td>
+  <td>inconnu</td>
+  <td style="text-align:right">-</td>
+  <td>Non mesures physiquement</td>
+</tr>
+</tbody>
+</table>
+<p>Ne pas confondre les labels <strong>HWRN/HRDN</strong> du SCT avec une fonction EXMC choisie automatiquement par le GD32. Le modele active le bus par GPIO et inspecte les niveaux d'entree; pas de preuve d'utilisation materielle EXMC sur la version PRO.</p>
+<h2 id="3-boot-1024-mots-de-16-bits">3. Boot : 1024 mots de 16 bits</h2>
+<p>Documentation de la famille SCT3258 : apres reset, le processeur attend <strong>1024 mots de 16 bits</strong>, soit <strong>2048 octets</strong>, sur HPI, en ordre des octets documente par son protocole. Ce bloc charge un second etage qui demarre le firmware interne SCT. Une reponse de boot est decrite dans la reference Sicomm par le paquet <code>84 A9 61 00 02 20 17 01</code>.</p>
+<p>RadioFoundry donne le SHA256 d'un bloc identique sur plusieurs firmwares 868/878 et D578 <strong>GD 2.08</strong> :</p>
+<p><code>743515b9f7cd90737c1fff29b652b7558bc5a56487ec38df4fdea8877e7a619a</code></p>
+<p><strong>Attention :</strong> cette empreinte n'est <strong>pas ici une verification sur la CDD PRO GD V1.21 de l'utilisateur</strong>. Les modes 0..3 et les quelques octets de patch mentionnes par RadioFoundry sont specifiques a leur analyse; ne pas imposer un mode sans tracer les conditions du firmware V1.21. Le bloc est un logiciel constructeur/Sicomm, non redistribue dans le depot GitHub.</p>
+<p>Un futur pilote doit implementer une machine d'etats :</p>
+<p><code>POWER_OFF -&gt; GPIO_INPUT -&gt; CLOCK_STABLE -&gt; SCT_RESET -&gt; WAIT_BOOT_READY -&gt; SEND_BOOT_BLOCK -&gt; READ_BOOT_ACK -&gt; CONFIGURE_HPI -&gt; CONFIGURE_MODE -&gt; CONFIGURE_CODEC -&gt; DMR_READY</code></p>
+<p>Toute erreur de longueur, statut, timeout ou tension doit mener a un <strong>etat non emissif</strong>, plutot qu'a une boucle de commandes RF ou a un TX silencieusement actif.</p>
+<h2 id="4-format-de-paquet-hpi-et-jeu-de-commandes">4. Format de paquet HPI et jeu de commandes</h2>
+<p>La classe <code>SctHpi</code> du banc decode des paquets structures avec <strong>en-tete <code>84 A9 61</code></strong>, champ longueur (deux octets, ordre observe dans le code), type et charges utiles. Elle simule le paquet de boot et plusieurs types de requetes selon les champs acceptes. Les registres enumerees dans le code ne sont pas une transcription exhaustive du firmware interne de la puce.</p>
+<table>
+<thead>
+<tr>
+  <th>Groupe</th>
+  <th>Exemples de fonctions connues dans la litterature / modele</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Boot/handshake</td>
+  <td>2048 octets, reponse type 0x20 / 0x17</td>
+  <td>Datasheet + modele ; timing poste non mesure</td>
+</tr>
+<tr>
+  <td>Configuration radio analogique</td>
+  <td><code>ANALOG_CONFIG</code>, <code>CTC_PARAM</code>, <code>ANALOG_SUBAUDIO</code>, <code>SQ_LEVEL</code></td>
+  <td>Spec externe et traces OEM partielles</td>
+</tr>
+<tr>
+  <td>Gain/calibration</td>
+  <td><code>MOD_GAIN</code>, <code>DEMOD_GAIN</code>, <code>DIGI_MIC_GAIN</code>, <code>DIGI_SPEAKER_GAIN</code>, <code>DC_OFFSET</code>, <code>IQCOMP_COEF</code>, <code>AFC_CONFIG</code>, <code>MODOUT_CONFIG</code></td>
+  <td>Noms de familles protocolaires, valeurs usine inconnues</td>
+</tr>
+<tr>
+  <td>Codec TLV320AIC3204</td>
+  <td><code>SET_I2C_ADDRESS</code>, <code>I2C_OPERATION</code>, <code>CODEC_SELECT</code> et bypass type <code>0x40</code></td>
+  <td>Spec externe + parseur de paquets dans bench/sct_hpi.py</td>
+</tr>
+<tr>
+  <td>DMR voix/donnees</td>
+  <td>modes DMR, trames et evenements 60 ms TDMA, ID DMR/call setup</td>
+  <td>Modes a decodage incomplet dans le banc</td>
+</tr>
+<tr>
+  <td>Identite SCT</td>
+  <td>Requete de version avec reponse conditionnee par image de reference dans banc</td>
+  <td>Pas preuve d'interrogation physique du poste actuel</td>
+</tr>
+</tbody>
+</table>
+<p>Exemple interne du banc : si la condition de bypass codec est active et la charge utile est une serie de paires <code>(registre, valeur)</code>, les transactions sont enregistrees dans <code>codec_writes</code>. Les registres AIC sont pagines et le chemin de commande passe par le SCT : <strong>on ne doit pas lancer un pilote I2C autonome directement sur deux GPIO GD32 supposes</strong>.</p>
+<h2 id="5-firmware-interne-sct-et-mise-a-jour-distincte">5. Firmware interne SCT et mise a jour distincte</h2>
+<p>Le <strong>Boot Mode for Sct</strong> affiche par le poste est une fonction de maintenance du baseband et <strong>n'est pas</strong> le mode de mise a jour de l'application GD32. Le logiciel constructeur peut exposer un pont USB/COM vers le port SCT. Une source externe detaille l'outil <code>SCT_PORT</code> et un fichier <code>SCT3258TD_UpdateFlash_V2_01_07BF.hex</code> ; dans notre banc, l'identite de ce fichier est controlee par SHA256 :</p>
+<p><code>d5ada473af891b6c707978f0b9dde81324afcc4af27348d3bcdf70615ab19407</code> (taille <strong>603 102 octets</strong> telle qu'attendue dans <code>bench/sct_hpi.py</code>).</p>
+<p>Ce fichier est <strong>une reference du modele</strong>, pas un firmware libre ni un blob a programmer. Il peut contenir du code proprietaire et des sections de vocoder. Aucun octet de ce firmware ne doit etre publie comme composant de l'archive source.</p>
+<h2 id="6-relation-avec-rf-codec-et-parametres-usine">6. Relation avec RF, codec et parametres usine</h2>
+<p>Le SCT gere des traitements numeriques qui influencent audio, deviation, CTCSS, DMR, squelch et calibration. Les <strong>quatre QA4818N</strong> et les etages analogiques RF constituent un autre sous-systeme, controle depuis le GD32 par un bus serie distinct (quatre chip selects dans le modele). La liaison exacte entre evenements SCT, frequences des QA et gates PA doit etre mesuree/decodue.</p>
+<p>Le rapport NAND situe des zones critiques autour de <code>0x02F00000..0x02FDFFFF</code>. On peut chercher les champs de gain/offset dans ces secteurs, mais <strong>aucune correspondance valeur NAND -&gt; commande SCT -&gt; registre DAC physique</strong> n'est certifiee dans la seule lecture de cette documentation. Une valeur de puissance PA incorrecte peut endommager le poste ou causer une emission hors specification : ne pas lancer d'experience TX.</p>
+<h2 id="7-etat-du-modele-et-tests-manquants">7. Etat du modele et tests manquants</h2>
+<p>La simulation HPI <strong>n'execute pas</strong> le processeur interne, le vocoder AMBE ou les chaines RF/audio physiques. Elle peut valider des formes de paquets, des sequences et l'adressage GPIO observe par l'application OEM, pas le fonctionnement d'un DMR complet. Pour qualifier un driver autonome :</p>
+<ol>
+<li>Capturer passivement HPI DATA/HCSN/HWRN/HRDN/HOBIB en reception, au boot et lors d'un changement de canal en <strong>mode non emissif</strong>.</li>
+<li>Mesurer lignes RESET et horloge 12,288 MHz sans charger le quartz ; relever les niveaux logiques pour les domains 1,2 V / 2,5-3,3 V.</li>
+<li>Comparer les trames a la reference « Packet Interface of CT3258 » et relever toutes les commandes inconnues, sans inventer de reponse.</li>
+<li>Recuperer le boot block du <strong>firmware OEM appartenant a l'utilisateur</strong>, calculer empreinte et comparer avant tout essai ; ne pas publier le bloc.</li>
+<li>Tester la lecture des messages, identification et commandes non TX d'abord ; ne jamais valider RF uniquement sur un ACK SCT.</li>
+<li>Garder un watchdog/timeout independant en cas de reset du SCT, disconnection HPI ou desynchronisation de slot.</li>
+</ol>
+<h2 id="8-sources">8. Sources</h2>
+<ul>
+<li>Projet : <code>bench/sct_hpi.py</code>, <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>, <code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code>, <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code>, <code>docs/hardware/DMR.md</code>.</li>
+<li>RadioFoundry, architecture AnyTone et caracteristiques SCT : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a>.</li>
+<li>Sicomm, datasheet CT3258 : <a href="https://cdn.hackaday.io/files/1642237026116832/CT3258_datasheet.pdf">https://cdn.hackaday.io/files/1642237026116832/CT3258_datasheet.pdf</a> ; SCT3258 : <a href="https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf">https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf</a> ; Packet Interface v1.0 : <a href="https://cdn.hackaday.io/files/1642237026116832/CT3258_Packet_Interface.pdf">https://cdn.hackaday.io/files/1642237026116832/CT3258_Packet_Interface.pdf</a>. <strong>Licences non etablies : lier, ne pas redistribuer.</strong></li>
+<li>Mise a jour DMR distincte et pont USB : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

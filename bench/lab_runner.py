@@ -1,11 +1,13 @@
 """V9 external stimuli and evidence-labelled hardware telemetry."""
 import json
+from collections import deque
 from emulate_front_v121 import FrontRunner
 from lab_inputs import FRONT_KEYS,validate_keys,microphone_frame,MIC_CODES,MicrophonePeer,GpsScenario,GpsPeer
 from unicorn.arm_const import UC_ARM_REG_PC,UC_ARM_REG_R0,UC_ARM_REG_R1
 
 class LabRunner(FrontRunner):
     def __init__(self,*args,**kwargs):
+        self.front_key_queue=deque()
         self.held_keys=set();self.mic_keys=set();self.mic_last_code=0
         self.mic_connected=False;self.mic_next_tick=0;self.mic_long_sent=False;self.mic_press_tick=0;self.mic_lock=False
         self.gps_scenario=GpsScenario();self.serial_virtual_time=False
@@ -55,6 +57,18 @@ class LabRunner(FrontRunner):
         self.serial_deadline()
     def set_keys(self,keys):
         keys=validate_keys(keys)
+        if getattr(self,'interactive_mode',False):
+            self.front_key_queue.append(keys)
+            self.drain_front_keys()
+        else:self.apply_front_keys(keys)
+    def drain_front_keys(self):
+        while self.front_key_queue:
+            keys=self.front_key_queue[0]
+            if self.held_keys-keys and self.tick_wraps<getattr(self,'front_press_tick',-1000)+(15 if self.held_keys=={'DIAL_PUSH'} else 80):return
+            self.front_key_queue.popleft()
+            self.apply_front_keys(keys)
+    def apply_front_keys(self,keys):
+        if keys-self.held_keys:self.front_press_tick=self.tick_wraps
         self.held_keys=keys;self.key_releases=[];self.power_release=None
         self.adc_dma.profile['channels'].update({'8':4095,'9':4095})
         for key in keys:
@@ -106,10 +120,13 @@ class LabRunner(FrontRunner):
             self.adc_dma.profile['channels'][channel]=value;self.event('ADC_external_sample',channel=channel,value=value)
         elif kind=='VOLTAGE':self.voltage_sample(command['volts'])
         elif kind=='RELEASE_ALL':
-            self.set_keys([])
+            self.front_key_queue.clear();self.apply_front_keys(set())
             if self.mic_connected:self.send_microphone([])
         else:super().input_command(command)
     def gpio_set(self,off,size,value):
+        if getattr(self,'interactive_mode',False):
+            from interactive_runtime import fast_lcd_gpio
+            if fast_lcd_gpio(self,off,size,value):return
         base=(0x40010000+off)&~0x3FF
         previous=self.gpio.get(base,{}).get(12)
         super().gpio_set(off,size,value)
@@ -129,6 +146,7 @@ class LabRunner(FrontRunner):
                 self.uart_wait_extra=max(0,min(device.tx_shift[1],self.serial_next)-self.virtual_units-1)
                 if self.uart_wait_extra:self.lab_counts['UART_wait_accelerations']=self.lab_counts.get('UART_wait_accelerations',0)+1
         super().on_code(uc,address,size,data)
+        if self.stop is not None:return
         if address==0x08072426:
             self.event('FAN_native_request',on=bool(uc.reg_read(UC_ARM_REG_R0)),serialized=bool(uc.reg_read(UC_ARM_REG_R1)),
                 destination='radio bank 0 register 25h bit 1; hardware continuity not measured')
@@ -142,6 +160,7 @@ class LabRunner(FrontRunner):
             self.event('APRS_schedule' if address==0x0806624C else 'APRS_modulator_entry',evidence='native OEM PC observed')
         if self.steps>=self.lab_next:
             self.lab_next=self.steps+256
+            if getattr(self,'interactive_mode',False):self.drain_front_keys()
             if self.pending_voltage is not None and bytes(uc.mem_read(0x20001542,1))==b'\x01':
                 volts=self.pending_voltage;self.pending_voltage=None;self.voltage_sample(volts)
             while self.scenario and self.steps-self.scenario_origin>=self.scenario[0]['after_instructions']:
@@ -191,7 +210,8 @@ class LabRunner(FrontRunner):
             FM=dict(transactions=len(self.fm_i2c.frames),RF_station_simulated=False),
             RTC=dict(battery_mode=self.rtc_initial_mode,synthetic=True),
             lighting_registers={str(k):v for k,v in self.lighting.registers.items()},
-            USB=dict(host_connected=False),Bluetooth=dict(peer=self.uart3.peer.mode),
+            USB=dict(host_connected=getattr(self.usbd,'connected',False),CDC_state=getattr(getattr(self,'cdc',None),'state','disconnected')),
+            Bluetooth=dict(peer=self.uart3.peer.mode),
             firmware=getattr(self,'firmware_selection',None))
     def run_chunks(self,*args,**kwargs):
         result,ram=super().run_chunks(*args,**kwargs)

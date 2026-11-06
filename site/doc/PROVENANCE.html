@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Source provenance and local inputs - OpenD578</title>
+<link rel="stylesheet" href="../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../index.html">Vue eclatee</a>
+<a class="active" href="../docs.html">Documents</a>
+<a href="../cps.html">CPS / USB</a>
+<a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="../firmware.html">Firmware</a>
+<a href="../photos.html">Photos</a>
+<a href="../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>Source provenance and local inputs</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/PROVENANCE.md">Modifier sur GitHub</a><a download href="../raw/PROVENANCE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>PROVENANCE.md</code></p>
+<article class="markdown-body"><h1 id="source-provenance-and-local-inputs">Source provenance and local inputs</h1>
+<p>This initial source tree contains the Python/C emulator code from the project's
+V10/V11 bench, subsequent independent hardware-mode work, and French research
+notes from the project's 4 November 2026 handoff. Original contract programs are
+generated from the included Thumb instruction emitter.</p>
+<p>No manufacturer application, DSP image, Flash/NAND capture, OEM execution
+snapshot, radio calibration or codeplug is included. Hash constants and addresses
+identify the historical inputs; they are not the inputs themselves.</p>
+<p>The exact earlier compiled satellite modules are not included in this initial
+tree. Historical notes reference them without presenting them as available source.
+No OpenGD77 or OpenRTX firmware modules have been imported in this initial tree.</p>
+<p>Python dependencies are installed separately: Unicorn, Capstone and Pillow retain
+their upstream licenses. Future source imports must retain attribution and their
+applicable license terms. Original OpenD578 source and documentation in this
+repository are provided under GPL-3.0-or-later.</p>
+<p>The legacy OEM replay tools expect user-provided local files. The independent
+hardware tests require no OEM inputs and can run in public CI.</p>
+<h2 id="consolidation-of-5-november-2026">Consolidation of 5 November 2026</h2>
+<p>The public V11.7 source was recovered from the clean
+<code>SOURCES_PUBLIQUES/OpenD578_source_V11_7.zip</code> stored inside the project's
+<code>OpenD578_Banc_V11_7.zip</code> delivery. Only that public source tree has been
+merged here. No manufacturer image, raw NAND dump, execution snapshot,
+manufacturer CPS binary or private codeplug has been copied out of the bench
+archive. The newer V11.8 LCD, front-panel and microphone Markdown documents
+are included as independently delivered documentation; the V11.8 executable
+source was <strong>not</strong> available for this package.</p>
+<p>The interactive site sources, hardware models, external-source notes and CPS
+trace auditor were developed as public documentation/tools. Historical phase
+reports describe some investigations whose original artifacts have not been
+recovered. Such historical observations must not be construed as available
+and tested files or validated firmware integration.</p>
+<p>The generated <code>site/</code> tree is a derivative of the source Markdown and
+<code>hardware/models/*.json</code>, built with <code>tools/build_site.py</code> and rebuilt by
+GitHub Actions when <code>main</code> is pushed. The Markdown and JSON are canonical.</p>
+<h2 id="evidence-update-5-november-2026">Evidence update, 5 November 2026</h2>
+<p>Reconstructed peripheral documentation, GD32F303VKT6 pin map and <em>unwired</em> KiCad reference sheet are newly authored using surviving analyses and published component datasheets. They are <strong>not</strong> original files from the earlier chats. The hardware models now include candidate RTC/GNSS backup capacitors with per-connection confidence, based on the user's earlier board observation and VK7ZJA's photos of other board revisions. Original boot/flash/NAND dumps and Phase60 exact build files remain absent. All added external datasheets, photos and manuals are linked and not copied. Evidence ledger and reconstruction inventory: <code>docs/evidence/INDEX.md</code> and <code>docs/archives/ORIGINAUX_A_RECUPERER.md</code>.</p>
+<h2 id="qa4818n-analyse-du-6-novembre-2026">QA4818N : analyse du 6 novembre 2026</h2>
+<p>Source externe: guide de programmation AT1846S et documentation de VK7ZJA. Source locale: banc <code>bench/rf_spi.py</code> V11.7 et index des routines V1.21. Le code C est entièrement nouveau et utilise seulement une formule de codage de fréquence de référence. Il ne réutilise ni firmware OEM ni routine OEM, et ne peut pas piloter directement les GPIO. Les valeurs de démonstration sont étiquetées <code>synthetic</code> ; aucune capture originale constructeur du changement de fréquence n'est embarquée. Une copie officielle de V1.21 est référencée dans les précédents travaux par SHA-256 <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>, mais l'image n'est pas incluse ici.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>
+</body></html>

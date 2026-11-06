@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Site technique OpenD578 / GitHub Pages - OpenD578</title>
+<link rel="stylesheet" href="../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../index.html">Vue eclatee</a>
+<a class="active" href="../docs.html">Documents</a>
+<a href="../cps.html">CPS / USB</a>
+<a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="../firmware.html">Firmware</a>
+<a href="../photos.html">Photos</a>
+<a href="../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>Site technique OpenD578 / GitHub Pages</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/README_SITE.md">Modifier sur GitHub</a><a download href="../raw/README_SITE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>README_SITE.md</code></p>
+<article class="markdown-body"><h1 id="site-technique-opend578-github-pages">Site technique OpenD578 / GitHub Pages</h1>
+<p>Site statique sans serveur, framework JS, CDN ni animation. Les fichiers <code>.md</code> sont
+la source unique: le script publie <strong>les Markdown du depot en lecture integree</strong>
+a chaque <code>push</code> sur <code>main</code>. Ajouter ou modifier un fichier sous <code>docs/</code> ou
+<code>firmware/</code> ou <code>hardware/</code> met automatiquement a jour l'index et la page correspondante.</p>
+<h2 id="mise-en-ligne">Mise en ligne</h2>
+<ol>
+<li>Pour un depot GitHub <strong>encore vide</strong>, copier le <strong>contenu du dossier <code>OpenD578/</code></strong>
+a la racine de <code>Telectroboy/OpenD578</code>. Ne pas copier uniquement le ZIP.
+Pour un depot deja rempli, comparer les fichiers et fusionner les modifications
+sans supprimer les sources existantes.</li>
+<li>Commit/push sur la branche <code>main</code>.</li>
+<li>Dans GitHub: <code>Settings</code> &gt; <code>Pages</code> &gt; <code>Build and deployment</code> &gt; <code>Source</code> =
+<strong>GitHub Actions</strong>.</li>
+<li>Verifier l'action <code>Deploy OpenD578 documentation</code> dans <code>Actions</code>.</li>
+<li>Ouvrir <code>https://telectroboy.github.io/OpenD578/</code>.</li>
+</ol>
+<p>La compilation du site ne requiert que Python et <code>mistune</code> 3.2.x dans l'action.
+Le contenu est compile <strong>a partir du fichier courant</strong>, sans mettre a jour
+une seconde page HTML a la main. Les fichiers Markdown sources sont egalement
+proposes en telechargement.</p>
+<h2 id="mise-a-jour">Mise a jour</h2>
+<ul>
+<li>Modifier n'importe quel <code>.md</code> sous <code>docs/</code> ou <code>firmware/</code>, ou les README.</li>
+<li>Ajouter une liaison ou un composant dans
+<code>hardware/models/d578uv-pro-gd32-v121.json</code> avec son niveau de preuve.</li>
+<li>Ajouter une vraie photo dans <code>hardware/photos/&lt;variante&gt;/</code> : elle apparait
+automatiquement. Ajouter ses zones cliquables dans <code>manifest.json</code> si besoin.</li>
+<li>Ajouter une variante par un nouveau JSON du dossier <code>hardware/models/</code>.</li>
+<li>Les nouvelles pages sont listees automatiquement sans modifier un menu.</li>
+</ul>
+<h2 id="centre-de-preuves-et-sauvegardes-rtcgps">Centre de preuves et sauvegardes RTC/GPS</h2>
+<p>La navigation <code>Preuves</code> donne acces aux cinq monographies reconstituees, a la carte CSV des 100 broches GD32, a la feuille KiCad <strong>non cablee</strong>, aux deux sauvegardes RTC/GNSS historiques et aux tests passifs proposes. Le contenu distingue releves utilisateur, OEM statique, banc d emulation et donnees tierces. Les originaux non accessibles ne sont pas inventes. Voir <a href="docs/evidence/INDEX.html">preuves</a>.</p>
+<h2 id="bluetooth-ajouts-materiels-recents">Bluetooth / ajouts materiels recents</h2>
+<p>La carte <strong>D868BT-SP</strong>, son module Bluetooth blinde (firmware ET12), le microphone
+<strong>BT01</strong> et le bouton PTT <strong>BP-02</strong> possedent maintenant des fiches distinctes
+reliees aux deux vues PRO/PLUS. Le PLUS utilise egalement un <strong>GD32F303</strong> selon
+le releve materiel ; les GPIO et firmware exacts restent propres a la variante.
+Le circuit marque <strong>H2226</strong> en boitier <strong>SSOP-B16</strong> est identifie comme
+<strong>ROHM BH2226FV-E2</strong> (8 sorties DAC), sans supposer ses affectations physiques.</p>
+<p>Les outils <code>tools/audit_bluetooth_strings.py</code> et <code>tools/decode_bt_uart.py</code>
+fonctionnent hors ligne et en <strong>lecture seule</strong> : le premier repere des chaines
+dans un binaire fourni, le second annote des trames UART deja capturees.
+Ils ne pilotent jamais le poste ni le PTT.</p>
+<h2 id="generation-locale-facultative">Generation locale (facultative)</h2>
+<pre><code class="language-bash">python3 -m pip install -r site-requirements.txt
+python3 tools/validate_hardware_model.py
+python3 tools/build_site.py
+python3 -m http.server --directory site 8000
+</code></pre>
+<p>Le site peut aussi etre ouvert depuis un fichier <code>site/index.html</code>; les
+scripts et donnees sont embarques/locales et ne consultent pas de service.
+Le code met automatiquement des liens vers la documentation GitHub et les
+copies Markdown generees pour consultation hors ligne.</p>
+<h2 id="regles-de-publication">Regles de publication</h2>
+<p>Aucune image OEM, aucun dump NAND, aucune calibration/codeplug personnel ou
+source sous licence incertaine. On ne presente pas un signal de simulation
+comme une liaison physique prouvee. Dans les photos tierces, on prefere les
+liens de source a une republication sans autorisation.</p>
+<h2 id="programmation-cps">Programmation CPS</h2>
+<p>Un nouvel onglet <code>CPS / USB</code> regroupe les trames OEM <code>PROGRAM</code>, identification, <code>R</code>, <code>W</code>, <code>END</code>, les descripteurs USB CDC et le format des 128 premiers canaux du PRO V1.21. Les fichiers <code>bench/cps_bridge.py</code>, <code>bench/cps_probe.py</code>, <code>bench/web/mini_cps_protocol.js</code> et leurs tests proviennent de la <strong>source publique V11.7</strong>. Le scanner <code>tools/cps_trace_audit.py</code> analyse des journaux JSONL déjà capturés, sans connexion USB.</p>
+<p>Le dépôt ne comprend pas le constructeur CPS.exe ni les images constructeur. La compatibilité avec les postes physiques et la totalité des fonctions Windows reste à qualifier.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>USB et CPS AnyTone — constat du 5 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>USB et CPS AnyTone — constat du 5 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/USB_CPS_PLAN.md">Modifier sur GitHub</a><a download href="../../raw/docs/USB_CPS_PLAN.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/USB_CPS_PLAN.md</code></p>
+<article class="markdown-body"><p>Mise à jour V11.5 : voir <a href="USB_CPS_V11_5.html">USB_CPS_V11_5.md</a>.
+Le texte ci-dessous conserve le constat antérieur V11.4.1.</p>
+<h1 id="usb-et-cps-anytone-constat-du-5-novembre-2026">USB et CPS AnyTone — constat du 5 novembre 2026</h1>
+<h2 id="verifie-dans-la-flash-capturee">Vérifié dans la Flash capturée</h2>
+<p>Image complète SHA256 : e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e.
+L’inspection est statique : le firmware n’a pas encore répondu à une énumération
+USB complète dans le banc. Voir USB_V121_DESCRIPTORS.json et l’outil reproductible
+<code>python tools/inspect_usb_descriptors.py full_flash_pass1.bin</code>.</p>
+<table>
+<thead>
+<tr>
+  <th>Élément</th>
+  <th>Application V1.21</th>
+  <th>Bootloader</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Descripteur périphérique</td>
+  <td>0x080F566E</td>
+  <td>0x080044C8</td>
+</tr>
+<tr>
+  <td>VID:PID</td>
+  <td>28E9:018A</td>
+  <td>28E9:018A</td>
+</tr>
+<tr>
+  <td>Classe périphérique</td>
+  <td>02, communications</td>
+  <td>02, communications</td>
+</tr>
+<tr>
+  <td>Configuration CDC</td>
+  <td>0x080F60FE</td>
+  <td>0x08004508</td>
+</tr>
+<tr>
+  <td>Interface 0</td>
+  <td>CDC ACM, classe 02, sous-classe 02, protocole 01</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Interface 1</td>
+  <td>données CDC, classe 0A</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Notification</td>
+  <td>endpoint 0x82, interruption, 8 octets</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Données PC → poste</td>
+  <td>endpoint 0x03, bulk, 64 octets</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Données poste → PC</td>
+  <td>endpoint 0x81, bulk, 64 octets</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Contrôle</td>
+  <td>EP0, 64 octets</td>
+  <td>idem</td>
+</tr>
+</tbody>
+</table>
+<p>Les chaînes PROGRAM et QX suivi de 06 sont présentes dans l’application.
+Cela concorde avec l’implémentation primaire qdmr, lib/anytone_interface.cc :
+<a href="https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_interface.cc">https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_interface.cc</a>
+Source consultée le 5 novembre 2026 ; une concordance de chaînes ne prouve pas
+à elle seule tous les chemins d’exécution du firmware capturé.</p>
+<table>
+<thead>
+<tr>
+  <th>Échange de programmation décrit par qdmr</th>
+  <th>Réponse attendue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>PROGRAM (7 octets ASCII)</td>
+  <td>QX puis ACK 06</td>
+</tr>
+<tr>
+  <td>02 (identification)</td>
+  <td>structure avec préfixe I, modèle, bandes, version, fin 06</td>
+</tr>
+<tr>
+  <td>R + adresse big endian sur 4 octets + longueur 10 hex</td>
+  <td>W + adresse + longueur + 16 octets + somme + 06</td>
+</tr>
+<tr>
+  <td>W + adresse + longueur + 16 octets + somme + 06</td>
+  <td>ACK 06</td>
+</tr>
+</tbody>
+</table>
+<p>La somme est l’addition modulo 256 des octets adresse, longueur et données,
+sans l’octet commande. qdmr configure son port série à 115200. Ce débit CDC
+n’est pas un débit UART matériel démontré. Les adresses du protocole de
+programmation ne doivent pas être confondues avec des pointeurs MCU ou des
+offsets NAND directs. Le CPS constructeur doit encore être observé : il peut
+utiliser d’autres commandes, tailles, contrôles de ligne et délais.</p>
+<h2 id="architecture-retenue-pour-une-liaison-fidele">Architecture retenue pour une liaison fidèle</h2>
+<p>CPS → port COM virtuel A ↔ port virtuel B → pont local du banc → hôte CDC
+simulé → contrôleur USB/PMA/IRQ du GD32 → firmware exécuté → NAND virtuelle.
+Le navigateur reste l’interface de commande et d’observation du banc.</p>
+<p>Un navigateur peut ouvrir un port existant avec Web Serial ; il ne crée pas
+un périphérique COM Windows pour une autre application. Sous Windows, il faut
+un pilote de ports virtuels ou un périphérique USB virtuel. Le pont Python
+local existant permet d’éviter de faire transiter les octets par l’interface web.
+Un PTY peut jouer ce rôle pour un client Linux ; le CPS Windows reste à tester
+sur son environnement réel et peut avoir des contraintes de détection de ports.</p>
+<p>Il n’est pas nécessaire d’émuler un périphérique USB au niveau du système
+Windows si le CPS accepte un port COM virtuel choisi manuellement. Si le CPS
+filtre les identifiants USB ou utilise des requêtes de pilote spécifiques, cette
+solution devra être complétée. Aucun pilote n’est installé automatiquement.</p>
+<p>Références primaires sur les interfaces hôte :
+<a href="https://developer.chrome.com/docs/capabilities/serial">https://developer.chrome.com/docs/capabilities/serial</a>
+<a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/samples/serial-driver-samples">https://learn.microsoft.com/en-us/windows-hardware/drivers/samples/serial-driver-samples</a></p>
+<h2 id="ce-qui-manque-encore">Ce qui manque encore</h2>
+<ol>
+<li>Énumération réelle du firmware : GET_DESCRIPTOR, SET_ADDRESS,
+SET_CONFIGURATION et transferts de contrôle à plusieurs paquets.</li>
+<li>Contrôles CDC : SET/GET_LINE_CODING, SET_CONTROL_LINE_STATE et notifications.</li>
+<li>Files bulk avec ACK/NAK/STALL, découpage 64 octets et réassemblage du flux.</li>
+<li>Pont entre ces files et le port virtuel ; journal binaire horodaté des deux sens.</li>
+<li>Essai du CPS d’origine : identification puis lecture, ensuite écriture dans
+une copie NAND virtuelle et relecture après redémarrage du modèle.</li>
+<li>Délais réels du CPS : le moteur accéléré ne garantit pas de répondre avant
+son timeout. Ne pas synthétiser une réponse à la place du firmware pour masquer
+un retard ou une fonction manquante.</li>
+</ol>
+<p>V11.4.1 ne fournit pas encore une liaison CPS fonctionnelle. Le modèle UsbdHost
+existant permet des tokens et interruptions en mode matériel, mais ne réalise
+pas encore tout l’hôte CDC. Le mode Analyse OEM conserve son modèle USB absent.
+Un faux poste qui répondrait directement PROGRAM/QX et lirait une image mémoire
+serait un émulateur de protocole distinct : il ne testerait pas la pile USB et
+le gestionnaire de programmation du firmware. Ce n’est pas l’architecture visée.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -46,6 +46,12 @@ class CortexExceptions:
 
     def core_set(self,off,size,value):
         word,shift,mask=self.lane(off,size)
+        if word==0xD0C:
+            if size!=4:raise StopModel('AIRCR requires a word access')
+            if value>>16!=0x05FA:return
+            if value&4:self.halt('software reset requested',source='AIRCR.SYSRESETREQ',automatic_reboot=False)
+            else:self.core[word]=0xFA050000|(value&0x700)
+            return
         if word==0xD04:
             value<<=shift
             if value&~0x1E000000:raise StopModel('ICSR command outside PendSV/SysTick subset')
@@ -55,7 +61,11 @@ class CortexExceptions:
             if len(self.core_pend_events)<256:
                 self.core_pend_events.append(dict(step=self.steps,value=hx(value),pending=sorted(self.core_pending)))
             return
-        return super().core_set(off,size,value)
+        result=super().core_set(off,size,value)
+        if getattr(self,'interactive_mode',False) and 0x100<=word<0x1A0:
+            self.peripheral_deadline=min(self.peripheral_deadline,self.virtual_units+1)
+            self.serial_deadline()
+        return result
 
     def on_code(self,uc,address,size,data):
         super().on_code(uc,address,size,data)

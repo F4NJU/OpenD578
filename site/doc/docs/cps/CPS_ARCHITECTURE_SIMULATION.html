@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS dans le banc V11.7 : architecture, lancement et fichiers sources - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>CPS dans le banc V11.7 : architecture, lancement et fichiers sources</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/CPS_ARCHITECTURE_SIMULATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/CPS_ARCHITECTURE_SIMULATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/CPS_ARCHITECTURE_SIMULATION.md</code></p>
+<article class="markdown-body"><h1 id="cps-dans-le-banc-v117-architecture-lancement-et-fichiers-sources">CPS dans le banc V11.7 : architecture, lancement et fichiers sources</h1>
+<h2 id="1-ce-qui-est-reellement-fourni">1. Ce qui est réellement fourni</h2>
+<p>Le banc exécute l'application AnyTone OEM V1.21 dans une simulation de CPU et de périphériques. Son hôte USB observe les descripteurs et les transactions de cette application. Il ne réimplémente pas les réponses OEM en inventant une lecture du dump NAND.</p>
+<p>La source publique V11.7 a été réintégrée ici depuis <code>OpenD578_source_V11_7.zip</code>, lui-même contenu dans l'archive de qualification V11.7. Cette version est la <strong>base exécutable publique disponible</strong>. Les notices V11.8 du LCD et du microphone ont été conservées mais ne signifient pas que leurs modifications de banc sont toutes présentes dans les sources V11.7.</p>
+<h3 id="chemin-des-octets">Chemin des octets</h3>
+<pre><code class="language-text">CPS constructeur Windows --&gt; port COM10 (exemple)
+                                |
+                 paire de ports COM virtuels, externe au dépôt
+                                |
+                         port COM11
+                         cps_bridge.py
+                                |
+                localhost /api/usb/* (web_server.py)
+                                |
+                   file CDC (usb_cdc.py)
+                                |
+                  transactions USBD / PMA
+                                |
+                 firmware OEM V1.21 exécuté
+                                |
+                  gestionnaire NAND du GD32
+                                |
+                         nand_overlay.py
+</code></pre>
+<p>Sous Linux, <code>cps_bridge.py --pty</code> fournit <code>/dev/pts/N</code> à un client qui autorise la sélection manuelle du chemin de port ; il ne se présente <strong>pas</strong> comme un périphérique USB 28E9:018A.</p>
+<p>Le CPS <strong>intégré dans le navigateur</strong> utilise le même chemin USB, mais <strong>sans port COM</strong> : <code>web/mini_cps.js</code> -&gt; <code>web/mini_cps_protocol.js</code> -&gt; API USB -&gt; firmware exécuté. Ce n'est pas un clone complet du logiciel AnyTone.</p>
+<h2 id="2-sources-a-lire-les-chemins-sont-dans-bench">2. Sources à lire (les chemins sont dans <code>bench/</code>)</h2>
+<table>
+<thead>
+<tr>
+  <th>Fichier</th>
+  <th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>usbd_host.py</code></td>
+  <td>Requêtes de contrôle et transactions IN/OUT du contrôleur USBD simulé, lecture des données PMA</td>
+</tr>
+<tr>
+  <td><code>usb_cdc.py</code></td>
+  <td>État hôte, énumération CDC, configuration, endpoints et files bulk</td>
+</tr>
+<tr>
+  <td><code>usb_cdc_runtime.py</code>, <code>cdc_channel.py</code></td>
+  <td>Association du moteur CPU à la session USB et son suivi</td>
+</tr>
+<tr>
+  <td><code>web_server.py</code>, <code>web_endpoint.py</code></td>
+  <td>API locale, contrôle des clients et identification du serveur actif</td>
+</tr>
+<tr>
+  <td><code>cps_bridge.py</code></td>
+  <td>Pont transparents COM/PTY &lt;-&gt; HTTP/CDC ; journal optionnel des octets</td>
+</tr>
+<tr>
+  <td><code>cps_probe.py</code></td>
+  <td>Identification et lecture <strong>seule</strong> de 16 octets, contrôle d'adresse et checksum</td>
+</tr>
+<tr>
+  <td><code>web/mini_cps_protocol.js</code></td>
+  <td><code>PROGRAM</code>, identification, <code>R</code>, <code>W</code>, <code>END</code>, décodage de 32 canaux/page, modification nom seulement</td>
+</tr>
+<tr>
+  <td><code>web/mini_cps.js</code>, <code>web/cps_link.js</code></td>
+  <td>Interface CPS intégrée et connexion au moteur</td>
+</tr>
+<tr>
+  <td><code>web/test_mini_cps.cjs</code></td>
+  <td>Tests hors ligne des BCD, noms, snapshots périmés, protection des champs voisins et non-répétition de END</td>
+</tr>
+<tr>
+  <td><code>test_usb_cdc.py</code>, <code>test_cps_endpoint.py</code>, <code>test_cdc_channel.py</code></td>
+  <td>Tests hôte USB, API, transport et état des sessions</td>
+</tr>
+<tr>
+  <td><code>nand_overlay.py</code>, <code>nand_state.py</code></td>
+  <td>Couche de pages et persistance des modifications si activée</td>
+</tr>
+</tbody>
+</table>
+<p>Il ne faut <strong>pas</strong> appeler <code>mini_cps_protocol.js</code> un pilote NAND. Il génère et vérifie des échanges série CPS. Le firmware OEM réalise les transactions NAND par ses propres routines.</p>
+<h2 id="3-tests-sans-materiel">3. Tests sans matériel</h2>
+<p>Depuis la racine du dépôt, après installation des dépendances du banc :</p>
+<pre><code class="language-sh">node bench/web/test_mini_cps.cjs
+python3 -m unittest discover -s bench -p 'test_usb_cdc.py' -v
+python3 -m unittest discover -s bench -p 'test_cps_endpoint.py' -v
+python3 -m unittest discover -s tools -p 'test_cps_trace_audit.py' -v
+</code></pre>
+<p>Les tests nécessitant <code>unicorn</code>, <code>capstone</code> et parfois <code>pyserial</code> ou <code>numpy</code> ne doivent pas être déclarés réussis lorsqu'ils n'ont pas réellement été lancés. Le <code>site</code> GitHub Pages est indépendant de ces bibliothèques lourdes.</p>
+<h2 id="4-lancer-le-banc-et-faire-une-lecture">4. Lancer le banc et faire une lecture</h2>
+<p>Le banc exige des entrées locales propriétaires qui ne sont <strong>pas</strong> contenues dans le dépôt public : image application GD32 V1.21, références NAND, éventuellement l'état de reprise. Le lire-moi et les lanceurs <code>bench/OUVRIR_BANC_WEB.*</code> expliquent l'environnement. L'image OEM utilisée est identifiée par son SHA256 dans <code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code>.</p>
+<p>Démarrage : <code>bench/OUVRIR_BANC_WEB.sh</code> sous Linux ou <code>bench/OUVRIR_BANC_WEB.cmd</code> sous Windows. Dans l'interface, lancer la simulation appropriée, puis connecter l'hôte CDC. Le client de test <code>bench/cps_probe.py</code> lit un bloc de contrôle en <strong>lecture seule</strong> :</p>
+<pre><code class="language-sh">cd bench
+python3 cps_probe.py --read-address 0x02FA0000
+</code></pre>
+<p><strong>Ne pas</strong> lancer simultanément le CPS intégré, un pont COM et un autre client de test. Le serveur n'impose pas un verrou exclusif inter-processus sur toutes les opérations.</p>
+<h2 id="5-pont-windows-et-linux">5. Pont Windows et Linux</h2>
+<p>Windows : créer une paire COM virtuelle avec un logiciel adapté ; configurer le CPS pour <code>COM10</code> et <code>cps_bridge.py</code> pour l'autre extrémité (<code>COM11</code>) ; ne pas faire ouvrir deux processus sur le même côté. Le pont sait préparer le mode CPS avant de rendre la liaison au CPS, afin de limiter les délais lors du premier <code>PROGRAM</code>.</p>
+<pre><code class="language-sh">cd bench
+python cps_bridge.py --port COM11 --prepare
+</code></pre>
+<p>Linux :</p>
+<pre><code class="language-sh">cd bench
+python3 cps_bridge.py --pty
+</code></pre>
+<p>Le pont affiche le nom du PTY. L'option <code>--log</code> produit un journal JSONL contenant les <strong>octets complets de la communication CPS</strong>. Ce journal peut révéler identifiants, fréquences, messages, contacts et paramètres d'étalonnage. Il doit rester hors du dépôt public. <code>tools/cps_trace_audit.py</code> permet d'en extraire un <strong>résumé technique sans charge utile</strong>.</p>
+<h2 id="6-ecriture-etendue-reelle-de-la-validation">6. Écriture : étendue réelle de la validation</h2>
+<p>Le scénario V11.6 a : identifié la radio simulée ; lu une page logique de 2048 octets ; modifié seulement le champ nom d'un canal ; réécrit la page ; émis <code>END</code> ; laissé finir le code OEM et ses métadonnées NAND ; sauvegardé l'overlay ; redémarré l'application depuis la Flash, sans la RAM de reprise ; relu et comparé la page entière. Le contrôle a confirmé que <strong>seuls les octets du nom ciblé avaient changé</strong>.</p>
+<p>Ce résultat ne vérifie ni la totalité des champs CPS, ni toutes les fonctions du logiciel Windows, ni la résistance à une coupure électrique au milieu d'une programmation. Les changements sur un poste réel sont hors de ce scénario.</p>
+<h2 id="7-procedure-de-qualification-physique-lecture-seule">7. Procédure de qualification physique (lecture seule)</h2>
+<p>Commencer par une sauvegarde constructeur ; noter les identifiants de firmware, le VID/PID, le descripteur CDC, le modèle retourné et les temps de réponse ; capturer une session de <strong>lecture</strong> terminée proprement. Comparer les groupes d'adresses et checksums au protocole de ce dossier. Ne pas utiliser de commande de test qui modifie les calibrations, de bouton TX ni de mise à jour firmware lors de cette campagne.</p>
+<p>Sources : <a href="../USB_CPS_V11_5.html">V11.5</a>, <a href="../CPS_INTEGRE_V11_6.html">V11.6</a>, <a href="../CHANGELOG_V11_7.html">V11.7</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/USB_V121_DESCRIPTORS.json">descripteurs</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

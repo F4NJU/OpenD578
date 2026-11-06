@@ -1,0 +1,1198 @@
+{
+  "schema_version": 1,
+  "status": "incomplete",
+  "target": "D578UV PRO GD32 V1.21",
+  "inventory_completeness": "open_inventory_not_exhaustive",
+  "physical_radio_certified": false,
+  "features": [
+    {
+      "id": "ihm.power",
+      "title": "Mise en marche, arrêt et réveil",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "watchdog reset request observed; automatic reboot missing",
+      "model": "partial",
+      "acceptance": "watchdog et retour dans un état sûr"
+    },
+    {
+      "id": "ihm.keys",
+      "title": "Touches P1–P6, MENU et EXIT",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "real OEM key decoder probes",
+      "model": "partial",
+      "acceptance": "appui court, long, maintien et relâchement"
+    },
+    {
+      "id": "ihm.encoder",
+      "title": "Encodeur et appui du cadran",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "OEM EXTI decoder probes",
+      "model": "partial",
+      "acceptance": "sens, pas, verrouillage et absence de double événement"
+    },
+    {
+      "id": "ihm.mic_keys",
+      "title": "Clavier du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "captured UART input protocol",
+      "model": "partial",
+      "acceptance": "chiffres, fonctions, appuis longs et verrouillage haut/bas"
+    },
+    {
+      "id": "ihm.dual_ptt",
+      "title": "PTT principal et sélection A/B du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "Main microphone PTT executed; alternate A/B PTT behavior not fully qualified",
+      "model": "partial",
+      "acceptance": "sélection réelle de la voie et relâchement"
+    },
+    {
+      "id": "ihm.lcd",
+      "title": "Écran et rendu",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "GPIO LCD bus decoder",
+      "model": "partial",
+      "acceptance": "pixels, veille, réveil et mises à jour concurrentes"
+    },
+    {
+      "id": "ihm.backlight",
+      "title": "Rétroéclairage écran",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "lighting channel 8 caller and bus evidence",
+      "model": "partial",
+      "acceptance": "luminosité et extinction commandées sur le bus"
+    },
+    {
+      "id": "ihm.key_lights",
+      "title": "Éclairage des touches du poste",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sorties électriques et intensités par groupe"
+    },
+    {
+      "id": "ihm.status_led",
+      "title": "LED de statut du poste",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "Red/green bus sequence tested; physical continuity and other colours unverified",
+      "model": "partial",
+      "acceptance": "séquence PE3/PE4 vert/repos/rouge/repos ; polarité et câblage physiques à confirmer"
+    },
+    {
+      "id": "ihm.mic_led_main",
+      "title": "Indicateurs de voie principale du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sélection A/B sans déduction depuis une variable OEM"
+    },
+    {
+      "id": "ihm.mic_led_rt",
+      "title": "Indicateurs RX/TX du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "trames radio vers microphone et état lumineux par voie"
+    },
+    {
+      "id": "ihm.mic_backlight",
+      "title": "Éclairage du clavier microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "commande, alimentation, temporisation et intensité"
+    },
+    {
+      "id": "ihm.locks",
+      "title": "Verrouillages des commandes",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "façade, encodeur, clavier et touches haut/bas du microphone"
+    },
+    {
+      "id": "ihm.menu_timeout",
+      "title": "Sortie temporisée des menus",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "délai virtuel et retour à la vue active"
+    },
+    {
+      "id": "ihm.vfo_memory",
+      "title": "VFO, mémoires et affichage",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "passage de mode et cohérence des fréquences"
+    },
+    {
+      "id": "ihm.zones",
+      "title": "Zones et listes de canaux",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "navigation, limites et persistance"
+    },
+    {
+      "id": "ihm.main_sub",
+      "title": "Voie principale et voie secondaire",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "permutation A/B et activation secondaire"
+    },
+    {
+      "id": "ihm.beeps",
+      "title": "Bips et avertissements sonores",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sortie audio réellement commandée"
+    },
+    {
+      "id": "ihm.startup",
+      "title": "Affichage et options au démarrage",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "initialisation et reprise sans capture RAM pour qualification"
+    },
+    {
+      "id": "ihm.password",
+      "title": "Mot de passe de démarrage",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "acceptation, rejet et absence de corruption"
+    },
+    {
+      "id": "ihm.device_info",
+      "title": "Informations matérielles et versions",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "provenance MCU, SCT et module Bluetooth"
+    },
+    {
+      "id": "ihm.service",
+      "title": "Mode TEST et réglages de maintenance",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "conditions d’accès et conservation des alignements propres au poste"
+    },
+    {
+      "id": "fm.rx_frequency",
+      "title": "Accord réception",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "fréquence effective, bande et réception hors canal"
+    },
+    {
+      "id": "fm.tx_frequency",
+      "title": "Accord émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "fréquence effective et absence de porteuse au repos"
+    },
+    {
+      "id": "fm.offset",
+      "title": "Décalage relais",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sens positif, négatif et simplex"
+    },
+    {
+      "id": "fm.reverse",
+      "title": "Inversion relais",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "permutation des fréquences et des tonalités"
+    },
+    {
+      "id": "fm.talkaround",
+      "title": "Communication directe",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "usage de la fréquence attendue sans modification du canal sauvegardé"
+    },
+    {
+      "id": "fm.steps",
+      "title": "Pas VFO",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "arrondis, limites et mémorisation"
+    },
+    {
+      "id": "fm.bands",
+      "title": "Bandes et limites de fréquence",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "bornes, variantes régionales et interdiction hors plages configurées"
+    },
+    {
+      "id": "fm.bandwidth",
+      "title": "Largeur de canal",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "filtres RX et déviation TX cohérents"
+    },
+    {
+      "id": "fm.power",
+      "title": "Niveaux de puissance",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "commandes des niveaux et alignements ; watts à mesurer sur matériel"
+    },
+    {
+      "id": "fm.squelch",
+      "title": "Squelch porteuse",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "synthetic discriminator/status inputs only",
+      "model": "partial",
+      "acceptance": "seuil, hystérésis, retard et fermeture"
+    },
+    {
+      "id": "fm.rssi",
+      "title": "Indication du niveau reçu",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "courbe brute puis étalonnage du niveau physique"
+    },
+    {
+      "id": "fm.monitor",
+      "title": "Écoute forcée",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "ouverture audio et retour au filtrage normal"
+    },
+    {
+      "id": "fm.ctcss_tx",
+      "title": "CTCSS émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "fréquence, amplitude, phase et suppression en fin de transmission"
+    },
+    {
+      "id": "fm.ctcss_rx",
+      "title": "CTCSS réception",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "bonne tonalité, mauvaise tonalité, absence et délais"
+    },
+    {
+      "id": "fm.dcs_tx",
+      "title": "DCS émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "code, polarité et fin de transmission"
+    },
+    {
+      "id": "fm.dcs_rx",
+      "title": "DCS réception",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "code, polarité, faux positifs et temps de détection"
+    },
+    {
+      "id": "fm.squelch_logic",
+      "title": "Combinaisons de critères de réception",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "porteuse, sous-tonalité et signalisation optionnelle"
+    },
+    {
+      "id": "fm.tail",
+      "title": "Traitement de fin de porteuse",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "silence, phase CTCSS et bruit de fermeture"
+    },
+    {
+      "id": "fm.dual_rx",
+      "title": "Réception simultanée A/B",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "deux signaux indépendants et routage sans échange de voie"
+    },
+    {
+      "id": "fm.crossband",
+      "title": "Répéteur entre bandes",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "RX sur une voie vers TX sur l’autre avec protections"
+    },
+    {
+      "id": "fm.scan",
+      "title": "Balayage mémoire et priorités",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "arrêt, reprise et priorité"
+    },
+    {
+      "id": "fm.vfo_scan",
+      "title": "Balayage VFO programmé",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "bornes et pas effectifs"
+    },
+    {
+      "id": "fm.scan_resume",
+      "title": "Modes de reprise du balayage",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "porteur, temporisation et arrêt manuel"
+    },
+    {
+      "id": "fm.tbst",
+      "title": "Tonalité d’ouverture relais",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "fréquence, durée et combinaison PTT/haut-bas"
+    },
+    {
+      "id": "fm.dtmf_tx",
+      "title": "DTMF émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "fréquences, niveaux, cadence et contenu"
+    },
+    {
+      "id": "fm.dtmf_rx",
+      "title": "DTMF réception",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "détection, sélection et rejet des trames invalides"
+    },
+    {
+      "id": "fm.two_tone",
+      "title": "Signalisation deux tons",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "émission, réception et temporisations"
+    },
+    {
+      "id": "fm.five_tone",
+      "title": "Signalisation cinq tons",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "séquence, cadence, réception et rejet"
+    },
+    {
+      "id": "fm.ptt_id",
+      "title": "Identifiant au début ou à la fin du PTT",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "moment, contenu et coexistence avec APRS"
+    },
+    {
+      "id": "fm.compander",
+      "title": "Compandeur",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "réponse dynamique et saturation"
+    },
+    {
+      "id": "fm.scrambler",
+      "title": "Inversion audio",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "transformation, paramètres et désactivation"
+    },
+    {
+      "id": "fm.broadcast",
+      "title": "Réception FM radiodiffusion",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "accord et retour aux voies radio"
+    },
+    {
+      "id": "fm.broadcast_monitor",
+      "title": "Priorité radio sur radiodiffusion",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "interruption et reprise"
+    },
+    {
+      "id": "fm.weather",
+      "title": "Réception et alerte météo selon variante",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "présence conditionnelle et priorité"
+    },
+    {
+      "id": "fm.alarm",
+      "title": "Alarme et travail isolé",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "délais, avertissements, acquittement et émission contrôlée"
+    },
+    {
+      "id": "audio.mic_input",
+      "title": "Entrée audio microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "polarisation, gain, saturation et coupure"
+    },
+    {
+      "id": "audio.volume_a",
+      "title": "Volume de la voie A",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "échantillons ADC et gain réel"
+    },
+    {
+      "id": "audio.volume_b",
+      "title": "Volume de la voie B",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "échantillons ADC et gain réel"
+    },
+    {
+      "id": "audio.internal_speaker",
+      "title": "Haut-parleur interne",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sélection, mute et gain"
+    },
+    {
+      "id": "audio.mic_speaker",
+      "title": "Haut-parleur du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sélection microphone/poste/les deux et choix de la voie A ou B"
+    },
+    {
+      "id": "audio.external_a",
+      "title": "Sortie haut-parleur externe A",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "routage et effet du contact mécanique de prise"
+    },
+    {
+      "id": "audio.external_b",
+      "title": "Sortie haut-parleur externe B",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "routage et effet du contact mécanique de prise"
+    },
+    {
+      "id": "audio.max_volume",
+      "title": "Limitation du volume",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "plafonnement et mode intérieur"
+    },
+    {
+      "id": "audio.codec",
+      "title": "Codec et liaisons audio numériques",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "SCT codec bypass writes retained, samples not routed",
+      "model": "partial",
+      "acceptance": "horloges, routage, gains et échantillons sans présumer le câblage du codec"
+    },
+    {
+      "id": "audio.filtering",
+      "title": "Filtres et préaccentuation",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "réponse en fréquence et déviation sans coefficients inventés"
+    },
+    {
+      "id": "audio.record",
+      "title": "Enregistrement analogique optionnel",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "présence de la carte et absence de fausse prise en charge"
+    },
+    {
+      "id": "safety.tot",
+      "title": "Limitation de durée émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "coupure indépendante d’un PTT maintenu"
+    },
+    {
+      "id": "safety.busy",
+      "title": "Interdiction émission sur canal occupé",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "combinaisons porteuse et CTCSS/DCS"
+    },
+    {
+      "id": "safety.rx_only",
+      "title": "Canal réception seule",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "aucune activation PA malgré toutes les sources de PTT"
+    },
+    {
+      "id": "safety.tx_allow",
+      "title": "Critères autorisant émission",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "priorité des interdictions et cohérence entre voies"
+    },
+    {
+      "id": "safety.temperature",
+      "title": "Mesure de température",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "relation capteur/ADC et valeurs impossibles"
+    },
+    {
+      "id": "safety.fan",
+      "title": "Ventilateur",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "bank 0 page 0 register 0x25 bit 1 observed",
+      "model": "partial",
+      "acceptance": "modes PTT/température/les deux, seuils et hystérésis"
+    },
+    {
+      "id": "safety.overheat",
+      "title": "Protection thermique",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "action OEM à confirmer ; ne pas présumer une protection absente"
+    },
+    {
+      "id": "safety.voltage",
+      "title": "Mesure tension alimentation",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "OEM ADC conversion observed",
+      "model": "partial",
+      "acceptance": "conversion brute, calibration et seuils"
+    },
+    {
+      "id": "safety.supply_fault",
+      "title": "Défauts alimentation",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sous-tension, chute TX et politique OEM à identifier"
+    },
+    {
+      "id": "safety.auto_off",
+      "title": "Arrêt automatique",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "inactivité et état de sortie"
+    },
+    {
+      "id": "safety.watchdog",
+      "title": "Surveillance et reset",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "FWDGT request only",
+      "model": "partial",
+      "acceptance": "détection puis redémarrage et sorties sûres"
+    },
+    {
+      "id": "safety.storage_fault",
+      "title": "Défauts de mémoire",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "données corrompues, coupure et conservation des alignements"
+    },
+    {
+      "id": "safety.startup_ptt",
+      "title": "PTT au démarrage ou perte du microphone",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "politique explicite et absence de transmission incontrôlée"
+    },
+    {
+      "id": "usb.read",
+      "title": "Lecture et identification CPS",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "user confirmed original Windows CPS full read; Python probe",
+      "model": "partial",
+      "acceptance": "réponses produites par le firmware et contrôles des blocs"
+    },
+    {
+      "id": "usb.write",
+      "title": "Écriture des mémoires",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "name roundtrip and cold restart validated",
+      "model": "partial",
+      "acceptance": "modification et récupération après démarrage complet"
+    },
+    {
+      "id": "usb.channel_edit",
+      "title": "Édition complète des canaux",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "création, suppression, fréquence, tonalités, zones et persistance"
+    },
+    {
+      "id": "usb.alignment",
+      "title": "Alignements individuels",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sauvegarde et non-écrasement inter-postes"
+    },
+    {
+      "id": "usb.update",
+      "title": "Mise à jour et récupération",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "bornes, interruption, bootloader et restauration"
+    },
+    {
+      "id": "gps.enable",
+      "title": "Activation du module",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "commandes et alimentation si câblage connu"
+    },
+    {
+      "id": "gps.presence",
+      "title": "Module absent ou présent",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "silence, démarrage et détection"
+    },
+    {
+      "id": "gps.fix",
+      "title": "Acquisition et perte de position",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "ordered OEM acquisition/loss scenario oracle exists; no generic hardware verdict",
+      "model": "partial",
+      "acceptance": "messages valides, fix, perte et réacquisition"
+    },
+    {
+      "id": "gps.coordinates",
+      "title": "Coordonnées et heure",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "signes, hémisphères, date et validité"
+    },
+    {
+      "id": "gps.parser",
+      "title": "Robustesse NMEA",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "checksum, fragmentation, débit, débordement et données périmées"
+    },
+    {
+      "id": "gps.constellations",
+      "title": "Choix de constellation selon module",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "vraies commandes du module et variante"
+    },
+    {
+      "id": "gps.forward",
+      "title": "Transfert des données GPS vers USB",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "direction, format et disponibilité selon configuration"
+    },
+    {
+      "id": "aprs.configuration",
+      "title": "Configuration APRS analogique",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "identités, chemin, symbole, texte et fréquence"
+    },
+    {
+      "id": "aprs.manual",
+      "title": "Déclenchement manuel",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "une trame au bon moment et bon retour RX"
+    },
+    {
+      "id": "aprs.ptt_start",
+      "title": "Balise au début PTT",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "ordre, délai et coexistence avec phonie"
+    },
+    {
+      "id": "aprs.ptt_end",
+      "title": "Balise en fin PTT",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "ordre et retour RX"
+    },
+    {
+      "id": "aprs.interval",
+      "title": "Balises périodiques",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "temps virtuel, annulation et dérive"
+    },
+    {
+      "id": "aprs.fixed",
+      "title": "Position fixe",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "trame conforme même sans acquisition GPS si autorisé"
+    },
+    {
+      "id": "aprs.gps",
+      "title": "Position du module GPS",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "validité et absence d’utilisation silencieuse d’une position périmée"
+    },
+    {
+      "id": "aprs.modulation",
+      "title": "Chaîne de modulation OEM",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "DMA, échantillons, AFSK, FM puis décodage indépendant depuis I/Q"
+    },
+    {
+      "id": "aprs.power",
+      "title": "Fréquence et puissance des balises",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "commandes RF propres à la balise et restitution du canal"
+    },
+    {
+      "id": "aprs.busy",
+      "title": "Arbitrage avec réception et PTT",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "comportement OEM à mesurer et politique OpenD578 explicite"
+    },
+    {
+      "id": "aprs.receive",
+      "title": "Réception APRS — étape ultérieure",
+      "scope": "later_stage",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "branche PRO/PLUS et éventuelle carte optionnelle ; chaîne non validée"
+    },
+    {
+      "id": "satellite.orbits",
+      "title": "Éléments orbitaux et temps UTC",
+      "scope": "extension",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "extension OpenD578, pas une fonction OEM D578 démontrée"
+    },
+    {
+      "id": "satellite.doppler",
+      "title": "Correction Doppler RX/TX",
+      "scope": "extension",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "valeurs de référence indépendantes et fréquences commandées"
+    },
+    {
+      "id": "satellite.channels",
+      "title": "Canaux et tonalités satellite",
+      "scope": "extension",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "liaisons montante/descendante et identification du profil"
+    },
+    {
+      "id": "satellite.ptt",
+      "title": "Suivi pendant émission",
+      "scope": "extension",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "arbitrage, stabilité RF et politique de mise à jour"
+    },
+    {
+      "id": "satellite.ui",
+      "title": "Affichage et commandes satellite",
+      "scope": "extension",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "intégration exclusive de l’écran et retour au mode normal"
+    },
+    {
+      "id": "bluetooth.identity",
+      "title": "Module, version et transport",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "documented ET12 AT subset only",
+      "model": "partial",
+      "acceptance": "référence ET12/B707 disponible ; processeur et carte à qualifier"
+    },
+    {
+      "id": "bluetooth.pairing",
+      "title": "Découverte et appairage",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "états, succès, refus et délais"
+    },
+    {
+      "id": "bluetooth.reconnect",
+      "title": "Connexion et perte du lien",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "reconnexion et retour à un chemin audio défini"
+    },
+    {
+      "id": "bluetooth.mic",
+      "title": "Microphone Bluetooth",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sélection et gain du chemin entrant"
+    },
+    {
+      "id": "bluetooth.speaker",
+      "title": "Écoute Bluetooth",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "sélection et gain du chemin sortant"
+    },
+    {
+      "id": "bluetooth.ptt",
+      "title": "PTT Bluetooth",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "appui, relâchement, perte du lien et sécurités"
+    },
+    {
+      "id": "bluetooth.audio_controls",
+      "title": "Volume et routage Bluetooth",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "coexistence avec micro filaire et sorties du poste"
+    },
+    {
+      "id": "bluetooth.firmware",
+      "title": "Firmware interne du module",
+      "scope": "oem_candidate",
+      "status": "incomplete",
+      "reason": "No end-to-end automated qualification",
+      "model": "unimplemented",
+      "acceptance": "inventaire disponible ; exécution du firmware non implémentée"
+    }
+  ],
+  "regressions": [
+    {
+      "scenario": "FM",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "carrier applied",
+          "step": 61600001
+        },
+        {
+          "phase": "audio opened",
+          "step": 64581892
+        },
+        {
+          "phase": "carrier removed",
+          "step": 66600208
+        },
+        {
+          "phase": "audio closed",
+          "step": 66875652
+        }
+      ],
+      "executed_instructions": 9000000
+    },
+    {
+      "scenario": "GPS",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "fix stimulus",
+          "step": 61600000
+        },
+        {
+          "phase": "position acquired",
+          "step": 64526594
+        },
+        {
+          "phase": "loss stimulus",
+          "step": 67100187
+        },
+        {
+          "phase": "position lost",
+          "step": 71264516
+        }
+      ],
+      "executed_instructions": 13000000
+    },
+    {
+      "scenario": "PTT",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "PTT pressed",
+          "step": 61600001
+        },
+        {
+          "phase": "TX and fan requested",
+          "step": 62204161
+        },
+        {
+          "phase": "PTT released",
+          "step": 63100161
+        },
+        {
+          "phase": "TX and fan cleared",
+          "step": 64225537
+        }
+      ],
+      "executed_instructions": 4000000
+    },
+    {
+      "scenario": "LED_bus",
+      "scope": "decoded GPIO command sequence only",
+      "physical_radio_certified": false,
+      "mapping_confidence": "firmware_correlated_with_user_observation",
+      "status": "passed",
+      "reason": "Observed green / off / red / off from GPIO bus after external stimuli",
+      "observed": [
+        {
+          "step": 63600138,
+          "kind": "carrier",
+          "on": true
+        },
+        {
+          "step": 64476778,
+          "kind": "wire",
+          "value": 78
+        },
+        {
+          "step": 66600206,
+          "kind": "carrier",
+          "on": false
+        },
+        {
+          "step": 66819559,
+          "kind": "wire",
+          "value": 70
+        },
+        {
+          "step": 68600078,
+          "kind": "PTT",
+          "on": true
+        },
+        {
+          "step": 69160085,
+          "kind": "wire",
+          "value": 86
+        },
+        {
+          "step": 71100184,
+          "kind": "PTT",
+          "on": false
+        },
+        {
+          "step": 72759596,
+          "kind": "wire",
+          "value": 70
+        }
+      ],
+      "executed_instructions": 13000000
+    }
+  ],
+  "counts": {
+    "incomplete": 117
+  },
+  "limitations": [
+    "Passing an OEM logical regression does not qualify an RF/audio waveform chain",
+    "New firmware requires hardware observations; no OEM RAM addresses are portable",
+    "No automatic completeness claim from strings, routine candidates or unit test count"
+  ]
+}

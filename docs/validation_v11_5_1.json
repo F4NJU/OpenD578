@@ -1,0 +1,29 @@
+{
+  "server_url": "http://127.0.0.1:40405",
+  "used_fixed_8765": false,
+  "returncode": 0,
+  "passed": true,
+  "probe": {
+    "passed": true,
+    "server_url": "http://127.0.0.1:40405",
+    "server_application": "D578 local bench V11.5.1",
+    "model": "D578UV",
+    "identity_hex": "49443537385556000e56313131000006",
+    "read_address": "0x02FA0000",
+    "read_bytes": 16,
+    "read_SHA256": "8208b74207d2956a56751cd8a70ec35a99bc43b1c84fbf9607b970c09a969957",
+    "enumeration_seconds": 0.8862203570001839,
+    "program_and_identity_seconds": 3.1463860349999777,
+    "memory_read_seconds": 0.050663285000155156,
+    "responses_source": "executed firmware PMA",
+    "memory_writes_requested": false,
+    "programming_mode_left_active": true,
+    "original_CPS_executed": false
+  },
+  "explicit_url_argument_used": false,
+  "original_CPS_executed": false,
+  "Windows_cmd_executed": false,
+  "version": "V11.5.1",
+  "automated_tests_passed": 192,
+  "packaged_tests_passed": 192
+}

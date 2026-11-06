@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Inventaire des originaux manquants et documents reconstruits - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Inventaire des originaux</div>
+<div class="doc-heading"><h1>Inventaire des originaux manquants et documents reconstruits</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/archives/ORIGINAUX_A_RECUPERER.md">Modifier sur GitHub</a><a download href="../../../raw/docs/archives/ORIGINAUX_A_RECUPERER.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/archives/ORIGINAUX_A_RECUPERER.md</code></p>
+<article class="markdown-body"><h1 id="inventaire-des-originaux-manquants-et-documents-reconstruits">Inventaire des originaux manquants et documents reconstruits</h1>
+<p><strong>Date : 05/11/2026.</strong> Les noms ci-dessous renvoient aux travaux des discussions anterieures. On ne fabrique jamais un faux binaire pour faire croire a une archive complete.</p>
+<table>
+<thead>
+<tr>
+  <th>Original historique annonce</th>
+  <th>Statut dans ce depot</th>
+  <th>Alternative actuellement presente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>D578_DOSSIER_PERIPHERIQUES_2026-11-05.zip</code> et ses 5 monographies</td>
+  <td>Archive originale absente</td>
+  <td>Cinq fichiers <code>docs/peripherals/</code> <strong>reconstruits</strong></td>
+</tr>
+<tr>
+  <td><code>D578_GD32_Brochage_KiCad_V0_3.zip</code></td>
+  <td>ZIP original absent</td>
+  <td>CSV datasheet 100 pins et KiCad <strong>recrees 05/11 V0.4</strong></td>
+</tr>
+<tr>
+  <td><code>D578_SAT_V121_EXP06_PHASE60_SAT_CHANNEL_NONFLASHABLE_2026-11-03.zip</code></td>
+  <td>Code exact Phase60 non exporte</td>
+  <td><code>docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md</code>, phase60 non flashable decrite</td>
+</tr>
+<tr>
+  <td><code>OpenD578_MAJ_V11_8.zip</code> complet</td>
+  <td>Distribution executable originale absente</td>
+  <td>Notices V11.8, code banc public V11.7</td>
+</tr>
+<tr>
+  <td><code>boot_A.bin</code>, <code>boot_B.bin</code></td>
+  <td>Binaire de boot physique absent</td>
+  <td>Vecteurs, allocations et SHA256 dans docs/02 et docs/peripherals/05</td>
+</tr>
+<tr>
+  <td><code>full_flash_pass1.bin</code>, <code>full_flash_pass2.bin</code></td>
+  <td>Dumps Flash 3 Mio absents</td>
+  <td>Cartographie et empreintes sans bytes</td>
+</tr>
+<tr>
+  <td><code>nand_main_256MiB.bin</code>, <code>nand_oob64_8MiB.bin</code>, <code>nand_ecc_status_128KiB.bin</code>, <code>nand_2112_interleaved_264MiB.bin</code></td>
+  <td>Dumps NAND absents ; 437 ECC20</td>
+  <td>Carte statistique, hashes, scripts d'observation</td>
+</tr>
+<tr>
+  <td>Photographies carte CPU/RF de nos PRO/PLUS avec blindages retires</td>
+  <td>Non publiees</td>
+  <td>Liens FCC, guide photographique tiers, manifestes vides</td>
+</tr>
+<tr>
+  <td>Captures passives UART/GPIO/HPI des composants reels</td>
+  <td>Non archivees</td>
+  <td>Traces et decodeurs du banc public, et plans de mesures</td>
+</tr>
+</tbody>
+</table>
+<p>La non-publication de certains fichiers OEM et dumps est souhaitable : droits de tiers, informations individuelles et memoires de calibration. Une archive <strong>publique</strong> ne peut donc pas etre un clone inconditionnel de toutes les donnees de recherche. Le projet doit publier la preuve de provenance (SHA256, chemin et rapport) et conserver les sources proprietaires/secrets dans l'archive privee du proprietaire.</p>
+<h2 id="empreintes-attestant-les-binaires-proprietaires-historiques">Empreintes attestant les binaires proprietaires historiques</h2>
+<ul>
+<li>Boot physique 24576 octets : <code>c098c74d2a979e162d6dd901c9d59d7ed3f0a4c9d526a168a1db78fba316fdeb</code>.</li>
+<li>Flash physique 3145728 octets : <code>e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e</code>.</li>
+<li>App OEM V1.21 CDD 1020300 octets : <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>.</li>
+<li>NAND main 268435456 octets : <code>329d22165d234bf0df043e62af11397dea96327925b9db18f3c354230ff40945</code>.</li>
+<li>NAND OOB64 8388608 octets : <code>9a999b9fd13a02b45ed4d38e68f9e9c7d1095994c751e36e04f4a62b2e4c5106</code>.</li>
+<li>NAND 2112 interleave 276824064 octets : <code>568b6395f88e8ef1b27d16fc9c25aa5d94f8bcf5d47556910466baaeeefde1c9</code>.</li>
+<li>Phase60 originale : consulter la passation <code>docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md</code> ; un rapport de code compile NE FOURNIT PAS les octets originaux.</li>
+</ul>
+<p><strong>Ne pas attribuer au depot les tests exacts de Phase60 ou les observations hardware d'une archive qu'on ne peut pas re-executer.</strong></p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

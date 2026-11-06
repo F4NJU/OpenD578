@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>USB du GD32F303 : CDC ACM, endpoints, accès du CPS - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>USB du GD32F303 : CDC ACM, endpoints, accès du CPS</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/USB_CDC_GD32_V121.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/USB_CDC_GD32_V121.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/USB_CDC_GD32_V121.md</code></p>
+<article class="markdown-body"><h1 id="usb-du-gd32f303-cdc-acm-endpoints-acces-du-cps">USB du GD32F303 : CDC ACM, endpoints, accès du CPS</h1>
+<h2 id="1-cible-et-identification">1. Cible et identification</h2>
+<ul>
+<li>Poste étudié : <strong>D578UV PRO GD32, firmware OEM V1.21</strong>.</li>
+<li>Identifiants observés dans les descripteurs du firmware : <strong>VID <code>0x28E9</code>, PID <code>0x018A</code></strong>, classe appareil <code>0x02</code>, USB Full Speed.</li>
+<li>Nom observé : <code>GD32 Virtual ComPort</code>. Le numéro de série <code>000000010000</code> a été rapporté ; ne pas supposer qu'il est unique ou qu'il identifie une version.</li>
+<li>Ces descripteurs sont communs à plusieurs contextes de démarrage. <strong>Un VID/PID identique n'indique pas à lui seul « mode normal » ou « MCU Update ».</strong></li>
+</ul>
+<p>La liste analysée est archivée en <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/USB_V121_DESCRIPTORS.json">USB_V121_DESCRIPTORS.json</a>. Les deux tables CDC retrouvées portent la même structure.</p>
+<h2 id="2-configuration-cdc-oem">2. Configuration CDC OEM</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément</th>
+  <th>Valeur trouvée</th>
+  <th>Interprétation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Configuration</td>
+  <td>1, descripteur complet de 67 octets</td>
+  <td>Une fonction CDC à deux interfaces</td>
+</tr>
+<tr>
+  <td>Interface 0</td>
+  <td>Class <code>0x02</code>, Subclass <code>0x02</code>, Protocol <code>0x01</code></td>
+  <td>Contrôle CDC ACM</td>
+</tr>
+<tr>
+  <td>EP <code>0x82</code></td>
+  <td>IN, interrupt, taille max 8 octets, intervalle 10</td>
+  <td>Notifications CDC</td>
+</tr>
+<tr>
+  <td>Interface 1</td>
+  <td>Class <code>0x0A</code></td>
+  <td>Données CDC</td>
+</tr>
+<tr>
+  <td>EP <code>0x03</code></td>
+  <td>OUT, bulk, paquet max 64 octets</td>
+  <td>PC vers GD32</td>
+</tr>
+<tr>
+  <td>EP <code>0x81</code></td>
+  <td>IN, bulk, paquet max 64 octets</td>
+  <td>GD32 vers PC</td>
+</tr>
+<tr>
+  <td>EP0</td>
+  <td>taille max 64 octets</td>
+  <td>Requêtes contrôle USB</td>
+</tr>
+</tbody>
+</table>
+<p>Le débit nominal de ligne demandé par le banc est <code>115200 8N1</code> via <code>SET_LINE_CODING</code>; le flux est <strong>USB natif</strong>, et cette valeur ne démontre pas l'existence d'une UART physique de programmation. Le hôte envoie aussi <code>SET_CONTROL_LINE_STATE</code>, DTR et RTS activés.</p>
+<h2 id="3-chemin-des-donnees">3. Chemin des données</h2>
+<pre><code class="language-text">COM Windows / ttyACM côté poste réel (ou PTY + pont côté simulation)
+  -&gt; transactions USB OUT / endpoint 0x03
+  -&gt; PMA USB du GD32 (modèle usbd_host)
+  -&gt; interruptions USB (IRQ20 dans le banc)
+  -&gt; pile USB et analyseur de commandes OEM
+  -&gt; accès NAND logique par les routines OEM
+  -&gt; réponse construite par l'OEM
+  -&gt; PMA, endpoint 0x81, USB IN
+  -&gt; client hôte
+</code></pre>
+<p>Le <strong>pont CPS</strong> de la simulation transporte uniquement les octets et n'interprète pas les commandes de lecture/écriture à la place de l'OEM. Cette règle est importante pour distinguer une simulation fidèle d'une réponse « fabriquée » à partir du dump NAND.</p>
+<h2 id="4-controleur-hote-de-simulation">4. Contrôleur hôte de simulation</h2>
+<p>Fichiers : <code>bench/usbd_host.py</code> (transactions et registres/PMA), <code>bench/usb_cdc.py</code> (énumération CDC, échanges EP0 et bulk), <code>bench/usb_cdc_runtime.py</code> (liaison à l'exécution), <code>bench/cdc_channel.py</code> (transport de statut), <code>bench/web_server.py</code> et <code>bench/cps_bridge.py</code> (pont local).</p>
+<p>Propriétés vérifiées par les tests V11.5 à V11.7 :</p>
+<ul>
+<li>Découverte de la configuration et des endpoints par analyse des descripteurs, sans imposer ces valeurs dans le client générique.</li>
+<li>Gestion de l'adresse USB, de la configuration, de <code>SET_LINE_CODING</code> et des lignes de contrôle.</li>
+<li>File OUT limitée, fragmentation selon la taille maximale de l'endpoint, erreurs d'ACK/NAK/STALL, canal de suivi borné.</li>
+<li>Détection d'un changement de session USB et refus de confondre une réponse tardive avec un nouveau moteur.</li>
+<li>Chaque transaction avance dans le <strong>thread d'exécution CPU</strong> ; le pont HTTP ne modifie pas directement la RAM ou la NAND.</li>
+</ul>
+<p>Limitations explicites : pas de PHY USB électrique, pas de modèle complet des CRC et bascules DATA0/DATA1, pas de prise en charge générale du double buffer bulk/isochronous, notifications CDC non exploitées en profondeur, requêtes optionnelles Windows non couvertes entièrement. Une énumération réussie par ce hôte logiciel ne valide pas une pile USB de firmware alternatif sur le poste.</p>
+<h2 id="5-sequence-minimale-testee">5. Séquence minimale testée</h2>
+<ol>
+<li>Énumérer le poste virtuel et obtenir <code>ready</code>.</li>
+<li>Envoyer les 7 octets ASCII <code>PROGRAM</code> au bulk OUT.</li>
+<li>Recevoir <code>51 58 06</code> au bulk IN.</li>
+<li>Envoyer <code>02</code>, recevoir 16 octets d'identité ; modèle <code>D578UV</code>.</li>
+<li>Envoyer un ordre <code>R</code> (adresse sur 4 octets big endian et longueur).</li>
+<li>Recevoir <code>W</code>, adresse, longueur, données, checksum, terminateur <code>06</code>.</li>
+</ol>
+<p>Exemple <strong>de client en lecture</strong> : <code>python3 bench/cps_probe.py --read-address 0x02FA0000</code>. L'adresse est une zone de configuration logique conservée dans le compte rendu ; ce test n'est pas une méthode générale pour lire arbitrairement les données privées d'un appareil.</p>
+<h2 id="6-ce-qui-doit-encore-etre-mesure">6. Ce qui doit encore être mesuré</h2>
+<ul>
+<li>Captures USB du CPS Windows sur le <strong>poste physique</strong>, en lecture seulement, depuis le début de la session jusqu'à <code>END</code>.</li>
+<li>Réponses aux requêtes de contrôle CDC que le simulateur ne reproduit pas.</li>
+<li>Timings maximaux et comportement à la déconnexion et au changement de port COM.</li>
+<li>Trafic et descripteurs exacts du PLUS GD32 V2.08 : ne pas extrapoler les adresses de la branche PRO.</li>
+</ul>
+<p>Références : <a href="https://github.com/hmatuschek/qdmr">qdmr</a>, <a href="https://anytoneusa.com/Downloads/">source AnyTone officielle</a>, <a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf">manuel GD32F30x</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

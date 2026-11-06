@@ -1,0 +1,118 @@
+{
+  "image_SHA256": "e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e",
+  "device_descriptors": [
+    {
+      "address": "0x80044c8",
+      "device_class": 2,
+      "EP0_packet_bytes": 64,
+      "VID": "28E9",
+      "PID": "018A",
+      "configurations": 1
+    },
+    {
+      "address": "0x80f566e",
+      "device_class": 2,
+      "EP0_packet_bytes": 64,
+      "VID": "28E9",
+      "PID": "018A",
+      "configurations": 1
+    }
+  ],
+  "CDC_configurations": [
+    {
+      "address": "0x8004508",
+      "length": 67,
+      "interfaces": 2,
+      "descriptors": [
+        {
+          "type": "interface",
+          "number": 0,
+          "alternate": 0,
+          "class_code": 2,
+          "subclass": 2,
+          "protocol": 1
+        },
+        {
+          "type": "endpoint",
+          "address": "0x82",
+          "direction": "IN",
+          "transfer": "interrupt",
+          "max_packet_bytes": 8,
+          "interval": 10
+        },
+        {
+          "type": "interface",
+          "number": 1,
+          "alternate": 0,
+          "class_code": 10,
+          "subclass": 0,
+          "protocol": 0
+        },
+        {
+          "type": "endpoint",
+          "address": "0x03",
+          "direction": "OUT",
+          "transfer": "bulk",
+          "max_packet_bytes": 64,
+          "interval": 0
+        },
+        {
+          "type": "endpoint",
+          "address": "0x81",
+          "direction": "IN",
+          "transfer": "bulk",
+          "max_packet_bytes": 64,
+          "interval": 0
+        }
+      ]
+    },
+    {
+      "address": "0x80f60fe",
+      "length": 67,
+      "interfaces": 2,
+      "descriptors": [
+        {
+          "type": "interface",
+          "number": 0,
+          "alternate": 0,
+          "class_code": 2,
+          "subclass": 2,
+          "protocol": 1
+        },
+        {
+          "type": "endpoint",
+          "address": "0x82",
+          "direction": "IN",
+          "transfer": "interrupt",
+          "max_packet_bytes": 8,
+          "interval": 10
+        },
+        {
+          "type": "interface",
+          "number": 1,
+          "alternate": 0,
+          "class_code": 10,
+          "subclass": 0,
+          "protocol": 0
+        },
+        {
+          "type": "endpoint",
+          "address": "0x03",
+          "direction": "OUT",
+          "transfer": "bulk",
+          "max_packet_bytes": 64,
+          "interval": 0
+        },
+        {
+          "type": "endpoint",
+          "address": "0x81",
+          "direction": "IN",
+          "transfer": "bulk",
+          "max_packet_bytes": 64,
+          "interval": 0
+        }
+      ]
+    }
+  ],
+  "qualification": "static descriptors only; runtime enumeration, CPS and firmware transfers not tested"
+}

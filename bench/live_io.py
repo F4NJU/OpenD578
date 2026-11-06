@@ -2,7 +2,8 @@
 import json,time
 def publish_status(target,value,final=False):
     temporary=target.with_suffix('.tmp.json')
-    temporary.write_text(json.dumps(value,ensure_ascii=False),encoding='utf-8')
+    try:temporary.write_text(json.dumps(value,ensure_ascii=False),encoding='utf-8')
+    except OSError:return False
     for attempt in range(30 if final else 4):
         try:temporary.replace(target);return True
         except PermissionError:

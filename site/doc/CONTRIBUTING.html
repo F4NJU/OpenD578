@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Contributing - OpenD578</title>
+<link rel="stylesheet" href="../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../index.html">Vue eclatee</a>
+<a class="active" href="../docs.html">Documents</a>
+<a href="../cps.html">CPS / USB</a>
+<a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="../firmware.html">Firmware</a>
+<a href="../photos.html">Photos</a>
+<a href="../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>Contributing</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/CONTRIBUTING.md">Modifier sur GitHub</a><a download href="../raw/CONTRIBUTING.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>CONTRIBUTING.md</code></p>
+<article class="markdown-body"><h1 id="contributing">Contributing</h1>
+<p>Start with a small reproducible result: one peripheral transaction, one register
+behavior or one code path. State the MCU/board variant and firmware hash.
+Separate physical captures from synthetic stimuli and inferred behavior.</p>
+<p>Run <code>python -m unittest discover -s bench -v</code> before submitting a change.
+New hardware behavior should include a regression test that would fail with the
+previous model. Unknown behavior must remain labeled incomplete rather than
+being converted into an unconditional successful reply.</p>
+<p>The hardware mode must not depend on OEM function addresses, current-channel RAM
+pointers, manufacturer task flags or particular scratch-register conventions.
+Keep OEM-specific analysis in the legacy runner.</p>
+<p>Source contributions and documentation are welcome. Do not include manufacturer
+images, physical dumps, codeplugs, calibration records or session snapshots.
+Generated work belongs under ignored <code>work/</code> or <code>results/</code> directories.</p>
+<p>For code adapted from another project, preserve its attribution and verify the
+license of the exact source version before proposing its integration.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>
+</body></html>

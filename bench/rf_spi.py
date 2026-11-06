@@ -77,9 +77,13 @@ class RfSpi:
         page=self.pages[self.bank]
         key=(self.bank,page,address)
         if self.expected:
-            bank,reg,wanted=self.expected.pop(0)
+            bank,reg,wanted=self.expected[0]
             if (bank,reg)!=(self.bank,address) or (wanted is None)!=read or (not read and wanted!=value):
-                raise StopModel('RF SPI GPIO frame differs from OEM call arguments')
+                self.last_mismatch=dict(step=step,expected=dict(bank=bank,register=reg,direction='read' if wanted is None else 'write',value=wanted),
+                    actual=dict(bank=self.bank,page=page,register=address,direction='read' if read else 'write',value=value),
+                    pending_calls=len(self.expected),recent_frames=self.frames[-8:])
+                raise StopModel(f'RF SPI GPIO frame differs from OEM call arguments: expected bank={bank} reg=0x{reg:02X} value={wanted}; actual bank={self.bank} reg=0x{address:02X} value={value}; pending={len(self.expected)}')
+            self.expected.pop(0)
             self.crosschecks+=1
         origin=('explicit synthetic receiver/decoder status input' if self.bank in getattr(self,'external_inputs',{}) else 'synthetic no-carrier/no-audio input, inferred OEM register consumers') if address in (0x0C,0x60,0x61,0x65,0x67) else 'previous OEM GPIO write' if key in self.written else 'AT1846S guide reset 44h=00FFh'
         self.frames.append(dict(step=step,bank=self.bank,page=page,register=address,
@@ -128,4 +132,5 @@ class RfSpi:
             result['external_input_scenario']=dict(name='programmable synthetic FM discriminator/CTCSS status',
                 raw_registers_by_bank={str(b):{f'{a:02X}':v for a,v in values.items()} for b,values in self.external_inputs.items()},
                 interpretation='native OEM consumes status registers; physical RF and waveform decoding are not modelled')
+        if getattr(self,'last_mismatch',None):result['last_mismatch']=self.last_mismatch
         return result

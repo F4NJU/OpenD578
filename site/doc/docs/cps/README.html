@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS, programmation PC et codeplug du D578 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>CPS, programmation PC et codeplug du D578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/README.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/README.md</code></p>
+<article class="markdown-body"><h1 id="cps-programmation-pc-et-codeplug-du-d578">CPS, programmation PC et codeplug du D578</h1>
+<p><strong>Cible de référence : AnyTone AT-D578UV PRO à GD32F303, application OEM V1.21 (19 juin 2024).</strong></p>
+<p>Cette section rassemble les indices provenant de l'analyse de l'image constructeur, de l'exécution de cette image dans le banc OpenD578 V11.7, des tests du petit éditeur CPS V11.6, et des implémentations tierces. Elle concerne <strong>le protocole de programmation du poste</strong>, pas le protocole d'un éventuel firmware OpenD578 autonome.</p>
+<h2 id="documents">Documents</h2>
+<ol>
+<li><a href="USB_CDC_GD32_V121.html">USB CDC et contrôleur GD32</a> : descripteurs, endpoints, énumération, bus et limites de simulation.</li>
+<li><a href="PROTOCOLE_OEM_V121.html">Protocole CPS OEM</a> : PROGRAM, identification, READ, WRITE, END, longueurs, checksums, fin différée.</li>
+<li><a href="CODEPLUG_CANAL_OEM_V121.html">Structure des canaux et zones mémoire</a> : champs de 64 octets, BCD, NAND, éléments inconnus et précautions.</li>
+<li><a href="CPS_ARCHITECTURE_SIMULATION.html">Banc et CPS intégré</a> : chemin exact des octets, sources, procédures Windows/PTY, étendue des essais.</li>
+<li><a href="COMPATIBILITE_PRO_PLUS.html">Compatibilité PRO/PLUS et firmware alternatif</a> : variantes, codes produit, protocoles à ne pas mélanger.</li>
+<li><a href="CPS_QUALIFICATION.html">Plan de qualification</a> : cas positifs, erreurs, perte d'alimentation, écritures différées, conservation des étalonnages.</li>
+</ol>
+<p>Références conservées du banc : <a href="../USB_CPS_V11_5.html">USB_CPS_V11_5.md</a>, <a href="../CPS_INTEGRE_V11_6.html">CPS_INTEGRE_V11_6.md</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/USB_V121_DESCRIPTORS.json">USB_V121_DESCRIPTORS.json</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/validation_v11_6.json">validation_v11_6.json</a>, <a href="../CHANGELOG_V11_7.html">CHANGELOG_V11_7.md</a>.</p>
+<h2 id="materiel-et-logiciels-concernes">Matériel et logiciels concernés</h2>
+<pre><code class="language-text">CPS constructeur Windows / qdmr / client de test
+                  |
+       port série USB CDC (GD32 28E9:018A)
+                  |
+         pile USB de l'application OEM
+                  |
+           gestionnaire CPS OEM
+                  |
+      accès logique NAND (canaux et réglages)
+                  |
+       NAND physique / ECC / copies de secours
+</code></pre>
+<p>Le mode de mise à jour du MCU (<code>UPDATE</code>, <code>.spi</code>/<code>.CDI</code>/<code>.CDD</code>) est <strong>distinct</strong> du mode de programmation CPS. Les deux ne doivent pas partager les mêmes tests d'écriture. La mise à jour du modem DMR/SCT3258 constitue encore un <strong>troisième chemin</strong>.</p>
+<h2 id="niveaux-de-preuve">Niveaux de preuve</h2>
+<ul>
+<li><strong>Firmware OEM exécuté en simulation</strong> : les octets sont transmis au contrôleur USB, puis pris en charge par le programme constructeur ; le modèle NAND reçoit les commandes de ce programme.</li>
+<li><strong>Essai CPS intégré</strong> : un groupe de 32 enregistrements lu et modifié dans le banc, nom retrouvé après une nouvelle session et une finalisation complète.</li>
+<li><strong>Lecture physique</strong> : observations de l'utilisateur sur le vrai poste. La compatibilité de tous les transferts avec le CPS Windows <strong>n'est pas certifiée par le banc</strong>.</li>
+<li><strong>Documentation tierce</strong> : qdmr et les cartographies publiées sont des points de comparaison, pas une preuve que tous les firmwares V1.21/2.08 stockent exactement les mêmes champs.</li>
+</ul>
+<h2 id="ce-que-le-depot-fournit">Ce que le dépôt fournit</h2>
+<ul>
+<li>Sources publiques du banc V11.7 comprenant le pont <code>bench/cps_bridge.py</code>, le client <code>bench/cps_probe.py</code>, le modèle hôte <code>bench/usb_cdc.py</code>, le contrôleur <code>bench/usbd_host.py</code>, le parseur de canaux <code>bench/web/mini_cps_protocol.js</code> et leurs tests.</li>
+<li>Outil <strong>hors ligne, lecture seule</strong> <code>tools/cps_trace_audit.py</code> pour analyser les journaux JSONL du pont sans exposer les octets de codeplug dans le rapport produit.</li>
+<li>Aucun exécutable propriétaire CPS, aucune image OEM, aucune base de contacts, aucun codeplug ni étalonnage individuel.</li>
+</ul>
+<h2 id="premiere-regle-pour-ecrire-un-firmware-alternatif">Première règle pour écrire un firmware alternatif</h2>
+<p>Conserver la zone calibration OEM et toute donnée dont la fonction n'est pas démontrée. Une émulation du dialogue CPS ne suffit pas : une écriture doit être atomique ou récupérable, respectueuse des pages NAND et de leur ECC, puis vérifiée après un véritable redémarrage. Tant que ces conditions ne sont pas satisfaites, conserver le pilote alternatif en <strong>lecture seule</strong>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

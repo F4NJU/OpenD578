@@ -48,3 +48,7 @@ La compatibilité avec APRS et la reprise de l'affichage de trame reçue restent
 ## Sources à retrouver
 
 `D578_SAT_V121_EXP06_PHASE60_SAT_CHANNEL_NONFLASHABLE_2026-11-03.zip` (375 046 o selon la bibliothèque), `D578_SAT_V121_EXP05_PHASE59_INTEGRATION_NONFLASHABLE_2026-11-03.zip`, `D578_SATELLITE_V121_PHASE52_INTEGRATION_LOGICIELLE_2026-11-03.zip`, l'archive cumulative contenant Phase47 et la CDD V1.21 authentifiée. Vérifier le hash avant toute compilation. Ne jamais utiliser le `.spi` d'une autre branche radio comme base d'un patch V1.21.
+
+### Liaison éventuelle avec suivi Doppler
+
+Le calculateur de mot QA4818N dans `firmware/rf` donne une résolution théorique de 62,5 Hz **dans le codage AT1846S**. Le pas effectif QA4818N, les délais PLL, les changements en émission et la correspondance banque RF / VFO / filtre restent non qualifiés. La fonction satellite ne doit pas piloter le RF sur cette seule base. Voir [monographie QA4818N](hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md).

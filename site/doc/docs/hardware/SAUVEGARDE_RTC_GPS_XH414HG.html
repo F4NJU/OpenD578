@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Deux sauvegardes RTC et GPS sur le PCB CPU : XH414HG et variantes - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Deux sauvegardes RTC et GPS sur le PCB CPU : XH414HG et variantes</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md</code></p>
+<article class="markdown-body"><h1 id="deux-sauvegardes-rtc-et-gps-sur-le-pcb-cpu-xh414hg-et-variantes">Deux sauvegardes RTC et GPS sur le PCB CPU : XH414HG et variantes</h1>
+<p><strong>Etat au 05/11/2026.</strong> Cible : D578UV PRO GD32 V1.21; architecture D578 historique comme comparaison. L'utilisateur a signale des elements de sauvegarde sur la carte CPU. La photographie precise et les marquages de ses exemplaires PRO/PLUS ne sont pas encore archives. <strong>Ne pas substituer une reference de remplacement sans mesure et identification du boitier reel.</strong></p>
+<h2 id="1-deux-composants-deux-fonctions">1. Deux composants, deux fonctions</h2>
+<table>
+<thead>
+<tr>
+  <th>Element</th>
+  <th>Localisation dans l'etude VK7ZJA</th>
+  <th>Charge sauvegardee</th>
+  <th>Preuve</th>
+  <th>Reste a verifier sur les postes du projet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>RTC BACKUP</td>
+  <td>Face arriere du PCB afficheur/MCU, pres du connecteur de nappe</td>
+  <td>Domaine d'horloge temps reel GD32</td>
+  <td>Photo et explication de VK7ZJA / IK8JHL</td>
+  <td>Continuite vers <strong>GD32 VBAT, broche physique 6</strong>, circuit de charge et diode</td>
+</tr>
+<tr>
+  <td>GPS HOT START</td>
+  <td>Face avant du meme PCB, entre les deux potentiometres de volume</td>
+  <td>Maintien du contexte GNSS (RTC/SRAM du GPS)</td>
+  <td>VK7ZJA / IK8JHL</td>
+  <td>Continuite vers l'entree <strong>VBAT du module ATGM336H</strong> et orientation des contacts</td>
+</tr>
+</tbody>
+</table>
+<p>La reference <strong>XH414HG IV01E</strong> est indiquee dans l'edition 2023 de l'etude VK7ZJA pour <strong>les deux elements</strong>. Elle n'est <strong>pas</strong> une mesure faite sur nos deux cartes. L'edition ancienne du meme guide proposait <strong>MS412</strong> comme piece de remplacement pour le RTC : c'est une reference DIFFERENTE, et il faut garder l'historique des editions et versions, pas transformer ces deux references en equivalents.</p>
+<h2 id="2-nature-exacte-du-xh414hg">2. Nature exacte du XH414HG</h2>
+<p>Seiko Instruments commercialise le <strong>XH414HG</strong> dans la gamme <strong>XH-HG Capacitor</strong>. Ce n'est pas une pile primaire CR2032 et <strong>pas une cellule lithium standard</strong> : c'est un condensateur de sauvegarde rechargeable, a forte capacite pour son volume.</p>
+<table>
+<thead>
+<tr>
+  <th>Caracteristique fabricant</th>
+  <th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Famille</td>
+  <td>XH-HG capacitor, reference XH414HG</td>
+</tr>
+<tr>
+  <td>Capacite nominale</td>
+  <td><strong>0,08 F</strong></td>
+</tr>
+<tr>
+  <td>Tension maximale d'utilisation</td>
+  <td><strong>3,3 V</strong></td>
+</tr>
+<tr>
+  <td>Diametre</td>
+  <td><strong>4,8 mm</strong></td>
+</tr>
+<tr>
+  <td>Hauteur</td>
+  <td><strong>1,4 mm</strong></td>
+</tr>
+<tr>
+  <td>Impedance interne typique de catalogue</td>
+  <td><strong>100 ohms</strong> (methode AC specifiee)</td>
+</tr>
+<tr>
+  <td>Usage prevu</td>
+  <td>Sauvegarde de memoire et d'horloge</td>
+</tr>
+</tbody>
+</table>
+<p>La notice fabricant deconseille une charge avec ondulation excessive et donne des conditions de charge specifiques. <strong>Ne pas charger directement ces composants avec une alimentation de laboratoire</strong> et ne pas les remplacer par une CR2032 sans analyser le circuit de charge. Un MS412 et un XH414HG ne sont pas substituables sur le seul critere de leur taille.</p>
+<h2 id="3-liaison-au-gd32-et-au-gps-niveau-de-preuve">3. Liaison au GD32 et au GPS, niveau de preuve</h2>
+<h3 id="rtc">RTC</h3>
+<ul>
+<li><strong>Fait de datasheet :</strong> GD32F303VKT6 LQFP100, pin <strong>6 = VBAT</strong>. Pins <strong>7 = PC13/TAMPER-RTC</strong>, <strong>8 = PC14/OSC32_IN</strong>, <strong>9 = PC15/OSC32_OUT</strong>. Pin <strong>14 = NRST</strong>. Ce sont les fonctions disponibles du MCU, pas un relevage de pistes du D578.</li>
+<li><strong>Source externe sur radio D578 :</strong> la sauvegarde situee a l'arriere est assignee a l'horloge RTC.</li>
+<li><strong>Hypothese de connexion :</strong> batterie/condensateur RTC -&gt; elements de limitation/isolation -&gt; VBAT (pin 6). Circuit et chemins <strong>inconnus</strong> ; aucune GPIO n'est affectee.</li>
+<li><strong>Indicateurs de panne a comparer :</strong> date/heure perdues, message RTC ERROR / RTC not run, impossibilite de conserver l'heure. Ces symptomes ne prouvent pas a eux seuls une panne du condensateur.</li>
+</ul>
+<h3 id="gps">GPS</h3>
+<ul>
+<li><strong>Fait de datasheet (module ATGM336H-5N, a confronter a la sous-version montee) :</strong> entree VBAT dediee a la sauvegarde RTC/SRAM, avec domaine mentionne 1,5 a 3,6 V. <strong>La numerotation de broche 6 du module -5N ne doit pas etre transposee a toutes les sous-versions ATGM336H sans verifier le footprint</strong>.</li>
+<li><strong>Source D578 :</strong> second element en facade entre les volumes, affecte au demarrage GNSS a chaud.</li>
+<li><strong>Hypothese de connexion :</strong> sauvegarde GPS -&gt; reseau de charge -&gt; VBAT du module ; mesurer la continute sans injection.</li>
+<li>Une acquisition GPS lente peut aussi provenir de l'antenne, du firmware, du temps depuis le dernier fix, de la position ou du bruit RF : ne pas la diagnostiquer par defaut comme une panne de sauvegarde.</li>
+</ul>
+<h2 id="4-observation-et-qualification-sans-depannage-destructif">4. Observation et qualification sans depannage destructif</h2>
+<ol>
+<li>Photographier les deux faces du PCB CPU, identifier exactement les inscriptions et la polarite eventuelle des composants, preciser PRO/PLUS et revision.</li>
+<li>Mesurer <strong>hors tension, alimentation debranchee</strong> la tension aux bornes avec un instrument a entree haute impedance ; relever la duree depuis la derniere mise sous tension.</li>
+<li>Etablir la continuite du composant RTC vers VBAT pin 6 du GD32 et du composant GPS vers la piste de sauvegarde du GNSS. Ne pas utiliser de test de continuite si une tension residuelle est presente.</li>
+<li>Si autorise, mesurer passivement les tensions avant/apres alimentation du poste, y compris poste logiquement eteint mais alimente ; <strong>aucun pontage ni injection</strong>.</li>
+<li>Tester la conservation de l'heure et la difference entre premier fix GPS a froid / redemarrage rapide, puis consigner mesures et temperatures. Ces essais ne remplacent pas l'identification electrique.</li>
+<li>Ajouter photo et captures au manifeste <code>hardware/photos/</code> avec la variante et la date.</li>
+</ol>
+<h2 id="5-consequences-pour-un-firmware-alternatif">5. Consequences pour un firmware alternatif</h2>
+<ul>
+<li>Le RTC doit avoir un driver independant du GPS, avec detection de donnees invalides et politique explicite d'initialisation UTC.</li>
+<li>Le GNSS peut perdre son contexte de hot start alors que le RTC systeme garde l'heure, et inversement.</li>
+<li>Aucun code du firmware ne doit traiter l'alimentation VBAT comme une GPIO commutable sans schema.</li>
+<li>L'absence de validation du RTC/heure rend une propagation TLE/Doppler non fiable ; le mode satellite doit refuser de calculer des corrections sur une date inconnue.</li>
+<li>Des tests de veille/power doivent verifier la continute d'alimentation des sauvegardes, sans conclure a l'autonomie exacte depuis une simple capacite nominale de 0,08 F.</li>
+</ul>
+<h2 id="6-sources-et-differences-de-revision">6. Sources et differences de revision</h2>
+<ol>
+<li>VK7ZJA / IK8JHL, documentation 2023, deux elements XH414HG IV01E et localisations : <a href="https://www.radiomanual.info/schemi/Vari/Alinco_DR-MD500_DR-MD520_AnyTone_AT-D578UV_mods_and_information_VK7ZJA_2023.pdf">https://www.radiomanual.info/schemi/Vari/Alinco_DR-MD500_DR-MD520_AnyTone_AT-D578UV_mods_and_information_VK7ZJA_2023.pdf</a> ; miroir HTML : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a>.</li>
+<li>Edition ancienne, remplacement RTC MS412 : <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm</a>. <strong>La proposition MS412 date d'une autre edition, ne pas la fusionner avec XH414HG.</strong></li>
+<li>Seiko Instruments, Micro Battery Product Catalogue 2007-2008, pages XH-HG Capacitor / XH414HG : <a href="https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf">https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf</a>.</li>
+<li>GigaDevice, GD32F303xx Datasheet, section LQFP100 pin definitions : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a>.</li>
+<li>ATGM336H-5N reference de famille : consulter la fiche fabricant correspondant au marquage reel avant d'attribuer VBAT.</li>
+<li>Vue photographique commerciale annotee des deux emplacements : <a href="https://moonrakeronline.com/eu/anytone-replacement-battery-for-at-d578uv-sm3r3703t01u">https://moonrakeronline.com/eu/anytone-replacement-battery-for-at-d578uv-sm3r3703t01u</a>. Photographies externes liees, non recopiees dans le depot public.</li>
+</ol>
+<p><strong>Regle de preuve :</strong> confirmation utilisateur de composants de sauvegarde sur la carte CPU ; nature exacte XH414HG, nombre et fonctions etayes par la documentation externe sur le D578 historique ; pas de preuve de continuite sur les cartes PRO/PLUS inspectees actuellement.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

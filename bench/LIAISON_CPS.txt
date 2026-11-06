@@ -1,0 +1,90 @@
+OpenD578 V11.5.3 — Liaison USB / CPS expérimentale
+
+Le CPS constructeur AnyTone est une application Windows. qdmr constitue une
+alternative libre pour Linux/macOS, avec un périmètre de fonctions différent.
+Le CPS Windows n’a pas été exécuté dans notre environnement de validation.
+
+DÉMARRER
+1. Extraire cette archive dans un nouveau dossier, puis lancer OUVRIR_BANC_WEB.
+2. Choisir Analyse OEM V1.21, Reprise rapide OEM et moteur Interactif.
+3. Démarrer le moteur. Dans USB & UART : Connecter l’hôte CDC ; attendre ready.
+4. TESTER_USB.cmd réalise PROGRAM, identification et lecture de 16 octets
+   à travers le firmware. Ce test ne demande aucune écriture de mémoire.
+   Le testeur détecte automatiquement le serveur de ce dossier, même sur un autre
+   port que 8765. Pour imposer explicitement l’adresse du navigateur :
+   .venv\Scripts\python.exe cps_probe.py --url http://127.0.0.1:PORT
+
+RELIER LE CPS WINDOWS
+Une paire de ports COM virtuels compatible avec votre Windows doit être créée
+au préalable. Le banc ne fournit et n’installe pas de pilote de ports virtuels.
+Exemple : COM10 relié à COM11, le CPS utilise COM10, le pont utilise COM11.
+Les deux programmes ne doivent pas ouvrir le même côté de la paire.
+
+Lancer CONNECTER_CPS.cmd et saisir l’adresse affichée dans le navigateur puis
+COM11 (dans cet exemple). Le pont prépare le mode programmation en envoyant
+PROGRAM et l’identification au firmware, puis annonce que le lien est prêt.
+Ouvrir ensuite le CPS correspondant au D578 et choisir COM10.
+Commencer par l’identification / la lecture du poste pour valider les délais.
+La configuration de la paire de ports dépend du pilote installé.
+
+Commande équivalente dans le dossier du banc :
+.venv\Scripts\python.exe cps_bridge.py --url http://127.0.0.1:8765 --port COM11 --prepare
+
+Une trace privée des octets peut être demandée avec :
+--log results/cps_bridge.jsonl
+Cette trace peut contenir les mémoires du poste ; elle ne fait pas partie des
+sources publiques. Un seul client doit dialoguer avec la session à la fois.
+Ne pas utiliser les boutons de test manuel pendant une connexion CPS.
+
+LINUX
+Lancer CONNECTER_CPS.sh --url http://127.0.0.1:8765
+ou .venv/bin/python cps_bridge.py --url http://127.0.0.1:8765 --pty
+Le programme affiche le terminal virtuel /dev/pts/N à ouvrir côté client.
+Ce chemin ne présente pas les identifiants USB d’un vrai poste : un logiciel
+qui filtre les ports par VID/PID doit pouvoir forcer le chemin du périphérique.
+L’utilisation du CPS constructeur sous Wine n’a pas été validée ici.
+
+ÉCRITURE ET CONSERVATION DES MÉMOIRES
+Les octets passent par le contrôleur USB/PMA/IRQ du MCU et son gestionnaire de
+programmation. Le pont ne génère aucune réponse AnyTone et ne modifie pas une
+image NAND à la place du firmware.
+
+Un ACK de bloc écrit ne prouve pas que la donnée est déjà relisible en NAND.
+Le firmware V1.21 utilise une écriture différée et la fin de programmation END.
+Attendre que le CPS et le firmware aient fini avant d’arrêter le moteur.
+Même l’ACK de END précède encore certaines écritures de métadonnées : laisser
+le moteur poursuivre le retour normal du poste après la fin du transfert.
+Le cycle changement de nom → finalisation → sauvegarde → reset application →
+relecture a été vérifié avec un client de validation, sans le CPS Windows.
+Le redémarrage automatique du MCU reste une limite du banc : une demande de
+reset peut arrêter le modèle et nécessiter de le redémarrer manuellement.
+
+Cocher « Conserver la NAND virtuelle après arrêt normal » avant l’essai pour
+sauvegarder ses pages modifiées dans results/web/nand_session.dat. Le prochain
+lancement impose un Reset application et recharge ces pages ; une ancienne
+reprise RAM ne serait pas cohérente avec les nouvelles mémoires. Les sources
+Flash/NAND restent en lecture seule. Le fichier est vérifié et lié aux empreintes
+des sources. Un état incompatible est refusé. Pour revenir à la capture initiale,
+décocher la conservation et lancer une nouvelle session ; conserver le fichier
+ailleurs si besoin avant de le supprimer. La case désactivée ne recharge pas
+l’état, mais ne supprime pas le fichier conservé d’un ancien essai.
+La sauvegarde se fait à la fin du processus : un arrêt forcé ou un crash peut
+laisser le dernier état sauvegardé seulement. Ce fichier ne conserve ni la RAM,
+ni les écritures de Flash interne. Il ne représente pas une émulation d’usure
+ou de correction ECC de la NAND.
+
+LIMITES
+La première réponse PROGRAM a pris environ 2 à 4 secondes selon la charge du
+PC de validation. Certaines applications peuvent dépasser leur délai d’attente.
+Le mode --prepare permet de lancer l’entrée en programmation avant le CPS,
+mais ne garantit pas tous les délais du constructeur. Aucun ACK n’est fabriqué
+pour masquer un retard. Il reste à éprouver le CPS Windows complet, le pilote
+COM virtuel choisi, tous les champs et les gros transferts de codeplug.
+Voir docs/USB_CPS_V11_5.md pour le périmètre exact des essais.
+
+V11.5.2 : en cas d’échec du testeur, joindre results/cps_probe_diagnostic.json.
+Une indisponibilité temporaire du suivi n’est plus affichée comme une déconnexion.
+
+V11.5.3 : le suivi USB de la page et du pont est transmis par un canal mémoire,
+sans lecture de usb_cdc.json. Exporter le diagnostic USB depuis USB & UART.
+Un ancien fichier usb_cdc.json ne représente plus l’état de la session courante.

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Firmware-independent board mode - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Firmware-independent board mode</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/EMULATOR.md">Modifier sur GitHub</a><a download href="../../raw/docs/EMULATOR.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/EMULATOR.md</code></p>
+<article class="markdown-body"><h1 id="firmware-independent-board-mode">Firmware-independent board mode</h1>
+<p>The V11.3 web interface and the new USB/sleep/watchdog diagnostics are described
+in <a href="HARDWARE_COVERAGE.html">HARDWARE_COVERAGE.md</a>. The table there supersedes the
+older WFI and disconnected-USB limits below.</p>
+<p>The V1.21 bench originally combined two jobs: modeling peripherals and observing
+the manufacturer's functions and SRAM structures. Its exact PC/signature checks
+were useful for OEM analysis but inappropriate for a new program.</p>
+<p><code>HardwareRunner</code> reuses the digital peripheral implementations without invoking
+the inherited OEM instruction observers. Its GPIO input path reads the modeled
+pin levels without relying on a helper function address or a mask in CPU R1.
+The LCD and radio buses arm from pin configuration and edges, not from function
+entry addresses. No OEM RAM flag is read to decide whether the program is running.</p>
+<h2 id="image-and-memory">Image and memory</h2>
+<ul>
+<li>Physical Flash: <code>0x08000000..0x082FFFFF</code>, 3 MiB.</li>
+<li>SRAM: <code>0x20000000..0x20017FFF</code>, 96 KiB, including executable SRAM.</li>
+<li>A read/execute boot alias starts at zero.</li>
+<li>The image's first words provide its stack and reset vector. The loader sets
+VTOR to the supplied image's base, representing a loader handoff.</li>
+<li>The reset vector must point into the supplied image. Subsequent valid execution
+is not constrained to the OEM application's old occupied range.</li>
+</ul>
+<p>The boot alias initially mirrors Flash; self-modification and all Flash
+programming/alias synchronization modes are not qualified yet. Do not infer
+complete bootloader or update support from the loader's ability to place an image.</p>
+<h2 id="explicit-model-boundaries">Explicit model boundaries</h2>
+<table>
+<thead>
+<tr>
+  <th>Stop category</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>control</code></td>
+  <td>Instruction budget reached or the operator stopped the run.</td>
+</tr>
+<tr>
+  <td><code>waiting</code></td>
+  <td>WFI/WFE observed; full sleep/event progression remains to be extended.</td>
+</tr>
+<tr>
+  <td><code>model_incomplete</code></td>
+  <td>An unsupported register, protocol variant or missing peripheral profile was encountered.</td>
+</tr>
+<tr>
+  <td><code>physical_address_unmapped</code></td>
+  <td>Access outside mapped physical devices/memory; assess the program and board profile.</td>
+</tr>
+<tr>
+  <td><code>execution_boundary</code></td>
+  <td>Other execution stop requiring analysis.</td>
+</tr>
+</tbody>
+</table>
+<p>An instruction budget alone is not a success criterion for a radio feature.
+The contract probe separately checks its pixels, SRAM markers, executed SRAM
+routine and received radio-register bits.</p>
+<p>The default NAND has synthetic erased cells and a volatile program/erase overlay.
+It allocates no manufacturer dump. Captured NAND and an explicit SCT bootstrap
+can instead be provided locally. DSP bootstrap comparison is a bus contract;
+the DSP program itself is not executed.</p>
+<p>GPIO inputs not attached to a modeled peer use an explicit idle/pull-up scenario.
+Not all electrical pull modes or external loads are modeled. RF status inputs
+are bank-level digital stimuli. They do not yet follow a synthesized frequency.</p>
+<h2 id="current-independent-tests">Current independent tests</h2>
+<p>The original Thumb generator and executable tests cover:</p>
+<ul>
+<li>Flash placement at <code>0x08006000</code> and <code>0x08000000</code>.</li>
+<li>Entry at <code>0x0808ADBE</code>, previously a V1.21 NAND hook.</li>
+<li>Initial stack above the old OEM allocation, and reads/writes near SRAM's end.</li>
+<li>Execution of a newly written Thumb routine at <code>0x20017F00</code>.</li>
+<li>GPIO LCD command/data cycles producing two known RGB565 pixels.</li>
+<li>GPIO radio-register writes and carrier/CTCSS decoder reads.</li>
+<li>Missing peripheral behavior distinguished from an OEM signature mismatch.</li>
+<li>Ideal NAND overlay one-way programming on synthetic erased cells.</li>
+</ul>
+<p>The legacy OEM tests remain available. OEM images and recorded sessions must be
+supplied separately before replaying the old full-radio scenarios.</p>
+<h2 id="local-inputs-for-the-legacy-v121-web-bench">Local inputs for the legacy V1.21 web bench</h2>
+<p>The original route uses <code>full_flash_pass1.bin</code>,
+<code>AT-D578 PRO PC SOFTWARE.zip</code>, and
+<code>D578_PASSATION_PHASE47_NAND_COMPLETE_2026-11-03.zip</code> in the selected source folder.
+The ZIP files stay compressed.</p>
+<p>The extracted route accepts these files in the selected source folder:</p>
+<table>
+<thead>
+<tr>
+  <th>File</th>
+  <th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>full_flash_pass1.bin</code></td>
+  <td>Authenticated 3 MiB physical Flash capture, including the reference application.</td>
+</tr>
+<tr>
+  <td><code>nand_main_256MiB.bin</code></td>
+  <td>Main NAND cells.</td>
+</tr>
+<tr>
+  <td><code>nand_oob64_8MiB.bin</code></td>
+  <td>Captured NAND spare bytes.</td>
+</tr>
+<tr>
+  <td><code>nand_ecc_status_128KiB.bin</code></td>
+  <td>Captured per-page ECC status.</td>
+</tr>
+<tr>
+  <td><code>SCT3258TD_UpdateFlash_V2_01_07BF.hex</code></td>
+  <td>Manufacturer reference for the modeled DSP bootstrap contract.</td>
+</tr>
+</tbody>
+</table>
+<p>Extracted NAND files can also reside in <code>NAND_ORIGINAUX</code>. Existing authenticated
+cache files and original archives can be mixed with the extracted route. Sizes
+and SHA256 checks remain mandatory; missing OOB/ECC captures are never invented.
+The reference CDD is recovered from the authenticated full capture if it is not
+already present or supplied by the original archive. Optional ET12 Bluetooth
+also requires its matching manufacturer binary. None of these private inputs is
+included in this public repository. Use application reset when no matching OEM
+ready-session recording is available.</p>
+<p>The optional <a href="EMULATOR_PERFORMANCE.html">V11.2 interactive OEM path</a> improves host-side bus dispatch and input delivery. Reference paths remain available.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

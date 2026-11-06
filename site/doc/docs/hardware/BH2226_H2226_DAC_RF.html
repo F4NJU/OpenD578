@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>ROHM BH2226FV-E2 : CNA 8 sorties, marque H2226 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>ROHM BH2226FV-E2 : CNA 8 sorties, marque H2226</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BH2226_H2226_DAC_RF.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BH2226_H2226_DAC_RF.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/BH2226_H2226_DAC_RF.md</code></p>
+<article class="markdown-body"><h1 id="rohm-bh2226fv-e2-cna-8-sorties-marque-h2226">ROHM BH2226FV-E2 : CNA 8 sorties, marque H2226</h1>
+<p>Le composant est marque <strong><code>H2226</code></strong> et le boitier observe a ete precise comme <strong>SSOP-B16</strong>. Cette combinaison correspond a la reference ROHM <strong>BH2226FV-E2</strong>, un CNA <strong>8 canaux / 8 bits</strong>. L'identification de type et de boitier est donc retenue ; les 16 broches ne sont pas encore suivies jusqu'au GD32 ni aux destinations analogiques. Relever la broche 1 et le marquage complet sur la photo de reference pour figer la revision de PCB.</p>
+<h2 id="1-fonction">1. Fonction</h2>
+<p>Ce composant génère huit tensions analogiques par programmation série. Il <strong>n'est pas</strong> le codec audio TLV320 et ne peut pas fournir directement plusieurs watts au haut-parleur. En RF il peut par exemple servir de source de polarisation ou de tensions de commande varicap, mais <strong>aucune sortie DAx n'a encore été suivie</strong> sur cette carte. Le rôle RF est donc une <strong>hypothèse</strong>.</p>
+<h2 id="2-broches-de-reference-bh2226fv-e2-fonction-constructeur-et-pistes-a-verifier">2. Broches de reference BH2226FV-E2 (fonction constructeur et pistes a verifier)</h2>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Pin</th>
+  <th>Nom</th>
+  <th>Fonction théorique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1 à 8</td>
+  <td>DA1…DA8</td>
+  <td>Huit sorties analogiques</td>
+</tr>
+<tr>
+  <td style="text-align:right">9</td>
+  <td>VCC</td>
+  <td>Alimentation analogique/logique</td>
+</tr>
+<tr>
+  <td style="text-align:right">10</td>
+  <td>RESETB</td>
+  <td>Réinitialisation active basse</td>
+</tr>
+<tr>
+  <td style="text-align:right">11</td>
+  <td>TEST</td>
+  <td>Entrée de test, ne pas commander arbitrairement</td>
+</tr>
+<tr>
+  <td style="text-align:right">12</td>
+  <td>CSB</td>
+  <td>Sélection active basse</td>
+</tr>
+<tr>
+  <td style="text-align:right">13</td>
+  <td>CLK</td>
+  <td>Horloge série</td>
+</tr>
+<tr>
+  <td style="text-align:right">14</td>
+  <td>DI</td>
+  <td>Entrée données</td>
+</tr>
+<tr>
+  <td style="text-align:right">15</td>
+  <td>SO</td>
+  <td>Sortie série</td>
+</tr>
+<tr>
+  <td style="text-align:right">16</td>
+  <td>GND</td>
+  <td>Masse</td>
+</tr>
+</tbody>
+</table>
+<p>Le format de commande du BH2226FV comporte <strong>12 bits</strong> à déduire exactement du tableau <em>Serial data input</em> de sa notice : adresse / commande de canal et valeur de conversion, échantillonnage à l'horloge avec <code>CSB</code> bas. <strong>L'ordre précis des champs et l'état de RESETB à l'allumage doivent être repris de la révision constructeur</strong>, sans copier une séquence non mesurée dans une ROM modifiée.</p>
+<h2 id="3-comment-le-gd32-pourrait-y-acceder">3. Comment le GD32 pourrait y accéder</h2>
+<p>Aucune liaison GPIO ↔ <code>CLK/DI/CSB/RESETB</code> <strong>spécifique à ce boîtier</strong> n'est identifiée dans l'analyse actuellement accessible. Le bus <code>PB3/PB4</code> observé dans les traces RF et éclairages n'est pas automatiquement celui de ce DAC.</p>
+<p>Pour retrouver la routine dans le firmware V1.21 :</p>
+<ol>
+<li>Rechercher des boucles d'émission <strong>12 bits</strong>, un <code>CSB</code> actif bas et des sorties <code>CLK/DI</code>.</li>
+<li>Croiser les écritures GPIO avec les conditions de changement de fréquence, de bande, de niveau de puissance et de calibration.</li>
+<li>Chercher un tampon de huit canaux et ses valeurs persistées, mais ne pas supposer qu'une table OEM contient les tensions du BH2226 tant qu'un octet de transaction n'a pas été corrélé.</li>
+<li>Mesurer les huit sorties avec un voltmètre haute impédance pendant des opérations ordinaires, et identifier la destination par continuité hors tension.</li>
+</ol>
+<h2 id="4-pour-un-firmware-alternatif">4. Pour un firmware alternatif</h2>
+<p>Pilote séparé <code>bh2226.c</code>, exigeant des primitives <code>clock</code>, <code>data</code>, <code>cs</code>, <code>reset</code> configurables et une table de calibration <strong>issue du poste sauvegardé</strong>. Aucune valeur de tension, séquence de charge, fréquence de conversion ni profil varicap n'est déduite de la seule identification du composant.</p>
+<p><strong>Qualifie :</strong> reference BH2226FV-E2 (marquage et SSOP-B16). <strong>Non qualifies :</strong> tension d'alimentation sur carte, huit affectations DA, usage du SO, CS/CLK/DI, GPIO du GD32 et calibrations usine.</p>
+<p><strong>Source fabricant :</strong> <a href="https://www.rohm.com/products/data-converters/da-converters/bh2226fv-product">https://www.rohm.com/products/data-converters/da-converters/bh2226fv-product</a>. La correspondance marquage / boitier provient de ROHM ; les associations GPIO/fonctions RF restent inconnues.</p>
+<h2 id="5-format-exact-du-mot-12-bits-rohm">5. Format exact du mot 12 bits ROHM</h2>
+<p>La notice ROHM distingue <strong>D0..D7</strong> (valeur 8 bits, D0 bit de poids faible) et <strong>D8..D11</strong> (sélection/commande). Valeurs 4 bits de sélection : <code>0001</code> → DA1, …, <code>1000</code> → DA8 ; <code>1001</code> → sortie du mode <em>power down</em> ; <code>0000</code> → power down ; codes <code>1100</code> à <code>1111</code> destinés aux fonctions I/O particulières. <strong>Ces derniers ne doivent pas être employés comme commandes DAC usuelles.</strong></p>
+<p>Pour une conversion ordinaire, le mot peut être représenté comme <code>((canal_1_à_8 &amp; 0xF) &lt;&lt; 8) | valeur_8_bits</code>. Les <strong>12 bits sont envoyés MSB-first</strong>, DATA pris en compte au front montant CLK lorsque CSB est bas, puis l'écriture est validée au retour CSB haut. <strong>La fiche précise une séquence d'initialisation obligatoire après Power On/Reset</strong> : sortie du mode de veille, sélection I/O/DAC, configuration I/O. Cette initialisation doit être qualifiée dans le firmware réel avant d'envoyer le premier réglage.</p>
+<p>Une fonction pure <code>bh2226_build_dac_word</code> est présente dans <code>firmware/hal/serial_command_encoders.c</code>. Elle ne commande <strong>aucun GPIO du poste</strong> et ne contient aucune table de calibration.</p>
+<p>Fiche constructeur PDF utilisée pour la table (2015, rev.001) : <a href="https://www.mouser.com/datasheet/2/348/bh2226fv-e-1807393.pdf">https://www.mouser.com/datasheet/2/348/bh2226fv-e-1807393.pdf</a></p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

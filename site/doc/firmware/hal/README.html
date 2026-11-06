@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Hardware abstraction and board drivers - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../../docs/evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>Hardware abstraction and board drivers</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/firmware/hal/README.md">Modifier sur GitHub</a><a download href="../../../raw/firmware/hal/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>firmware/hal/README.md</code></p>
+<article class="markdown-body"><h1 id="hardware-abstraction-and-board-drivers">Hardware abstraction and board drivers</h1>
+<p>Place standalone MCU drivers here after verifying the target board GPIO and timing.
+Avoid OEM RAM offsets and manufacturer function addresses as runtime dependencies.</p>
+<h2 id="nouveaux-peripheriques-rf-et-audio">Nouveaux périphériques RF et audio</h2>
+<p>Les contrats de pilotes et leur niveau de vérification figurent dans <a href="../../docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.html">PILOTES_RDA_QA_BH_U2429_AUDIO.md</a>. Aucune constante de calibration RF n'est inscrite comme valeur universelle. Les premières fonctions seront testées hors poste jusqu'à identification physique des GPIO.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

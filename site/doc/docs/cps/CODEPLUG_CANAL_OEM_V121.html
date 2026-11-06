@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Codeplug OEM V1.21 : champs de canal et organisation NAND - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>Codeplug OEM V1.21 : champs de canal et organisation NAND</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/CODEPLUG_CANAL_OEM_V121.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/CODEPLUG_CANAL_OEM_V121.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/CODEPLUG_CANAL_OEM_V121.md</code></p>
+<article class="markdown-body"><h1 id="codeplug-oem-v121-champs-de-canal-et-organisation-nand">Codeplug OEM V1.21 : champs de canal et organisation NAND</h1>
+<h2 id="1-vue-de-la-zone-etudiee">1. Vue de la zone étudiée</h2>
+<p>Le mini-CPS du banc V11.6 lit les 128 premières entrées analogiques/digitales de l'image constructeur à l'adresse logique <code>0x00800000</code>, structurées en enregistrements de <strong>64 octets</strong>. Il ne prétend pas représenter le codeplug complet : le constructeur possède d'autres tables de canaux, zones, contacts, réglages, étalonnages et copies de secours.</p>
+<pre><code class="language-text">0x00800000  Page logique 0 : 32 x 64 octets = 2048 octets
+0x00800800  Page logique 1 : 32 x 64 octets
+0x00801000  Page logique 2 : 32 x 64 octets
+0x00801800  Page logique 3 : 32 x 64 octets
+0x00802000  Au-delà des 128 premiers canaux : non édité par ce module
+</code></pre>
+<p>Les pages de 2048 octets correspondent aux 128 transferts de 16 octets lors de la réécriture d'un groupe, et à la géométrie NAND principale relevée ; le rapport de V11.5 mentionne notamment une page physique <code>4160</code> après traduction de la première adresse logique. <strong>Ne pas transformer l'adresse logique CPS en numéro de page physique par une formule constante non vérifiée</strong> : le firmware peut utiliser des métadonnées, blocs alternatifs, copies ou une couche de translation.</p>
+<h2 id="2-champs-identifies-dans-lenregistrement-de-64-octets">2. Champs identifiés dans l'enregistrement de 64 octets</h2>
+<table>
+<thead>
+<tr>
+  <th>Offset (hex)</th>
+  <th style="text-align:right">Taille</th>
+  <th>Fonction observée dans le décodeur V11.6</th>
+  <th>Niveau de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x00..0x03</code></td>
+  <td style="text-align:right">4 octets</td>
+  <td>Fréquence RX, codage BCD</td>
+  <td>Implémentation testée dans le mini-CPS</td>
+</tr>
+<tr>
+  <td><code>0x04..0x07</code></td>
+  <td style="text-align:right">4 octets</td>
+  <td>Décalage RX-&gt;TX en BCD</td>
+  <td>Implémentation testée</td>
+</tr>
+<tr>
+  <td><code>0x08</code> bits <code>7:6</code></td>
+  <td style="text-align:right">2 bits</td>
+  <td>sens : 0 simplex, 1 positif, 2 négatif, 3 refusé</td>
+  <td>Implémentation testée</td>
+</tr>
+<tr>
+  <td><code>0x08</code> bits <code>1:0</code></td>
+  <td style="text-align:right">2 bits</td>
+  <td>indicateur de mode brut</td>
+  <td>Champ décodé, interprétation exacte à corroborer</td>
+</tr>
+<tr>
+  <td><code>0x08</code> bits <code>3:2</code></td>
+  <td style="text-align:right">2 bits</td>
+  <td>indicateur de puissance brut</td>
+  <td>Champ décodé, pas une mesure RF</td>
+</tr>
+<tr>
+  <td><code>0x23..0x32</code></td>
+  <td style="text-align:right">16 octets</td>
+  <td>Nom affiché du canal, ASCII 1-16 caractères, terminé par NUL si plus court</td>
+  <td>Écriture de nom et persistance testées</td>
+</tr>
+<tr>
+  <td>Tous les autres</td>
+  <td style="text-align:right">Variable</td>
+  <td>Paramètres de canal non décodés dans le mini-CPS</td>
+  <td>Inconnus <strong>dans cet outil</strong> ; ne pas les remplacer</td>
+</tr>
+</tbody>
+</table>
+<p>L'éditeur ne change que les seize positions du champ nom. Il conserve tous les octets voisins, même lorsqu'ils paraissent vides.</p>
+<h2 id="3-frequences-exemple-du-test-source">3. Fréquences : exemple du test source</h2>
+<p>Le test du mini-CPS encode la fréquence RX à l'aide des octets <code>14 55 00 00</code>. La conversion BCD du code retourne <code>145500000</code> Hz, soit 145,500 MHz. Le décalage <code>00 00 06 00</code> correspond à 600000 Hz, et le sens positif produit <code>146100000</code> Hz. Ces valeurs vérifient le code du décodeur, pas l'intégralité de la plage de fréquences du D578.</p>
+<p>Fonction présente dans le code source : <code>bcd(bytes)</code> multiplie l'entier BCD reconstitué par 10 pour obtenir les hertz. Des nibbles supérieurs à <code>9</code> sont rejetés.</p>
+<p><strong>Ne pas attribuer une signification aux bits réservés</strong> sur la seule base d'un exemple. Pour connaître les CTCSS/DCS RX/TX, l'inversion, la bande, les flags, le scan et la puissance nominale, comparer un vrai export CPS à une modification contrôlée champ par champ, puis mesurer le comportement matériel.</p>
+<h2 id="4-relation-avec-la-cartographie-externe-publiee">4. Relation avec la cartographie externe publiée</h2>
+<p>VK7ZJA décrit une mémoire NAND Toshiba/KIOXIA de <strong>2 Gbit / 256 Mio</strong> dans le D578 et une cartographie indicative :</p>
+<table>
+<thead>
+<tr>
+  <th>Plage publiée (adresses NAND logiques)</th>
+  <th>Rôle rapporté</th>
+  <th>Utilisation dans OpenD578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x00800000..0x02A9FFFF</code></td>
+  <td>Données de codeplug hors DMR IDs</td>
+  <td><strong>Zone à sauvegarder</strong>, écriture limitée aux records compris</td>
+</tr>
+<tr>
+  <td><code>0x02F00000..0x02F80679</code></td>
+  <td>Alignement RF actif et sauvegardes</td>
+  <td><strong>Zone protégée</strong>, ne jamais effacer pendant l'édition de canaux</td>
+</tr>
+<tr>
+  <td><code>0x02FA0000..0x02FDFFFF</code></td>
+  <td>Informations locales du poste et copie</td>
+  <td>Lecture de 16 octets testée dans le banc</td>
+</tr>
+<tr>
+  <td><code>0x05500000..</code></td>
+  <td>Base de DMR IDs</td>
+  <td>Non validée pour l'écriture dans OpenD578</td>
+</tr>
+<tr>
+  <td><code>0x0C8E0000..</code></td>
+  <td>Enregistrements audio DMR</td>
+  <td>Non validés</td>
+</tr>
+</tbody>
+</table>
+<p>Cette cartographie est issue d'un travail externe sur la famille 578. Les zones ont été étudiées à d'autres révisions. <strong>Elle ne constitue pas un décodage exhaustif des adresses de ton dump PRO GD32 V1.21.</strong> Voir <a href="../03_NAND_LECTURES_ECC_CARTE.html">NAND et ECC</a> et <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">source VK7ZJA</a>.</p>
+<h2 id="5-consequences-pour-le-firmware-alternatif">5. Conséquences pour le firmware alternatif</h2>
+<p>Le chemin le plus sûr consiste à : sauvegarder des images de référence et leurs empreintes ; identifier les records et leur numérotation ; séparer le codeplug des étalonnages ; conserver les octets inconnus ; traiter les écritures par page avec vérification et politique d'interruption ; reconstruire seulement les index compris ; tester lecture/écriture/relecture après redémarrage sur <strong>banc</strong> avant toute mise en service.</p>
+<p>Pour le mode satellite, le nom <code>SAT:</code> peut être utilisé comme convention dans le codeplug, mais l'adresse <code>+0x23</code> <strong>ne démontre pas</strong> que le nom réside à la même position dans l'objet RAM utilisé par le firmware OEM. Cette séparation est déjà consignée dans <a href="../05_SATELLITE_CODE_INTEGRATION_EXP06.html">le portage satellite</a>.</p>
+<h2 id="6-ce-qui-manque">6. Ce qui manque</h2>
+<ul>
+<li>Bitmap des canaux actifs et relation des index de zones et groupes de balayage.</li>
+<li>Encodage complet du CTCSS/DCS analogique, fréquence TX, options PTT, bandwidth, compander, scrambler, etc.</li>
+<li>Formes exactes des canaux de banque 2 et offsets au-delà du premier groupe.</li>
+<li>Transactions de mise à jour des copies, ECC et état en cas d'extinction durant <code>END</code>.</li>
+<li>Différences PRO V1.20/V1.21 et PLUS V2.07/V2.08.</li>
+</ul>
+<p><strong>Sources</strong> : <code>bench/web/mini_cps_protocol.js</code>, <code>bench/web/test_mini_cps.cjs</code>, <code>docs/CPS_INTEGRE_V11_6.md</code>, <code>docs/validation_v11_6.json</code>, <a href="https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_codeplug.cc">qdmr anytone_codeplug</a>, <a href="https://github.com/dmr-tools/codeplugs/tree/master/d578uv">dmr-tools/codeplugs</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

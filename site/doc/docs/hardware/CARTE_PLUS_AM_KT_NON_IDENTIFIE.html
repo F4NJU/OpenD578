@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>D578UV PLUS : carte RF supplémentaire, CI KT09?5R et réception AM - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>D578UV PLUS : carte RF supplémentaire, CI KT09?5R et réception AM</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md</code></p>
+<article class="markdown-body"><h1 id="d578uv-plus-carte-rf-supplementaire-ci-kt095r-et-reception-am">D578UV PLUS : carte RF supplémentaire, CI KT09?5R et réception AM</h1>
+<p><strong>Observation comparative :</strong> la version <strong>PLUS</strong> comporte une petite carte enfichable au voisinage du RDA5802N, avec un circuit marqué approximativement <code>KT0905R</code> ou <code>KT09S5R</code>, une entrée RF, une référence quartz et quelques composants. Le connecteur correspondant <strong>n'est pas implanté sur la version PRO</strong> rapportée. Le second marquage <code>B9129</code> peut être un code de fabrication ; son interprétation n'est pas vérifiée.</p>
+<h2 id="1-ce-quon-peut-inferer">1. Ce qu'on peut inférer</h2>
+<p>Les sources historiques D578 prévoient une <strong>voie AM bande aéronautique</strong> supplémentaire sur le PLUS, contrairement à la réception FM limitée du PRO. La position de la carte et l'entrée RF sont cohérentes avec cette fonction. <strong>Aucun élément disponible ne prouve néanmoins que le circuit KT09?5R est un récepteur AM complet</strong>, plutôt qu'un sous-ensemble de cette voie. Il ne faut pas le confondre avec le RDA5802N FM de radiodiffusion, ni le module Bluetooth/APRS de certaines variantes.</p>
+<p>Les recherches de référence exacte sur <code>KT0905R</code> et <code>KT09S5R</code> n'aboutissent pas à une fiche fabricant certaine. Les composants KTMicro <code>KT0915</code> ou <code>KT0903</code> possèdent des registres et fréquences propres : <strong>aucun de leurs pilotes ne doit être attribué</strong> à la carte PLUS sans photo confirmant l'identité.</p>
+<h2 id="2-fonction-de-la-carte-a-caracteriser">2. Fonction de la carte à caractériser</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément visible</th>
+  <th>Fait rapporté</th>
+  <th>Analyse restante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Petit PCB RF côté PLUS</td>
+  <td>Présent</td>
+  <td>Numéro de carte, faces et couches</td>
+</tr>
+<tr>
+  <td>CI marqué KT0905R / KT09S5R (?)</td>
+  <td>Marquage partiellement lu</td>
+  <td>Photo macro, boîtier, dimensions et logo</td>
+</tr>
+<tr>
+  <td>Quartz</td>
+  <td>Présence visible</td>
+  <td>Fréquence, réseau de charge, liaison au CI</td>
+</tr>
+<tr>
+  <td>Entrée RF</td>
+  <td>Présente</td>
+  <td>Source : filtre, préampli, commutateur, antenne</td>
+</tr>
+<tr>
+  <td>Connecteur au PCB principal</td>
+  <td>Présent sur PLUS</td>
+  <td>Nombre de contacts, pin 1, tensions, GND, audio, data, IRQ</td>
+</tr>
+<tr>
+  <td>Empreintes PRO</td>
+  <td>Connecteurs absents selon observation</td>
+  <td>Comparaison des pistes et composants non implantés</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-procedure-de-comparaison-pro-plus">3. Procédure de comparaison PRO / PLUS</h2>
+<ol>
+<li>Prendre une photo perpendiculaire, macro et éclairée, de <strong>chaque face du PCB additionnel</strong>, avec le repère broche 1 et le quartz lisible.</li>
+<li>Compter les contacts et numéroter le connecteur <strong>depuis un repère physique</strong>, pas à partir d'un dessin arbitraire.</li>
+<li>Poste hors tension, relever masses, alimentation, couplage RF et audio à travers la nappe / connecteur.</li>
+<li>En usage RX AM uniquement, capturer passivement les signaux numériques de la carte avec sondes adaptées, si l'utilisateur possède le PLUS et si les tensions sont confirmées.</li>
+<li>Si le PLUS utilise une ligne I²C, identifier adresse et registres par <strong>trames observées</strong> et recherche de leur product ID, sans recopie depuis le KT0915.</li>
+<li>Comparer le firmware PRO et PLUS, notamment la présence d'un initialiseur AM, d'une table de bande aéronautique, de GPIO de reset/enable, de mute/audio et de test de présence du module.</li>
+</ol>
+<h2 id="4-impact-sur-un-firmware-alternatif-pro">4. Impact sur un firmware alternatif PRO</h2>
+<p>Le firmware peut réserver l'API <code>airband_rx</code> et indiquer <code>hardware_absent</code> sur PRO. Ajouter uniquement du code ne créera <strong>ni le circuit manquant ni sa chaîne analogique</strong>, et le brochage de la version PLUS n'est pas transposable sans adaptation. Une première étape logicielle utile consiste à <strong>détecter la présence effective du module sans écriture intrusive</strong>, après identification du bus.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Historique D578, bande aéronautique prévue pour PLUS : <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm</a></li>
+<li>Relevé utilisateur sur les PCB PRO et PLUS (novembre 2026), à accompagner de photographies.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

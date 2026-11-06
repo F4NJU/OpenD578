@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>État des fonctions : ce que l&#x27;analyse seule permet et ce qui exige des mesures - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>État des fonctions : ce que l&#x27;analyse seule permet et ce qui exige des mesures</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md</code></p>
+<article class="markdown-body"><h1 id="etat-des-fonctions-ce-que-lanalyse-seule-permet-et-ce-qui-exige-des-mesures">État des fonctions : ce que l'analyse seule permet et ce qui exige des mesures</h1>
+<p><strong>Révision de travail : D578UV PRO GD32, application V1.21, 5 novembre 2026.</strong></p>
+<p>La colonne « Analyse seule » représente ce que l'on peut étudier avec le code public, les documents, les dumps déjà disponibles et les fiches constructeur, <strong>pas une promesse de certitude</strong>. La colonne « Mesure requise » décrit ce qui ne peut être prouvé sans photographie suffisamment lisible, mesure passive ou continuité sur une carte représentative.</p>
+<h2 id="19-fonctions-du-premier-modele">19 fonctions du premier modèle</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>Ce qui manque</th>
+  <th>Faisable sans poste</th>
+  <th>Mesure ou photo indispensable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>lcd</code></td>
+  <td>Contrôleur exact, continuité FPC et interface backlight</td>
+  <td>Comparer les transactions d’initialisation OEM à ST7735 et aux contrôleurs alternatifs ; reconstituer reset, delays et RGB565</td>
+  <td>Photo macro du contrôleur/FPC, contrôles des contacts PE7–PE14, PB10–PB13, rétroéclairage</td>
+</tr>
+<tr>
+  <td><code>keys</code></td>
+  <td>Valeurs de résistances et hystérésis, faux déclenchements/antirebond</td>
+  <td>Analyser le code des seuils ADC, les exceptions et les intervalles de lecture</td>
+  <td>Valeurs ADC brutes pour chaque touche, résistances et mesures au repos</td>
+</tr>
+<tr>
+  <td><code>encoder</code></td>
+  <td>Polarité, temps d’antirebond, montage électrique pull-up</td>
+  <td>Tracer EXTI et automate de quadrature ; vérifier ordre PC8/PC9</td>
+  <td>Capture deux phases en rotation gauche/droite et contact d’appui</td>
+</tr>
+<tr>
+  <td><code>volumes</code></td>
+  <td>Affectation A/B et loi de transfert vers atténuateurs/gains</td>
+  <td>Rapprocher PC2/PC5 des fonctions speaker-volume et U2429, données OEM</td>
+  <td>Potentiomètres identifiés par mesures ADC simultanées et trames U2429</td>
+</tr>
+<tr>
+  <td><code>lights</code></td>
+  <td>Circuits de commande, table des canaux de LED et PWM rétroéclairage</td>
+  <td>Indexer writes PE3/PE4, PA5/PB3/PB4, démultiplexeur et canaux 0..15</td>
+  <td>Suivi pistes jusqu’aux LEDs, fréquence des lignes et contrôle de chaque éclairage</td>
+</tr>
+<tr>
+  <td><code>microphone</code></td>
+  <td>Orientation UART au connecteur, protocole complet, microcontrôleur interne, chemin analogique</td>
+  <td>Étendre parseur 0x41/0x53 et identifier les champs 8..14</td>
+  <td>Capture UART sur prise 8 contacts, tension et lignes micro/haut-parleur</td>
+</tr>
+<tr>
+  <td><code>swd</code></td>
+  <td>Schéma de reset, alimentation et stratégie de récupération</td>
+  <td>Cartographie séquence boot, SWD DP/AP, sections Flash et vecteurs</td>
+  <td>Confirmer NRST, alimentation et comportement après récupération en conditions sûres</td>
+</tr>
+<tr>
+  <td><code>mcu</code></td>
+  <td>Cartographie exhaustive multiplexage GPIO, clocks, DMA, interruptions, RAM réellement occupée</td>
+  <td>Étendre désassemblage et journaux du banc, charger vecteurs, état horloges et assertions</td>
+  <td>JTAG/SWD lecture seule et mesures simultanées pour signaux partagés</td>
+</tr>
+<tr>
+  <td><code>adc0</code></td>
+  <td>Canaux et taux d’échantillonnage effectifs par scénario, décalage mesures</td>
+  <td>Décoder SQR/CHSEL, DMA et tables de calibration ; corréler volumes/touches</td>
+  <td>Injecter aucune tension : observer valeurs mesurées et comparer aux potentiomètres</td>
+</tr>
+<tr>
+  <td><code>power</code></td>
+  <td>Arbre 13,8 V / 5 V / 3,3 V, séquencement et état sommeil</td>
+  <td>Rechercher commandes power/standby et délais de reset, logique d’activation du PA</td>
+  <td>Tracer L7805CV, protections et rails au repos et en réception</td>
+</tr>
+<tr>
+  <td><code>nand</code></td>
+  <td>Table partitions, correction ECC exhaustive, wear/bad-block et écriture sûre</td>
+  <td>Interpréter dump, OOB, réserves, index et appels pilote ; déduire format sans écrire</td>
+  <td>Captures lecture seule, comparaison dump stable, mesure bus et politique de récupération</td>
+</tr>
+<tr>
+  <td><code>gps</code></td>
+  <td>USART, baud, EN/RESET, NMEA/UBX/CASIC exact, sauvegarde et PPS</td>
+  <td>Recherche séquences NMEA, initialisation UART, chaînes et interrupteurs dans V1.21</td>
+  <td>Capture UART passivement à l’acquisition et repérage TX/RX sur ATGM336H</td>
+</tr>
+<tr>
+  <td><code>dmr</code></td>
+  <td>Pinout HPI, reset/clock/IRQ, code DSP, streaming, calibres, DMR TDMA</td>
+  <td>Analyse des commandes HPI dans firmware et des objets de simulation; localisation blob DSP</td>
+  <td>Captures bus en RX normal, relevé horloge/reset IRQ, statut boot</td>
+</tr>
+<tr>
+  <td><code>codec</code></td>
+  <td>Référence physique, I²C/SPI contrôles, I²S audio, gains et offset par profil</td>
+  <td>Décoder écritures codec et registres TI, déterminer initialisation audio</td>
+  <td>Identification du boîtier exact et liaisons numériques/analogiques vers DMR/PA</td>
+</tr>
+<tr>
+  <td><code>audio</code></td>
+  <td>Ordre codec → atténuateur → amplificateur, fonctions PA7/reg0x25</td>
+  <td>Tracer Speaker Mode et commandes mute selon scénarios connus</td>
+  <td>Continuité du trajet U2429/MC34119/YD1517 et niveaux volume</td>
+</tr>
+<tr>
+  <td><code>bluetooth</code></td>
+  <td>SoC blinde, brochage D868BT-SP, UART/baud, dialogue et audio reel</td>
+  <td>Modeliser ET12 UART3 (VER/AGHF), analyser les chaines OEM, appairage PTT/BT01 et variants PRO/PLUS</td>
+  <td>Photographies support + module, continuite UART/EN/RESET, captures de demarrage et d'appairage</td>
+</tr>
+<tr>
+  <td><code>rf</code></td>
+  <td>Attribution des 4 QA, PLL, FI, filtres, squelch/CTCSS, biais varicap</td>
+  <td>Decoder banques SPI, registres 0x29/0x2A/0x44/0x7F et états de réception</td>
+  <td>Suivi chaque CS, 26 MHz, filtres 38,550/38,850 et RF RX</td>
+</tr>
+<tr>
+  <td><code>pa</code></td>
+  <td>Deux chemins VHF/UHF, DAC de polarisation, protection et linéarisation</td>
+  <td>Repérer appels puissance/mode/bande, tables usine, états de TX contrôlés logiciel</td>
+  <td>Photos/tracés des AFT05MP075N et rails PA, aucun TX exploratoire</td>
+</tr>
+<tr>
+  <td><code>antenna</code></td>
+  <td>Chemin RF complet, commutation TX/RX, filtres passe-bas et protection</td>
+  <td>Comparer variantes de bande et décisions GPIO pour commutateurs</td>
+  <td>Continuité depuis les filtres/PA jusqu’au connecteur et mesures RF instrumentées</td>
+</tr>
+</tbody>
+</table>
+<h2 id="composants-ajoutes-a-linventaire">Composants ajoutés à l'inventaire</h2>
+<table>
+<thead>
+<tr>
+  <th>Composant</th>
+  <th>Ce qui manque</th>
+  <th>Faisable sans poste</th>
+  <th>Mesure ou photo indispensable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>rda5802n</code> (RDA5802N)</td>
+  <td>Interface I²C exacte, référence, sortie audio, antenne et mapping PB6/PB7</td>
+  <td>Décoder les trames enregistrées par FmI2c et appels OEM</td>
+  <td>Comparer niveau SDA/SCL sur broches tuner et sortie audio</td>
+</tr>
+<tr>
+  <td><code>qa_lo_a</code> (QA candidat LO A)</td>
+  <td>Fonction physique et CS du boîtier</td>
+  <td>Comparer mots 0x29/0x2A aux commandes VFO A</td>
+  <td>Continuite CS et fréquence oscillateur</td>
+</tr>
+<tr>
+  <td><code>qa_lo_b</code> (QA candidat LO B)</td>
+  <td>Fonction physique et CS du boîtier</td>
+  <td>Comparer mots 0x29/0x2A aux commandes VFO B</td>
+  <td>Continuite CS et fréquence oscillateur</td>
+</tr>
+<tr>
+  <td><code>qa_if_a</code> (QA candidat FI A)</td>
+  <td>Affectation FI, CS et chaîne analogique</td>
+  <td>Comparer changements de squelch et registres RF</td>
+  <td>Relier filtre 38 MHz et contrôle CS</td>
+</tr>
+<tr>
+  <td><code>qa_if_b</code> (QA candidat FI B)</td>
+  <td>Affectation FI, CS et chaîne analogique</td>
+  <td>Comparer changements de squelch et registres RF</td>
+  <td>Relier second filtre 38 MHz et CS</td>
+</tr>
+<tr>
+  <td><code>ref26</code> (Référence 26 MHz)</td>
+  <td>Répartition aux QA et stabilité</td>
+  <td>Rechercher calibrations d’horloge OEM</td>
+  <td>Sonde haute impédance non intrusive</td>
+</tr>
+<tr>
+  <td><code>rf_spi</code> (Bus RF quatre sélections)</td>
+  <td>Associer banques logiques aux 4 circuits</td>
+  <td>Simulation déjà disponible dans bench/rf_spi.py</td>
+  <td>Continuité PB5/PB2/PC13/PE1</td>
+</tr>
+<tr>
+  <td><code>bh2226</code> (H2226 / BH2226FV-E2 confirme)</td>
+  <td>Affectation 8 sorties, controle CS/CLK/DI et table de calibration</td>
+  <td>Emission 12 bits connue de la datasheet ; recherches de boucles et mot-cle init</td>
+  <td>Continuite DA1..DA8, CS/CLK/DI, tension d'alimentation</td>
+</tr>
+<tr>
+  <td><code>u2429</code> (UTC U2429G)</td>
+  <td>Deux entrées et sorties et GPIO de contrôle</td>
+  <td>Rechercher pulses 11 bits liés au volume</td>
+  <td>Continuité et capture CLOCK/DATA, niveau 5 V</td>
+</tr>
+<tr>
+  <td><code>mc34119</code> (MC34119G)</td>
+  <td>Affectation HP, CD, audio et alimentation</td>
+  <td>Chercher commande speaker mode et mute</td>
+  <td>Continuité CD et OUT1/OUT2</td>
+</tr>
+<tr>
+  <td><code>sgm8272</code> (SGM8272)</td>
+  <td>Deux boucles analogiques inconnues</td>
+  <td>Relier séquences de calibration DAC si identifiées</td>
+  <td>Mesurer feedback, entrée/sortie et rails</td>
+</tr>
+<tr>
+  <td><code>yd1517</code> (YD1517P)</td>
+  <td>Lien mute M/SS, alimentation, entrées et sorties</td>
+  <td>Comparer états PA7 issus du banc</td>
+  <td>Continuité entre pin 8 et PA7 ; sorties HP</td>
+</tr>
+<tr>
+  <td><code>aft_vhf</code> (AFT05MP075N VHF)</td>
+  <td>Biais TX, capteurs et filtres</td>
+  <td>Chercher tables de puissance VHF</td>
+  <td>Tracer réseau PA sous protection RF</td>
+</tr>
+<tr>
+  <td><code>aft_uhf</code> (AFT05MP075N UHF)</td>
+  <td>Biais TX, capteurs et filtres</td>
+  <td>Chercher tables de puissance UHF</td>
+  <td>Tracer réseau PA sous protection RF</td>
+</tr>
+<tr>
+  <td><code>l7805</code> (L7805CV)</td>
+  <td>Charges du rail +5 V et activation éventuelle</td>
+  <td>Reconstituer machine Power du firmware</td>
+  <td>Mesure des rails et continuité hors tension</td>
+</tr>
+<tr>
+  <td><code>bt_support</code> (support D868BT-SP)</td>
+  <td>Connector/pads, rails, antenne, identite support entre PRO et PLUS</td>
+  <td>Comparer les photos FCC et generations D868/D878, localiser les appels UART3</td>
+  <td>Photos des 2 faces, continuity connecteur et alimentation</td>
+</tr>
+<tr>
+  <td><code>bt_et12</code> (module blinde)</td>
+  <td>SoC sous blindage, firmware exact, UART, audio, enable/reset</td>
+  <td>Documenter VER/AGHF, chercher xrefs AT+ dans la ROM si disponible</td>
+  <td>Lire version en menu, capter UART passivement au boot, relever padout</td>
+</tr>
+<tr>
+  <td><code>bt01</code> (micro Bluetooth)</td>
+  <td>Trames commande/ecran/audio, priorites IHM et sortie du mode distant</td>
+  <td>Exploiter manuel BT01, recenser les menus et construire un automate de reconnexion</td>
+  <td>Capture d'appairage et messages BT01, controles des commandes filaires</td>
+</tr>
+<tr>
+  <td><code>bp02</code> (PTT Bluetooth)</td>
+  <td>Trames PTT, mode Hold, watchdog, niveau batterie, separation audio</td>
+  <td>Definir machine d'etats et tests d'inhibition TX avec manuel BP-02</td>
+  <td>Capture d'appairage et appui/relache, perte de connexion</td>
+</tr>
+</tbody>
+</table>
+<h2 id="repartition-des-taches">Répartition des tâches</h2>
+<h3 id="realisable-hors-ligne-des-maintenant">Réalisable hors ligne dès maintenant</h3>
+<ul>
+<li>Indexer les données constructeur accessibles, les routines déjà trouvées, les registres et séquences de simulation avec leur <strong>niveau de preuve</strong>.</li>
+<li>Retrouver des initialisations, tables de fréquences, traitements de registres et boucles de sérialisation dans un <strong>binaire V1.21 intégral disponible localement</strong>. Dans le dépôt public préparé ici, le binaire OEM intégral <strong>n'est pas présent</strong>, donc les nouvelles adresses de routines ne sont pas revendiquées.</li>
+<li>Proposer des pilotes HAL sans dépendance à la RAM OEM et des tests d'encodage côté PC, en gardant les valeurs de registres non qualifiées comme inconnues.</li>
+<li>Documenter séparément PRO et PLUS, sans transférer un brochage ou un firmware par supposition.</li>
+</ul>
+<h3 id="impossible-a-confirmer-hors-ligne-sans-nouvelles-donnees-materielles">Impossible à confirmer hors ligne sans nouvelles données matérielles</h3>
+<ul>
+<li>Identifier <strong>physiquement</strong> chaque broche de chacun des quatre LQFP32 grattés et sa sélection SPI.</li>
+<li>Attribuer les sorties BH2226 et SGM8272 à des varicaps, amplificateurs ou régulateurs sans suivre les pistes.</li>
+<li>Déterminer la référence précise <code>KT09?5R</code> à partir d'un marquage incertain, le connecteur PLUS et son bus.</li>
+<li>Vérifier la continuité entre GPIO du GD32 et circuit RDA/U2429/MC34119/YD1517/L7805.</li>
+<li>Etablir le brochage et l'identite du SoC du module Bluetooth sous blindage, ainsi que les trames BT01 et BP-02 en utilisant des mesures et captures passives. Le marquage D868BT-SP ne demontre pas a lui seul une equivalence D878.</li>
+<li>Certifier la chaîne TX, les calibrations PA, les profils RF ou la sûreté d'un firmware flashable sans essais de protection et de récupération.</li>
+</ul>
+<p>Le <a href="PLAN_INVESTIGATION_BROCHAGES.html">plan de mesures</a> fournit un ordre de travail et un format de fiche réutilisable pour chaque liaison.</p>
+<h3 id="qa4818n-mise-a-jour-documentaire-du-6-novembre-2026">QA4818N : mise à jour documentaire du 6 novembre 2026</h3>
+<p>Le nouvel <a href="QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">analyseur QA4818N</a> rapproche automatiquement les paires de registres <code>0x29/0x2A</code> des fréquences VFO et des FI 38,550/38,850 MHz ; un calculateur C reproduit le format supposé AT1846S. Il <strong>ne clôt pas</strong> l'inconnue sur les quatre CI : la corrélation sur captures OEM et la mesure de fréquence LO restent nécessaires.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

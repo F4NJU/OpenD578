@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Validation du depot public, lot de preuves du 05/11/2026 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Preuves et tracabilite</div>
+<div class="doc-heading"><h1>Validation du depot public, lot de preuves du 05/11/2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/VALIDATION_DU_DEPOT.md">Modifier sur GitHub</a><a download href="../../../raw/docs/evidence/VALIDATION_DU_DEPOT.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/evidence/VALIDATION_DU_DEPOT.md</code></p>
+<article class="markdown-body"><h1 id="validation-du-depot-public-lot-de-preuves-du-05112026">Validation du depot public, lot de preuves du 05/11/2026</h1>
+<p>Le controle de cette livraison a porte sur les <strong>fichiers remis et les comportements de leur outillage documentaire</strong>, et non sur une emission radio ou une programmation du poste.</p>
+<table>
+<thead>
+<tr>
+  <th>Test</th>
+  <th>Etat</th>
+  <th>Portee</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Inventaire CPU GD32 100 pins</td>
+  <td>Reussi</td>
+  <td>CSV de 100 broches, signaux annotés par provenance</td>
+</tr>
+<tr>
+  <td>Fichier KiCad reconstruit</td>
+  <td>Partiel</td>
+  <td>100 pins et syntaxe structurelle controlees, non ouvert dans l'interface KiCad</td>
+</tr>
+<tr>
+  <td>Modeles materiels</td>
+  <td>Reussi</td>
+  <td>2 modeles avec destinations de liens existantes, faits et hypotheses separes</td>
+</tr>
+<tr>
+  <td>Site Markdown -&gt; HTML</td>
+  <td>Reussi</td>
+  <td>Liens locaux valides, lien vers documents sources, lecture integree</td>
+</tr>
+<tr>
+  <td>Registre des preuves</td>
+  <td>Reussi</td>
+  <td>IDs uniques, provenance, lien local existant et 29 affirmations classees</td>
+</tr>
+<tr>
+  <td>CPS trace decoder</td>
+  <td>Reussi</td>
+  <td>4 tests locaux, aucune ecriture radio</td>
+</tr>
+<tr>
+  <td>Bluetooth protocol analyzers</td>
+  <td>Reussi</td>
+  <td>5 tests locaux, aucun appairage materiel</td>
+</tr>
+<tr>
+  <td>Mini-CPS JavaScript</td>
+  <td>Reussi</td>
+  <td>Test Node des transformations de champs; pas de CPS physique</td>
+</tr>
+<tr>
+  <td>Audit publication</td>
+  <td>Reussi</td>
+  <td>Pas de binaire proprietaire ou dump dans les chemins publics</td>
+</tr>
+<tr>
+  <td>Banc complet Python/Unicorn</td>
+  <td><strong>Non verifie dans cette session</strong></td>
+  <td>Dependance <code>unicorn</code> absente et installation impossible sans acces PyPI; CI Github installe <code>bench/requirements.txt</code> et execute la suite</td>
+</tr>
+<tr>
+  <td>Releves physiques RTC/GNSS, GPIO RF/HPI/Bluetooth</td>
+  <td><strong>A faire</strong></td>
+  <td>Photo/multimetre/logic analyzer necessaires, aucune trace fabriquee</td>
+</tr>
+<tr>
+  <td>Firmware autonome flashable</td>
+  <td><strong>Non disponible</strong></td>
+  <td>Aucun fichier de mise a jour radio valide ou autorise</td>
+</tr>
+</tbody>
+</table>
+<p>La creation du ZIP peut etre controlee par les SHA-256 de <code>PACKAGE_MANIFEST_20261105.json</code>. Le fichier <code>site/</code> est genere automatiquement et ne doit jamais etre edite a la place de son Markdown source. Voir <a href="../archives/ORIGINAUX_A_RECUPERER.html">les originaux manquants</a> et <a href="INDEX.html">le centre de preuves</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

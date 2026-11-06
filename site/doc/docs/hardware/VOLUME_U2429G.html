@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>UTC U2429G : atténuateur audio stéréo à commande série - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>UTC U2429G : atténuateur audio stéréo à commande série</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VOLUME_U2429G.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/VOLUME_U2429G.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/VOLUME_U2429G.md</code></p>
+<article class="markdown-body"><h1 id="utc-u2429g-attenuateur-audio-stereo-a-commande-serie">UTC U2429G : atténuateur audio stéréo à commande série</h1>
+<p>Le <code>U2429G</code> fabriqué par UTC (Unisonic Technologies) est un <strong>contrôleur de volume analogique à deux canaux</strong>. Il conserve des entrées/sorties analogiques ; le GD32 règle leur atténuation par deux signaux <strong>CLOCK et DATA</strong>. Il ne s'agit <strong>pas d'un périphérique I²C</strong> (pas de SDA/SCL ni d'adresse 7 bits).</p>
+<h2 id="1-pinout-constructeur-soic8-dip8-vue-dessus">1. Pinout constructeur (SOIC8 / DIP8, vue dessus)</h2>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Pin</th>
+  <th>Nom</th>
+  <th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>VIN1</td>
+  <td>Entrée signal voie 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>VOUT1</td>
+  <td>Sortie signal voie 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>GND</td>
+  <td>Masse</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>DATA</td>
+  <td>Entrée série</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>CLOCK</td>
+  <td>Horloge série</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>VCC</td>
+  <td>Alimentation, 4,5–5,5 V</td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>VOUT2</td>
+  <td>Sortie signal voie 2</td>
+</tr>
+<tr>
+  <td style="text-align:right">8</td>
+  <td>VIN2</td>
+  <td>Entrée signal voie 2</td>
+</tr>
+</tbody>
+</table>
+<p>Atténuation programmable de <strong>0 à −83 dB par incréments de 1 dB</strong>, plus une condition de coupure. Les deux canaux peuvent être réglés ensemble ou séparément.</p>
+<h2 id="2-contraintes-electriques-et-timings">2. Contraintes électriques et timings</h2>
+<p>Selon la datasheet UTC (rév. D) : tension recommandée 4,5–5,5 V, <code>VIH ≥ 0,8×VCC</code> pour CLOCK/DATA, <code>VIL ≤ 0,2×VCC</code>. À <strong>VCC=5 V</strong>, <code>VIH ≥ 4 V</code> : <strong>une sortie 3,3 V du GD32 ne garantit pas une entrée haute</strong>. Chercher un étage d'adaptation, un transistor, une alimentation différente ou une autre révision avant toute connexion.</p>
+<p>Horloge série, fiche constructeur : <code>tCR ≥ 4 µs</code> (soit une fréquence maximale théorique de 250 kHz), état haut et bas de <code>1,6 µs</code> minimum chacun. Conserver des marges après capture des séquences OEM. Les changements de DATA doivent respecter les délais de setup/hold du tableau original.</p>
+<p>La trame native contient <strong>11 bits</strong> : sélection d'un ou des deux canaux, atténuation et bits de contrôle. Le sens de transmission, la fonction de chaque champ et l'événement de validation doivent être <strong>repris du diagramme de timing UTC et confirmés sur la radio</strong> ; ils ne sont pas interchangeables avec une commande I²C.</p>
+<h2 id="3-reconstitution-de-la-commande-gd32">3. Reconstitution de la commande GD32</h2>
+<p>Il reste à trouver les <strong>deux GPIO</strong> ou le circuit de translation qui aboutissent aux broches 4/5, et les <strong>deux sources audio</strong> raccordées aux broches 1/8. La relation avec les potentiomètres <code>PC2/PC5</code> est seulement conceptuelle : ces potentiomètres sont mesurés par ADC du GD32, qui pourrait recalculer l'atténuation, mais la correspondance n'a pas été tracée.</p>
+<p>À rechercher dans V1.21 : fonction d'écriture à 11 cycles d'horloge, appels au mouvement des boutons de volume, code de mute, reprise de veille, ordre d'envoi des deux canaux. Les routines natives d'origine ne doivent pas être prises pour des adresses universelles d'un firmware autonome.</p>
+<h2 id="4-qualification-materielle">4. Qualification matérielle</h2>
+<ol>
+<li>Poste hors tension : relever la continuité entre broches 4/5 et réseau de transistors/MCU ; entre 1/2/7/8 et amplificateurs.</li>
+<li>Poste allumé sans TX : mesurer VCC, niveaux logiques CLOCK/DATA et trames pendant variation du volume A et B.</li>
+<li>Rejouer ces trames <strong>uniquement dans le banc</strong> pour valider l'encodage, sans injection sur le poste réel.</li>
+<li>Déterminer si U2429 reçoit les deux voies indépendantes ou un mix stéréo, et si la coupure intervient ailleurs.</li>
+</ol>
+<p><strong>Référence constructeur :</strong> <a href="https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf">https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf</a></p>
+<h2 id="5-format-de-la-trame-documente-par-utc">5. Format de la trame documenté par UTC</h2>
+<p>Les <strong>onze bits D0 à D10 sont transmis dans cet ordre</strong> et lus sur le <strong>front montant CLOCK</strong>. Le constructeur indique un mécanisme de latch sur front descendant à la fin du paquet, avec D9 et D10 tenus à 1. L’ordre de tension DATA doit être vérifié au scope sur le D578 avant tout usage matériel.</p>
+<table>
+<thead>
+<tr>
+  <th>Bits</th>
+  <th>Signification de la fiche UTC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>D0</td>
+  <td><code>0</code> = deux canaux réglés en même temps ; <code>1</code> = un seul canal</td>
+</tr>
+<tr>
+  <td>D1</td>
+  <td><code>0</code> = canal 1 ; <code>1</code> = canal 2 (utile si D0=1)</td>
+</tr>
+<tr>
+  <td>D2..D6</td>
+  <td>Atténuation grossière, pas de <strong>4 dB</strong> ; ordre LSB-first, code 21 pour 0 dB, 1 pour −80 dB</td>
+</tr>
+<tr>
+  <td>D7..D8</td>
+  <td>Atténuation fine, pas de <strong>1 dB</strong> ; code 3 pour 0 dB, 2 pour −1 dB, 1 pour −2 dB, 0 pour −3 dB</td>
+</tr>
+<tr>
+  <td>D9..D10</td>
+  <td>Deux bits à <strong>1</strong> pour terminer/valider la trame</td>
+</tr>
+</tbody>
+</table>
+<p>Pour une atténuation entière <code>A</code> de 0 à 83 dB, le codage extrait de la table constructeur est <code>coarse = 21 - floor(A/4)</code> et <code>fine = 3 - (A % 4)</code>. Exemple : A=0 donne <code>D2..D6=10101</code>, <code>D7..D8=11</code> ; A=83 donne <code>10000</code> et <code>00</code>. Les bits sont affichés dans l'ordre <strong>D2 vers D6 / D7 vers D8</strong>, pas dans l'ordre traditionnel d'un nombre écrit sur 5 bits.</p>
+<p>Un encodeur C <strong>sans GPIO</strong>, compilable sur ordinateur, est livré dans <code>firmware/hal/serial_command_encoders.c</code> avec tests dans <code>firmware/tests/test_serial_command_encoders.c</code>. <strong>Il ne prouve pas l’accès au U2429 du D578</strong> et ne permet pas de forcer ses lignes.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

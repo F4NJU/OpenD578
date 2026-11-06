@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Qualification analogique OpenD578 — V11.7 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Qualification analogique OpenD578 — V11.7</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/QUALIFICATION_ANALOGIQUE.md">Modifier sur GitHub</a><a download href="../../raw/docs/QUALIFICATION_ANALOGIQUE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/QUALIFICATION_ANALOGIQUE.md</code></p>
+<article class="markdown-body"><h1 id="qualification-analogique-opend578-v117">Qualification analogique OpenD578 — V11.7</h1>
+<p>Cette révision établit un inventaire ouvert, une recherche reproductible dans le
+firmware et un rapport d’auto-test conservateur. Elle ne termine pas la chaîne
+FM/APRS du firmware et ne constitue pas un firmware OpenD578 installable.</p>
+<h2 id="sources-et-niveaux-de-preuve">Sources et niveaux de preuve</h2>
+<p>Le catalogue <code>bench/qualification_data/catalog.json</code> contient 117 fonctions ou
+exigences. La même liste est exportée dans <code>FUNCTION_MATRIX.csv</code>. Les sources
+sont référencées dans le JSON ; les critères et descriptions sont rédigés pour
+ce projet, sans reproduction des documents constructeurs.</p>
+<p>Les données recoupées sont :</p>
+<ul>
+<li>Manuel fabricant A3.200730, distribué par Connect Systems : façade, microphone,
+audio, menus analogiques et options GPS/APRS. Il couvre plusieurs variantes.</li>
+<li>Application PRO GD32 V1.21 authentifiée, SHA-256
+<code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>.</li>
+<li>Bootloader du dump complet et sondages exécutés RX/PTT.</li>
+<li>Modèles et résultats antérieurs : LCD, ADC, NAND, USB, GPS, RF, SCT et audio I/Q.</li>
+<li>Table des 100 broches relue : les anciennes hypothèses d’autres cartes ne
+deviennent pas des connexions mesurées. « NON CONNECTE » y était souvent un
+emplacement non renseigné, pas une preuve de non-connexion.</li>
+<li>Datasheets GigaDevice, TI AIC3204 et SCT3258, et documentation du protocole
+microphone. Les possibilités d’un circuit ne prouvent pas son routage sur ce PCB.</li>
+<li>Observations utilisateur : voyant vert en squelch ouvert, rouge en émission,
+haut-parleur microphone sélectionnable et option Bluetooth à inclure.</li>
+</ul>
+<p>Les références de photos FCC sont conservées. Leur récupération a échoué dans
+cette révision ; aucune nouvelle inspection de ces photos ni correspondance de
+révision PCB n’est revendiquée. Les schémas FCC affichés comme métadonnées ne
+sont pas traités comme des schémas obtenus.</p>
+<p>Une chaîne ASCII candidate est une piste. Exemple concret : <code>APRS Receive</code>
+existe dans l’image PRO, ce qui ne démontre pas que l’option APRS RX fonctionne
+sur le poste capturé. Les menus partagés, variantes et branches désactivées
+empêchent d’inférer les capacités depuis les seuls textes.</p>
+<h2 id="formats-et-reutilisation">Formats et réutilisation</h2>
+<p>Sources Python 3 et C existant sous GPL-3.0-or-later ; catalogue JSON avec JSON
+Schema 2020-12 ; vue CSV ; rapports JSON et JUnit XML. Le signal utilise déjà
+WAV PCM16 et SigMF cf32_le. Aucun format opaque supplémentaire n’est requis.
+Pour l’extension satellite : éléments TLE ou OMM, propagation de référence
+indépendante puis comparaison des fréquences réellement commandées. Le format
+orbital ne dispense pas de tester les conventions, l’époque et les signes Doppler.
+Les firmwares et captures propriétaires restent des entrées privées séparées
+et ne sont pas inclus dans les sources publiables.</p>
+<h2 id="refaire-linventaire-du-firmware">Refaire l’inventaire du firmware</h2>
+<pre><code class="language-sh">python bench/oem_discovery.py /chemin/application.CDD --out results/discovery.json
+</code></pre>
+<p>Le programme enregistre l’empreinte, les candidats d’entrées, les constantes de
+périphériques, les chaînes candidates par exigence et les pointeurs alignés
+possibles vers ces chaînes. Il conserve les fonctions indirectes, tables de saut,
+code/données et composants opaques dans les inconnues. Un candidat d’entrée n’est
+pas une fonction décompilée. Les motifs larges peuvent produire de faux liens.
+Aucune absence de chaîne ne prouve l’absence de la fonction.</p>
+<h2 id="auto-test-actuellement-executable">Auto-test actuellement exécutable</h2>
+<pre><code class="language-sh">python bench/run_bench.py --source-dir /chemin/captures --engine native
+python bench/selftest_report.py --regressions bench/results/bench/qualification.json
+</code></pre>
+<p>Depuis le paquet Windows : <code>TESTER_BASES.cmd</code>. Le lanceur demande le chemin du dossier source, ou accepte <code>--source-dir</code>.
+Le moteur web doit être arrêté pendant ce test. Les captures originales sont
+lues et les écritures éventuelles restent dans des copies virtuelles.</p>
+<p>Les trois scénarios OEM historiques sont : entrée porteuse et ouverture audio puis
+fermeture ; acquisition puis perte GPS ; PTT puis activation TX/ventilateur/DAC
+puis relâchement et retour au repos. Ils dépendent des observations V1.21 et ne
+sont pas des tests complets de formes d’onde ou d’audio. Un quatrième scénario
+<code>LED_bus</code> teste la séquence vert/repos/rouge/repos sur les véritables fronts
+GPIO PE3/PE4, sans lire les variables RX/TX OEM ; voir LED_STATUS_BUS.md.</p>
+<p>Le rapport <code>qualification.json</code> conserve ces verdicts limités. <code>selftest.json</code>
+et <code>junit.xml</code> ajoutent toutes les exigences non qualifiées, marquées
+<code>incomplete</code> / <code>skipped</code>. Aucun test omis ne devient vert. Le code de sortie de
+<code>selftest_report.py</code> est 2 tant que la qualification est incomplète, 1 en cas
+d’échec. <code>run_bench.py</code> conserve son code de sortie historique pour ses seuls
+scénarios. Les deux portées sont différentes et annoncées dans le lanceur.
+Un export seul du catalogue n’exécute pas un firmware.</p>
+<h2 id="audio-chemins-a-qualifier-separement">Audio : chemins à qualifier séparément</h2>
+<p>Les sorties à suivre sont le haut-parleur interne, celui du microphone, les
+prises externes A/B et le Bluetooth. La sélection microphone/poste/les deux et
+l’affectation A/B du microphone doivent être essayées. Les contacts mécaniques
+des prises externes et l’impédance de charge relèvent aussi du matériel.
+La voix synthétique du navigateur et la boucle I/Q autonome ne constituent pas
+une preuve du bon routage. Les sorties inconnues restent <code>selected: null</code>.
+Les gains du codec, ses horloges et les liaisons SCT/audio doivent être reliés
+aux échantillons avant de qualifier le trajet complet.</p>
+<h2 id="ordre-de-realisation-convenu">Ordre de réalisation convenu</h2>
+<ol>
+<li>Inventaire analogique OEM et preuves matérielles, y compris les voyants.</li>
+<li>Chaîne FM : chemins microphone/codec/SCT/RF, échantillons et récepteur de mesure
+indépendant ; CTCSS/DCS, signalisation et routage des haut-parleurs.</li>
+<li>Audit continu des branches et routines non rattachées à l’inventaire ; essais
+croisés et défauts. Aucun total de tests ne démontre que tout a été découvert.</li>
+<li>GPS : démarrage, acquisition/perte, coordonnées, UTC, trames invalides et
+positions périmées, sans écrire directement le fix dans la RAM du firmware.</li>
+<li>APRS TX : terminer le DMA réellement utilisé, récupérer la modulation, décoder
+l’I/Q indépendamment et tester l’arbitrage GPS/PTT/canal occupé.</li>
+<li>Satellite : références orbitales indépendantes, Doppler, limites, CTCSS,
+coexistence UI/RF, restauration de l’état et absence d’usure mémoire inutile.</li>
+</ol>
+<p>Le Bluetooth est une option matérielle transversale à l’étape audio : référence
+ET12/B707 disponible et quelques commandes AT modélisées. Découverte, appairage,
+reconnexion, PTT et audio ne sont pas implémentés. Le firmware du module n’est
+pas exécuté : son ISA, sa mémoire et ses interfaces doivent être identifiées.
+La phonie DMR reste hors de cette campagne. APRS RX reste une étape ultérieure.
+Les fonctions OEM précédemment déclarées supprimables restent dans l’inventaire
+pour ne pas être oubliées ; cela ne les rend pas obligatoires dans la première
+version du firmware ouvert.</p>
+<h2 id="pour-un-firmware-entierement-nouveau">Pour un firmware entièrement nouveau</h2>
+<p>Utiliser <code>run_hardware.py</code>, sans anciennes adresses de routines ni offsets RAM.
+Les observateurs doivent voir les fils GPIO, UART, USB, HPI, ADC/DMA et les
+échantillons audio/RF. Le profil de navigation peut changer selon l’IHM ; le
+contrat physique reste identique. Le modèle actuel ne couvre pas encore tous
+les périphériques : un arrêt de modèle est un essai incomplet.</p>
+<p>Chaque futur cas doit contenir état initial, stimuli, résultat physique attendu,
+délais en temps virtuel et invariants. Contrôles négatifs nécessaires : mauvais
+CTCSS, mauvaise fréquence, PTT ignoré, amplificateur muet, trame APRS corrompue,
+capteur absent et commande inconnue. Modifier volontairement un pilote doit
+faire échouer les essais concernés. Un firmware ne se déclare pas lui-même bon.
+Les temps du modèle ne sont pas précis au cycle ; les marges temporelles devront
+être vérifiées sur poste avant toute affirmation sur les performances réelles.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

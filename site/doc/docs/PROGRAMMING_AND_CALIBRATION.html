@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>PC programming and retained alignment - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>PC programming and retained alignment</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/PROGRAMMING_AND_CALIBRATION.md">Modifier sur GitHub</a><a download href="../../raw/docs/PROGRAMMING_AND_CALIBRATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/PROGRAMMING_AND_CALIBRATION.md</code></p>
+<article class="markdown-body"><h1 id="pc-programming-and-retained-alignment">PC programming and retained alignment</h1>
+<p>Added to the first usable-version scope on 4 November 2026.</p>
+<h2 id="pc-link-and-analog-memories">PC link and analog memories</h2>
+<p>OpenD578 needs a working PC connection, not just manual VFO entry. A first
+programming path must support identifying the board/firmware, reading analog
+memories, writing selected memories, reading them back, and preserving them
+through a restart. Frequency, separate RX/TX tones, name, power choice and
+repeater shift are part of the memory contract.</p>
+<p>Prefer an established programming protocol when it can be reproduced correctly.
+qdmr supports the OEM D578, but that alone does not establish compatibility with
+a new OpenD578 firmware or its memory format:
+<a href="https://github.com/hmatuschek/qdmr">https://github.com/hmatuschek/qdmr</a></p>
+<p>V11.5 adds CDC host enumeration and a local COM/PTY bridge through PMA/IRQ20
+in both board and OEM analysis modes. The original firmware answers identification
+and memory reads; write finalization and persistence require explicit checks.
+The original Windows CPS and its virtual COM driver have not been executed here.
+See <a href="USB_CPS_V11_5.html">USB_CPS_V11_5.md</a> for tested scope and limitations.</p>
+<h2 id="three-different-kinds-of-settings">Three different kinds of settings</h2>
+<table>
+<thead>
+<tr>
+  <th>Data</th>
+  <th>Examples</th>
+  <th>Required handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>User/channel settings</td>
+  <td>Memories, repeater offset, CTCSS choice, selected power level</td>
+  <td>Read/write through the PC programming interface.</td>
+</tr>
+<tr>
+  <td>Per-radio alignment</td>
+  <td>Frequency trim, PA drive calibration, tracking gain, squelch/RSSI, deviation and tone levels</td>
+  <td>Preserve the original device-specific records and interpret each known field.</td>
+</tr>
+<tr>
+  <td>Firmware policy/defaults</td>
+  <td>Menu behavior and initial UI preferences</td>
+  <td>Document separately; do not substitute defaults for measured alignment.</td>
+</tr>
+</tbody>
+</table>
+<p>A power-level label is not itself a PA calibration. A repeater's RX/TX offset
+is not the same setting as the oscillator's fine-frequency correction.
+Unknown calibration bytes must remain preserved; values from another radio or
+an example table must not silently replace them.</p>
+<p>The initial PC memory writer should accept only identified channel/configuration
+records. Alignment storage needs a separate, explicit path after its format and
+integrity rules are established. Test unchanged alignment hashes around channel
+uploads, interrupted transactions and restarts. These are acceptance criteria,
+not implemented guarantees of the current model.</p>
+<h2 id="oem-test-mode-investigation">OEM test-mode investigation</h2>
+<p>P4 plus the pressed dial at power-up is being tested with the authentic V1.21
+application, physical Flash capture and captured NAND. Observations must separate
+the original option state from any future synthetic unlocked fixture.</p>
+<p>The first test uses external button stimuli and read-only display observation.
+It does not force test-mode flags or parameter values in OEM RAM. Test-mode
+navigation should use the parameter-selection keys; adjusting the dial, PTT,
+saving alignment or changing band mode are separate actions.</p>
+<p>Jason Reilly VK7ZJA's technical notes describe disabled, band-selection-only
+and full-alignment access, controlled by option settings. They are a useful
+reference, not evidence of which permissions are enabled in a particular capture:
+<a href="https://radio.carstenbauer.net/578techmods.htm">https://radio.carstenbauer.net/578techmods.htm</a></p>
+<p>Individual calibration records and captured execution state remain local inputs.
+The public repository should contain formats, extraction/observation tools,
+hash-based comparisons and anonymized test results.</p>
+<p>The 5 November follow-up identifies the captured permissions as disabled and
+distinguishes application reset from the physical Power-off/on sequence:
+<a href="TEST_MODE_OPTIONS.html">TEST_MODE_OPTIONS.md</a>. The virtual-unlock probe reaches
+the service entry routine but has not reached a confirmed service screen.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Centre de preuves OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Preuves et tracabilite</div>
+<div class="doc-heading"><h1>Centre de preuves OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/INDEX.md">Modifier sur GitHub</a><a download href="../../../raw/docs/evidence/INDEX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/evidence/INDEX.md</code></p>
+<article class="markdown-body"><h1 id="centre-de-preuves-opend578">Centre de preuves OpenD578</h1>
+<p>Ce dossier sert a distinguer un <strong>fait prouve</strong>, une <strong>hypothese de circuit</strong> et un <strong>comportement uniquement simule</strong>. Il accompagne les vues interactives et le developpement de firmware alternatif.</p>
+<h2 id="notation-de-preuve">Notation de preuve</h2>
+<table>
+<thead>
+<tr>
+  <th>Code</th>
+  <th>Signification</th>
+  <th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>USER_PHOTO</code></td>
+  <td>Composant ou implantation observe par utilisateur</td>
+  <td>H2226 SSOP-B16, deux AFT05MP075N</td>
+</tr>
+<tr>
+  <td><code>USER_MEAS</code></td>
+  <td>Mesure ou identification sur poste physique</td>
+  <td>SWD DPIDR, ID NAND 98 CB</td>
+</tr>
+<tr>
+  <td><code>OEM_STATIC</code></td>
+  <td>Instruction/adresse verifiee dans binaire constructeur</td>
+  <td>Vecteur app 0x08006000, PA7 mode speaker</td>
+</tr>
+<tr>
+  <td><code>OEM_EMU</code></td>
+  <td>Effet execute dans le banc qui modele des peripheriques</td>
+  <td>Commandes RF, USB/USB CDC, LCD</td>
+</tr>
+<tr>
+  <td><code>DATASHEET</code></td>
+  <td>Propriete constructeur d'un composant specifie</td>
+  <td>GD32 VBAT pin 6, XH414HG 0,08 F</td>
+</tr>
+<tr>
+  <td><code>THIRD_PARTY_BOARD</code></td>
+  <td>Observation d'une AUTRE revision d'AnyTone</td>
+  <td>VK7ZJA, quatre QA4818N, RTC + GPS backup</td>
+</tr>
+<tr>
+  <td><code>INFERRED</code></td>
+  <td>Hypothese deduite de plusieurs indices</td>
+  <td>BH2226 -&gt; varicaps, charge VBAT MCU</td>
+</tr>
+<tr>
+  <td><code>UNKNOWN</code></td>
+  <td>Information explicitement non etablie</td>
+  <td>Trace electrique de l'UART GNSS sur le PRO</td>
+</tr>
+</tbody>
+</table>
+<p>Dans un fichier <code>hardware/models/*.json</code>, les liaisons <code>physical</code> doivent avoir une preuve sur le poste, <code>oem_trace</code> une preuve d'instruction OEM, <code>emulator</code> une trace du banc ; <code>datasheet</code> decrit un circuit seul, pas sa continuite PCB.</p>
+<h2 id="pieces-documentaires-ajoutees-le-05112026">Pieces documentaires ajoutees le 05/11/2026</h2>
+<ul>
+<li><a href="../hardware/SAUVEGARDE_RTC_GPS_XH414HG.html">Les deux sauvegardes RTC et GPS, XH414HG et edition MS412</a></li>
+<li><a href="../hardware/ETAGES_RF_PROTECTION_FI.html">Etages RF, protection contre inversion, filtres varicaps et FI reservee</a></li>
+<li><a href="../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Monographie NAND reconstruite</a></li>
+<li><a href="../peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.html">Monographie GPS reconstruite</a></li>
+<li><a href="../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Monographie ADC/DAC et audio reconstruite</a></li>
+<li><a href="../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Monographie SCT3258 DMR reconstruite</a></li>
+<li><a href="../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Monographie bootloader reconstruite</a></li>
+<li><a href="CPS_QDMR_CAPTURE_DE_REFERENCE.html">Capture publique et independante du protocole CPS</a></li>
+<li><a href="../archives/ORIGINAUX_A_RECUPERER.html">Fichiers originaux et acquis manquants</a></li>
+<li><a href="../../hardware/kicad/README.html">Brochage GD32 / KiCad reconstruit</a></li>
+<li><a href="SOURCES_EXTERNES_RECROISEES_20261105.html">Sources externes nouvellement recroisees</a></li>
+<li><a href="MESURES_RTC_GPS_A_CONSIGNER.html">Grille de mesures a completer pour les deux sauvegardes</a></li>
+<li><a href="../CHANGELOG_PREUVES_RTC_GPS_20261105.html">Changelog de consolidation</a></li>
+<li><a href="VALIDATION_DU_DEPOT.html">Rapport de validation et limites des tests</a></li>
+</ul>
+<p>Les 100 broches <code>GD32F303VKT6</code> sont definis dans <code>hardware/pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv</code>. Les propositions de destination et etats figurent dans les colonnes de ce fichier, qui ne peut pas servir de netlist de fabrication.</p>
+<h2 id="references-externes-principales">References externes principales</h2>
+<ol>
+<li>GigaDevice, GD32F303xx datasheet, Tableau 2-5 LQFP100 : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a></li>
+<li>Seiko Instruments, XH-HG Capacitor XH414HG 0,08 F, 3,3 V max : <a href="https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf">https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf</a></li>
+<li>VK7ZJA / IK8JHL, D578, deux sauvegardes, protections RF, FI, NAND : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+<li>RadioFoundry, architecture des familles D868/D878/D578, SCT3258, QA4818N, boot : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a></li>
+<li>qdmr, Chapter 8, capture de lecture D578UV via CPS : <a href="https://static.dm3mat.de/qdmr/manual/ch08.html">https://static.dm3mat.de/qdmr/manual/ch08.html</a></li>
+<li>Linux Toshiba SPI NAND, composant 0xCB, ECC : <a href="https://cos.googlesource.com/third_party/kernel/+/5aa092beb12119ed7e0b9fc696e597ca0fba9721/drivers/mtd/nand/spi/toshiba.c">https://cos.googlesource.com/third_party/kernel/+/5aa092beb12119ed7e0b9fc696e597ca0fba9721/drivers/mtd/nand/spi/toshiba.c</a></li>
+<li>ROHM BH2226FV-E2 : <a href="https://www.rohm.com/products/data-converter/d-a-converters/8bit-d-a/bh2226fv-product">https://www.rohm.com/products/data-converter/d-a-converters/8bit-d-a/bh2226fv-product</a></li>
+<li>TI TLV320AIC3204 : <a href="https://www.ti.com/product/TLV320AIC3204">https://www.ti.com/product/TLV320AIC3204</a></li>
+<li>FCC, photos de revisions D578 : <a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250</a></li>
+<li>qdmr / dmr-tools codeplugs : <a href="https://github.com/dmr-tools/codeplugs">https://github.com/dmr-tools/codeplugs</a>.</li>
+</ol>
+<p><strong>Regle documentaire :</strong> meme une source externe serieuse ne prouve pas l'identite du composant non marque ou sa connexion sur <strong>notre</strong> PRO/PLUS. Photographier et mesurer si une conclusion concerne physiquement notre carte.</p>
+<h2 id="reconstruction-qa4818n-6-novembre-2026">Reconstruction QA4818N, 6 novembre 2026</h2>
+<ul>
+<li><a href="../hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Protocole, registres, fréquence et architecture RX/TX</a>.</li>
+<li><code>qa-bus</code>: trames et GPIO observés dans le simulateur OEM, pas une netlist physique.</li>
+<li><code>qa-frequency-format</code>: codage <strong>AT1846S</strong> documenté ; transposition QA4818N encore non confirmée.</li>
+<li><code>qa-lo-if</code>: structure de la famille D578 selon VK7ZJA, mapping des quatre banques encore inconnu.</li>
+<li><code>qa-mapping-unknown</code> / <code>qa-tx-not-qualified</code>: les impossibilités actuelles sont conservées dans <code>CLAIMS.json</code>.</li>
+</ul>
+<p>Aucune capture RF authentifiée portant deux fréquences RX/TX n'a été intégrée. Les tests ne sont que numériques et sans émission.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

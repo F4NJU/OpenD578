@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Pilotes à développer : RDA5802N, QA4818N, BH2226 et chaîne audio - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>Pilotes à développer : RDA5802N, QA4818N, BH2226 et chaîne audio</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md">Modifier sur GitHub</a><a download href="../../../raw/docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md</code></p>
+<article class="markdown-body"><h1 id="pilotes-a-developper-rda5802n-qa4818n-bh2226-et-chaine-audio">Pilotes à développer : RDA5802N, QA4818N, BH2226 et chaîne audio</h1>
+<p><strong>Cible primaire :</strong> D578UV PRO GD32 V1.21. Cette page décrit les frontières de pilotes prévues pour un futur firmware autonome. <strong>Elle n'affirme pas qu'un firmware complet a été construit ou flashé.</strong></p>
+<h2 id="interfaces-hal">Interfaces HAL</h2>
+<table>
+<thead>
+<tr>
+  <th>Pilote</th>
+  <th>Entrées à découvrir</th>
+  <th>API cible</th>
+  <th>Ce qui est testable hors poste</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>rf_qa4818</code></td>
+  <td>Bus 24 bits (8 +16), quatre CS logiques, signaux reset/IRQ</td>
+  <td><code>read_reg(bank,page,reg)</code>, <code>write_reg(...)</code>, <code>set_rx_frequency(...)</code></td>
+  <td>Reconstruction de trames RF sur traces <code>RfSpi</code> ; pas de valeurs RF inventées</td>
+  <td>Bus émulé, map des quatre puces inconnue</td>
+</tr>
+<tr>
+  <td><code>fm_rda5802</code></td>
+  <td>Bus I²C, adresse vérifiée, régulateur, reset</td>
+  <td><code>probe</code>, <code>init</code>, <code>tune</code>, <code>seek</code>, <code>read_rssi</code>, <code>standby</code></td>
+  <td>Décoder trames du modèle <code>FmI2c</code> ; pas de statut RF simulé</td>
+  <td>RDA5807-compatible au banc, RDA5802N physique non raccordé</td>
+</tr>
+<tr>
+  <td><code>dac_bh2226</code></td>
+  <td>CSB/CLK/DI, 8 sorties, reset, codes usine</td>
+  <td><code>set_channel(ch,value)</code>, <code>reset</code></td>
+  <td>Encoder/deserializer 12 bits selon fiche fabricant</td>
+  <td>Identité H2226 plausible ; aucune ligne mesurée</td>
+</tr>
+<tr>
+  <td><code>volume_u2429</code></td>
+  <td>CLOCK/DATA, 5 V, encode 11 bits</td>
+  <td><code>set_attenuation(channel,db)</code>, <code>mute</code></td>
+  <td>Décoder/encoder trames selon fiche UTC</td>
+  <td>GPIO et adaptation de niveau non identifiés</td>
+</tr>
+<tr>
+  <td><code>codec_aic3204</code></td>
+  <td>Horloge, port série, configuration registres TI</td>
+  <td><code>init_audio</code>, <code>set_path</code>, <code>set_gain</code></td>
+  <td>Décodage statique des appels OEM et tables</td>
+  <td>Connectivité carte non cartographiée</td>
+</tr>
+<tr>
+  <td><code>audio_mc34119</code></td>
+  <td>Ligne CD, rail et entrée analogique</td>
+  <td><code>enable(bool)</code></td>
+  <td>Test de temporisation de mute</td>
+  <td>Aucune GPIO liée à CD</td>
+</tr>
+<tr>
+  <td><code>audio_1517</code></td>
+  <td><code>M/SS</code> pin 8, alimentation, gains externes</td>
+  <td><code>enable</code>, <code>mute</code></td>
+  <td>Machine à états pure côté PC</td>
+  <td>PA7 candidat, continuité non mesurée</td>
+</tr>
+<tr>
+  <td><code>rf_aft05m</code></td>
+  <td>Bias, capteurs, filtres, gamme VHF/UHF</td>
+  <td><code>tx_request</code> sous garde-fous RF</td>
+  <td>Transitions d'état sans piloter de PA réel</td>
+  <td>Valeurs usine de biais inconnues</td>
+</tr>
+<tr>
+  <td><code>power_l7805</code></td>
+  <td>Commande amont éventuelle et rails</td>
+  <td>Contrôle supervision DC, pas un registre 7805</td>
+  <td>Test logique Power <code>PA0</code> et veille</td>
+  <td>Aucune ligne EN intrinsèque au L7805</td>
+</tr>
+</tbody>
+</table>
+<h2 id="separation-ferme-entre-code-materiel-et-modele-danalyse">Séparation ferme entre code matériel et modèle d'analyse</h2>
+<p>Le firmware autonome ne doit pas appeler une routine <code>0x080...</code> trouvée dans l'application constructeur. Il doit posséder une HAL de registres GD32, horloges, GPIO, DMA, UART, watchdog, interruptions et temporisateurs <strong>fondée sur le datasheet MCU</strong>. Les adresses OEM servent à documenter comment le constructeur a réalisé une opération, pas à initialiser des ressources matérielles de substitution.</p>
+<p>Le code de test sur PC peut lire <code>bench/rf_spi.py</code> et <code>bench/fm_i2c.py</code>. Les <strong>trames synthétiques</strong> enregistrées par ces modèles ne peuvent pas être assimilées aux valeurs d'étalonnage du matériel ou à un réglage de fréquence prêt pour la radio.</p>
+<h2 id="ordre-dintegration">Ordre d'intégration</h2>
+<ol>
+<li>GPIO entrée, USB/SWD lecture seule et console de trace ; préserver le bootloader et la NAND.</li>
+<li>Contrôle de source horloge et transactions RF <strong>passives</strong>, relever les quatre CS.</li>
+<li>I²C RDA5802N, avec confirmation d'ACK matériel avant lecture/écriture de configuration.</li>
+<li>Contrôle de mute audio ; identités et liaisons U2429, PA1517/YD1517, MC34119.</li>
+<li>DAC BH2226 et SGM8272 après découverte des tensions analogiques et canaux.</li>
+<li>Réception FM VHF/UHF puis CTCSS ; TX désactivé tant que la gestion PA/capteurs n'est pas qualifiée.</li>
+<li>GPS, DMR, mémoire, puis mode satellite et variantes PLUS.</li>
+</ol>
+<h2 id="tests-automatiques-recommandes">Tests automatiques recommandés</h2>
+<ul>
+<li>Rejet de toute lecture sur une banque RF hors bornes <code>0..3</code> et de tout registre non qualifié.</li>
+<li>Encodage bit par bit 24 bits et 12 bits, sans aucune écriture GPIO réelle.</li>
+<li>Rejet des écritures RDA hors adresses validées par trames capturées.</li>
+<li>Test de mute au démarrage, perte d'horloge, absence d'ACK, reset d'alimentation et contrôle de transition RX/TX.</li>
+<li>En absence de calibrations PA, la condition <code>tx_enabled</code> doit rester fausse.</li>
+</ul>
+<h2 id="liens-aux-fiches-techniques-et-aux-preuves">Liens aux fiches techniques et aux preuves</h2>
+<p><a href="../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">QA4818N ×4</a> · <a href="../hardware/RDA5802N_RECEPTION_FM.html">RDA5802N</a> · <a href="../hardware/BH2226_H2226_DAC_RF.html">BH2226</a> · <a href="../hardware/VOLUME_U2429G.html">UTC U2429G</a> · <a href="../hardware/AUDIO_MC34119_SGM8272.html">Ampli et AOP</a> · <a href="../hardware/PA_RF_AFT05MP075N.html">AFT05MP075N</a> · <a href="../hardware/PLAN_INVESTIGATION_BROCHAGES.html">Plan de mesures</a>.</p>
+<h2 id="deux-encodeurs-de-mots-serie-deja-testables">Deux encodeurs de mots série déjà testables</h2>
+<p><code>firmware/hal/serial_command_encoders.c</code> contient le codage <strong>pur</strong> (sans GPIO) des mots BH2226 12 bits et U2429 11 bits. Ils servent à préparer les tests de capture du bus, pas à piloter directement les composants ; aucun CS, CLOCK ou DATA n'est branché. Leurs tables proviennent des notices ROHM et UTC et sont indépendantes de toute adresse du firmware constructeur.</p>
+<p>Compilation de vérification sur PC :</p>
+<pre><code class="language-sh">cc -std=c11 -Wall -Wextra -Werror -pedantic \
+  firmware/hal/serial_command_encoders.c \
+  firmware/tests/test_serial_command_encoders.c \
+  -o /tmp/opend578_serial_test
+/tmp/opend578_serial_test
+</code></pre>
+<h2 id="qa4818n-encodeur-et-validation-6-novembre-2026">QA4818N : encodeur et validation (6 novembre 2026)</h2>
+<p>Le code source <code>firmware/rf/qa4818n_frequency.[ch]</code> construit les registres <code>0x29/0x2A</code> selon la <strong>formule de l'AT1846S</strong>, avec tests C et sans accès au GPIO. Le décodeur <code>tools/qa4818n_trace.py</code> permet de vérifier sur <strong>des captures constructeur authentifiées</strong> le facteur et les rôles des quatre banques. Il reste à qualifier les horloges, le PLL et l'initialisation QA ainsi que les registres TX ; le code actuel n'est pas flashable. <a href="../hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Documentation complète</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

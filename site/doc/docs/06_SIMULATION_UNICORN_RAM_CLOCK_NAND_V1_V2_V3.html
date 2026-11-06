@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Simulations réellement récupérées, 4 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Simulations réellement récupérées, 4 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.md">Modifier sur GitHub</a><a download href="../../raw/docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.md</code></p>
+<article class="markdown-body"><h1 id="simulations-reellement-recuperees-4-novembre-2026">Simulations réellement récupérées, 4 novembre 2026</h1>
+<p><strong>Nature:</strong> exécutions Unicorn Cortex-M4 hors radio, avec firmware officiel GD32 V1.21 dont le SHA attendu est <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>. Les ZIP de simulations contiennent les scripts, README, tests, JSON et sauvegardes SRAM; la CDD officielle et les gros BIN NAND ne sont pas dans ces ZIP. Les instructions exécutées ne sont <strong>pas</strong> des cycles horloge mesurés, une charge CPU ou un temps réel.</p>
+<h2 id="v1-audit-ram">V1 : audit RAM</h2>
+<p>Archive exacte incluse <code>D578_RAM_AUDIT_2026-11-04.zip</code>.</p>
+<ul>
+<li>Reset vrai <code>0x08006D38</code> bloque sur <code>RCU_CTL 0x40021000</code> en <code>0x08006344</code> sans modèle horloge.</li>
+<li>C startup <code>0x08006130</code> vers <code>0x0800620C</code>, sans <code>SystemInit</code>, exécute 64 088 instructions. Initialise 6 872 octets data et 87 560 octets zéro, soit 94 432 octets, réserves 512 heap et 1 024 stack incluses.</li>
+<li>Prolongation jusqu'à main <code>0x08006654</code> : 64 549 instructions, puis blocage en <code>0x08008A82</code> sur <code>RCU_CTL</code>.</li>
+<li>Deux SRAM initiales <code>0xA5</code> et <code>0x5A</code>: zone init identique au décodeur indépendant des 2 529 octets compressés de source; haut 3 872 octets non écrit pendant le chemin limité.</li>
+<li>Correction de faux positifs pointeurs haut RAM <code>0x20017801</code>, <code>0x20017904</code>, <code>0x20017F21</code>, qui sont en fait des séquences Thumb.</li>
+<li><strong>Pas</strong> une mesure de consommation maximale RAM.</li>
+</ul>
+<h2 id="v2-rcu-horloge-gpio-et-systick">V2 : RCU, horloge, GPIO et SysTick</h2>
+<p>Archive exacte incluse <code>D578_RAM_CLOCK_SIM_V2_2026-11-04.zip</code>.</p>
+<ul>
+<li>Part du vrai Reset_Handler et traverse SystemInit, scatter, main, puis initialisation application, sans patch ni fonction sautée.</li>
+<li><code>RCU_CTL 0x40021000</code> : stabilité IRC8M/HXTAL/PLL après activation; bits stable 1/17/25 reflétant disponibilité réelle modélisée, <code>RCU_CFG0 0x40021004</code> statut système, alias bitband PLL <code>0x42420060</code>. <code>FMC_WS 0x40022000</code> enregistre wait-state (pas d'effacement), <code>SCB_VTOR 0xE000ED08</code> reçoit <code>0x08006000</code>.</li>
+<li>Horloge seule -&gt; arrêt à configuration GPIOC <code>0x40011000</code>, 64 828 instructions immédiat, 64 954 avec attente 7 lectures RCU_CTL.</li>
+<li>GPIO/AFIO/SysTick -&gt; entrée pilote mémoire via <code>0x0808AE62</code>, arrêt à <code>0x0800879A</code> sur <code>GPIOA_ISTAT 0x40010808</code> bit PA15, 70 692 ou 70 818 instructions.</li>
+<li>Pilote demande <code>9F</code> et compare <code>C8</code>, puis <code>98</code>; une donnée de mémoire externe doit être fournie, non inventée.</li>
+<li>Tests négatifs HXTAL/PLL indisponibles restent dans les boucles (<code>0x08006276</code>, <code>0x08006308</code>) après quota 100 000. La simulation ne force donc pas une réussite factice.</li>
+<li>SysTick config initiale <code>CTRL 0x3</code>, recharge <code>0x124F8</code> = 75 000; unité virtuelle et aucune mesure du quartz réel.</li>
+</ul>
+<h2 id="v3-nand-bit-serie-sommeil-profond-power-adc-dma">V3 : NAND bit-série, sommeil profond, Power, ADC DMA</h2>
+<p>Archive exacte incluse <code>D578_RAM_NAND_SIM_V3_2026-11-04.zip</code>. Le simulateur fait communiquer le code OEM avec une NAND <strong>virtuelle</strong> alimentée par la capture physique. Il ne fait pas un <code>memcpy</code> de convenance directement dans les buffers SRAM : il simule les fronts SCK, CS et les bits MISO/SO0/SO1. Il compare après coup les données attendues et celles effectivement lues.</p>
+<p>Bus : PB8=CS actif bas, PB15=SCK, PB14=MOSI ou SO0, PA15=MISO ou SO1. Commandes modélisées <code>9F</code>, <code>0F</code>, <code>1F</code>, <code>13</code>, <code>03</code>, <code>0B</code>, <code>3B</code>, <code>06</code>, <code>04</code>, <code>FF</code>, <code>FE</code>. L'application utilise effectivement <code>3B</code> (deux fils) en démarrage. ID <code>98 CB</code>, NAND virtualisée avec A0=38 et B0=16 à la remise à zéro selon les docs, ensuite état modifié par l'OEM. ECC <code>20</code> conservé dans les états, pas magiquement corrigé.</p>
+<p><strong>Résultat V3:</strong></p>
+<table>
+<thead>
+<tr>
+  <th>Mesure</th>
+  <th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Buffers lus par le pilote OEM et comparés au dump</td>
+  <td><strong>58/58</strong></td>
+</tr>
+<tr>
+  <td>Données transférées</td>
+  <td><strong>2 673 octets</strong></td>
+</tr>
+<tr>
+  <td>Pages chargées</td>
+  <td><strong>16 chargements</strong>, <strong>9 pages distinctes</strong></td>
+</tr>
+<tr>
+  <td>Buffers SRAM de départ distincts</td>
+  <td><strong>46</strong></td>
+</tr>
+<tr>
+  <td>Adresses SRAM distinctes couvertes</td>
+  <td><strong>2 610</strong></td>
+</tr>
+<tr>
+  <td>Transactions NAND durant scénarios avant/après Power</td>
+  <td><strong>105 par scénario</strong></td>
+</tr>
+<tr>
+  <td>Vérifications indépendantes <code>verify_spi_wire.py</code></td>
+  <td><strong>16 groupes réussis</strong></td>
+</tr>
+<tr>
+  <td>Texte station constaté en lecture</td>
+  <td><code>F4EGM JN29HN</code>, NAND page 19008 colonne 1536 vers <code>0x20003FEC</code></td>
+</tr>
+<tr>
+  <td>Mise sous tension sans Power</td>
+  <td><code>WFI 0x080089AA</code>, mode SLEEPDEEP</td>
+</tr>
+<tr>
+  <td>Réveil via Power virtuel</td>
+  <td>PA0/EXTI0 front descendant, IRQ6 vecteur <code>0x0808CAE5</code>, relâchement après 20 SysTick</td>
+</tr>
+<tr>
+  <td>SysTick</td>
+  <td>Vecteur Thumb <code>0x08009D79</code>, trame d'exception alignée, contrôle pile/registres</td>
+</tr>
+<tr>
+  <td>Stop suivant</td>
+  <td><code>0x08007A9E</code>, activation DMA0 ch0 à <code>0x40020008</code> sur ADC0</td>
+</tr>
+</tbody>
+</table>
+<p>Scénarios exécutés :</p>
+<table>
+<thead>
+<tr>
+  <th>Scénario</th>
+  <th>SRAM init</th>
+  <th style="text-align:right">Instructions observées</th>
+  <th>Dernier état</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>avant Power, NAND initialement busy puis ready, compteur normal</td>
+  <td>A5 / 5A</td>
+  <td style="text-align:right">7 242 575 chacun</td>
+  <td>WFI profond</td>
+</tr>
+<tr>
+  <td>avant Power, ready immédiat, entrée MISO inerte=0</td>
+  <td>A5</td>
+  <td style="text-align:right">634 527</td>
+  <td>WFI profond</td>
+</tr>
+<tr>
+  <td>après appui + relâchement Power, attente idle accélérée x64</td>
+  <td>A5 / 5A</td>
+  <td style="text-align:right">6 957 025 chacun</td>
+  <td>DMA ADC</td>
+</tr>
+</tbody>
+</table>
+<p>Les scénarios après Power exécutent <strong>347 SysTick</strong> et <strong>1 IRQ6</strong> par scénario, soit 348 retours d'exception contrôlés. 11 SysTick dans les scénarios avant Power busy. La simulation « idle-clock-scale=64 » est un raccourci <strong>du modèle du compteur virtuel dans une attente</strong>, pas une accélération du CPU réel ou un saut de fonction.</p>
+<p><strong>ADC DMA, blocage volontaire :</strong></p>
+<ul>
+<li>PC <code>0x08007A9E</code>, écriture <code>DMA0 CH0 CTL 0x40020008 = 0x25A1</code>.</li>
+<li>Périphérique source <code>ADC0_RDATA</code> à <code>0x4001244C</code>.</li>
+<li>Destination SRAM <code>0x2000DA76</code>.</li>
+<li>Nombre: 7 valeurs 16 bits = 14 octets, plage <code>0x2000DA76..0x2000DA83</code>, déjà à l'intérieur de ZI constructeur.</li>
+<li>Aucune voie analogique, conversion, déclencheur ou transfert DMA réellement simulés à ce stade. <strong>Le circuit TLV320AIC3204 est un codec audio distinct du périphérique ADC0 du GD32</strong>; l'ADC rencontré est d'abord celui du microcontrôleur.</li>
+</ul>
+<p>RAM: 94 432 octets init/reservés; haut 3 872 octets sans écriture observée sur ces chemins; pile main minimum avant Power <code>0x2001702C</code>, après Power <code>0x2001700C</code> soit descente maximale observée 212 octets depuis SP initial pour ce scénario. Cela ne borne pas les piles des tâches DMR/FM/APRS ou des IRQ RF en fonctionnement.</p>
+<h2 id="reproduire-sur-pc">Reproduire sur PC</h2>
+<p>Les scripts Python sous <code>07_CODE_SIMULATEURS_ET_SOURCES_RECUPEREES/D578_RAM_*</code> attendent Unicorn et la CDD constructeur exacte; <code>emulate_nand_v121.py</code> attend le répertoire des BIN NAND d'origine. Ils ne sont pas reliés au SWD, ne modifient aucun fichier constructeur, et leurs outputs JSON/SRAM sont des données de simulation. Voir les README et <code>requirements.txt</code> originaux inclus dans chaque ZIP. Exemple <strong>lecture seule</strong> :</p>
+<pre><code class="language-bash">python3 -m pip install -r 07_CODE_SIMULATEURS_ET_SOURCES_RECUPEREES/D578_RAM_NAND_SIM_V3_2026-11-04/requirements.txt
+cd 07_CODE_SIMULATEURS_ET_SOURCES_RECUPEREES/D578_RAM_NAND_SIM_V3_2026-11-04
+python3 verify_spi_wire.py /CHEMIN/NAND_ORIGINAUX --out verification_spi.json
+python3 emulate_nand_v121.py /CHEMIN/D578UV_GD_V1.21_OFFICIEL.CDD /CHEMIN/NAND_ORIGINAUX --instructions 15000000 --wake-once --idle-clock-scale 64 --out power.json
+</code></pre>
+<p>Ce modèle prouve des transferts cohérents dans la simulation, <strong>pas</strong> l'activité radio, l'affichage LCD correct, l'occupation mémoire en charge, ni la robustesse d'un firmware modifié.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

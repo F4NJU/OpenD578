@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS et mises à jour : différences PRO, PLUS et firmwares libres - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>CPS et mises à jour : différences PRO, PLUS et firmwares libres</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/COMPATIBILITE_PRO_PLUS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/COMPATIBILITE_PRO_PLUS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/COMPATIBILITE_PRO_PLUS.md</code></p>
+<article class="markdown-body"><h1 id="cps-et-mises-a-jour-differences-pro-plus-et-firmwares-libres">CPS et mises à jour : différences PRO, PLUS et firmwares libres</h1>
+<h2 id="1-deux-branches-gd32-pas-un-seul-firmware">1. Deux branches GD32, pas un seul firmware</h2>
+<table>
+<thead>
+<tr>
+  <th>Propriété</th>
+  <th>D578UV PRO étudié</th>
+  <th>D578UV PLUS observé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MCU</td>
+  <td>GD32F303, confirmé sur le matériel</td>
+  <td>GD32F303, confirmé par observation de l'utilisateur</td>
+</tr>
+<tr>
+  <td>Application étudiée</td>
+  <td>GD32 V1.21</td>
+  <td>Branche GD32 V2.08, identité et layout à comparer</td>
+</tr>
+<tr>
+  <td>Carte RF airband</td>
+  <td>Connecteur de la carte fille supplémentaire absent sur PRO observé</td>
+  <td>Carte fille sur la RF observée, référence de puce <code>KT0905R/KT09S5R</code> non tranchée</td>
+</tr>
+<tr>
+  <td>Carte BT</td>
+  <td>Support <code>D868BT-SP</code> et module blindé à investiguer</td>
+  <td>Carte BT à investiguer par révision</td>
+</tr>
+<tr>
+  <td>USB et CPS</td>
+  <td>VID/PID 28E9:018A et protocole observés dans l'application V1.21</td>
+  <td>Même famille MCU, <strong>pas de validation du même protocole exact dans notre banc</strong></td>
+</tr>
+<tr>
+  <td>Codeplug NAND</td>
+  <td>Premiers canaux V1.21 décodés partiellement</td>
+  <td>À comparer par fichier/capture de lecture V2.08</td>
+</tr>
+</tbody>
+</table>
+<p>Référence des versions officielles : <a href="https://anytoneusa.com/Downloads/">AnyTone USA</a> et <a href="https://www.anytone.net/download">fabricant</a>. Le fabricant distingue PRO <code>1.xx</code> et PLUS <code>2.xx</code>. Les informations sur <strong>le processeur identique</strong> sont des observations du poste, pas une preuve de compatibilité binaire.</p>
+<h2 id="2-trois-operations-souvent-confondues">2. Trois opérations souvent confondues</h2>
+<ol>
+<li><strong>CPS / codeplug</strong> : <code>PROGRAM</code>, <code>R</code>, <code>W</code>, <code>END</code> sur la connexion USB CDC normale ; données utilisateurs et réglages selon les adresses demandées.</li>
+<li><strong>MCU Update</strong> : mode firmware spécial, outil fabricant, en général fichier manifeste <code>.spi</code> puis <code>.CDI</code>/<code>.CDD</code>, commande <code>UPDATE</code> et transport propre. Le choix de branche GD32/AT et du modèle est déterminant.</li>
+<li><strong>Mise à jour baseband</strong> : chaîne de communication avec le SCT3258/DMR (SCT_PORT et firmware spécifique). Ce n'est pas le même bootloader ni le même stockage que le GD32.</li>
+</ol>
+<p>Ne pas déduire des captures CPS que le bootloader se programme avec <code>W</code> et <code>END</code>. Les règles de récupération, de calibration et de redémarrage sont différentes.</p>
+<h2 id="3-clients-externes-utiles">3. Clients externes utiles</h2>
+<ul>
+<li><a href="https://github.com/hmatuschek/qdmr">qdmr</a> : éditeur GPL-3 avec interfaces AnyTone spécifiques. Référence de travail pour le protocole et les modèles D578UV/D578UVII.</li>
+<li><a href="https://github.com/dmr-tools/codeplugs/tree/master/d578uv">dmr-tools/codeplugs</a> : données de structure pour le codeplug D578, versionnées, utiles pour recouper les offsets et champs.</li>
+<li><a href="https://github.com/hardenedpenguin/AnyTone_CPS">AnyTone_CPS Linux</a> : profil de modèle <code>d578uv_v1.21</code>, flux USB et import/export <code>.atcp</code>. Ne pas intégrer directement son code GPL dans un fichier non compatible sans vérifier les obligations.</li>
+<li><a href="https://cps.aes.app/manual/en/about">AesApp WebCPS</a> : documentation du WebCPS ; son propre support distingue les D578 PLUS en 2.xx des branches PRO en 1.xx. Cela concerne <strong>cet outil</strong>, pas une impossibilité fondamentale de décoder le PRO.</li>
+</ul>
+<h2 id="4-opengd77-et-loption-dinteroperabilite">4. OpenGD77 et l'option d'interopérabilité</h2>
+<p>Le protocole du CPS OpenGD77 n'est pas le protocole AnyTone OEM. Il utilise lui aussi un transport série et des commandes commençant par certaines lettres ASCII (<code>R</code>, <code>W</code>, <code>X</code>, <code>C</code>), mais la trame, les zones et la translation d'adresses sont différentes.</p>
+<p>Un firmware autonome OpenD578 peut soit :</p>
+<ul>
+<li>implémenter un sous-ensemble strictement identifié du <strong>protocole AnyTone OEM</strong> pour la compatibilité avec les clients existants ; ou</li>
+<li>implémenter un <strong>shim OpenGD77</strong> avec une image de codeplug adaptée ; ou</li>
+<li>proposer un protocole propre avec un outil de programmation dédié.</li>
+</ul>
+<p>Ces choix ne sont pas simultanément interchangeables. La première livraison doit avoir une identité de modèle explicite et des tests indépendants avant de débloquer des écritures. Conserver une commande de diagnostic distincte du flux CPS : un <code>printf</code> au milieu d'une réponse binaire corrompt le protocole.</p>
+<h2 id="5-politique-de-versions-proposee">5. Politique de versions proposée</h2>
+<p>Pour chaque matériel documenté, tenir : <code>board_revision</code>, <code>mcu_model</code>, <code>application_version</code>, <code>usb_vid_pid</code>, <code>cps_schema</code>, <code>nand_map_version</code>, <code>baseband_firmware</code>, <code>bluetooth_firmware</code>, <code>module_variant</code>, <code>evidence</code>. Une mise à jour d'un champ n'implique <strong>aucun</strong> changement automatique des autres.</p>
+<p>Le PLUS ne doit être autorisé à écrire des données OEM que lorsque sa carte NAND, son identity et ses réponses sont caractérisées séparément.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

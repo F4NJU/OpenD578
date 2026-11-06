@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md">Modifier sur GitHub</a><a download href="../../../raw/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md</code></p>
+<article class="markdown-body"><h1 id="firmware-alternatif-couches-bluetooth-d868bt-sp-et12-bt01-et-ptt-bp-02">Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02</h1>
+<p><strong>Objectif :</strong> reimplementer proprement le controle Bluetooth sans depender des adresses RAM de l'OEM. <strong>Etat actuel :</strong> specification de developpement, <em>pas</em> de pilote radio valide sur PCB et <em>pas</em> d'image flashable.</p>
+<h2 id="1-separation-minimale-des-responsabilites">1. Separation minimale des responsabilités</h2>
+<table>
+<thead>
+<tr>
+  <th>Module propose</th>
+  <th>Responsabilite</th>
+  <th>Dependance a qualifier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>hal/uart_bt.c</code></td>
+  <td>USART3 logique, interruption RX, tampon circulaire, compteur erreurs, timeout, pinmux verifie</td>
+  <td>UART physiquement connectee, frequence et baud exacts</td>
+</tr>
+<tr>
+  <td><code>drivers/et12.c</code></td>
+  <td>Format commandes/reponses AT, interrogation version, activation, etat de liaison</td>
+  <td>Toutes commandes necessaires a appairage et audio, exactitude de la V10043</td>
+</tr>
+<tr>
+  <td><code>app/bt01_remote.c</code></td>
+  <td>Etat distant, touches, rendu, synchronisation zones/VFO, sortie mode distant</td>
+  <td>Trames de synchronisation BT01 non decodees</td>
+</tr>
+<tr>
+  <td><code>app/bt_ptt.c</code></td>
+  <td>Arbitrage PTT filaire/BT01/BP-02, timeout et interlock TX</td>
+  <td>Format evenements BT PTT et traitement de la deconnexion</td>
+</tr>
+<tr>
+  <td><code>drivers/bt_audio.c</code></td>
+  <td>Commutations micro/HP, gain, mute, coexistence codec/FM/DMR</td>
+  <td>Brochage et routine audio analogique non traces</td>
+</tr>
+<tr>
+  <td><code>storage/bt_settings.c</code></td>
+  <td>Parametres accessibles dans l'IHM et persistants</td>
+  <td>Format et emplacement des parametres du codeplug</td>
+</tr>
+</tbody>
+</table>
+<p>Ne pas multiplier les couches : HAL UART + protocole ET12 + gestionnaire d'etat distant/PTT suffisent initialement, tant que l'audio n'est pas qualifie. Le projet doit rester leger et deterministe.</p>
+<h2 id="2-jeu-de-commandes-teste-en-simulation-existante">2. Jeu de commandes teste en simulation existante</h2>
+<pre><code class="language-text">TX AT+VER?\r\n      RX \r\n+VER:ET12_AQQX_V10043\r\n
+TX AT+AGHF=0\r\n    RX \r\n+AGHF:0\r\n
+TX AT+AGHF=1\r\n    RX \r\n+AGHF:1\r\n
+TX AT+AGHF?\r\n     RX \r\n+AGHF:0|1\r\n
+</code></pre>
+<p>La notation <code>0|1</code> represente les deux reponses possibles ; <strong>elle n'est pas une reponse literale</strong>. Ces valeurs viennent du <em>pair</em> simule <code>bench/uart_serial.py</code> et des tests <code>bench/test_uart_serial.py</code>, pas d'un log d'UART de la radio physique. Les commandes inconnues sont interdites dans le modele, pas remplacees par <code>OK</code>.</p>
+<h2 id="3-contrats-obligatoires-avant-ptt-bt">3. Contrats obligatoires avant PTT BT</h2>
+<ul>
+<li>Bloquer TX par defaut au boot, au reset Bluetooth, en absence de liaison ou en cas d'erreur UART/protocole.</li>
+<li>Accepter une demande PTT uniquement apres validation mode/canal/frequence, et lever le TX a la relache ou a un timeout independant du module ET12.</li>
+<li>Coordonner BT01, BP-02, PTT filaire, VOX, DMR (TDMA) et affichage A/B : aucune priorite n'est supposee OEM sans trace.</li>
+<li>Verifier l'arbitrage des sources audio par les signaux reels, jamais par ecriture opportuniste dans la RAM OEM.</li>
+<li>Ne pas envoyer de sequences d'update/module ni reprogrammer le firmware ET12 pendant la caracterisation.</li>
+</ul>
+<h2 id="4-etapes-du-portage">4. Etapes du portage</h2>
+<ol>
+<li>Capturer l'echange V1.21 au demarrage en lecture seule (<code>BT off</code>, <code>BT on</code>, interrogation version) et le relire par <code>tools/decode_bt_uart.py</code>.</li>
+<li>Retrouver la routine UART/GPIO en Ghidra avec les chaines de la ROM via <code>tools/audit_bluetooth_strings.py</code>; sauvegarder la plage, les references et les valeurs de baud.</li>
+<li>Reproduire uniquement l'interrogation de version et le timeout, sur banc avant poste physique.</li>
+<li>Ajouter appairage PTT et BT01, synchrone / asynchrone en separant leurs etats, en utilisant une trace reellement observee.</li>
+<li>Tracer la chaine audio et les signaux <code>mute</code>, <code>gain</code> et HP. Programmer les niveaux uniquement apres qualification du routage.</li>
+<li>Ajouter tests de non-regression (reception duale, GPS/APRS, satellite, boot, NAND, USB, DFU, TX inhibit).</li>
+</ol>
+<h2 id="5-references">5. References</h2>
+<ul>
+<li><a href="../hardware/BLUETOOTH_D868BT_SP_ET12.html">Carte D868BT-SP et ET12</a></li>
+<li><a href="../hardware/BT01_MICROPHONE_BLUETOOTH.html">Microphone BT01</a></li>
+<li><a href="../hardware/BP02_PTT_BLUETOOTH.html">PTT BP-02</a></li>
+<li>Sources <code>bench/uart_serial.py</code>, <code>bench/test_uart_serial.py</code> ; documents fabricant dans les fiches ci-dessus.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

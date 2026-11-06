@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Deux AFT05MP075N : étages de puissance RF VHF et UHF - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Deux AFT05MP075N : étages de puissance RF VHF et UHF</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/PA_RF_AFT05MP075N.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/PA_RF_AFT05MP075N.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/PA_RF_AFT05MP075N.md</code></p>
+<article class="markdown-body"><h1 id="deux-aft05mp075n-etages-de-puissance-rf-vhf-et-uhf">Deux AFT05MP075N : étages de puissance RF VHF et UHF</h1>
+<p><strong>Observation physique :</strong> deux transistors NXP de puissance marqués <code>AFT05MP075N</code>. L'analyse publiée du D578 indique <strong>un transistor pour la chaîne VHF, un pour UHF</strong>. Cette attribution est crédible mais les positions exactes, les filtres et la commande de polarisation restent à suivre sur la révision PRO GD32 V1.21.</p>
+<h2 id="1-technologie-et-limites-dinterpretation">1. Technologie et limites d'interprétation</h2>
+<p>Le AFT05MP075N appartient à la famille <strong>LDMOS RF NXP</strong> adaptée aux bandes VHF/UHF. L'indication de 70 W dans les références commerciales qualifie <strong>la capacité du transistor dans des conditions d'essai</strong>, pas la puissance nominale émise par le poste. Les niveaux de puissance de l'émetteur dépendent de l'alimentation, de la polarisation de grille, de l'adaptation, du filtrage, de la température et du logiciel.</p>
+<p>L'étage de puissance est <strong>analogique</strong>. Le GD32 ne dialogue pas avec un AFT05MP075N via UART, I²C ou SPI ; il contrôle indirectement les polarisations, la chaîne d'excitation RF, les commutations RX/TX, les protections et éventuellement la calibration.</p>
+<h2 id="2-informations-a-relever">2. Informations à relever</h2>
+<ul>
+<li>Identification de la paire de <strong>grilles / drains internes</strong> suivant le boîtier retenu et le schéma exact NXP ; source généralement reliée au boîtier / masse thermique.</li>
+<li>Alimentation de drain en réception et en émission, découplage et séquence de mise en service.</li>
+<li>Source de polarisation de grille, régulation thermique, réseaux de contre-réaction et filtres de sortie.</li>
+<li>Mesure / protection de courant, tension, température et puissance directe/réfléchie.</li>
+<li>Liaisons de commande vers les éventuels DAC <code>BH2226</code>, opamp <code>SGM8272</code> et GPIO, <strong>si elles existent après suivi de pistes</strong>.</li>
+<li>Chemin de la sortie PA vers filtres passe-bas, commutateurs et connecteur antenne.</li>
+</ul>
+<h2 id="3-ce-que-le-firmware-doit-gerer">3. Ce que le firmware doit gérer</h2>
+<p>Un pilote TX devra posséder une <strong>machine à états sécurisée</strong> : contrôle d'alimentation, vérification du mode et de la bande, désactivation en RX, configuration RF, activation de la commande de polarisation uniquement pendant l'émission autorisée, et coupure immédiate en défaut. Toutes les calibrations sont propres au poste.</p>
+<p><strong>Aucune valeur de tension de grille, de courant de repos, de gain, de puissance ou de temporisation d'attaque n'est fournie comme consigne de pilotage réel.</strong> En particulier, ne pas déduire qu'un DAC 0–5 V peut être relié directement à la grille.</p>
+<p>Les essais à prévoir se font d'abord sur banc de simulation et avec instrumentation RF/charge adaptée. Aucune recherche GPIO active et aucun signal TX ne doivent être exécutés sur la radio dans l'objectif de deviner une broche.</p>
+<h2 id="references">Références</h2>
+<ul>
+<li>NXP, produit AFT05MP075N : <a href="https://www.nxp.com/part/AFT05MP075N">https://www.nxp.com/part/AFT05MP075N</a></li>
+<li>Architecture historique VK7ZJA : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

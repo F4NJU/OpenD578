@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md</code></p>
+<article class="markdown-body"><h1 id="quatre-lqfp32-grattes-qa4818n-horloges-26-mhz-et-recepteurs-a-fi">Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</h1>
+<p><strong>Observation de la carte étudiée :</strong> quatre boîtiers à 32 broches, deux visibles et deux sous blindages, marquages effacés. L'un est proche d'un oscillateur marqué <code>26.00</code> (26 MHz, hypothèse à confirmer par mesure).</p>
+<p><strong>Identification par comparaison :</strong> l'étude VK7ZJA d'un D578 nomme <strong>quatre QA4818N</strong>. Cette correspondance est solide à l'échelle de la famille, mais <strong>les quatre circuits individuels de la révision PRO GD32 V1.21 ne sont pas identifiés électriquement</strong>. Il ne faut pas transformer la position photographique en fonction A/B sans suivi de pistes.</p>
+<h2 id="1-architecture-du-recepteur-documentee-sur-la-famille-d578">1. Architecture du récepteur documentée sur la famille D578</h2>
+<ul>
+<li>Deux synthétiseurs servent d'oscillateurs locaux pour les voies A et B.</li>
+<li>Les deux autres circuits traitent la réception après un premier changement de fréquence ; la carte emploie des filtres de FI à <strong>38,550 MHz et 38,850 MHz</strong> selon la voie / la chaîne. L'attribution exacte d'une FI à A ou B n'est pas déduite de cette seule mention.</li>
+<li>L'étage RF avant les filtres possède des sélections VHF/UHF et un préfiltrage à varicaps décrit dans l'étude VK7ZJA.</li>
+<li>Une possibilité de troisième chaîne FI non implantée est documentée sur certaines cartes.</li>
+<li>Les QA4818N partagent un <em>pinout annoncé comme compatible AT1846S</em>. Cela ne signifie ni registres identiques à 100 %, ni séquences d'initialisation interchangeables.</li>
+</ul>
+<h2 id="2-bus-radio-dans-les-sources-de-simulation">2. Bus radio dans les sources de simulation</h2>
+<p>Source : <code>bench/rf_spi.py</code>, classe <code>RfSpi</code>. Le banc récupère un protocole de <strong>24 bits</strong> : <strong>8 bits d'adresse/commande + 16 bits de valeur</strong>, avec sélection de page par registre <code>0x7F</code>. Il surveille un bus bit-bang partagé et <strong>quatre sélections logiques</strong>.</p>
+<table>
+<thead>
+<tr>
+  <th>Signal sur GD32, tel que reconstruit par le banc</th>
+  <th>Rôle du modèle</th>
+  <th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>PB3</code></td>
+  <td>Horloge du bus RF</td>
+  <td>Aucun lien direct à la broche d'un QA mesuré</td>
+</tr>
+<tr>
+  <td><code>PB4</code></td>
+  <td>Données bidirectionnelles</td>
+  <td>Sens lecture/écriture à vérifier sur PCB</td>
+</tr>
+<tr>
+  <td><code>PB5</code></td>
+  <td>CS banque logique 0, actif bas</td>
+  <td>Attribution à QA physique inconnue</td>
+</tr>
+<tr>
+  <td><code>PB2</code></td>
+  <td>CS banque logique 1, actif bas</td>
+  <td>Attribution à QA physique inconnue</td>
+</tr>
+<tr>
+  <td><code>PC13</code></td>
+  <td>CS banque logique 2, actif bas</td>
+  <td>Attribution à QA physique inconnue</td>
+</tr>
+<tr>
+  <td><code>PE1</code></td>
+  <td>CS banque logique 3, actif bas</td>
+  <td>Attribution à QA physique inconnue</td>
+</tr>
+</tbody>
+</table>
+<p>Un conflit apparent avec d'autres emplois de <code>PB3/PB4</code> (par exemple éclairage de façade) <strong>doit être résolu par l'ordre d'initialisation, les activations de CS et les traces physiques</strong>, pas par fusion d'office des deux bus.</p>
+<p><strong>Registres du modèle :</strong> <code>0x44</code> est utilisé pour le gain/volume, <code>0x7F</code> pour la page. Les lectures <code>0x0C</code>, <code>0x60</code>, <code>0x61</code>, <code>0x65</code>, <code>0x67</code> peuvent retourner des valeurs <strong>synthétiques</strong> de statut radio au repos. Les interprétations de ces registres découlent des consommateurs OEM, pas d'une validation complète du QA4818N réel.</p>
+<p>Le document <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code> repère notamment l'écriture de fréquence dans la paire <code>0x29/0x2A</code> et la routine native <code>0x0808AB18</code> ; ces adresses sont <strong>propres à l'application V1.21</strong>.</p>
+<h2 id="3-at1846s-comparaison-de-brochage-pas-identification-definitive">3. AT1846S : comparaison de brochage, pas identification définitive</h2>
+<p>Dans une fiche AT1846S, l'interface de commande série porte les signaux : <code>SCLK</code> broche <strong>2</strong>, <code>SDIO</code> broche <strong>3</strong>, <code>MODE</code> broche <strong>7</strong>, <code>SENB</code> broche <strong>8</strong>. La référence d'horloge est sur <code>XTAL1</code> broche <strong>5</strong> et <code>XTAL2</code> broche <strong>6</strong>. Ce tableau est <strong>à vérifier sur chaque boîtier réellement monté</strong> ; on ne doit pas brancher un programmateur sur un numéro de pin calculé par analogie.</p>
+<p>Le mode de sélection 2 fils / 3 fils du circuit et la polarité d'une lecture doivent être établis par la forme d'onde. La présence de quatre sélections actives basses dans le modèle soutient l'hypothèse d'une interface série à sélection séparée, sans prouver que les quatre circuits sont tous QA4818N.</p>
+<h2 id="4-inventaire-des-boitiers-de-la-carte-pro">4. Inventaire des boîtiers de la carte PRO</h2>
+<table>
+<thead>
+<tr>
+  <th>Repère documentaire</th>
+  <th>Emplacement rapporté</th>
+  <th>Hypothèse fonctionnelle</th>
+  <th>Preuve nécessaire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>U_QA1</td>
+  <td>LQFP32 visible côté zone FI</td>
+  <td>Synthétiseur ou réception FI</td>
+  <td>Suivi de RF/IF et CS</td>
+</tr>
+<tr>
+  <td>U_QA2</td>
+  <td>LQFP32 visible face inférieure</td>
+  <td>Synthétiseur ou réception FI</td>
+  <td>Suivi des filtres 38 MHz et CS</td>
+</tr>
+<tr>
+  <td>U_QA3</td>
+  <td>LQFP32 sous blindage, côté 1</td>
+  <td>Synthétiseur ou réception FI</td>
+  <td>Photo macro, continuité, RF/horloge</td>
+</tr>
+<tr>
+  <td>U_QA4</td>
+  <td>LQFP32 sous blindage, côté 2 ; voisin 26.00</td>
+  <td>Synthétiseur ou réception FI</td>
+  <td>Oscillateur, sortie IF, CS</td>
+</tr>
+</tbody>
+</table>
+<p>Les quatre repères ne sont pas des références de sérigraphie relevées. Ils servent à éviter que deux circuits soient confondus dans les mesures.</p>
+<h2 id="5-methode-dattribution-sans-modifier-la-radio">5. Méthode d'attribution sans modifier la radio</h2>
+<ol>
+<li>Photographier chaque face avec les blindages retirés, une règle visible et des repères permanents par position.</li>
+<li>Poste hors tension : relever résistance/continuité entre la sortie de chaque sélection et le contact <code>SENB</code> candidat de chaque boîtier, <strong>sans injecter de courant externe dans les lignes alimentées</strong>.</li>
+<li>Mesurer en fonctionnement normal la fréquence de l'oscillateur <code>26.00</code> avec une sonde haute impédance/faible capacité adaptée ; ne pas charger directement le quartz. Le marquage seul ne démontre pas qu'un circuit donné reçoit cette horloge.</li>
+<li>Capturer passivement CS/CLK/SDIO pendant la sélection A/B, changement VHF/UHF et syntonisation. Enregistrer le n° de banque et la fréquence affichée, comparer les registres <code>0x29/0x2A</code>.</li>
+<li>Associer chaque boîtier au filtre FI et à la voie audio, sans effectuer d'émission RF.</li>
+<li>Créer dans le modèle une liaison <code>physical</code> seulement après continuité mesurée, ou <code>oem_trace</code> quand seule la routine est vérifiée.</li>
+</ol>
+<h2 id="6-ce-qui-empeche-encore-un-pilote-complet">6. Ce qui empêche encore un pilote complet</h2>
+<p>Restent les brochages spécifiques du QA4818N, la configuration d'horloge, les registres propres au QA, les paramètres usine de déviation/squelch/gain, la séparation VFO A/B, le mapping RF switch/varicaps, les resets IRQ et le timing exact de mise en service. <strong>Les séquences AT1846S constituent une référence d'analyse, pas un firmware QA4818N prêt à flasher.</strong></p>
+<h2 id="references">Références</h2>
+<ul>
+<li>VK7ZJA, documentation technique du D578 : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+<li>Documentation AT1846S, repères de broches et registres : <a href="https://www.alldatasheet.com/view.jsp?Searchword=AT1846S">https://www.alldatasheet.com/view.jsp?Searchword=AT1846S</a></li>
+<li>Sources OpenD578 : <code>bench/rf_spi.py</code>, <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>.</li>
+</ul>
+<h2 id="reconstruction-frequence-sequences-rf-6-novembre-2026">Reconstruction fréquence / séquences RF (6 novembre 2026)</h2>
+<p>L'analyse du bus 24 bits, la formule candidate AT1846S (<code>0x29</code>/<code>0x2A</code>), les calculs de LO en première FI 38,550/38,850 MHz, les méthodes de corrélation des quatre banques et le pilote de test autonome sont dans <a href="QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html"><strong>QA4818N, reconstruction des registres et du PLL</strong></a>. Les exemples calculés ne sont <strong>pas</strong> une capture OEM du poste ; le mapping physique reste ouvert.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

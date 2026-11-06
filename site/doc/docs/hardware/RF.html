@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Chaine RF : entree de recherche - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Chaine RF : entree de recherche</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/RF.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/RF.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/RF.md</code></p>
+<article class="markdown-body"><h1 id="chaine-rf-entree-de-recherche">Chaine RF : entree de recherche</h1>
+<p>La vue eclatee montre des blocs RF fonctionnels, pas encore une implantation des composants. Aucun niveau de puissance, broche de PA, type exact de synthese ou ligne de commutation n'est affiche comme mesure sans preuve.</p>
+<p><strong>A relever :</strong> transceiver(s), oscillateurs/TCXO, filtre(s) RX/TX, controle des VFO VHF et UHF, duplexage, amplificateurs, lignes PTT et detecteur de puissance, receptions FM/DMR, squelch/CTCSS, et zones memoire des etalonnages par bande.</p>
+<p>Un firmware alternatif doit refuser TX tant que les etats autoritaires (PTT, TX actif, busy, RF et antenne) et la restitution apres erreur ne sont pas qualifies. La fonction satellite reste additive et ne doit pas modifier la NAND ni ignorer l'exclusivite des ressources RF.</p>
+<p><strong>Sources :</strong> <a href="../04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.html">routines RF</a>, <a href="../01_DECISIONS_ET_HISTORIQUE.html">decisions</a>, <a href="../07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.html">erreurs corrigees</a>, <a href="../PROGRAMMING_AND_CALIBRATION.html">programmation/calibration</a>.</p>
+<h3 id="complement-materiel">Complément matériel</h3>
+<p>Consulter <a href="QA4818N_QUATRE_CIRCUITS_26MHZ.html">QA4818N QUATRE CIRCUITS 26MHZ</a> et <a href="AUDIT_FONCTIONS_PARTIELLES.html">audit des fonctions partielles</a>.</p>
+<p>Voir aussi <a href="QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">reconstruction des fréquences QA4818N et des registres 0x29/0x2A</a>, avec analyseur de traces RF et tests de codage C.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

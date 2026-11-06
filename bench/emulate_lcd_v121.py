@@ -21,6 +21,8 @@ class LcdRunner(AdcRunner):
         self.lcd = LcdBus()
         self.live_directory = Path(live_directory) if live_directory else None
         self.last_publish = 0
+        self.last_publish_host = 0
+        self.last_ui_check = 0
         self.uart3 = None
         self.uart_reset_asserted = False
         super().__init__(*args, **kwargs)
@@ -115,6 +117,7 @@ class LcdRunner(AdcRunner):
 
     def on_code(self, uc, address, size, data):
         super().on_code(uc, address, size, data)
+        if self.stop is not None:return
         if address == 0x0808B672:
             # Ignore output changes made while configuring GPIO/reset lines;
             # start sampling at the first proven OEM command call.
@@ -136,7 +139,11 @@ class LcdRunner(AdcRunner):
                 self.serial_deadline()
             except StopModel as error:
                 self.halt(str(error))
-        if self.live_directory and self.steps - self.last_publish >= 100000:
+        if getattr(self,'interactive_mode',False):
+            if self.live_directory and self.steps-getattr(self,'last_ui_check',0)>=10000:
+                self.last_ui_check=self.steps
+                if time.monotonic()-getattr(self,'last_publish_host',0)>=.1:self.publish()
+        elif self.live_directory and self.steps - self.last_publish >= 100000:
             self.publish()
 
     def publish(self, final=False):
@@ -145,8 +152,9 @@ class LcdRunner(AdcRunner):
         target = self.live_directory
         target.mkdir(parents=True, exist_ok=True)
         if self.lcd.dirty or final:
-            self.lcd.save(target/'lcd.png')
-            self.lcd.save(target/'lcd_gram.png', honor_display=False)
+            display_saved=self.lcd.save(target/'lcd.png')
+            gram_saved=self.lcd.save(target/'lcd_gram.png', honor_display=False)
+            self.lcd.dirty=not(display_saved and gram_saved)
         status = dict(steps=self.steps, running=not final, stop=self.stop,
                       pixels=self.lcd.total_pixels, width=self.lcd.width, height=self.lcd.height,
                       display_on=self.lcd.display_on, sleeping=self.lcd.sleeping,
@@ -154,7 +162,15 @@ class LcdRunner(AdcRunner):
                       ADC_transfers=self.adc_dma.total_transfers)
         status['application_running']=bytes(self.cpu.mem_read(0x20001542,1))==b'\x01'
         status['quick_resume']=hasattr(self,'session_origin')
-        status['model_seconds']=round(getattr(self,'tick_wraps',0)*.005,3)
+        status['origin_steps']=getattr(self,'session_origin',{}).get('recorded_steps',0)
+        from board_clock import describe_clock
+        clock_info=describe_clock(self.clock.regs,self.systick)
+        tick_period=clock_info['SysTick_period_seconds'] or .005
+        status['model_seconds']=round(getattr(self,'tick_wraps',0)*tick_period,3)
+        status['interactive_mode']=getattr(self,'interactive_mode',False)
+        status['last_control_id']=getattr(self,'last_control_id',None)
+        status['frame_revision']=self.lcd.total_pixels
+        status['clocks']=clock_info
         status['execution_engine']='native' if getattr(self,'native_gate',None) else 'python'
         if hasattr(self,'hardware_state'):status['hardware']=self.hardware_state()
         if hasattr(self,'lighting'):
@@ -162,6 +178,7 @@ class LcdRunner(AdcRunner):
         from live_io import publish_status
         publish_status(target/'status.json',status,final)
         self.last_publish = self.steps
+        self.last_publish_host = time.monotonic()
         if not final and (target/'stop.request').exists():
             self.halt('stopped by simulator user')
 

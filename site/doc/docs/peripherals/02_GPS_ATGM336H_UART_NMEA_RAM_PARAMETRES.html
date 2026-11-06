@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>02 - GPS/GNSS ATGM336H : interfaces, sauvegarde, NMEA et contrat firmware - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>02 - GPS/GNSS ATGM336H : interfaces, sauvegarde, NMEA et contrat firmware</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md</code></p>
+<article class="markdown-body"><h1 id="02---gpsgnss-atgm336h-interfaces-sauvegarde-nmea-et-contrat-firmware">02 - GPS/GNSS ATGM336H : interfaces, sauvegarde, NMEA et contrat firmware</h1>
+<blockquote>
+<p><strong>RECONSTITUTION du 05/11/2026.</strong> Le document historique homonyme n'est pas conserve octet pour octet. Les informations ci-dessous proviennent de l'observation de la reference ATGM336H, du banc et de sources externes. Le brochage et les parametres <strong>propres au D578</strong> restent partiels.</p>
+</blockquote>
+<h2 id="1-constitution-de-la-fonction-gnss">1. Constitution de la fonction GNSS</h2>
+<p>L'AnyTone D578 avec GPS est equipe d'un module <strong>ATGM336H</strong>, capable selon variantes de GPS et BeiDou (BDS). Ce module n'est ni le RDA5802N (tuner FM) ni le processeur principal GD32. Une carte fille/antenne GPS externe est reliee au module par une liaison RF coaxiale. La fiche externe de VK7ZJA donne aussi un emplacement pour une possible antenne interne, non peuplee sur les cartes observees a l'epoque.</p>
+<p>Trois espaces/etats sont a distinguer :</p>
+<ol>
+<li><strong>Etat interne du GNSS</strong> : horloge, almanach/ephemerides et donnees de hot start dans son domaine de sauvegarde (ne pas appeler cet espace la NAND de 256 Mio du GD32).</li>
+<li><strong>RAM OEM GD32</strong> : dernier fix, validite, heure et donnees de position exploitees par les fonctions radio/APRS ; leurs adresses sont a valider contre le firmware V1.21, pas deduites des noms de phrases NMEA.</li>
+<li><strong>NAND/Flash radio</strong> : parametres utilisateur GPS/APRS et frequences de canal, servis par le CPS. L'adresse de chaque champ n'est <strong>pas</strong> prouvee ici par la presence du GPS.</li>
+</ol>
+<h2 id="2-alimentation-et-maintien-de-lhorloge-gps">2. Alimentation et maintien de l'horloge GPS</h2>
+<p>L'etude technique D578 fait etat de <strong>deux sauvegardes sur le PCB afficheur/CPU</strong>. Le second composant, devant entre les deux potentiometres, est destine au hot start GPS. Pour la reference XH414HG IV01E citee sur les cartes historiques, Seiko Instruments specifie un <strong>condensateur rechargeable 0,08 F / 3,3 V max</strong>, pas une CR2032. Voir <code>../hardware/SAUVEGARDE_RTC_GPS_XH414HG.md</code>.</p>
+<p>La documentation d'un <strong>ATGM336H-5N</strong> decrit l'entree <code>VBAT</code> destinee au maintien RTC/SRAM (1,5 a 3,6 V). Elle decrit aussi <code>VCC</code>, <code>TXD</code>, <code>RXD</code>, <code>1PPS</code> et <code>ON/OFF</code> selon le boitier. <strong>Le tableau de broches et les seuils du -5N ne doivent pas etre imposes sans verifier le suffixe et l'implantation du module monte sur D578</strong>. Continuite vers la sauvegarde et polarite de la charge inconnues.</p>
+<h2 id="3-liaison-avec-le-gd32-ce-qui-est-etabli">3. Liaison avec le GD32, ce qui est etabli</h2>
+<table>
+<thead>
+<tr>
+  <th>Parametre</th>
+  <th>Valeur/observation</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Module</td>
+  <td>ATGM336H</td>
+  <td>Identifie dans la famille D578 et par le projet</td>
+</tr>
+<tr>
+  <td>Chemin de commande</td>
+  <td>Liaison serie UART logique entre GNSS et MCU, selon architecture de la famille</td>
+  <td><strong>A confirmer</strong> sur broches PRO/PLUS</td>
+</tr>
+<tr>
+  <td>Debit de reference</td>
+  <td><code>9600 8N1</code> dans des modules ATGM336H et dans des references de la famille AnyTone</td>
+  <td><strong>Pas de capture temporelle sur notre D578</strong></td>
+</tr>
+<tr>
+  <td>Signaux de module</td>
+  <td>TXD, RXD, GND, alimentation, sauvegarde, eventuellement PPS et ON/OFF</td>
+  <td>Interface de module ; affectation MCU physique inconnue</td>
+</tr>
+<tr>
+  <td>RTC/GPS backup</td>
+  <td>Sauvegarde GPS sur facade PCB CPU, distincte du RTC</td>
+  <td>Source externe, piste non mesuree</td>
+</tr>
+<tr>
+  <td>Communication du banc</td>
+  <td>Emulation GPS et cas d'erreur/perte de fix</td>
+  <td><strong>Modele</strong>, pas mesure de bus</td>
+</tr>
+</tbody>
+</table>
+<p>Les broches <code>PA2/PA3</code> du GD32 peuvent implementer <code>USART1_TX/RX</code> par fonction alternative <strong>selon datasheet</strong>. Cela ne prouve absolument pas que ce D578 les utilise pour son GPS. <strong>Ne pas attribuer ces GPIO au GPS</strong> dans les schemas tant qu'une configuration USART OEM et la continuite ne sont pas concordantes.</p>
+<h2 id="4-format-nmea-0183-et-validations-necessaires">4. Format NMEA 0183 et validations necessaires</h2>
+<p>Les phrases standard susceptibles d'etre utiles sont <code>GGA</code> (qualite de fix), <code>RMC</code> (position, statut, vitesse, temps), <code>GSA</code> (DOP/satellites utilises), <code>GSV</code> (satellites en vue) et <code>VTG</code> (route/vitesse). Le talker peut etre <code>GP</code>, <code>GN</code>, <code>BD</code>, <code>GL</code> suivant firmware et constellations, et <strong>ne doit pas etre suppose fixe a <code>GP</code></strong>. Une phrase suit en general la forme <code>$&lt;talker&gt;&lt;type&gt;,...*HH</code> avec checksum XOR des caracteres entre <code>$</code> et <code>*</code>.</p>
+<h3 id="validation-du-parseur-du-firmware-alternatif">Validation du parseur du firmware alternatif</h3>
+<ol>
+<li>Attendre une phrase complete jusqu'a <code>CR/LF</code>, avec taille maximale fixe et sans depassement memoire.</li>
+<li>Verifier <code>$</code>, nombre de champs et <code>*HH</code> ; refuser une phrase au checksum non conforme, sans utiliser un ancien champ comme valeur courante.</li>
+<li>Pour <code>RMC</code>, verifier le statut de validite avant toute utilisation ; pour <code>GGA</code>, controler la qualite du fix et le type d'altitude. Ne pas convertir directement heure UTC en heure locale.</li>
+<li>Traiter explicitement les dates manquantes, le passage minuit et les solutions invalides ; un « vieux fix » est un <strong>fix invalide pour Doppler/APRS</strong> si aucune fraicheur n'est attestee.</li>
+<li>Accepter un flux en fragments, plusieurs phrases par interruption DMA et les pertes d'octets ; journaliser un compteur d'erreurs, pas toutes les positions sensibles par defaut.</li>
+<li>Produire un objet immutable <code>gnss_fix{timestamp_utc, lat, lon, alt, speed, fix_quality, age_ms, provenance}</code> consomme par APRS et satellite ; ne pas relire en cours de trame des variables OEM disjointes.</li>
+</ol>
+<h2 id="5-commandes-de-configuration-ne-pas-appliquer-sans-qualification">5. Commandes de configuration : ne pas appliquer sans qualification</h2>
+<p>Des modules a base d'AT6558R publient la famille de commandes <code>$PCAS...</code> (par exemple mise a jour d'intervalle ou choix de constellations). Les valeurs supportees dependent <strong>du firmware interne du module</strong>. Une page GitHub sur un ATGM336H-5N decrit <code>$PCAS04</code> et <code>$PCAS10</code> avec plusieurs modes. Ce n'est <strong>pas une preuve</strong> que le module du D578 accepte exactement ces commandes ou qu'elles sont utilisees par l'OEM. L'analyse doit rechercher dans <code>D578UV_GD_V1.21_20240619.CDD</code> les chaines <code>PCAS</code>, <code>NMEA</code>, <code>GNRMC</code>, <code>GPGGA</code>, les tables d'initialisation et les references UART pour separer commandes OEM et simples formats documentes.</p>
+<p><strong>Regle :</strong> ne pas envoyer <code>$PCAS00</code> ou de commande de sauvegarde non volatile a un module de poste sans avoir recupere la configuration d'origine et qualifie son protocole.</p>
+<h2 id="6-relations-avec-aprs-mode-satellite-et-rtc">6. Relations avec APRS, mode satellite et RTC</h2>
+<ul>
+<li>L'APRS TX peut partir d'un fix GNSS quand il est valide ; la presence d'un flag « GPS enable » ne prouve pas un fix dequalite.</li>
+<li>Le suivi satellite demande <strong>heure UTC juste et actuelle</strong>, position d'observateur fiable, TLE valable et securite RF (PTT/busy). Ni NMEA seul ni hot start ne valident la periode de calcul.</li>
+<li>Un RTC correct peut subsister sans sauvegarde GNSS, et l'inverse ; le driver ne doit pas rendre le mode satellite actif tant que les deux sources temporelles n'ont pas ete comparees.</li>
+<li>La lecture des parametres CPS doit etre <strong>en lecture seule</strong> dans les etapes de recherche ; les octets de calibration et local information NAND doivent rester proteges.</li>
+</ul>
+<h2 id="7-tests-reproductibles-et-preuves-a-obtenir">7. Tests reproductibles et preuves a obtenir</h2>
+<table>
+<thead>
+<tr>
+  <th>Test</th>
+  <th>Donnee attendue</th>
+  <th>Methode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Identification module</td>
+  <td>Marquage complet et orientation pin 1</td>
+  <td>Macro-photo de carte CPU</td>
+</tr>
+<tr>
+  <td>RX/TX UART</td>
+  <td>Sens TX module / RX GD32, debit et amplitudes</td>
+  <td>Analyseur logique passif haute impedance</td>
+</tr>
+<tr>
+  <td>Hot start</td>
+  <td>Presence tension de sauvegarde au demarrage et apres extinction</td>
+  <td>Multimetre sans injection</td>
+</tr>
+<tr>
+  <td>PPS (si cable)</td>
+  <td>Continuite et eventuelle periode 1 s</td>
+  <td>Mesure passive</td>
+</tr>
+<tr>
+  <td>Recovery position</td>
+  <td>Comportement sans antenne/sans fix</td>
+  <td>Scenario non-emissif + journaux horodates</td>
+</tr>
+<tr>
+  <td>CPS fields</td>
+  <td>Offsets et tailles V1.21 vs PLUS 2.x</td>
+  <td>Capture CPS lecture et diff schema avant/apres un parametre</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-sources">8. Sources</h2>
+<ul>
+<li>Projet : <code>../04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>, <code>../hardware/SAUVEGARDE_RTC_GPS_XH414HG.md</code>, <code>bench/scenarios/GPS_loss.json</code>, <code>bench/scenarios/GPS_PTT_APRS_incomplete.json</code>, <code>docs/cps/</code>.</li>
+<li>VK7ZJA, photographie ATGM336H et antenne : <a href="https://radio.carstenbauer.net/578techmods.htm">https://radio.carstenbauer.net/578techmods.htm</a>.</li>
+<li>ATGM336H-5N reference et pin VBAT (document tiers a verifier sur sous-variant) : <a href="https://upcommons.upc.edu/bitstreams/85590e00-83f0-4e78-8569-c8873263d87f/download">https://upcommons.upc.edu/bitstreams/85590e00-83f0-4e78-8569-c8873263d87f/download</a>.</li>
+<li>Retour d'experience command set AT6558R : <a href="https://github.com/cbrown350/ATGM336H-GNSS-Reader/blob/main/FINDINGS.md">https://github.com/cbrown350/ATGM336H-GNSS-Reader/blob/main/FINDINGS.md</a>.</li>
+<li>Datasheet GD32 LQFP100 : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

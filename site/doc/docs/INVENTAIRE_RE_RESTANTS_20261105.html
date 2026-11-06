@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Inventaire des travaux encore ouverts et pistes d&#x27;analyse locale - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Inventaire des travaux encore ouverts et pistes d&#x27;analyse locale</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/INVENTAIRE_RE_RESTANTS_20261105.md">Modifier sur GitHub</a><a download href="../../raw/docs/INVENTAIRE_RE_RESTANTS_20261105.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/INVENTAIRE_RE_RESTANTS_20261105.md</code></p>
+<article class="markdown-body"><h1 id="inventaire-des-travaux-encore-ouverts-et-pistes-danalyse-locale">Inventaire des travaux encore ouverts et pistes d'analyse locale</h1>
+<p>Ce fichier donne un point de reprise transversal sans remplacer les fiches détaillées. Un composant « identifié » au sens de sa référence fabricant n'est <strong>pas</strong> nécessairement prêt pour un pilote lorsque ses GPIO, rails et périphériques voisins sont inconnus.</p>
+<table>
+<thead>
+<tr>
+  <th>Sous-système</th>
+  <th>Déjà exploitable dans le dépôt</th>
+  <th>Ce que l'analyse logicielle peut encore fournir</th>
+  <th>Ce qui exige une mesure ou un nouvel échantillon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>GD32F303, démarrage et SWD</td>
+  <td>Cartes CPU, bootloader, observations SWJ, adresses des routines OEM</td>
+  <td>Tables vecteurs, appels SWD/USB, registres, sources d'horloge</td>
+  <td>Reset / BOOT0 sur la carte, séquence de récupération contrôlée</td>
+</tr>
+<tr>
+  <td>USB CDC et CPS</td>
+  <td>Protocole <code>PROGRAM/R/W/END</code>, descripteurs, source banc V11.7</td>
+  <td>Décodage de captures, cartographie de nouveaux champs et transactions</td>
+  <td>Capture du CPS Windows complet, test sur PRO et PLUS</td>
+</tr>
+<tr>
+  <td>NAND 256 Mio</td>
+  <td>Dump de référence, géométrie, zones et ECC</td>
+  <td>Diff/entropie/structures/index, signatures d'écritures différées</td>
+  <td>Vérifier l'usure et l'interruption sans endommager les calibrations</td>
+</tr>
+<tr>
+  <td>GPS ATGM336H</td>
+  <td>Pilote et UART partiels</td>
+  <td>Analyse init, NMEA, traitements d'heure et GPS/APRS</td>
+  <td>Oscillateur, niveau logique et continuité UART</td>
+</tr>
+<tr>
+  <td>LCD, touches, codeur, LED</td>
+  <td>Timing, commandes, routage GPIO des fonctions connues</td>
+  <td>Couverture des commandes restantes et timings sur traces OEM</td>
+  <td>Brochages et alignement des photos PCB, mesure des courants</td>
+</tr>
+<tr>
+  <td>RF QA4818N x4 candidats</td>
+  <td>GPIO RF, mots série, référence 26 MHz et hypothèse 2 LO / 2 IF</td>
+  <td>Décoder tables de registres et distinguer instances/banques</td>
+  <td>Identifier les quatre boîtiers par pistes, quartz et signaux 26 MHz</td>
+</tr>
+<tr>
+  <td>FM RDA5802N</td>
+  <td>Modèle I2C PB6/PB7, adresse logicielle, commandes partielles</td>
+  <td>Extraire séquences init et configuration</td>
+  <td>Continuité de PB6/PB7 et réseau RF/audio</td>
+</tr>
+<tr>
+  <td>DAC ROHM BH2226FV (H2226, SSOP-B16)</td>
+  <td>Référence et protocole fabricant</td>
+  <td>Repérer séquences et ordres de commande du firmware</td>
+  <td>Affectation des huit sorties à chaque réglage analogique</td>
+</tr>
+<tr>
+  <td>ADC/AIC3204, U2429G, MC34119G, SGM8272</td>
+  <td>Fiches fonctionnelles et chemins audio candidats</td>
+  <td>Registres d'initialisation et routage logiciel</td>
+  <td>Nœuds analogiques, niveaux, mute, gain et chaîne audio jusqu'aux HP</td>
+</tr>
+<tr>
+  <td>PA AFT05MP075N x2 et amplificateur PA1517G/YD1517P</td>
+  <td>Identification fabricant / variante</td>
+  <td>Tables de puissance, watchdog thermique, contrôle mute</td>
+  <td>Mesures RF et alimentation sous charge avec procédures sûres</td>
+</tr>
+<tr>
+  <td>Carte airband PLUS KT0905R/KT09S5R</td>
+  <td>Topologie carte fille / quartz / connecteur</td>
+  <td>Chercher appels de pilote et variantes dans image PLUS</td>
+  <td>Identifier puce, connecteur et bus, vérifier référence sur photo</td>
+</tr>
+<tr>
+  <td>Bluetooth D868BT-SP, ET12, BT01, PTT BP-02</td>
+  <td>UART3 dans modèle, AT+VER?, fonctions UI</td>
+  <td>Désassembler chaînes et tables commandes, traces UART</td>
+  <td>Photo module sous shield, brochage BT, appairage et trames physiques</td>
+</tr>
+<tr>
+  <td>Modem SCT3258 / DMR</td>
+  <td>Flux HPI et fichiers de mise à jour distincts</td>
+  <td>Décrire protocole de transfert, audio AMBE, commandes de baseband</td>
+  <td>Mesures sur bus HPI et qualification d'une émission/réception DMR</td>
+</tr>
+<tr>
+  <td>Firmware alternatif</td>
+  <td>HAL source, modèle de simulation, stratégie satellite</td>
+  <td>Compilation/test hors ligne, budget mémoire, règles RF</td>
+  <td>Boot matériel indépendant, préservation calibration, comparaison RF</td>
+</tr>
+</tbody>
+</table>
+<p>Les essais restent <strong>lecture seule</strong> sur le poste physique tant qu'un moyen de récupération indépendant et les mécanismes de sauvegarde/restauration ne sont pas qualifiés.</p>
+<p>À consulter : <a href="hardware/AUDIT_FONCTIONS_PARTIELLES.html">audit des fonctions partielles</a>, <a href="09_REPRISE_PRIORITES_TESTS_ET_INFOS_MANQUANTES.html">priorités et blocages</a>, <a href="cps/README.html">CPS et codeplug</a>, <a href="SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.html">sources externes</a>.</p>
+<h3 id="avancement-rf-du-6-novembre-2026">Avancement RF du 6 novembre 2026</h3>
+<p>Un encodeur 30 bits (pas calculé 62,5 Hz selon AT1846S), un décodeur de journaux quatre banques/page et une matrice de corrélation <code>F_RX ± 38,550/38,850 MHz</code> ont été ajoutés. <strong>N'ayant pas de trace OEM native complète pour plusieurs fréquences dans le dépôt, le mapping LO/IF et les séquences RX/TX ne sont pas encore qualifiés.</strong> <a href="hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Voir l'étude QA4818N</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

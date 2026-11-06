@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-05",
+  "notes": "This is an evidence index, not measured PCB netlist. External sources remain linked, not copied.",
+  "claims": [
+    {
+      "id": "cpu-identity",
+      "variant": "PRO GD V1.21",
+      "statement": "GD32F303VKT6 Cortex-M4 LQFP100",
+      "evidence_type": "USER_MEAS",
+      "local_reference": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+      "external_reference": "https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf",
+      "verification": "documented"
+    },
+    {
+      "id": "plus-cpu",
+      "variant": "PLUS",
+      "statement": "GD32F303 sur version PLUS observe par utilisateur",
+      "evidence_type": "USER_PHOTO",
+      "local_reference": "docs/hardware/VERSIONS.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "cpu-vbat-pin",
+      "variant": "PRO GD V1.21",
+      "statement": "GD32F303Vx LQFP100 VBAT pin 6",
+      "evidence_type": "DATASHEET",
+      "local_reference": "hardware/pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv",
+      "external_reference": "https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf",
+      "verification": "documented"
+    },
+    {
+      "id": "rtc-backup",
+      "variant": "D578 historique",
+      "statement": "Sauvegarde sur face arriere PCB MCU pres de nappe, attribuee au RTC",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "gnss-backup",
+      "variant": "D578 historique",
+      "statement": "Sauvegarde sur face avant entre potentiometres, attribuee au hot start GPS",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "xh414hg-spec",
+      "variant": "Composant XH414HG",
+      "statement": "Seiko XH-HG capacitor 0.08 F et 3.3 V max, pas une pile lithium primaire",
+      "evidence_type": "DATASHEET",
+      "local_reference": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "external_reference": "https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf",
+      "verification": "documented"
+    },
+    {
+      "id": "ms412-historic",
+      "variant": "D578 historique",
+      "statement": "Edition ancienne du guide propose MS412: pas equivalent etabli au XH414HG",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "external_reference": "https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm",
+      "verification": "documented"
+    },
+    {
+      "id": "rtc-vbat-link",
+      "variant": "PRO et PLUS",
+      "statement": "Continuite sauvegarde RTC vers GD32 VBAT a verifier",
+      "evidence_type": "INFERRED",
+      "local_reference": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "external_reference": null,
+      "verification": "needs_physical_measurement"
+    },
+    {
+      "id": "nand-geometry",
+      "variant": "PRO GD V1.21",
+      "statement": "TC58CVG1S3HRAIG 2Gbit, ID 98 CB, main 256 Mio",
+      "evidence_type": "USER_MEAS",
+      "local_reference": "docs/03_NAND_LECTURES_ECC_CARTE.md",
+      "external_reference": "https://spiflash.readthedocs.io/en/latest/chips/98cb-nand.html",
+      "verification": "documented"
+    },
+    {
+      "id": "nand-ecc",
+      "variant": "PRO GD V1.21",
+      "statement": "437 pages ECC 20 non corrigees lors de la capture, 10 pages non triviales",
+      "evidence_type": "USER_MEAS",
+      "local_reference": "docs/03_NAND_LECTURES_ECC_CARTE.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "nand-gpio",
+      "variant": "PRO GD V1.21",
+      "statement": "PB8 PB15 PB14 PA15 bus NAND serie candidate dans simulation OEM",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "main-flash-boot",
+      "variant": "PRO GD V1.21",
+      "statement": "Boot OEM 24576 B base 0x08000000 et app base 0x08006000",
+      "evidence_type": "USER_MEAS",
+      "local_reference": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "sct-hpi-gpio",
+      "variant": "PRO GD V1.21",
+      "statement": "PD2..PD5 controls, PD8..PD15 data HPI candidat",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "sct-boot",
+      "variant": "SCT3258 datasheet",
+      "statement": "1024 mots 16-bit / 2048 octets au boot SCT, hors firmware GD32",
+      "evidence_type": "DATASHEET",
+      "local_reference": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+      "external_reference": "https://radiofoundry.org/docs/spec/hardware-anytone",
+      "verification": "documented"
+    },
+    {
+      "id": "lcd-8080",
+      "variant": "PRO GD V1.21",
+      "statement": "GPIO PE7..PE14 commandes LCD D0..D7 selon decode OEM",
+      "evidence_type": "OEM_STATIC",
+      "local_reference": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "qa-four",
+      "variant": "D578 historique",
+      "statement": "Quatre QA4818N, deux LO et deux recepteurs IF selon VK7ZJA",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "qa-bus",
+      "variant": "PRO GD V1.21",
+      "statement": "Bus RF OEM du modele : PB3 SCLK, PB4 SDIO, CS PB5 PB2 PC13 PE1; quatre banques; 24 bits",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "qa-frequency-format",
+      "variant": "AT1846S, comparaison",
+      "statement": "0x29[13:0]/0x2A[15:0] encodent F*16000 en MHz, soit 62,5 Hz par unite, non confirme pour QA4818N",
+      "evidence_type": "DATASHEET",
+      "local_reference": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "external_reference": "https://manuals.plus/m/3c3831cb8a4faeacfd8c45ad662fb36c9ff3232018d83d1e7ece0938337cb578",
+      "verification": "documented"
+    },
+    {
+      "id": "qa-lo-if",
+      "variant": "D578 historique",
+      "statement": "Deux LO et deux recepteurs FI avec filtres 38,550 et 38,850 MHz",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "qa-mapping-unknown",
+      "variant": "PRO GD V1.21",
+      "statement": "Mapping des quatre banques au boitiers et aux voies A/B non mesure",
+      "evidence_type": "INFERRED",
+      "local_reference": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "external_reference": null,
+      "verification": "needs_physical_measurement"
+    },
+    {
+      "id": "qa-tx-not-qualified",
+      "variant": "PRO GD V1.21",
+      "statement": "TX et PLL QA4818N non valides materiellement ; seul codage/banc simulable",
+      "evidence_type": "INFERRED",
+      "local_reference": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "external_reference": null,
+      "verification": "needs_physical_measurement"
+    },
+    {
+      "id": "qa-26",
+      "variant": "PRO GD V1.21",
+      "statement": "Un circuit gratte voisin oscillateur marque 26.00 observe par utilisateur",
+      "evidence_type": "USER_PHOTO",
+      "local_reference": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "if-third",
+      "variant": "D578 historique",
+      "statement": "Empreintes 3e FI et filtres supplementaires non peuples",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "rf-protection",
+      "variant": "D578 historique",
+      "statement": "Relais et diode de protection inversion polarite",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+      "external_reference": "https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php",
+      "verification": "documented"
+    },
+    {
+      "id": "dac-h2226",
+      "variant": "PRO GD V1.21",
+      "statement": "Marquage H2226 sur SSOP-B16 -> BH2226FV-E2",
+      "evidence_type": "USER_PHOTO",
+      "local_reference": "docs/hardware/BH2226_H2226_DAC_RF.md",
+      "external_reference": "https://www.rohm.com/products/data-converter/d-a-converters/8bit-d-a/bh2226fv-product",
+      "verification": "documented"
+    },
+    {
+      "id": "dac-varicaps",
+      "variant": "PRO GD V1.21",
+      "statement": "BH2226FV pilotage varicaps reste une hypothese non tracee",
+      "evidence_type": "INFERRED",
+      "local_reference": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+      "external_reference": null,
+      "verification": "needs_physical_measurement"
+    },
+    {
+      "id": "fm-rda",
+      "variant": "PRO GD V1.21",
+      "statement": "RDA5802N identifie par utilisateur, adresse I2C 0x10 dans modele PB6/PB7",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/hardware/RDA5802N_RECEPTION_FM.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "cps-program",
+      "variant": "D578UV OEM",
+      "statement": "PROGRAM -> QX 06, identification, lecture R 16 octets adresse 32-bit BE",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md",
+      "external_reference": "https://static.dm3mat.de/qdmr/manual/ch08.html",
+      "verification": "documented"
+    },
+    {
+      "id": "cps-writing",
+      "variant": "PRO GD V1.21 banc",
+      "statement": "Ecriture W 16 et END simules ; ACK ne prouve pas persistance",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/cps/PROTOCOLE_OEM_V121.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "sat-no-go",
+      "variant": "PRO GD V1.21",
+      "statement": "Phase60 EXP06 hors ligne non flashable ; OEM ABI et recovery non qualifiees",
+      "evidence_type": "OEM_STATIC",
+      "local_reference": "docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "bt-et12",
+      "variant": "PRO GD V1.21 banc",
+      "statement": "Dialogue ET12 sur UART3 modelise, aucune preuve de pinout physique D868BT-SP",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+      "external_reference": null,
+      "verification": "documented"
+    },
+    {
+      "id": "cps-linux-current",
+      "variant": "Toutes variantes, tiers",
+      "statement": "AnyTone_CPS archive et CodeplugStudio est le developpement maintenu",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md",
+      "external_reference": "https://github.com/hardenedpenguin/AnyTone_CPS",
+      "verification": "documented"
+    },
+    {
+      "id": "plus-cps2",
+      "variant": "PLUS tiers",
+      "statement": "AesApp WebCPS documente l identification D578UV2 pour certains PLUS firmware 2.xx",
+      "evidence_type": "THIRD_PARTY_BOARD",
+      "local_reference": "docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md",
+      "external_reference": "https://cps.aes.app/manual/en/about",
+      "verification": "documented"
+    },
+    {
+      "id": "micro-uart",
+      "variant": "PRO GD V1.21",
+      "statement": "Microphone USART0 PA9/PA10, trames 41/53 dans bench V11.8",
+      "evidence_type": "OEM_EMU",
+      "local_reference": "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
+      "external_reference": null,
+      "verification": "documented"
+    }
+  ]
+}

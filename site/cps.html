@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS et USB - OpenD578</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="index.html">Vue eclatee</a>
+<a href="docs.html">Documents</a>
+<a class="active" href="cps.html">CPS / USB</a>
+<a href="doc/docs/evidence/INDEX.html">Preuves</a>
+<a href="firmware.html">Firmware</a>
+<a href="photos.html">Photos</a>
+<a href="sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><h1>Programmation PC : CPS, USB et codeplug</h1>
+<p class="lead">Protocole AnyTone OEM D578UV PRO GD32 V1.21, simulation de la communication serie USB et structure de la NAND.</p>
+<p class="muted small">Les lectures et ecritures de noms ont ete testees avec le firmware OEM dans le banc V11.7. La compatibilite totale du CPS Windows et celle d'un firmware alternatif ne sont pas validees.</p>
+<div class="stack"><section class="panel"><h2>Chemin de programmation</h2><pre>PC / CPS -&gt; USB CDC 28E9:018A -&gt; GD32F303 -&gt; gestionnaire NAND -&gt; codeplug</pre>
+<p>PROGRAM / identite / R / W / END. Les commandes d'ecriture sont tamponnees et l'ACK de END precede la finalisation de certaines metadonnees NAND.</p></section>
+<section class="panel"><h2>Outils et sources du banc</h2><p><code>bench/cps_bridge.py</code>, <code>bench/cps_probe.py</code>, <code>bench/usb_cdc.py</code>, <code>bench/usbd_host.py</code>, <code>bench/web/mini_cps_protocol.js</code>.</p>
+<p><a href="https://github.com/Telectroboy/OpenD578/blob/main/tools/cps_trace_audit.py">Audit hors ligne des journaux CPS</a></p></section></div>
+<h2>Fiches detaillees</h2><ul class="link-list"><li><a href="doc/docs/cps/README.html">CPS, programmation PC et codeplug du D578</a></li><li><a href="doc/docs/cps/USB_CDC_GD32_V121.html">USB du GD32F303 : CDC ACM, endpoints, accès du CPS</a></li><li><a href="doc/docs/cps/PROTOCOLE_OEM_V121.html">Protocole CPS OEM : transactions série observées en V1.21</a></li><li><a href="doc/docs/cps/CODEPLUG_CANAL_OEM_V121.html">Codeplug OEM V1.21 : champs de canal et organisation NAND</a></li><li><a href="doc/docs/cps/CPS_ARCHITECTURE_SIMULATION.html">CPS dans le banc V11.7 : architecture, lancement et fichiers sources</a></li><li><a href="doc/docs/cps/COMPATIBILITE_PRO_PLUS.html">CPS et mises à jour : différences PRO, PLUS et firmwares libres</a></li><li><a href="doc/docs/cps/CPS_QUALIFICATION.html">Plan de tests CPS D578 et critères de sécurité d&#x27;écriture</a></li><li><a href="doc/docs/USB_CPS_V11_5.html">USB CDC et pont CPS — V11.5</a></li><li><a href="doc/docs/CPS_INTEGRE_V11_6.html">CPS intégré V11.6</a></li><li><a href="doc/docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.html">Sources externes et limites de leur application au D578 GD32</a></li></ul></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="assets/models.js" defer></script><script src="assets/search-data.js" defer></script><script src="assets/site.js" defer></script>
+</body></html>

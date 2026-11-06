@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Protocole CPS OEM : transactions série observées en V1.21 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>Protocole CPS OEM : transactions série observées en V1.21</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/PROTOCOLE_OEM_V121.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/PROTOCOLE_OEM_V121.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/PROTOCOLE_OEM_V121.md</code></p>
+<article class="markdown-body"><h1 id="protocole-cps-oem-transactions-serie-observees-en-v121">Protocole CPS OEM : transactions série observées en V1.21</h1>
+<p><strong>Cette fiche documente exclusivement la variante PRO GD32 et les commandes réellement exercées par notre banc.</strong> Les champs inconnus ne sont pas complétés à partir d'un autre protocole.</p>
+<h2 id="1-transport-et-representation">1. Transport et représentation</h2>
+<p>USB CDC ACM (voir <a href="USB_CDC_GD32_V121.html">descripteurs</a>). L'interface transporte une suite d'octets, sans frontière de paquet applicatif garantie par USB. Le client doit réassembler les réponses selon les longueurs annoncées. Les adresses <code>R</code>/<code>W</code> sont transportées sur <strong>4 octets, ordre big endian</strong>. La longueur du bloc testée est de <strong>16 octets</strong>.</p>
+<p>La communication PC ne donne pas directement les signaux d'accès à la NAND. Le firmware OEM traduit l'adresse logique et gère les pages et la finalisation.</p>
+<h2 id="2-entree-en-programmation">2. Entrée en programmation</h2>
+<table>
+<thead>
+<tr>
+  <th>Échange</th>
+  <th>PC -&gt; radio</th>
+  <th>Radio -&gt; PC</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Initialisation</td>
+  <td>ASCII <code>PROGRAM</code> = <code>50 52 4F 47 52 41 4D</code></td>
+  <td><code>51 58 06</code> = <code>QX</code> + ETX <code>06</code></td>
+  <td>Observé dans l'OEM simulé</td>
+</tr>
+<tr>
+  <td>Identification</td>
+  <td><code>02</code></td>
+  <td>réponse de 16 octets commençant par <code>49</code> (<code>I</code>) et finissant par <code>06</code>; contient <code>D578UV</code></td>
+  <td>Observé</td>
+</tr>
+<tr>
+  <td>Terminer</td>
+  <td>ASCII <code>END</code> = <code>45 4E 44</code></td>
+  <td><code>06</code></td>
+  <td>Observé ; acquittement avant la fin de toutes les écritures NAND</td>
+</tr>
+</tbody>
+</table>
+<p>Attention : l'octet <code>06</code> est le terminateur/ACK observé. Il ne faut pas inférer une interprétation universelle de tous les octets de réponse avant d'étudier les autres commandes.</p>
+<p>L'identité relevée dans une session affichait la sous-chaîne <code>V111</code>. <strong>Elle n'est pas convertie artificiellement en V1.21</strong> : la valeur du champ demeure une donnée brute dont la sémantique exacte reste à caractériser.</p>
+<h2 id="3-lecture-commande-r">3. Lecture : commande <code>R</code></h2>
+<p>Requête de <strong>6 octets</strong> :</p>
+<pre><code class="language-text">52 AA AA AA AA LL
+R  |-- adresse BE--| taille demandée (testée = 10 hex / 16 déc.)
+</code></pre>
+<p>Réponse pour 16 octets, soit <strong>24 octets</strong> :</p>
+<pre><code class="language-text">57 AA AA AA AA LL [16 octets de données] CC 06
+W  |-- adresse BE--| 10  |------  données -----| checksum fin
+</code></pre>
+<p>Vérifications effectuées par le CPS intégré :</p>
+<ol>
+<li><code>réponse[0] == 0x57</code> ; adresse identique à la requête ; longueur déclarée <code>0x10</code> ; dernier octet <code>0x06</code>.</li>
+<li><code>somme(réponse[1..21]) mod 256 == réponse[22]</code> : somme de l'adresse, de la longueur et des 16 octets de données. Le marqueur <code>W</code> n'entre <strong>pas</strong> dans cette somme.</li>
+<li>Rejeter une réponse incomplète, surnuméraire ou incorrecte ; ne pas la traiter comme des données valides.</li>
+</ol>
+<p>Le script <code>bench/cps_probe.py</code> contrôle ces champs et affiche <strong>uniquement l'empreinte SHA256</strong> du bloc lu, pas le contenu.</p>
+<h2 id="4-ecriture-commande-w">4. Écriture : commande <code>W</code></h2>
+<p>Pour 16 octets :</p>
+<pre><code class="language-text">57 AA AA AA AA 10 [16 octets de données] CC 06
+W  |-- adresse BE--|  |------ charge ------| somme fin
+</code></pre>
+<p>La somme est celle des <strong>4 octets d'adresse</strong>, de la <strong>longueur</strong> et des <strong>données</strong>, modulo 256. La réponse observée pour une écriture de sous-bloc est <code>06</code>.</p>
+<p><strong>Ne pas confondre ACK et persistance</strong> : dans le banc, une écriture de 16 octets a pu être acquittée sans être encore relisible, car le firmware gère des modifications tamponnées de page NAND. <code>END</code> déclenche/finalise une série d'opérations, mais son ACK a lui-même précédé une partie de la mise à jour de métadonnées. Seule une nouvelle lecture après finalisation complète, arrêt propre et redémarrage permet de conclure à la persistance.</p>
+<p>Le CPS intégré V11.6 écrit <strong>128 sous-blocs de 16 octets</strong> pour une page logique de 2048 octets, en préservant la page d'origine hors des caractères de nom ciblés. Il refuse les modifications hors des positions prévues et compare une nouvelle lecture à l'instantané précédent avant la tentative d'écriture. Il ne détecte pas les clients concurrents qui auraient modifié le poste entre la comparaison et l'écriture : <strong>pas de verrou transactionnel général</strong>.</p>
+<h2 id="5-bornes-verifiees-pour-lediteur-integre">5. Bornes vérifiées pour l'éditeur intégré</h2>
+<ul>
+<li>Base des 128 premiers canaux : <code>0x00800000</code>.</li>
+<li>4 groupes de 32 canaux, chaque groupe = <strong>2048 octets</strong> : <code>base + groupe * 0x800</code>.</li>
+<li>Chaque canal = <strong>64 octets</strong> ; nom à <code>+0x23</code> (<code>35</code> décimal), jusqu'à 16 caractères ASCII imprimables.</li>
+<li>Zone éditée par le mini-CPS : <code>0x00800000..0x00801FFF</code> inclus. Ce n'est <strong>pas</strong> la carte complète de la NAND ni la limite du codeplug OEM.</li>
+</ul>
+<p>Voir <a href="CODEPLUG_CANAL_OEM_V121.html">champs du canal</a> pour la structure complète des éléments partiellement identifiés.</p>
+<h2 id="6-timings-observes-sans-garantie-contractuelle">6. Timings observés, sans garantie contractuelle</h2>
+<ul>
+<li>Entrée <code>PROGRAM</code> : environ 2 à 4 secondes dans le banc V11.5 selon la charge PC.</li>
+<li>Lecture de sous-blocs : généralement plusieurs dizaines à centaines de millisecondes dans ce banc.</li>
+<li>Opération <code>END</code> : son ACK n'attend pas la fin de toutes les transactions NAND.</li>
+<li>Des timeouts trop courts peuvent interrompre des sessions valides ; <strong>un timeout d'écriture ne doit jamais déclencher de répétition aveugle</strong>.</li>
+</ul>
+<p>Ces valeurs sont des résultats de simulation sur la machine utilisée, <strong>pas des timings certifiés du matériel</strong>.</p>
+<h2 id="7-elements-encore-inconnus">7. Éléments encore inconnus</h2>
+<ul>
+<li>Liste complète des sous-commandes/areas lues par le CPS Windows et leurs interprétations.</li>
+<li>Format et longueur des transactions non exercées ; en particulier programmation de contacts/DMR IDs, calibrations, fonds d'écran, messages et options.</li>
+<li>Gestion de verrouillage, de version, de compatibilité du codeplug et d'erreurs non récupérables.</li>
+<li>Sémantique et contrôles exacts d'une annulation ou déconnexion pendant une NAND WRITE/ERASE.</li>
+<li>Rôle de chaque champ restant de la réponse d'identification.</li>
+<li>Nombre de variantes du protocole entre les versions V1.20/V1.21 et V2.07/V2.08.</li>
+</ul>
+<h2 id="8-references-verifiables">8. Références vérifiables</h2>
+<p>Sources <strong>propres au projet</strong> : <code>bench/web/mini_cps_protocol.js</code>, <code>bench/cps_bridge.py</code>, <code>bench/cps_probe.py</code>, <code>bench/web/test_mini_cps.cjs</code>, <code>docs/validation_v11_5.json</code>, <code>docs/validation_v11_6.json</code>, <code>docs/USB_CPS_V11_5.md</code>.</p>
+<p><strong>À ne pas confondre</strong> avec le protocole CPS du firmware <strong>OpenGD77</strong> (<code>R</code>/<code>W</code>/<code>X</code>/<code>C</code>), dont certaines lettres sont identiques mais dont le format, les sous-commandes et l'adressage sont différents : <a href="https://radiofoundry.org/docs/spec/open-firmware-cps">spécification du protocole open firmware</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

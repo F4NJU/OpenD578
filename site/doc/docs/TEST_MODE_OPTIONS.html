@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OEM TEST MODE permissions — 5 November 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>OEM TEST MODE permissions — 5 November 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/TEST_MODE_OPTIONS.md">Modifier sur GitHub</a><a download href="../../raw/docs/TEST_MODE_OPTIONS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/TEST_MODE_OPTIONS.md</code></p>
+<article class="markdown-body"><h1 id="oem-test-mode-permissions-5-november-2026">OEM TEST MODE permissions — 5 November 2026</h1>
+<p>The captured PRO GD32 V1.21 radio has both service permissions disabled. The
+saved main NAND contains <code>00</code> at <code>0x02FA0002</code> and <code>08</code> at <code>0x02FA0006</code>.
+Bit zero of the latter byte is clear. Its backup candidate at <code>0x02FC0000</code>
+has the same permission values. Other bits must be preserved.</p>
+<p>This explains why holding P4 and the dial does not enter service mode on the
+captured radio. It does not establish that every startup path is modelled.</p>
+<h2 id="evidence">Evidence</h2>
+<p>VK7ZJA's D578 memory map places Local Information at <code>0x02FA0000</code>, with a
+backup candidate at <code>0x02FC0000</code>. AT Options v8 reads a 256-byte record at
+<code>0x02FA0000</code>. Static inspection of its checkbox handlers shows:</p>
+<table>
+<thead>
+<tr>
+  <th>Setting</th>
+  <th>Record offset</th>
+  <th>AT Options mask</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Full Test Mode</td>
+  <td><code>+0x02</code></td>
+  <td><code>0x01</code></td>
+</tr>
+<tr>
+  <td>Band Select</td>
+  <td><code>+0x06</code></td>
+  <td><code>0x01</code></td>
+</tr>
+</tbody>
+</table>
+<p>The V1.21 record loader at <code>0x0801ABBC</code> loads its initial 14 bytes into
+<code>0x20009872</code>. The service entry routine at <code>0x08064816</code> returns at
+<code>0x08064828</code> if both <code>record[2] == 0</code> and <code>(record[6] &amp; 1) == 0</code>.
+Its permitted path starts at <code>0x0806482A</code>. The firmware tests the complete
+full-test byte for nonzero, whereas AT Options edits its bit zero.</p>
+<p>The original instructions were executed in an isolated Cortex-M test for five
+combinations: <code>(full, band) = (0,8), (0,9), (1,8), (1,9), (0,0)</code>.
+They produced <code>closed, open, open, open, closed</code>, respectively.</p>
+<p>Sources, inspected 5 November 2026:</p>
+<ul>
+<li>Authorized mirror of Jason Reilly VK7ZJA's notes:
+<a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+<li>Original AT Options v8 distribution mirrored on that page:
+<a href="https://www.db1ig.de/media/JO_Pic/578/AT_Options_v8.zip">https://www.db1ig.de/media/JO_Pic/578/AT_Options_v8.zip</a></li>
+<li>Original spreadsheet mirrored on that page:
+<a href="https://www.db1ig.de/media/JO_Pic/578/Anytone-578-Flash-memory-map.zip">https://www.db1ig.de/media/JO_Pic/578/Anytone-578-Flash-memory-map.zip</a></li>
+</ul>
+<p>The executable was inspected statically; it was not executed or redistributed.</p>
+<h2 id="virtual-unlock-experiment-and-its-limit">Virtual-unlock experiment and its limit</h2>
+<p>A cold application reset was run with P4 and the pressed dial held, after
+setting bit zero of both permission bytes in both candidate records using only
+volatile NAND pages. Captured files and OEM instructions were not patched.</p>
+<p>At instruction 34,472,834 the firmware reached <code>0x08064816</code>, observed permission
+bytes <code>01</code> and <code>09</code>, followed the permitted path and entered <code>0x08064504</code>.
+It passed the native P4 code <code>0x17</code> and dial GPIO checks. This validates these
+inputs for that observed path.</p>
+<p>The run then stopped at instruction 34,483,713, PC <code>0x080AF7D4</code>, attempting
+to store a delay count at address <code>0x0000002C</code>. The current task pointer read
+from <code>0x20001548</code> was zero and OS-running state was not yet active. The TEST
+MODE banner and service menu were <strong>not</strong> observed. This is an unresolved
+execution discrepancy; it must not be described as successful full-test emulation
+or attributed conclusively to hardware emulation, OEM firmware or power sequencing.</p>
+<h2 id="physical-reference-supplied-by-f4egm">Physical reference supplied by F4EGM</h2>
+<p>On a second radio, connecting the supply starts the radio automatically. The
+successful service sequence is then: turn it off with Power; hold P4 and the
+dial button; pulse Power; keep P4 and the dial held while the display shows
+Booting / Please Wait, then D578UV TEST MODE, then the AnyTone logo; finally
+the service menu starts at MODE:00000. Model and firmware identification of
+this second unit remain to be recorded.</p>
+<p>This is a software power-off/on sequence after a normal boot. It is distinct
+from the bench's current application-reset startup preset. Reproduce that
+sequence before calling the reset-path discrepancy a confirmed emulator defect.
+MODE:00000 alone establishes service-mode access; full alignment access requires
+observing additional parameter pages with the zone selection keys.</p>
+<p>Do not copy calibration bytes between radios to obtain the same menu access.
+The spreadsheet's example calibration values are not measurements of either
+user radio. For initial observations, navigate parameter pages without changing
+the dial setting, changing MODE, transmitting, or saving new alignment values.</p>
+<h2 id="tools">Tools</h2>
+<p>Read only, with standard Python:</p>
+<pre><code class="language-sh">python bench/oem_options.py /path/to/nand_main_256MiB.bin
+</code></pre>
+<p>The diagnostic probe defaults to the original captured permissions. An optional
+<code>--virtual-full-test</code> flag installs the explicitly synthetic volatile fixture;
+<code>--stop-after-test-banner</code> stops only if the native text renderer returns after
+drawing TEST MODE. This diagnostic does not change the web startup presets and
+does not claim that the complete test menu already works.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>05 - Bootloader GD32 24 Kio : Flash, vecteurs, USB et politique de recuperation - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>05 - Bootloader GD32 24 Kio : Flash, vecteurs, USB et politique de recuperation</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md</code></p>
+<article class="markdown-body"><h1 id="05---bootloader-gd32-24-kio-flash-vecteurs-usb-et-politique-de-recuperation">05 - Bootloader GD32 24 Kio : Flash, vecteurs, USB et politique de recuperation</h1>
+<blockquote>
+<p><strong>RECONSTITUTION du 05/11/2026.</strong> L'original historique homonyme et le dump binaire <code>boot_A.bin/boot_B.bin</code> ne sont pas redistribues ; toutes les adresses et empreintes de cette fiche proviennent des rapports d'acquisition existants. Ce fichier n'est pas une image executable.</p>
+</blockquote>
+<h2 id="1-les-trois-demarrages-a-ne-pas-melanger">1. Les trois demarrages a ne pas melanger</h2>
+<table>
+<thead>
+<tr>
+  <th>Domaine</th>
+  <th>Cible</th>
+  <th>Action</th>
+  <th>Ce qu'on peut en conclure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Bootloader OEM dans Flash interne</td>
+  <td>GD32F303VKT6</td>
+  <td>Demarrage et installation de l'application OEM</td>
+  <td>Domaine occupe et protege de 24 Kio sur le poste analyse</td>
+</tr>
+<tr>
+  <td>« MCU Update »</td>
+  <td>Mise a jour du GD32</td>
+  <td>Etat avec LED rouge clignotante vu via SWD/USB</td>
+  <td>Descripteurs USB ne suffisent pas a reconnaitre le mode</td>
+</tr>
+<tr>
+  <td>« Boot Mode for Sct »</td>
+  <td>Sicomm SCT3258</td>
+  <td>Mise a jour/pont de communication DMR</td>
+  <td><strong>Ce n'est pas</strong> un recovery garanti du GD32</td>
+</tr>
+</tbody>
+</table>
+<p>Le GD32 comporte egalement des mecanismes de boot ROM definis par le silicium, mais l'acces physique a <code>BOOT0</code>, les niveaux au reset et la politique de protection de la carte AnyTone ne sont pas qualifies. <strong>Ne pas supposer qu'un boot ROM USB/USART est exploitable parce qu'il existe dans la datasheet.</strong></p>
+<h2 id="2-flash-physique-relevee-en-lecture-via-swd">2. Flash physique relevee en lecture via SWD</h2>
+<p>Cible : <strong>GD32F303VKT6</strong>, 3 145 728 octets de Flash et 98 304 octets de SRAM. Connexion debug reussie avec un FTDI FT232H / OpenOCD a 25 kHz en SWD, pads identifies par l'utilisateur, <strong>sans NRST cable</strong>. Lecture double passe des trois Mio et du boot :</p>
+<table>
+<thead>
+<tr>
+  <th>Plage ARM, inclusive</th>
+  <th style="text-align:right">Taille</th>
+  <th>Constat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x08000000..0x08005FFF</code></td>
+  <td style="text-align:right">24 576 octets</td>
+  <td>Boot OEM propre a cette revision</td>
+</tr>
+<tr>
+  <td><code>0x08006000..0x080FF18B</code></td>
+  <td style="text-align:right">1 020 300 octets</td>
+  <td>Image application <strong>GD V1.21 CDD</strong> identique au dump</td>
+</tr>
+<tr>
+  <td><code>0x080FF18C..0x080FF19F</code></td>
+  <td style="text-align:right">20 octets</td>
+  <td>Zeros hors fichier CDD</td>
+</tr>
+<tr>
+  <td><code>0x080FF1A0..0x082F57FF</code></td>
+  <td style="text-align:right">2 057 824 octets</td>
+  <td><code>FF</code> lors de deux captures, <strong>pas libre garanti</strong></td>
+</tr>
+<tr>
+  <td><code>0x082F5800..0x082FF81F</code></td>
+  <td style="text-align:right">40 992 octets</td>
+  <td>Donnees constructeur non-FF</td>
+</tr>
+<tr>
+  <td><code>0x082FF820..0x082FFFFF</code></td>
+  <td style="text-align:right">2 016 octets</td>
+  <td>Derniere portion FF, zone OEM dependante</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Des editions AnyTone anterieures</strong> etudiees par RadioFoundry emploient un bootloader de 16 Kio et une application a <code>0x08004000</code>. Ces adresses sont <strong>incompatibles</strong> avec le releve de notre boot 24 Kio / app <code>0x08006000</code>. Ne pas les recopier pour cette image.</p>
+<h2 id="3-vecteurs-et-routines-retrouvees-gd-v121">3. Vecteurs et routines retrouvees (GD V1.21)</h2>
+<table>
+<thead>
+<tr>
+  <th>Adresse</th>
+  <th>Role analyse</th>
+  <th>Force de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x08000000</code></td>
+  <td>Base Flash et table vecteur boot</td>
+  <td>Dump SWD, code statique</td>
+</tr>
+<tr>
+  <td>boot MSP <code>0x20001E50</code></td>
+  <td>Valeur de pile initiale du boot</td>
+  <td>Vecteur lu</td>
+</tr>
+<tr>
+  <td>boot Reset pointeur <code>0x080004D9</code></td>
+  <td>Reset_Handler Thumb du boot, code a <code>0x080004D8</code></td>
+  <td>Vecteur lu</td>
+</tr>
+<tr>
+  <td><code>0x08006000</code></td>
+  <td>Table vecteur de l'application V1.21</td>
+  <td>Dump et CDD</td>
+</tr>
+<tr>
+  <td>app Reset_Handler <code>0x08006D38</code></td>
+  <td>Initialisation application</td>
+  <td>Analyse statique</td>
+</tr>
+<tr>
+  <td><code>0x08006384/0x08006388</code></td>
+  <td>Changement de VTOR dans l'application</td>
+  <td>Analyse statique</td>
+</tr>
+<tr>
+  <td><code>0x0800436E</code></td>
+  <td>Routine boot FMC candidate</td>
+  <td>Analyse statique, <strong>pas une API qualifiee</strong></td>
+</tr>
+<tr>
+  <td><code>0x0808CE72</code></td>
+  <td>Routine d'alimentation Flash haute depuis des donnees NAND</td>
+  <td>Analyse statique, risque de reecriture</td>
+</tr>
+<tr>
+  <td><code>0x0800400E</code></td>
+  <td>Ancrage de transfert mentionne dans rapports historiques</td>
+  <td><strong>A revalider avec dump</strong>, ne pas executer</td>
+</tr>
+</tbody>
+</table>
+<p>La borne de securite reperee dans le boot teste un <strong>debut d'adresse</strong> <code>0x08000000 &lt;= r8 &lt; 0x08100000</code> ; elle <strong>ne prouve pas</strong> qu'une longueur de transfert est bornee ni que le boot protege des secteurs par construction. Le jeu d'instructions et les littéraux du boot doivent etre examines dans un environnement isolement, jamais rejoues directement sur une carte client.</p>
+<h2 id="4-empreintes-attestant-les-sources-proprietaires-non-incluses">4. Empreintes attestant les sources proprietaires (non incluses)</h2>
+<table>
+<thead>
+<tr>
+  <th>Source originale</th>
+  <th style="text-align:right">Taille</th>
+  <th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Boot GD32 physique</td>
+  <td style="text-align:right">24 576</td>
+  <td><code>c098c74d2a979e162d6dd901c9d59d7ed3f0a4c9d526a168a1db78fba316fdeb</code></td>
+</tr>
+<tr>
+  <td>Flash GD32 physique double passe</td>
+  <td style="text-align:right">3 145 728</td>
+  <td><code>e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e</code></td>
+</tr>
+<tr>
+  <td>Application OEM GD V1.21 <code>.CDD</code></td>
+  <td style="text-align:right">1 020 300</td>
+  <td><code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code></td>
+</tr>
+<tr>
+  <td>Application OEM GD V1.20</td>
+  <td style="text-align:right">1 020 096</td>
+  <td><code>1cdf1817f8abbbee72901357316953aea28763e192fe35b913c82520db31453b</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le depot n'expedie pas les fichiers OEM, les dumps ou les patches binaires pouvant contenir du code proprietaire. Les hashes ne remplacent pas les octets : une revue independante exige la copie authentique sous controle du proprietaire du poste.</p>
+<h2 id="5-usb-normal-cps-et-update">5. USB normal, CPS et UPDATE</h2>
+<p>Le firmware OEM expose USB <strong>VID <code>28E9</code>, PID <code>018A</code></strong>, interface CDC ACM <strong>GD32 Virtual ComPort in FS Mode</strong>, numero de serie rapporte <code>000000010000</code>. Cet identifiant peut se retrouver dans plusieurs modes ; <strong>ne pas faire de choix de recovery selon VID/PID</strong>.</p>
+<p>Le protocole CPS <code>PROGRAM</code>/<code>R</code>/<code>W</code>/<code>END</code> a ete decodue dans le banc, mais il s'agit des <strong>commandes de codeplug</strong> et non des ordres de reprogrammation MCU. RadioFoundry documente dans la famille OEM un protocole <code>UPDATE</code> suivi de paquets de 32 octets et checksum ; nous n'avons pas qualifie une session complete d'installation sur le poste physique. Ne pas envoyer <code>UPDATE</code> en utilisant le banc CPS comme s'il s'agissait d'une commande de lecture.</p>
+<p>Le terme <strong>Boot Mode for Sct</strong> correspond a un pont vers la Flash interne du baseband DMR. Le MCU peut dans ce mode servir de transport USB &lt;-&gt; HPI, et les options de mise a jour SCT n'effacent pas necessairement le bootloader GD32. Les details restent distincts dans <code>04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md</code>.</p>
+<h2 id="6-modele-de-developpement-opend578-principes-bloquants">6. Modele de developpement OpenD578 : principes bloquants</h2>
+<p>Un firmware alternatif autonome doit posseder une table de vecteurs, ses propres horloges, GPIO, USB, interruptions, watchdog, pilotes NAND, LCD, clavier, GPS, codec et SCT. Les <strong>adresses de routines 0x080... et variables RAM 0x200... OEM n'ont aucun sens apres remplacement</strong>. Pour un patch additif dans l'application OEM, il faut au contraire documenter et verifier toute ABI particuliere, ce qui n'est pas fait.</p>
+<p>Conditions de publication d'une premiere image chargeable :</p>
+<ol>
+<li><strong>Carte exacte</strong> (PRO/PLUS, suffixe et MCU, version OEM) identifiee.</li>
+<li>Source OEM authentifiee, sauvegarde Flash/NAND, checksums et lecture de verification ; une NAND avec pages ECC20 ne constitue pas a elle seule une sauvegarde restaurable.</li>
+<li>Secteur Flash destine a OpenD578 <strong>officiellement reserve ou prouve non utilise</strong>, avec effacement sans collisions de pages ni ressources CJK OEM.</li>
+<li>Vecteurs, position RAM/pile/heap et consommation en pleine charge qualifies ; les 3 872 derniers octets de RAM non initialises ne sont <strong>pas</strong> une preuve d'espace libre.</li>
+<li>Recovery <strong>independant</strong> teste sur echec, coupure et image invalide. La lecture SWD ne prouve pas qu'un restore marche.</li>
+<li>Tests de zero TX involontaire, watchdog, GPIO tri-state a boot, pas de PA enable ni DAC RF en etat inconnu.</li>
+<li>Tests de retour arriere, provenance et identification strictes de la version avant toute operation d'ecriture.</li>
+</ol>
+<p>Pour l'instant : <strong>NO_GO</strong> pour une image OEM modifiee, un blob phase60 ou une nouvelle application flashable. Le mode satellite Phase60 est <strong>pass-through inactif</strong>, avec <code>.bss</code> placee volontairement a <code>0x30000000</code> comme garde-fou.</p>
+<h2 id="7-liste-des-preuves-a-recuperer-si-disponibles">7. Liste des preuves a recuperer si disponibles</h2>
+<ul>
+<li><code>boot_A.bin</code>, <code>boot_B.bin</code>, <code>full_flash_pass1.bin</code>, <code>full_flash_pass2.bin</code> avec hashes et journal OpenOCD.</li>
+<li><code>D578_GD32_Brochage_KiCad_V0_3.zip</code>, original V0.3, plutot que le nouveau symbol KiCad reconstruit sous <code>hardware/kicad/</code>.</li>
+<li><code>D578_SAT_V121_EXP06_PHASE60_SAT_CHANNEL_NONFLASHABLE_2026-11-03.zip</code> et CDD d'origine, sans redistribution publique OEM.</li>
+<li>Traces USB du processus Update <strong>en lecture seule et anonymisees</strong>, puis confirmation d'un recovery physique avant toute ecriture.</li>
+</ul>
+<h2 id="8-sources">8. Sources</h2>
+<ul>
+<li>Projet : <code>../02_CPU_FLASH_BOOT_USB_SWD.md</code>, <code>../04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>, <code>../05_SATELLITE_CODE_INTEGRATION_EXP06.md</code>, <code>../cps/PROTOCOLE_OEM_V121.md</code>.</li>
+<li>GigaDevice GD32F303 : <a href="https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32f303vkt6">https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32f303vkt6</a> ; datasheet LQFP100 : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a>.</li>
+<li>RadioFoundry comparaison bootloader AnyTone et SCT : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a> (autres variantes non transposables telles quelles).</li>
+<li>Comparatif OEM D578 et recovery : <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>V11.3: experimental firmware and remaining board coverage - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>V11.3: experimental firmware and remaining board coverage</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/HARDWARE_COVERAGE.md">Modifier sur GitHub</a><a download href="../../raw/docs/HARDWARE_COVERAGE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/HARDWARE_COVERAGE.md</code></p>
+<article class="markdown-body"><p>V11.5 update: CDC host enumeration, COM/PTY transport and an optional NAND
+checkpoint are documented in <a href="USB_CPS_V11_5.html">USB_CPS_V11_5.md</a>.
+The V11.3 baseline and its original tests follow below.</p>
+<h1 id="v113-experimental-firmware-and-remaining-board-coverage">V11.3: experimental firmware and remaining board coverage</h1>
+<p>The web bench now exposes the independent hardware runner. Uploading a binary
+selects this mode. It reads GPIO/register transactions without V1.21 function
+addresses, signature anchors or OEM SRAM interpretations. Executable SRAM and
+all physically mapped Flash remain available after a valid vector handoff.</p>
+<p>This is a model of the known D578 board, not a guarantee that every possible
+program or peripheral mode is supported. Having a component's binary does not
+by itself provide a working emulator of its internal CPU, registers or timing.</p>
+<h2 id="selecting-a-run">Selecting a run</h2>
+<p>Choose <strong>Matériel · firmware expérimental</strong> and the uploaded image. Use a
+synthetic blank NAND when testing an original standalone driver. Choose captured
+NAND when the program needs the original memories, fonts or alignment records.
+Captured NAND inputs stay read-only; program/erase operations use volatile pages.</p>
+<p>Raw images normally start at <code>0x08006000</code>; the placement selector also accepts
+<code>0x08000000</code>. A full 3 MiB image normally uses the application vectors at
+<code>0x08006000</code>; bootloader reset selects vectors at <code>0x08000000</code>. Ambiguous raw
+images require the correct explicit load address. No historical RAM allocation
+is used as an execution or data boundary.</p>
+<p>The OEM analysis mode and its authenticated ready recording remain available.
+Its RAM labels and function hooks are not silently applied to another image.
+Hardware-mode supply inputs are raw ADC samples: the OEM inverse voltage
+conversion is deliberately not assumed for a new firmware.</p>
+<h2 id="implemented-and-unimplemented-behavior">Implemented and unimplemented behavior</h2>
+<table>
+<thead>
+<tr>
+  <th>Part</th>
+  <th>Available</th>
+  <th>Remaining limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MCU / memory</td>
+  <td>Cortex-M4 instruction execution, physical Flash/alias and 96 KiB SRAM, executable SRAM, basic thread/handler contexts</td>
+  <td>Nested/FP exceptions, SVC integration, all Flash program/erase modes and alias synchronization</td>
+</tr>
+<tr>
+  <td>GPIO / inputs</td>
+  <td>Pin-level LCD, NAND, RF and serial-control interactions; front keys, encoder and Power; EXTI and software-pended interrupts</td>
+  <td>Complete electrical pull/load behavior and all alternate functions</td>
+</tr>
+<tr>
+  <td>Sleep</td>
+  <td>WFI wait and resumable external interrupts; modeled SysTick/timer/UART wake deadlines; software event input</td>
+  <td>All deep-sleep clock domains and event-register edge cases</td>
+</tr>
+<tr>
+  <td>Clock / RTC / timers</td>
+  <td>Known RCU registers, ideal oscillator readiness, known timers and backup registers</td>
+  <td>Cycle-accurate instruction timing and every timer mode</td>
+</tr>
+<tr>
+  <td>ADC / DMA</td>
+  <td>Regular ADC0 scan and DMA0 channel 0, synthetic inputs and verified writes, batched with destination synchronization</td>
+  <td>Other DMA engines/channels, injected conversions and all ADC interrupt modes</td>
+</tr>
+<tr>
+  <td>LCD / lighting</td>
+  <td>Actual controller commands and pixels from GPIO edges; lighting register transactions</td>
+  <td>Measured electrical/color characteristics</td>
+</tr>
+<tr>
+  <td>NAND</td>
+  <td>Captured or synthetic backing, commands, volatile program/erase, captured ECC status</td>
+  <td>Analog cell behavior, generated ECC parity, raw/special read modes</td>
+</tr>
+<tr>
+  <td>RF banks</td>
+  <td>Digital register transactions and synthetic carrier/CTCSS/RSSI/noise status</td>
+  <td>RF/PLL analog behavior, frequency-selective signals, calibrated watts and DMR demodulation</td>
+</tr>
+<tr>
+  <td>UART / GPS / microphone</td>
+  <td>Scheduled raw RX bytes, transmit and interrupts; synthetic PMTK/NMEA and microphone frames</td>
+  <td>Internal GPS/BT/microphone MCU firmware execution and every command</td>
+</tr>
+<tr>
+  <td>USB</td>
+  <td>Virtual CONNECT/RESET/SETUP/OUT/IN tokens, single-buffer PMA, ACK/NAK/STALL and low-priority IRQ20</td>
+  <td>Real host/device passthrough, a full host stack, CPS protocol, isochronous/double-buffer endpoints</td>
+</tr>
+<tr>
+  <td>SCT3258</td>
+  <td>Explicit bootstrap contract and documented HPI control/codec packets</td>
+  <td>DSP and AMBE firmware execution, voice/RF processing and unknown packet variants</td>
+</tr>
+<tr>
+  <td>AIC3204</td>
+  <td>Known codec configuration packets/pages through the SCT path</td>
+  <td>PCM/I2S signal processing and analog audio</td>
+</tr>
+<tr>
+  <td>Watchdog / reset</td>
+  <td>FWDGT key/protection/prescaler/reload/feed and expiry; AIRCR reset requests</td>
+  <td>Automatic MCU restart; reset is a reported event, not a fabricated successful boot</td>
+</tr>
+<tr>
+  <td>APRS / DMR</td>
+  <td>Existing control paths and observable requests</td>
+  <td>Modulation DMA and waveforms, DMR/baseband execution</td>
+</tr>
+</tbody>
+</table>
+<h2 id="performance-and-execution-evidence">Performance and execution evidence</h2>
+<p>The native scheduler now also serves independent hardware mode. Its trap list
+contains CPU sleep/event and interrupt-mask boundaries, not OEM function PCs.
+It counts executed instructions and services modeled device deadlines. Hardware
+mode keeps independent GPIO sampling; it does not enable the old native NAND
+read shortcut that assumes the OEM helper's PC and R1 register.</p>
+<p>Reference/native tests compare RAM and device state, including ADC DMA while
+the CPU reads its destination. Original Thumb programs also exercise code at an
+old OEM hook address, high/executable SRAM, WFI wake by SysTick/Power, and USB
+SETUP delivered to a firmware interrupt handler. A live HTTP worker test checks
+startup, screen state, coverage and stopping without manufacturer input files.</p>
+<p>The example loop's host speed improvement is not a claim about full OEM boot,
+RF processing speed or cycle accuracy. Optional block coverage adds overhead.</p>
+<h2 id="systematic-routine-review">Systematic routine review</h2>
+<p><code>firmware_inventory.py</code> records vectors, direct BL candidates and literal values
+in MCU peripheral regions. The current scan sees 3,343 candidate entries in the
+captured full V1.21 Flash, and 3,042 in the V2.08 application. These inputs cover
+different regions, and scans also encounter data. The counts are neither proven
+functions nor a count of routines understood. Indirect calls, TBB/TBH, computed
+addresses and code/data separation still need dedicated analysis.</p>
+<p><code>--coverage</code> records entered Unicorn translation blocks. It does not claim that
+every instruction in a translated block completed: MMIO or an exception may
+stop a block partway through. The UI exports the run report and selected-image
+inventory for targeted follow-up of actual model boundaries.</p>
+<pre><code class="language-sh">python bench/run_hardware.py experimental.bin --engine native --coverage
+python bench/firmware_inventory.py experimental.bin --out inventory.json
+</code></pre>
+<h2 id="power-cycle-findings">Power-cycle findings</h2>
+<p>The OEM Power-off scenario previously stopped when SCT HRDN was strobed with an
+empty FIFO even though the CPU did not sample its data bus. The model now defers
+that boundary until a real input-register sample; an empty control strobe is
+recorded. Unknown packets and empty data samples still stop explicitly.</p>
+<p>With that change, the same Power-off execution reaches the MCU's free watchdog.
+After implementing its registers and timing, this run reaches an explicit FWDGT
+reset request at PC <code>0x0808A150</code>, instruction 68,396,285. Automatic reset/reboot
+has not been implemented, and the complete Power-off/P4+dial/Power-on service
+sequence is still unvalidated. Original calibration captures remain unchanged.</p>
+<h2 id="primary-references">Primary references</h2>
+<ul>
+<li>GigaDevice GD32F30x User Manual Rev3.0, USBD/FWDGT/NVIC chapters:
+<a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev3.0.pdf</a></li>
+<li>Arm Cortex-M4 Devices Generic User Guide, basic exceptions and WFI/WFE:
+<a href="https://developer.arm.com/documentation/dui0553/latest/">https://developer.arm.com/documentation/dui0553/latest/</a></li>
+<li>GigaDevice distributed USB driver implementation, for PMA geometry:
+<a href="https://github.com/CommunityGD32Cores/GD32Firmware/blob/main/GD32F30x/GD32F30x_usbd_library/usbd/Source/usbd_lld_core.c">https://github.com/CommunityGD32Cores/GD32Firmware/blob/main/GD32F30x/GD32F30x_usbd_library/usbd/Source/usbd_lld_core.c</a></li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

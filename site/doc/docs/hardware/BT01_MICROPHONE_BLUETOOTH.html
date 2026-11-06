@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Microphone sans fil AnyTone BT01 : fonctions, protocole a retrouver et integration - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Microphone sans fil AnyTone BT01 : fonctions, protocole a retrouver et integration</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BT01_MICROPHONE_BLUETOOTH.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BT01_MICROPHONE_BLUETOOTH.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/BT01_MICROPHONE_BLUETOOTH.md</code></p>
+<article class="markdown-body"><h1 id="microphone-sans-fil-anytone-bt01-fonctions-protocole-a-retrouver-et-integration">Microphone sans fil AnyTone BT01 : fonctions, protocole a retrouver et integration</h1>
+<p><strong>Cibles :</strong> AnyTone D578UV PRO/PLUS. Le BT01 est un terminal externe <strong>avec son propre firmware, afficheur, clavier, batterie, microphone et haut-parleur</strong>, pas seulement une capsule audio BT. La liaison vers le poste peut etre <strong>Bluetooth</strong> ou <strong>filaire par cable 4 m</strong> ; ces deux modes ne se confondent pas avec le protocole du microphone d'origine.</p>
+<h2 id="1-architecture-des-flux">1. Architecture des flux</h2>
+<pre><code class="language-text">                     Liaison Bluetooth 2,4 GHz
+D578 [GD32] -- UART? -- [module ET12]  &lt;-----------------&gt; [BT01]
+   |                |                                         |
+   |                +--- voies audio a tracer                +-- Afficheur, clavier
+   |                                                          +-- Micro et haut-parleur
+   |                                                          +-- PTT, P1/P2/P3, charge USB
+   |                                                          +-- MCU et firmware propres
+   +------------------ port microphone / cable 4 m ----------+
+</code></pre>
+<p>Le manuel qualifie une synchronisation d'etat/menus entre BT01 et radio. <strong>Aucune trame binaire du protocole de prise de controle d'ecran n'est documentee ici.</strong> Les paquets <code>41 ... 06</code> et <code>53 ... 06</code> concernent le microphone filaire standard et <strong>ne sont pas automatiquement ceux du BT01</strong>, meme si une prise ressemble a un RJ45.</p>
+<h2 id="2-etats-fonctionnels-constructeur">2. Etats fonctionnels constructeur</h2>
+<table>
+<thead>
+<tr>
+  <th>Etat BT01</th>
+  <th>Etat radio attendu</th>
+  <th>Donnees a observer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Alimentation BT01, choix <code>BT MODE</code>/<code>CABLE MODE</code></td>
+  <td>Aucun lien ou recherche</td>
+  <td>Niveau et version des deux terminaux.</td>
+</tr>
+<tr>
+  <td><code>BT MODE</code>, « NO DEVICE CONNECTED »</td>
+  <td>Recherche BT / appairage</td>
+  <td>Noms d'appairage, ouverture de session ET12.</td>
+</tr>
+<tr>
+  <td><code>ALL DATA CHECKING</code></td>
+  <td>Synchronisation des menus et parametres</td>
+  <td>Quantite de donnees, ordre/CRC, timeout, reprise, source exacte.</td>
+</tr>
+<tr>
+  <td><code>EXTERNAL BT MODE</code></td>
+  <td>Mode de controle distant</td>
+  <td>Verrouillage des touches/ecran du poste, gestion PTT, RX/TX, canaux.</td>
+</tr>
+<tr>
+  <td><code>EXTERNAL CABLE MODE</code></td>
+  <td>BT01 connecte en filaire</td>
+  <td>Flux du connecteur microphone : niveaux et trames differents possibles.</td>
+</tr>
+<tr>
+  <td>Deconnexion / extinction BT01</td>
+  <td>Reprise de controle local du poste</td>
+  <td>Relachement PTT, retour HP/micro, UI et etat BT.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Point fonctionnel verifie par le guide</strong> : en mode BT01 connecte, plusieurs commandes facade du D578 deviennent indisponibles et son affichage est limite ; la voie audio et certains modes (notamment cross-band) subissent des contraintes de coexistence. Un firmware alternatif doit prevoir un <em>mode distant exclusif</em> et une sortie de secours.</p>
+<h2 id="3-organes-et-reglages-a-traiter">3. Organes et reglages a traiter</h2>
+<ul>
+<li><strong>PTT</strong> local BT01, touche d'emission ; securite si perte radio ou batterie faible.</li>
+<li><strong>Microphone et HP</strong> BT01 ; gains RX/TX independants selon firmware et codeplug (<code>RfBT Mic Gain</code>, <code>RfBT SPK Gain</code>, <code>H-BT Mic Gain</code>).</li>
+<li><strong>P1/P2/P3</strong> programmables ; appuis bref, long et tres long, gestion au niveau programme radio.</li>
+<li><strong>CH+/-</strong>, zones, numerotation de canal, saisie VFO, menus; coherence de l'ecran pendant dual-watch, DMR et satellite.</li>
+<li><strong>POWER</strong> et synchronisation arret du poste selon option CPS (<code>BT Synchronization Shutdown Host</code>). Ne jamais couper l'alimentation du GD32 sans une sequence validee pour cette revision.</li>
+<li><strong>USB-C</strong> de charge et de mise a jour BT01 : ne pas confondre avec le port USB du D578.</li>
+<li><strong>RJ45/cable 4 m</strong> : connexion alternative, a qualifier electriquement avant tout echange de paquets hors manuel.</li>
+</ul>
+<h2 id="4-gestion-des-firmwares">4. Gestion des firmwares</h2>
+<p>Le guide constructeur indique des versions distinctes de <strong>firmware principal D578</strong>, <strong>firmware ET12 du poste</strong>, <strong>firmware BT01</strong>, <strong>CPS</strong> et parfois <strong>carte APRS PLUS</strong>. Ne pas charger un firmware ET12 dans le BT01 ni un firmware BT01 dans le GD32. Le BT01 dispose de son propre mode de mise a jour par USB et de son jeu de fichiers constructeur.</p>
+<h2 id="5-travail-a-faire-dans-le-firmware-v121-et-le-banc">5. Travail a faire dans le firmware V1.21 et le banc</h2>
+<ol>
+<li>Extraire les points d'entree « External BT Mode », « ALL DATA CHECKING », transitions vers la gestion distante, desactivation de touches P1..P6, synchronisation A/B.</li>
+<li>Trouver les routines de serialisation des changements d'etat et de commandes BT01, en partant des chaines disponibles et des xrefs et en distinguant le filaire du Bluetooth.</li>
+<li>Capturer passivement UART du module ET12 et l'interface filaire BT01 pour comparaison des flux avec les meme actions.</li>
+<li>Decoupler les pilotes : <code>bt_transport.c</code>, <code>bt01_remote_ui.c</code>, <code>bt_audio.c</code>, <code>bt_ptt.c</code> et configuration stockee de maniere propre au firmware alternatif.</li>
+<li>Ajouter des cas de test : reconnexion, perte de signal, boutons maintenus, commande PTT pendant 2 VFO, sat/Doppler, codeplug non pret, audio en cours, retour UI local, arret radio.</li>
+</ol>
+<p>Pour un firmware alternatif <strong>tout PTT distant doit tomber a OFF en cas de perte de liaison, reset, timeout ou changement de source non qualifie</strong>. Un etat de touche presse ne doit jamais etre conserve silencieusement apres la deconnexion.</p>
+<h2 id="6-sources">6. Sources</h2>
+<ul>
+<li>Guide officiel BT01 2022 : <a href="https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf">https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf</a></li>
+<li>Notice d'utilisation BT01 : <a href="https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_BT_Display_Mic_Instructions.pdf">https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_BT_Display_Mic_Instructions.pdf</a></li>
+<li>FCC ID BT01 et photographies internes : <a href="https://fccid.io/T4K-BT01">https://fccid.io/T4K-BT01</a></li>
+<li>Parametres BT01 du codeplug : <a href="https://static.dm3mat.de/qdmr/manual/ch04s04.html">https://static.dm3mat.de/qdmr/manual/ch04s04.html</a></li>
+<li>Comparaison avec le microphone filaire d'origine : <a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Notice microphone V11.8</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

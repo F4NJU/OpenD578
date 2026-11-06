@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Photographies et vues de cartes - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Photographies et vues de cartes</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/PHOTOS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/PHOTOS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/PHOTOS.md</code></p>
+<article class="markdown-body"><h1 id="photographies-et-vues-de-cartes">Photographies et vues de cartes</h1>
+<p>La vue initiale est <strong>une carte logique eclatee</strong>, non un plan d'implantation mesure. Le support photo accepte les faces de PCB et les zones cliquables, mais aucun emplacement ni piste n'a ete invente en l'absence de photographie calibree de la carte GD32 V1.21.</p>
+<h2 id="references-photographiques-publiques">References photographiques publiques</h2>
+<ul>
+<li><a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">FCC T4K-D578UV, photographies internes</a></li>
+<li><a href="https://fccid.io/T4K-D578UVIII/">FCC T4K-D578UVIII, dossier</a></li>
+<li><a href="https://radio.carstenbauer.net/578techmods.htm">D578 : vues de la carte de facade et du GPS</a></li>
+</ul>
+<p>Les vues FCC des premiers modeles ne doivent pas etre considerees comme un plan de la revision GD32 sans confrontation aux inscriptions des PCB. Les photos externes sont liees, pas republiees dans cette archive sans verification des droits de reproduction.</p>
+<h2 id="ajouter-une-photo-sur-le-site">Ajouter une photo sur le site</h2>
+<ol>
+<li>Deposer l'image dont on dispose des droits dans <code>hardware/photos/d578uv-pro-gd32-v121/</code>.</li>
+<li>La photo apparait automatiquement dans l'onglet Photos. Pour ajouter des zones cliquables, ajouter un objet a <code>hardware/photos/d578uv-pro-gd32-v121/manifest.json</code> avec <code>file</code>, <code>title</code>, <code>side</code>, <code>source</code>, <code>note</code>.</li>
+<li>Ajouter des <code>hotspots</code> en coordonnees pourcentage <code>{node, x, y, w, h}</code> apres verification sur image.</li>
+<li>Pousser le commit sur GitHub. Le site reconstruit et presente la photo et ses zones cliquables automatiquement.</li>
+</ol>
+<p>L'interface de clic renvoie aux memes fiches composant que la vue eclatee. L'image et les zones cliquables sont maintenues dans le meme depot.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

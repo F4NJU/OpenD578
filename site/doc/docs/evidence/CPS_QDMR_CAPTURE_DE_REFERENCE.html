@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS AnyTone D578 : reference externe qdmr et protocole observe dans le banc - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Preuves et tracabilite</div>
+<div class="doc-heading"><h1>CPS AnyTone D578 : reference externe qdmr et protocole observe dans le banc</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md</code></p>
+<article class="markdown-body"><h1 id="cps-anytone-d578-reference-externe-qdmr-et-protocole-observe-dans-le-banc">CPS AnyTone D578 : reference externe qdmr et protocole observe dans le banc</h1>
+<h2 id="un-echantillon-public-independant-du-simulateur-opend578">Un echantillon public, independant du simulateur OpenD578</h2>
+<p>Le manuel qdmr, chapitre 8, exemple 8.2, publie une session <strong>de lecture de codeplug sur un AT-D578UV</strong>. Le protocole utilise les commandes ASCII <code>PROGRAM</code>, <code>R</code> et des reponses commençant par <code>W</code>. Extrait technique minimal reecrit :</p>
+<pre><code class="language-text">PC &gt;  50 52 4F 47 52 41 4D           # PROGRAM
+D578&lt;  51 58 06                       # QX + 06
+PC &gt;  02                             # identification
+D578&lt;  49 44 35 37 38 55 56 ... 06   # ID578UV...
+PC &gt;  52 02 64 00 00 10              # R addr=0x02640000, 16 octets
+D578&lt;  57 02 64 00 00 10 [16] CC 06  # W addr/longueur/donnees/checksum/end
+</code></pre>
+<p>La documentation du banc OpenD578 V11.5/V11.6 reconnait le meme type d'echange ; le resultat est donc <strong>corrobore par une source tiers</strong>, et non uniquement par des reponses synthetiques. L'ID <code>V110</code> de l'exemple externe ne doit pas etre transforme en identifiant de firmware <code>V1.21</code> : les champs d'identification, versions CPS et version d'image sont distincts.</p>
+<h2 id="format-et-checksum">Format et checksum</h2>
+<p>| Requete <code>R</code> | Reponse <code>W</code> |
+| --- | --- |
+| <code>0x52 | addrBE32 | N8</code> | <code>0x57 | addrBE32 | N8 | data[N] | sum8 | 0x06</code> |</p>
+<p>Dans les trames publiques et les traces du banc, <code>sum8 = (sum(octets adresse 4) + N + sum(data[N])) &amp; 0xff</code>, hors marqueur <code>W</code>. Une reponse valide prouve un bloc de donnees au sens du protocole ; elle ne prouve pas une NAND physiquement saine si le chipset remonte un statut ECC non corrige.</p>
+<h2 id="particularites-qui-doivent-rester-en-tests-separes">Particularites qui doivent rester en tests separes</h2>
+<ul>
+<li>Le CPS Windows et les outils libres ne traversent pas necessairement les regions NAND dans le meme ordre ni avec les memes options.</li>
+<li>L'ecriture OEM <code>W ... checksum ... 06</code>, son ACK et <code>END</code> ont ete modelises avec tamponnement : <strong>ACK avant persistance possible</strong>.</li>
+<li>Le mini-CPS utilise la zone 0x00800000 et edite <strong>seulement le nom de canaux de 64 octets</strong>, offset +0x23, a l'interieur des 128 premiers enregistrements ; il n'est pas un CPS complet.</li>
+<li>Les offsets et registres de calibration ne doivent pas etre rendus editables par ce front-end tant que leur taille, CRC, redondance et restauration ne sont pas qualifies.</li>
+<li>Les captures brutes de CPS du poste reel, lecture puis ecriture, manquent a la publication. Des logs contenant indicatifs, ID DMR ou contacts doivent etre anonymises avant publication.</li>
+</ul>
+<h2 id="tests-locaux-et-preuves">Tests locaux et preuves</h2>
+<p><code>tools/cps_trace_audit.py</code> controle les traces de paquets, <code>tools/test_cps_trace_audit.py</code> ses tests. <code>bench/cps_bridge.py</code>, <code>bench/usb_cdc.py</code>, <code>bench/web/mini_cps_protocol.js</code> et <code>bench/web/test_mini_cps.cjs</code> permettent la reproduction sur banc. Il n'y a <strong>aucun test de programmation d'un poste physique</strong> dans cette documentation.</p>
+<p>Sources : <a href="https://static.dm3mat.de/qdmr/manual/ch08.html">https://static.dm3mat.de/qdmr/manual/ch08.html</a> ; <a href="https://github.com/hmatuschek/qdmr">https://github.com/hmatuschek/qdmr</a> ; <a href="https://github.com/dmr-tools/codeplugs">https://github.com/dmr-tools/codeplugs</a> ; <code>docs/cps/PROTOCOLE_OEM_V121.md</code>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

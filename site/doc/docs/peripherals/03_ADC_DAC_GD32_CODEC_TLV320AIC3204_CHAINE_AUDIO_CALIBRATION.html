@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>03 - ADC/DAC : GD32 ADC0, BH2226FV, TLV320AIC3204 et chemin audio - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>03 - ADC/DAC : GD32 ADC0, BH2226FV, TLV320AIC3204 et chemin audio</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md</code></p>
+<article class="markdown-body"><h1 id="03---adcdac-gd32-adc0-bh2226fv-tlv320aic3204-et-chemin-audio">03 - ADC/DAC : GD32 ADC0, BH2226FV, TLV320AIC3204 et chemin audio</h1>
+<blockquote>
+<p><strong>RECONSTITUTION du 05/11/2026.</strong> Aucun des octets du document historique de meme nom n'est pretendu recuperer. On separe ici des circuits bien distincts, leurs bus, les acces OEM releves et les inconnues.</p>
+</blockquote>
+<h2 id="1-ne-pas-confondre-quatre-fonctions">1. Ne pas confondre quatre fonctions</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>Composant</th>
+  <th>Destination et protocoles</th>
+  <th>Etat sur D578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>ADC tension lente</td>
+  <td><strong>ADC0 interne au GD32F303VKT6</strong></td>
+  <td>Echantillonnage de contacts et potentiometres par GPIO analogiques + DMA</td>
+  <td>Configuration et voies de lecture etudiees dans OEM/banc</td>
+</tr>
+<tr>
+  <td>DAC 8 sorties controle analogique</td>
+  <td><strong>ROHM BH2226FV-E2</strong> (marquage H2226, SSOP-B16 confirme utilisateur)</td>
+  <td>8 sorties 8 bits, mots serie 12 bits / interface 3 fils</td>
+  <td>Composant identifie, destination des 8 sorties inconnue</td>
+</tr>
+<tr>
+  <td>CODEC PCM/analogique</td>
+  <td><strong>TLV320AIC3204</strong> TI</td>
+  <td>ADC + DAC audio, filtres, gains, interface serie I2S et commandes registre</td>
+  <td>Composant de famille D578 ; codec modele via SCT3258, pinout sur PCB a confirmer</td>
+</tr>
+<tr>
+  <td>Controle du niveau analogique</td>
+  <td><strong>UTC U2429G</strong></td>
+  <td>Attenuateur 2 canaux et commande 11 bits CLOCK/DATA</td>
+  <td>Identification du composant, GPIO et trajets exacts inconnus</td>
+</tr>
+</tbody>
+</table>
+<p>Le <strong>SGM8272</strong> est un double amplificateur operationnel analogique et le <strong>MC34119G</strong> un amplificateur de haut-parleur, pas des bus de registres a piloter directement. Les amplis <strong>YD1517P (PRO)</strong> et <strong>PA1517G (PLUS)</strong> restent des elements de puissance audio a commander par voies analogiques / standby.</p>
+<h2 id="2-adc0-du-gd32-et-acquisition-dma">2. ADC0 du GD32 et acquisition DMA</h2>
+<ul>
+<li>Base peripherique ADC0 retrouvee : <code>0x40012400</code> ; des traces du convertisseur atteignent <code>0x4001244C</code>.</li>
+<li>Les entrees de facade de la revision etudiee sont compatibles avec <code>PB0 ADC8</code>, <code>PB1 ADC9</code> pour des reseaux de touches, <code>PC2 ADC12</code>, <code>PC5 ADC15</code> pour les deux potentiometres de volume.</li>
+<li>L'attribution physique A/B et le tableau complet <code>seuil ADC -&gt; touche</code> doivent suivre les rapports d'acquisition ; une correspondance logicielle n'est pas une mesure de continuite.</li>
+<li>Le banc possede <code>bench/adc_dma.py</code>, <code>bench/emulate_adc_v121.py</code>, <code>bench/lab_inputs.py</code> et des tests de scenarios. Le test ADC <strong>ne represente pas</strong> une conversion audio AIC3204.</li>
+<li><strong>Respecter</strong> ADC sample time, sequence de canaux, DMA (taille/type/increment), alignement, timeout, filtrage et hysteresis ; les seuils reperes dans l'OEM peuvent dependre du reseau resistif et de la tension de reference.</li>
+</ul>
+<h3 id="contrat-recommande-pour-un-pilote-opend578">Contrat recommande pour un pilote OpenD578</h3>
+<ol>
+<li>Configurer l'horloge du ADC et les entrees analogiques; initialiser VREF et verifier plage admissible avant chaque interpretation de valeur.</li>
+<li>Capturer un snapshot des quatre voies sans bloquer le scheduler; proteger contre DMA partiellement rafraichi.</li>
+<li>Debouncer touches sur plusieurs acquisitions et conserver l'etat de repos/erreur de conversion distinct d'un appui.</li>
+<li>Convertir chaque potentiometre en pourcentage ou dB <strong>apres identification de la courbe et des limites du circuit U2429</strong>; ne pas programmer un autre bus analogique avec un chiffre ADC brut.</li>
+<li>Au redemarrage, valider la calibration locale et ne pas ecraser les valeurs usine dans NAND/Flash si leur format n'est pas compris.</li>
+</ol>
+<h2 id="3-bh2226fv-sorties-dac-et-plages-de-tension">3. BH2226FV, sorties DAC et plages de tension</h2>
+<p>Le BH2226FV-E2 est un composant 8 bits x 8 canaux, <strong>SSOP-B16</strong>, alimentation specifiee <strong>2,7 a 5,5 V</strong>, interface serie 3 fils. Un mot ordinaire contient une selection de canal et une valeur 8 bits, <strong>12 bits au total</strong> ; la table de commandes initiales doit etre lue dans la notice ROHM (power down, DAC/I/O). Une encodeur logiciel pur existe dans <code>firmware/hal/serial_command_encoders.c</code> et ses tests, <strong>sans acces GPIO</strong>.</p>
+<table>
+<thead>
+<tr>
+  <th>Sortie</th>
+  <th>Alias datasheet</th>
+  <th>Destination sur le D578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>DA1</td>
+  <td><strong>Non tracee</strong></td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>DA2</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>DA3</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>DA4</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>DA5</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>DA6</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>DA7</td>
+  <td>Non tracee</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>DA8</td>
+  <td>Non tracee</td>
+</tr>
+</tbody>
+</table>
+<p>Par hypothese d'architecture, certaines sorties pourraient piloter les varicaps ou amplificateurs de commande RF. <strong>Cela ne prouve aucun lien</strong> vers le PA ou les frequences. Les mesures doivent documenter DAx -&gt; passifs -&gt; SGM8272 et/ou varicaps et leur variation en reception ordinaire, sans emission.</p>
+<h2 id="4-tlv320aic3204-et-passage-par-sct3258">4. TLV320AIC3204 et passage par SCT3258</h2>
+<p>TI documente un codec audio faible puissance avec conversion ADC/DAC et systeme de registres pagines. Sur les radios AnyTone avec SCT3258, RadioFoundry indique que le <strong>SCT3258 controle le codec</strong> via ses propres messages de configuration et sert de liaison I2S pour les echantillons ; le GD32 ne doit pas etre suppose connecter directement les pins SCL/SDA du codec.</p>
+<p>Dans notre banc :</p>
+<ul>
+<li><code>bench/sct_hpi.py</code> reconnait des paquets <code>type 0x40</code> de <strong>codec-bypass</strong> sous conditions de protocole, et produit des triplets <code>(page, registre, valeur)</code> dans <code>codec_writes</code>.</li>
+<li>Le registre de page <code>0</code> du model n'accepte que certaines valeurs, restriction du <strong>modele teste</strong> et non une limite generale TI.</li>
+<li>Des dizaines de commandes de gain, mute et equalisation existent dans la pile OEM / SCT ; <strong>le banc ne traite pas les echantillons PCM comme un DSP physiquement fidele</strong>.</li>
+<li>L'interface codec peut etre I2C en theorie, mais <strong>le chemin de commande reel par paquets HPI</strong> change l'architecture des pilotes.</li>
+</ul>
+<h3 id="pour-reconstruire-une-table-de-reglages-audio">Pour reconstruire une table de reglages audio</h3>
+<p>Capturer la sequence complete apres reset en reception, apres changement FM/DMR, changement d'ampli poste/micro, variation de volume, activation Bluetooth et mutation des menus. Conserver ordre, page, reg, valeur, delai et etat du SCT. Faire un diff de transactions entre deux conditions, puis retrouver la signification chez TI. <strong>Ne pas injecter une image de registre prise dans un autre poste</strong> sans qualification des gains et du chemin audio.</p>
+<h2 id="5-volume-mute-et-selection-haut-parleur-elements-de-preuve-internes">5. Volume, mute et selection haut-parleur : elements de preuve internes</h2>
+<p>La notice utilisateur du banc V11.8 fournit une trace plus precise que la seule datasheet :</p>
+<ul>
+<li><code>Speaker Mode</code> stocke son selecteur OEM en RAM a <code>0x2000431B</code> (0 = Mic Spk, 1 = Radio Spk, 2 = Both) ; ce n'est <strong>pas</strong> une adresse de registre materiel.</li>
+<li>Routine OEM <code>0x08090A86</code> associee a la commande <strong>PA7</strong> : <code>Mic Spk</code> PA7 haut, <code>Radio Spk</code> PA7 bas, <code>Both</code> PA7 bas en reception active.</li>
+<li>Registre RF <strong>banque 1/page 0/adresse 0x25</strong>, bit 4, observe dans les routines <code>0x08072514</code>, <code>0x08072544</code> / <code>0x08070A8C</code> ; distinct de la sortie PA7.</li>
+<li>Ces sorties paraissent gouverner deux mute de haut-parleur, mais leur continuite vers YD1517P, MC34119G ou U2429 <strong>n'a pas ete mesuree</strong>.</li>
+<li>Lors de la comparaison des menus, le nombre de configuration codec est reste constant (24 dans une simulation) ; cela ne prouve pas que le codec n'intervient jamais dans d'autres modes.</li>
+</ul>
+<p>Attention aux bornes <code>SP+</code> et <code>SP-</code> du microphone : liaison differentielle possible, <code>SP-</code> ne doit pas etre mis a GND par supposition.</p>
+<h2 id="6-parametres-usine-offsets-et-calibration">6. Parametres usine, offsets et calibration</h2>
+<p>La cartographie NAND historique situe la calibration active et ses copies vers <code>0x02F00000..0x02F80679</code>, et la configuration locale entre <code>0x02FA0000..0x02FDFFFF</code>. Des lectures physiques montrent des <strong>copies proches</strong> dans ces zones. Ces adresses sont des espaces logiques NAND, <strong>pas</strong> une structure de registre ADC0 ni des registres I2S. Leur codage reste en partie inconnu.</p>
+<p>Une documentation de calibration exploitable doit contenir : variante et numero de carte, valeur brute, unite, graduation, methode de mesure, conditions de temperature/tension, offset et gain, adresse NAND, duplication/CRC/ECC, initiateur d'ecriture et menu OEM associe. Les valeurs de polarisation PA et les references RF ne doivent jamais etre recalibrees sur la base d'une comparaison heuristique de deux fichiers.</p>
+<h2 id="7-tests-et-limites-de-pilotage">7. Tests et limites de pilotage</h2>
+<ul>
+<li>Ecrire et tester des fonctions <strong>pures</strong> de decode ADC, filtrage touche, encodage BH2226 et U2429; ne brancher le GPIO reel qu'apres mesures et extraction d'un firmware HAL autonome.</li>
+<li>Utiliser les scenarios du banc pour les transitions Speaker Mode ; verifier dans un autre temps les niveaux physiques de PA7/CI audio.</li>
+<li>Decoder les commandes codec via HPI en <strong>lecture seule sur fichier de trace</strong> ; ne pas reprogrammer la page 0 au hasard.</li>
+<li>Toutes les constantes d'adresses SRAM OEM sont propres a la version <strong>PRO GD32 V1.21</strong> et ne doivent pas etre reutilisees comme API du firmware alternatif.</li>
+</ul>
+<h2 id="8-sources">8. Sources</h2>
+<ul>
+<li>Projet : <code>../NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code>, <code>../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code>, <code>../04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>, <code>../hardware/BH2226_H2226_DAC_RF.md</code>, <code>../hardware/VOLUME_U2429G.md</code>, <code>../hardware/AUDIO_MC34119_SGM8272.md</code>, <code>bench/sct_hpi.py</code>, <code>bench/adc_dma.py</code>.</li>
+<li>ROHM BH2226FV : <a href="https://www.rohm.com/products/data-converter/d-a-converters/8bit-d-a/bh2226fv-product">https://www.rohm.com/products/data-converter/d-a-converters/8bit-d-a/bh2226fv-product</a>.</li>
+<li>TI TLV320AIC3204 : <a href="https://www.ti.com/product/TLV320AIC3204">https://www.ti.com/product/TLV320AIC3204</a>.</li>
+<li>RadioFoundry, chemin codec via SCT : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a>.</li>
+<li>UTC U2429G : <a href="https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf">https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

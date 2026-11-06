@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Amplification audio : YD1517P (PRO) et UTC PA1517G (PLUS) - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Amplification audio : YD1517P (PRO) et UTC PA1517G (PLUS)</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md</code></p>
+<article class="markdown-body"><h1 id="amplification-audio-yd1517p-pro-et-utc-pa1517g-plus">Amplification audio : YD1517P (PRO) et UTC PA1517G (PLUS)</h1>
+<p><strong>Observation :</strong> boîtier marqué <code>YD YD1517P</code> sur le D578UV PRO et <code>UTC PA1517G</code> sur le PLUS. Ces composants relèvent de la famille d'amplificateurs <strong>stéréo 2×6 W classe B</strong>. La fonction électrique d'une broche peut être comparable, sans démontrer que les boîtiers ou l'intégration sont identiques.</p>
+<h2 id="1-comparaison-fonctionnelle-des-broches">1. Comparaison fonctionnelle des broches</h2>
+<p>Sur les versions <strong>DIP18</strong> publiées par UTC et YD, les neuf premières positions sont compatibles en fonction ; de nombreuses autres broches sont des masses thermiques ou de puissance.</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Pin (DIP18/HSIP9 selon version)</th>
+  <th>Fonction constructeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>Entrée amplificateur 1 <code>−INV1</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>Masse signal <code>SGND</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>Filtrage de rejet d'ondulations <code>SVRR</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>Sortie amplificateur 1 <code>OUT1</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>Masse puissance <code>PGND</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>Sortie amplificateur 2 <code>OUT2</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>Alimentation <code>VCC</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">8</td>
+  <td>Commande <code>M/SS</code> (mute / standby)</td>
+</tr>
+<tr>
+  <td style="text-align:right">9</td>
+  <td>Entrée amplificateur 2 <code>−INV2</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">10 à 18</td>
+  <td>Masse ou contacts de dissipation selon boîtier DIP18</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ne pas connecter directement OUT1/OUT2 à la masse</strong> : la documentation D578 historique décrit un montage push-pull / pont de deux canaux destiné à fournir davantage de puissance acoustique. Le 12 W annoncé dans ce montage décrit l'architecture publiée, <strong>pas une puissance mesurée sur la carte PRO ou PLUS de l'utilisateur</strong>. Il faut lire le schéma de brochage correspondant <strong>au boîtier effectivement observé</strong> pour lever toute ambiguïté.</p>
+<h2 id="2-quels-liens-avec-le-firmware">2. Quels liens avec le firmware ?</h2>
+<p>Le <code>YD1517P</code>/<code>PA1517G</code> n'a pas de registres numériques. La commande logicielle de veille/mute pourrait atteindre <code>M/SS</code> via une sortie GPIO, un transistor ou un circuit de sélection audio.</p>
+<p>Le banc V11.8 observe un mode <code>Speaker Mode</code> avec trois choix <code>Mic Spk</code>, <code>Radio Spk</code>, <code>Both</code>, et distingue :</p>
+<ul>
+<li><strong>GD32 PA7</strong> : sortie associée au mute du haut-parleur poste dans l'exécution OEM ; continuité vers broche 8 <strong>non mesurée</strong>.</li>
+<li><strong>Registre RF banque 1 / page 0 / adresse 0x25, bit 4</strong> : autre commande de coupure liée au haut-parleur microphone, mais son chemin physique <strong>non démontré</strong>.</li>
+<li>Potentiomètres PC2/PC5 → ADC interne ; atténuateur U2429G → voies audio ; ces signaux ne sont pas équivalents à une sortie de puissance.</li>
+</ul>
+<p>La chaîne complète peut comprendre codec, attenuateur, amplificateur de commande et 1517, sans que l'ordre effectif soit encore prouvé.</p>
+<h2 id="3-verification-pro-plus">3. Vérification PRO / PLUS</h2>
+<ol>
+<li>Identifier si PA1517G est dans le boîtier <strong>DIP18, DIP20 ou HSIP9-B</strong> ; la famille UTC existe en plusieurs formats, et l'absence d'un nombre de broches ne prouve pas un composant différent.</li>
+<li>Contrôler VCC broche 7 et les masses avec le poste à l'arrêt, puis relever la tension de repos sous alimentation.</li>
+<li>Capturer le <strong>niveau de la broche 8</strong> pour les modes <code>Mic Spk</code>, <code>Radio Spk</code> et <code>Both</code> sans forcer l'activation ou l'émission.</li>
+<li>Relever les connexions des sorties 4/6 jusqu'au haut-parleur et des entrées 1/9 jusqu'au préamplificateur.</li>
+<li>Comparer PRO et PLUS uniquement à <strong>boîtier, implantation, résistances et alimentation équivalents</strong>.</li>
+</ol>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>UTC PA1517 (PDF constructeur à rechercher) : <a href="https://www.unisonic.com.tw/">https://www.unisonic.com.tw/</a></li>
+<li>Exemple de fiche PA1517 avec description et brochage : <a href="https://dtsheet.com/doc/1507666/datasheet">https://dtsheet.com/doc/1507666/datasheet</a></li>
+<li>Synthèse indépendante de l'amplification D578 : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+<li><a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Microphone et sélection du haut-parleur</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

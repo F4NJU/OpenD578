@@ -1,0 +1,118 @@
+id,group,title,scope,model,automation,acceptance,blockers
+ihm.power,ihm,"Mise en marche, arrêt et réveil",oem_candidate,partial,none,watchdog et retour dans un état sûr,watchdog reset request observed; automatic reboot missing
+ihm.keys,ihm,"Touches P1–P6, MENU et EXIT",oem_candidate,partial,none,"appui court, long, maintien et relâchement",real OEM key decoder probes
+ihm.encoder,ihm,Encodeur et appui du cadran,oem_candidate,partial,none,"sens, pas, verrouillage et absence de double événement",OEM EXTI decoder probes
+ihm.mic_keys,ihm,Clavier du microphone,oem_candidate,partial,none,"chiffres, fonctions, appuis longs et verrouillage haut/bas",captured UART input protocol
+ihm.dual_ptt,ihm,PTT principal et sélection A/B du microphone,oem_candidate,partial,partial_oem_only,sélection réelle de la voie et relâchement,Main microphone PTT executed; alternate A/B PTT behavior not fully qualified
+ihm.lcd,ihm,Écran et rendu,oem_candidate,partial,none,"pixels, veille, réveil et mises à jour concurrentes",GPIO LCD bus decoder
+ihm.backlight,ihm,Rétroéclairage écran,oem_candidate,partial,none,luminosité et extinction commandées sur le bus,lighting channel 8 caller and bus evidence
+ihm.key_lights,ihm,Éclairage des touches du poste,oem_candidate,unimplemented,none,sorties électriques et intensités par groupe,No end-to-end automated qualification
+ihm.status_led,ihm,LED de statut du poste,oem_candidate,partial,partial_oem_only,séquence PE3/PE4 vert/repos/rouge/repos ; polarité et câblage physiques à confirmer,Red/green bus sequence tested; physical continuity and other colours unverified
+ihm.mic_led_main,ihm,Indicateurs de voie principale du microphone,oem_candidate,unimplemented,none,sélection A/B sans déduction depuis une variable OEM,No end-to-end automated qualification
+ihm.mic_led_rt,ihm,Indicateurs RX/TX du microphone,oem_candidate,unimplemented,none,trames radio vers microphone et état lumineux par voie,No end-to-end automated qualification
+ihm.mic_backlight,ihm,Éclairage du clavier microphone,oem_candidate,unimplemented,none,"commande, alimentation, temporisation et intensité",No end-to-end automated qualification
+ihm.locks,ihm,Verrouillages des commandes,oem_candidate,unimplemented,none,"façade, encodeur, clavier et touches haut/bas du microphone",No end-to-end automated qualification
+ihm.menu_timeout,ihm,Sortie temporisée des menus,oem_candidate,unimplemented,none,délai virtuel et retour à la vue active,No end-to-end automated qualification
+ihm.vfo_memory,ihm,"VFO, mémoires et affichage",oem_candidate,unimplemented,none,passage de mode et cohérence des fréquences,No end-to-end automated qualification
+ihm.zones,ihm,Zones et listes de canaux,oem_candidate,unimplemented,none,"navigation, limites et persistance",No end-to-end automated qualification
+ihm.main_sub,ihm,Voie principale et voie secondaire,oem_candidate,unimplemented,none,permutation A/B et activation secondaire,No end-to-end automated qualification
+ihm.beeps,ihm,Bips et avertissements sonores,oem_candidate,unimplemented,none,sortie audio réellement commandée,No end-to-end automated qualification
+ihm.startup,ihm,Affichage et options au démarrage,oem_candidate,unimplemented,none,initialisation et reprise sans capture RAM pour qualification,No end-to-end automated qualification
+ihm.password,ihm,Mot de passe de démarrage,oem_candidate,unimplemented,none,"acceptation, rejet et absence de corruption",No end-to-end automated qualification
+ihm.device_info,ihm,Informations matérielles et versions,oem_candidate,unimplemented,none,"provenance MCU, SCT et module Bluetooth",No end-to-end automated qualification
+ihm.service,ihm,Mode TEST et réglages de maintenance,oem_candidate,unimplemented,none,conditions d’accès et conservation des alignements propres au poste,No end-to-end automated qualification
+fm.rx_frequency,fm,Accord réception,oem_candidate,unimplemented,none,"fréquence effective, bande et réception hors canal",No end-to-end automated qualification
+fm.tx_frequency,fm,Accord émission,oem_candidate,unimplemented,none,fréquence effective et absence de porteuse au repos,No end-to-end automated qualification
+fm.offset,fm,Décalage relais,oem_candidate,unimplemented,none,"sens positif, négatif et simplex",No end-to-end automated qualification
+fm.reverse,fm,Inversion relais,oem_candidate,unimplemented,none,permutation des fréquences et des tonalités,No end-to-end automated qualification
+fm.talkaround,fm,Communication directe,oem_candidate,unimplemented,none,usage de la fréquence attendue sans modification du canal sauvegardé,No end-to-end automated qualification
+fm.steps,fm,Pas VFO,oem_candidate,unimplemented,none,"arrondis, limites et mémorisation",No end-to-end automated qualification
+fm.bands,fm,Bandes et limites de fréquence,oem_candidate,unimplemented,none,"bornes, variantes régionales et interdiction hors plages configurées",No end-to-end automated qualification
+fm.bandwidth,fm,Largeur de canal,oem_candidate,unimplemented,none,filtres RX et déviation TX cohérents,No end-to-end automated qualification
+fm.power,fm,Niveaux de puissance,oem_candidate,unimplemented,none,commandes des niveaux et alignements ; watts à mesurer sur matériel,No end-to-end automated qualification
+fm.squelch,fm,Squelch porteuse,oem_candidate,partial,partial_oem_only,"seuil, hystérésis, retard et fermeture",synthetic discriminator/status inputs only
+fm.rssi,fm,Indication du niveau reçu,oem_candidate,unimplemented,none,courbe brute puis étalonnage du niveau physique,No end-to-end automated qualification
+fm.monitor,fm,Écoute forcée,oem_candidate,unimplemented,none,ouverture audio et retour au filtrage normal,No end-to-end automated qualification
+fm.ctcss_tx,fm,CTCSS émission,oem_candidate,unimplemented,none,"fréquence, amplitude, phase et suppression en fin de transmission",No end-to-end automated qualification
+fm.ctcss_rx,fm,CTCSS réception,oem_candidate,unimplemented,none,"bonne tonalité, mauvaise tonalité, absence et délais",No end-to-end automated qualification
+fm.dcs_tx,fm,DCS émission,oem_candidate,unimplemented,none,"code, polarité et fin de transmission",No end-to-end automated qualification
+fm.dcs_rx,fm,DCS réception,oem_candidate,unimplemented,none,"code, polarité, faux positifs et temps de détection",No end-to-end automated qualification
+fm.squelch_logic,fm,Combinaisons de critères de réception,oem_candidate,unimplemented,none,"porteuse, sous-tonalité et signalisation optionnelle",No end-to-end automated qualification
+fm.tail,fm,Traitement de fin de porteuse,oem_candidate,unimplemented,none,"silence, phase CTCSS et bruit de fermeture",No end-to-end automated qualification
+fm.dual_rx,fm,Réception simultanée A/B,oem_candidate,unimplemented,none,deux signaux indépendants et routage sans échange de voie,No end-to-end automated qualification
+fm.crossband,fm,Répéteur entre bandes,oem_candidate,unimplemented,none,RX sur une voie vers TX sur l’autre avec protections,No end-to-end automated qualification
+fm.scan,fm,Balayage mémoire et priorités,oem_candidate,unimplemented,none,"arrêt, reprise et priorité",No end-to-end automated qualification
+fm.vfo_scan,fm,Balayage VFO programmé,oem_candidate,unimplemented,none,bornes et pas effectifs,No end-to-end automated qualification
+fm.scan_resume,fm,Modes de reprise du balayage,oem_candidate,unimplemented,none,"porteur, temporisation et arrêt manuel",No end-to-end automated qualification
+fm.tbst,fm,Tonalité d’ouverture relais,oem_candidate,unimplemented,none,"fréquence, durée et combinaison PTT/haut-bas",No end-to-end automated qualification
+fm.dtmf_tx,fm,DTMF émission,oem_candidate,unimplemented,none,"fréquences, niveaux, cadence et contenu",No end-to-end automated qualification
+fm.dtmf_rx,fm,DTMF réception,oem_candidate,unimplemented,none,"détection, sélection et rejet des trames invalides",No end-to-end automated qualification
+fm.two_tone,fm,Signalisation deux tons,oem_candidate,unimplemented,none,"émission, réception et temporisations",No end-to-end automated qualification
+fm.five_tone,fm,Signalisation cinq tons,oem_candidate,unimplemented,none,"séquence, cadence, réception et rejet",No end-to-end automated qualification
+fm.ptt_id,fm,Identifiant au début ou à la fin du PTT,oem_candidate,unimplemented,none,"moment, contenu et coexistence avec APRS",No end-to-end automated qualification
+fm.compander,fm,Compandeur,oem_candidate,unimplemented,none,réponse dynamique et saturation,No end-to-end automated qualification
+fm.scrambler,fm,Inversion audio,oem_candidate,unimplemented,none,"transformation, paramètres et désactivation",No end-to-end automated qualification
+fm.broadcast,fm,Réception FM radiodiffusion,oem_candidate,unimplemented,none,accord et retour aux voies radio,No end-to-end automated qualification
+fm.broadcast_monitor,fm,Priorité radio sur radiodiffusion,oem_candidate,unimplemented,none,interruption et reprise,No end-to-end automated qualification
+fm.weather,fm,Réception et alerte météo selon variante,oem_candidate,unimplemented,none,présence conditionnelle et priorité,No end-to-end automated qualification
+fm.alarm,fm,Alarme et travail isolé,oem_candidate,unimplemented,none,"délais, avertissements, acquittement et émission contrôlée",No end-to-end automated qualification
+audio.mic_input,audio,Entrée audio microphone,oem_candidate,unimplemented,none,"polarisation, gain, saturation et coupure",No end-to-end automated qualification
+audio.volume_a,audio,Volume de la voie A,oem_candidate,unimplemented,none,échantillons ADC et gain réel,No end-to-end automated qualification
+audio.volume_b,audio,Volume de la voie B,oem_candidate,unimplemented,none,échantillons ADC et gain réel,No end-to-end automated qualification
+audio.internal_speaker,audio,Haut-parleur interne,oem_candidate,unimplemented,none,"sélection, mute et gain",No end-to-end automated qualification
+audio.mic_speaker,audio,Haut-parleur du microphone,oem_candidate,unimplemented,none,sélection microphone/poste/les deux et choix de la voie A ou B,No end-to-end automated qualification
+audio.external_a,audio,Sortie haut-parleur externe A,oem_candidate,unimplemented,none,routage et effet du contact mécanique de prise,No end-to-end automated qualification
+audio.external_b,audio,Sortie haut-parleur externe B,oem_candidate,unimplemented,none,routage et effet du contact mécanique de prise,No end-to-end automated qualification
+audio.max_volume,audio,Limitation du volume,oem_candidate,unimplemented,none,plafonnement et mode intérieur,No end-to-end automated qualification
+audio.codec,audio,Codec et liaisons audio numériques,oem_candidate,partial,none,"horloges, routage, gains et échantillons sans présumer le câblage du codec","SCT codec bypass writes retained, samples not routed"
+audio.filtering,audio,Filtres et préaccentuation,oem_candidate,unimplemented,none,réponse en fréquence et déviation sans coefficients inventés,No end-to-end automated qualification
+audio.record,audio,Enregistrement analogique optionnel,oem_candidate,unimplemented,none,présence de la carte et absence de fausse prise en charge,No end-to-end automated qualification
+safety.tot,safety,Limitation de durée émission,oem_candidate,unimplemented,none,coupure indépendante d’un PTT maintenu,No end-to-end automated qualification
+safety.busy,safety,Interdiction émission sur canal occupé,oem_candidate,unimplemented,none,combinaisons porteuse et CTCSS/DCS,No end-to-end automated qualification
+safety.rx_only,safety,Canal réception seule,oem_candidate,unimplemented,none,aucune activation PA malgré toutes les sources de PTT,No end-to-end automated qualification
+safety.tx_allow,safety,Critères autorisant émission,oem_candidate,unimplemented,none,priorité des interdictions et cohérence entre voies,No end-to-end automated qualification
+safety.temperature,safety,Mesure de température,oem_candidate,unimplemented,none,relation capteur/ADC et valeurs impossibles,No end-to-end automated qualification
+safety.fan,safety,Ventilateur,oem_candidate,partial,none,"modes PTT/température/les deux, seuils et hystérésis",bank 0 page 0 register 0x25 bit 1 observed
+safety.overheat,safety,Protection thermique,oem_candidate,unimplemented,none,action OEM à confirmer ; ne pas présumer une protection absente,No end-to-end automated qualification
+safety.voltage,safety,Mesure tension alimentation,oem_candidate,partial,none,"conversion brute, calibration et seuils",OEM ADC conversion observed
+safety.supply_fault,safety,Défauts alimentation,oem_candidate,unimplemented,none,"sous-tension, chute TX et politique OEM à identifier",No end-to-end automated qualification
+safety.auto_off,safety,Arrêt automatique,oem_candidate,unimplemented,none,inactivité et état de sortie,No end-to-end automated qualification
+safety.watchdog,safety,Surveillance et reset,oem_candidate,partial,none,détection puis redémarrage et sorties sûres,FWDGT request only
+safety.storage_fault,safety,Défauts de mémoire,oem_candidate,unimplemented,none,"données corrompues, coupure et conservation des alignements",No end-to-end automated qualification
+safety.startup_ptt,safety,PTT au démarrage ou perte du microphone,oem_candidate,unimplemented,none,politique explicite et absence de transmission incontrôlée,No end-to-end automated qualification
+usb.read,usb,Lecture et identification CPS,oem_candidate,partial,none,réponses produites par le firmware et contrôles des blocs,user confirmed original Windows CPS full read; Python probe
+usb.write,usb,Écriture des mémoires,oem_candidate,partial,none,modification et récupération après démarrage complet,name roundtrip and cold restart validated
+usb.channel_edit,usb,Édition complète des canaux,oem_candidate,unimplemented,none,"création, suppression, fréquence, tonalités, zones et persistance",No end-to-end automated qualification
+usb.alignment,usb,Alignements individuels,oem_candidate,unimplemented,none,sauvegarde et non-écrasement inter-postes,No end-to-end automated qualification
+usb.update,usb,Mise à jour et récupération,oem_candidate,unimplemented,none,"bornes, interruption, bootloader et restauration",No end-to-end automated qualification
+gps.enable,gps,Activation du module,oem_candidate,unimplemented,none,commandes et alimentation si câblage connu,No end-to-end automated qualification
+gps.presence,gps,Module absent ou présent,oem_candidate,unimplemented,none,"silence, démarrage et détection",No end-to-end automated qualification
+gps.fix,gps,Acquisition et perte de position,oem_candidate,partial,partial_oem_only,"messages valides, fix, perte et réacquisition",ordered OEM acquisition/loss scenario oracle exists; no generic hardware verdict
+gps.coordinates,gps,Coordonnées et heure,oem_candidate,unimplemented,none,"signes, hémisphères, date et validité",No end-to-end automated qualification
+gps.parser,gps,Robustesse NMEA,oem_candidate,unimplemented,none,"checksum, fragmentation, débit, débordement et données périmées",No end-to-end automated qualification
+gps.constellations,gps,Choix de constellation selon module,oem_candidate,unimplemented,none,vraies commandes du module et variante,No end-to-end automated qualification
+gps.forward,gps,Transfert des données GPS vers USB,oem_candidate,unimplemented,none,"direction, format et disponibilité selon configuration",No end-to-end automated qualification
+aprs.configuration,aprs,Configuration APRS analogique,oem_candidate,unimplemented,none,"identités, chemin, symbole, texte et fréquence",No end-to-end automated qualification
+aprs.manual,aprs,Déclenchement manuel,oem_candidate,unimplemented,none,une trame au bon moment et bon retour RX,No end-to-end automated qualification
+aprs.ptt_start,aprs,Balise au début PTT,oem_candidate,unimplemented,none,"ordre, délai et coexistence avec phonie",No end-to-end automated qualification
+aprs.ptt_end,aprs,Balise en fin PTT,oem_candidate,unimplemented,none,ordre et retour RX,No end-to-end automated qualification
+aprs.interval,aprs,Balises périodiques,oem_candidate,unimplemented,none,"temps virtuel, annulation et dérive",No end-to-end automated qualification
+aprs.fixed,aprs,Position fixe,oem_candidate,unimplemented,none,trame conforme même sans acquisition GPS si autorisé,No end-to-end automated qualification
+aprs.gps,aprs,Position du module GPS,oem_candidate,unimplemented,none,validité et absence d’utilisation silencieuse d’une position périmée,No end-to-end automated qualification
+aprs.modulation,aprs,Chaîne de modulation OEM,oem_candidate,unimplemented,none,"DMA, échantillons, AFSK, FM puis décodage indépendant depuis I/Q",No end-to-end automated qualification
+aprs.power,aprs,Fréquence et puissance des balises,oem_candidate,unimplemented,none,commandes RF propres à la balise et restitution du canal,No end-to-end automated qualification
+aprs.busy,aprs,Arbitrage avec réception et PTT,oem_candidate,unimplemented,none,comportement OEM à mesurer et politique OpenD578 explicite,No end-to-end automated qualification
+aprs.receive,aprs,Réception APRS — étape ultérieure,later_stage,unimplemented,none,branche PRO/PLUS et éventuelle carte optionnelle ; chaîne non validée,No end-to-end automated qualification
+satellite.orbits,satellite,Éléments orbitaux et temps UTC,extension,unimplemented,none,"extension OpenD578, pas une fonction OEM D578 démontrée",No end-to-end automated qualification
+satellite.doppler,satellite,Correction Doppler RX/TX,extension,unimplemented,none,valeurs de référence indépendantes et fréquences commandées,No end-to-end automated qualification
+satellite.channels,satellite,Canaux et tonalités satellite,extension,unimplemented,none,liaisons montante/descendante et identification du profil,No end-to-end automated qualification
+satellite.ptt,satellite,Suivi pendant émission,extension,unimplemented,none,"arbitrage, stabilité RF et politique de mise à jour",No end-to-end automated qualification
+satellite.ui,satellite,Affichage et commandes satellite,extension,unimplemented,none,intégration exclusive de l’écran et retour au mode normal,No end-to-end automated qualification
+bluetooth.identity,bluetooth,"Module, version et transport",oem_candidate,partial,none,référence ET12/B707 disponible ; processeur et carte à qualifier,documented ET12 AT subset only
+bluetooth.pairing,bluetooth,Découverte et appairage,oem_candidate,unimplemented,none,"états, succès, refus et délais",No end-to-end automated qualification
+bluetooth.reconnect,bluetooth,Connexion et perte du lien,oem_candidate,unimplemented,none,reconnexion et retour à un chemin audio défini,No end-to-end automated qualification
+bluetooth.mic,bluetooth,Microphone Bluetooth,oem_candidate,unimplemented,none,sélection et gain du chemin entrant,No end-to-end automated qualification
+bluetooth.speaker,bluetooth,Écoute Bluetooth,oem_candidate,unimplemented,none,sélection et gain du chemin sortant,No end-to-end automated qualification
+bluetooth.ptt,bluetooth,PTT Bluetooth,oem_candidate,unimplemented,none,"appui, relâchement, perte du lien et sécurités",No end-to-end automated qualification
+bluetooth.audio_controls,bluetooth,Volume et routage Bluetooth,oem_candidate,unimplemented,none,coexistence avec micro filaire et sorties du poste,No end-to-end automated qualification
+bluetooth.firmware,bluetooth,Firmware interne du module,oem_candidate,unimplemented,none,inventaire disponible ; exécution du firmware non implémentée,No end-to-end automated qualification

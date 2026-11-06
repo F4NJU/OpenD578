@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/03_NAND_LECTURES_ECC_CARTE.md">Modifier sur GitHub</a><a download href="../../raw/docs/03_NAND_LECTURES_ECC_CARTE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code></p>
+<article class="markdown-body"><h1 id="nand-toshibakioxia-geometrie-captures-ecc-et-zones-critiques">NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques</h1>
+<h2 id="fichiers-physiques-et-hashes-attestes">Fichiers physiques et hashes attestés</h2>
+<p>Le composant est <code>TC58CVG1S3HRAIG</code>, ID en lecture <code>98 CB</code>. Capacité <strong>2 048 blocs x 64 pages x 2 048 octets = 268 435 456 octets main (256 Mio)</strong>. Acquisition avec ECC interne actif: <strong>64 octets auxiliaires par page</strong>, soit 8 388 608 octets, non équivalents au véritable OOB raw 128 octets avec ECC désactivé. Interleave: 2 112 octets par page, total 276 824 064 octets (264 Mio), sur 131 072 pages. Un bloc main mesure 131 072 octets (128 Kio). Ne pas confondre <strong>offset NAND de fichier</strong> et adresse ARM Flash interne <code>0x080...</code>.</p>
+<table>
+<thead>
+<tr>
+  <th>Source originale non incluse</th>
+  <th style="text-align:right">Taille</th>
+  <th>SHA-256 de l'acquisition 03/11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>nand_main_256MiB.bin</code></td>
+  <td style="text-align:right">268 435 456</td>
+  <td><code>329d22165d234bf0df043e62af11397dea96327925b9db18f3c354230ff40945</code></td>
+</tr>
+<tr>
+  <td><code>nand_oob64_8MiB.bin</code></td>
+  <td style="text-align:right">8 388 608</td>
+  <td><code>9a999b9fd13a02b45ed4d38e68f9e9c7d1095994c751e36e04f4a62b2e4c5106</code></td>
+</tr>
+<tr>
+  <td><code>nand_ecc_status_128KiB.bin</code></td>
+  <td style="text-align:right">131 072</td>
+  <td><code>b40ebd3ebc3923f01d9d98a52a3b019b65785641ba76687127678b788ea793c6</code></td>
+</tr>
+<tr>
+  <td><code>nand_2112_interleaved_264MiB.bin</code></td>
+  <td style="text-align:right">276 824 064</td>
+  <td><code>568b6395f88e8ef1b27d16fc9c25aa5d94f8bcf5d47556910466baaeeefde1c9</code></td>
+</tr>
+<tr>
+  <td><code>nand_critical_896KiB_main.bin</code></td>
+  <td style="text-align:right">917 504</td>
+  <td><code>f10703d96c006543d05c5715e293c095dff486f16162c7273f896e28852b81fe</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>capture_report.json</code> (~9 592 o) déclare acquisition COMPLETE, 276 824 064 octets validés, pas de commande NAND d'écriture, pas de modification Flash cible, double passage critique correspondant et récupération non prouvée. <code>openocd_nand.log</code> (~439 131 o) mentionne <code>D578_NAND_RUN_FINISHED</code>. Les captures brutes anciennes existent au catalogue mais leurs octets n'ont pas été exportés ici. <strong>Les données de la NAND peuvent contenir indicatifs et paramètres privés.</strong></p>
+<h2 id="statuts-ecc">Statuts ECC</h2>
+<table>
+<thead>
+<tr>
+  <th>Statut</th>
+  <th style="text-align:right">Pages</th>
+  <th>Interprétation de la capture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>00</code></td>
+  <td style="text-align:right">130 610</td>
+  <td>Pas d'erreur signalée.</td>
+</tr>
+<tr>
+  <td><code>10</code></td>
+  <td style="text-align:right">25</td>
+  <td>Bits corrigés par ECC interne.</td>
+</tr>
+<tr>
+  <td><code>20</code></td>
+  <td style="text-align:right"><strong>437</strong></td>
+  <td>Erreurs non corrigées selon le statut capturé. Ne pas restaurer aveuglément.</td>
+</tr>
+<tr>
+  <td><code>30</code></td>
+  <td style="text-align:right">0</td>
+  <td>Aucune page dans cette classe.</td>
+</tr>
+</tbody>
+</table>
+<p>Sur les 437 pages avec ECC 20 : 192 pages toutes à <code>00</code> dans blocs 3, 1536, 1537; 225 pages de fin de bloc motif <code>22334455 ... 5555AAAA</code>; 10 pages de fin motif <code>AAAA5555 5555AAAA</code>; 10 pages avec contenu non trivial. <strong>Correction d'erreur antérieure : il y a 235 pages marqueurs de fin de bloc, non 238.</strong> Pages non triviales à traiter en priorité: <code>8324</code>, <code>14848</code>, <code>14912</code>, <code>17024</code>, <code>18817</code>, <code>18818</code>, <code>20992</code>, <code>24256</code>, <code>24320</code>, <code>24448</code>.</p>
+<p>La présence d'octets <code>00</code> sur tout un bloc et ECC <code>20</code> ne démontre pas l'état réel de la cellule; il peut s'agir de données non retournées. Aucune image de restauration physique totalement fiable n'est certifiée.</p>
+<h2 id="carte-logique-candidate-offset-main">Carte logique candidate, offset main</h2>
+<table>
+<thead>
+<tr>
+  <th>Offset/bloc</th>
+  <th>Observations</th>
+  <th>Force</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Bloc 1 / <code>0x00020000</code>, bloc 384 / <code>0x03000000</code></td>
+  <td>Glyphes monochromes chinois 16x16, 32 octets par glyphe, lignes big-endian. Prévisualisations PNG créées précédemment mais originaux non exportés.</td>
+  <td>Format observé, chemin LCD non prouvé.</td>
+</tr>
+<tr>
+  <td>Bloc 64 / <code>0x00800000</code></td>
+  <td>Indicatifs, noms, fréquence et structures de relais.</td>
+  <td>Signatures, sans décodage complet.</td>
+</tr>
+<tr>
+  <td>Blocs 379-382 / <code>0x02F60000..0x02FDFFFF</code></td>
+  <td>Paires de copies proches, signatures <code>D578UV</code>, probables paramètres/copies de calibration.</td>
+  <td><strong>Critique à protéger</strong>, rôle exact à confirmer.</td>
+</tr>
+<tr>
+  <td>Bloc 383 / <code>0x02FE0000</code></td>
+  <td><code>CHECKING DATA FOR D578UV</code>.</td>
+  <td>Chaîne certaine, sens exact non connu.</td>
+</tr>
+<tr>
+  <td>Blocs pairs 512-550 / depuis <code>0x04000000</code></td>
+  <td>Valeurs numériques en enregistrements fixes.</td>
+  <td>Hypothèse index/tables.</td>
+</tr>
+<tr>
+  <td>Blocs pairs 680-1032 / <code>0x05500000..0x0811FFFF</code></td>
+  <td>Noms, indicatifs, villes/pays.</td>
+  <td>Annuaire radio/DMR probable.</td>
+</tr>
+<tr>
+  <td>Blocs 3,1536,1537</td>
+  <td>Main et auxiliaires tout zéro, ECC20 sur l'ensemble.</td>
+  <td>Non garantis utilisables.</td>
+</tr>
+</tbody>
+</table>
+<p>Occupation statistique de 2 048 blocs : 741 blocs tous FF, 576 à marqueur de dix octets 55 initiaux, 463 à sentinelle terminale 55 55 AA AA, et autres familles. <strong>Les 741 blocs FF ne sont PAS des blocs attribuables aux TLE.</strong></p>
+<h2 id="copies-critiques">Copies critiques</h2>
+<ul>
+<li>Page 24256 bloc 379 vs page 24320 bloc 380 : 1 octet différent à indice 21.</li>
+<li>Page 24384 bloc 381 vs page 24448 bloc 382 : 5 octets différents aux indices 3, 10, 11, 12, 13.</li>
+<li>Signatures <code>D578UV</code> aux offsets <code>0x02FA0010</code>, <code>0x02FC0010</code>; <code>CHECKING DATA FOR D578UV</code> à <code>0x02FE0000</code>.</li>
+<li>Plusieurs pages de ces couples portent ECC20 : la ressemblance entre copies ne garantit pas leur intégrité.</li>
+<li>Extraction courte <code>nand_critical_896KiB_main.bin</code> : 7 fragments de 128 Kio, dont les quatre derniers blocs 379,380,381,382. Les trois premiers portent des marqueurs ordinaires et ne se repèrent pas de manière unique sans la carte de capture.</li>
+</ul>
+<h2 id="commandes-et-separation-lectureecriture">Commandes et séparation lecture/écriture</h2>
+<p>Les écritures <strong>présentes en code statique OEM</strong> sont <code>06</code> write-enable, <code>02</code> program load, <code>10</code> program execute, <code>D8</code> erase, mais <strong>elles n'ont pas été exécutées dans l'acquisition fournie</strong>. L'acquisition matérielle utilisait <code>9F</code>, <code>0F</code>, <code>13</code>, <code>03</code>. La simulation V3 ajoute <code>3B</code> sur deux lignes pour reproduire l'interface réellement utilisée par l'application; elle n'écrit pas les données NAND d'origine.</p>
+<p>Les tables de la copie Flash haute lisent la NAND aux offsets <code>0x00200000</code>, <code>0x02B00000</code>, <code>0x02B20000</code>, <code>0x02B80000</code>, <code>0x02BA0000</code>. Un appel OEM ciblant 32 octets à <code>0x02F60000</code> a été repéré en Phase47 : protection prioritaire.</p>
+<h2 id="reprise-de-lanalyse">Reprise de l'analyse</h2>
+<p>Retrouver les 5 fichiers de capture bruts, vérifier SHA; reproduire <code>map_nand.py</code>, <code>preview_glyphs.py</code> si l'archive <code>D578_GD32_Satellite_PHASE46_NAND_RE_2026-11-03.zip</code> est récupérée. Exécuter les scripts originaux en lecture seule. Pour le simulateur disponible, utiliser <code>D578_RAM_NAND_SIM_V3_2026-11-04/verify_spi_wire.py</code> avec les trois fichiers de capture attendus. <strong>Ne jamais écrire dans la NAND pour tester une hypothèse de mapping.</strong></p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

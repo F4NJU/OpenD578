@@ -1,0 +1,2495 @@
+{
+  "schema_version": 1,
+  "target": "D578UV PRO GD32 V1.21",
+  "completeness": "open_inventory_not_exhaustive",
+  "license": "GPL-3.0-or-later",
+  "excluded": [
+    "DMR voice/data",
+    "M17"
+  ],
+  "sources": {
+    "manual": {
+      "url": "https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf",
+      "edition": "A3.200730",
+      "kind": "manufacturer_document",
+      "scope": "family manual; does not prove every feature exists/enabled on GD32 PRO V1.21"
+    },
+    "mcu": {
+      "url": "https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf",
+      "kind": "manufacturer_document"
+    },
+    "codec": {
+      "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf",
+      "kind": "manufacturer_document",
+      "scope": "chip capabilities; exact board routing remains unqualified"
+    },
+    "sct": {
+      "url": "https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf",
+      "kind": "manufacturer_document",
+      "scope": "FM support and external codec links; not D578-specific wiring"
+    },
+    "mic": {
+      "url": "https://github.com/jrobertfisher/AT-D578UV-software-mic/wiki",
+      "kind": "captured_protocol_reference"
+    },
+    "photos": {
+      "url": "https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250",
+      "kind": "historical_photo_reference",
+      "scope": "re-fetch failed 403; photos not reinspected in this revision; board variant not established"
+    },
+    "pins": {
+      "path": "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+      "kind": "historical_analysis",
+      "scope": "old pin CSV read again: LED wiring still unassigned; NC placeholders do not prove disconnected pins"
+    },
+    "measurements": {
+      "kind": "user_observation",
+      "scope": "radio LED green with open squelch, red in TX; selectable mic speaker confirmed"
+    },
+    "private_v121": {
+      "kind": "private_input",
+      "sha256": "02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a",
+      "load_address": "0x08006000"
+    },
+    "source": {
+      "kind": "project_source",
+      "scope": "bench peripheral models, tests and documented validations"
+    },
+    "led_bus": {
+      "path": "docs/LED_STATUS_BUS.md",
+      "kind": "executed_GPIO_correlation"
+    }
+  },
+  "features": [
+    {
+      "id": "ihm.power",
+      "group": "ihm",
+      "title": "Mise en marche, arrêt et réveil",
+      "scope": "oem_candidate",
+      "keyword": "Power",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "watchdog reset request observed; automatic reboot missing"
+        }
+      ],
+      "acceptance": "watchdog et retour dans un état sûr",
+      "automation": "none",
+      "blockers": [
+        "watchdog reset request observed; automatic reboot missing"
+      ]
+    },
+    {
+      "id": "ihm.keys",
+      "group": "ihm",
+      "title": "Touches P1–P6, MENU et EXIT",
+      "scope": "oem_candidate",
+      "keyword": "Key",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "real OEM key decoder probes"
+        }
+      ],
+      "acceptance": "appui court, long, maintien et relâchement",
+      "automation": "none",
+      "blockers": [
+        "real OEM key decoder probes"
+      ]
+    },
+    {
+      "id": "ihm.encoder",
+      "group": "ihm",
+      "title": "Encodeur et appui du cadran",
+      "scope": "oem_candidate",
+      "keyword": "Knob",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "OEM EXTI decoder probes"
+        }
+      ],
+      "acceptance": "sens, pas, verrouillage et absence de double événement",
+      "automation": "none",
+      "blockers": [
+        "OEM EXTI decoder probes"
+      ]
+    },
+    {
+      "id": "ihm.mic_keys",
+      "group": "ihm",
+      "title": "Clavier du microphone",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "captured UART input protocol"
+        }
+      ],
+      "acceptance": "chiffres, fonctions, appuis longs et verrouillage haut/bas",
+      "automation": "none",
+      "blockers": [
+        "captured UART input protocol"
+      ]
+    },
+    {
+      "id": "ihm.dual_ptt",
+      "group": "ihm",
+      "title": "PTT principal et sélection A/B du microphone",
+      "scope": "oem_candidate",
+      "keyword": "Main Ch",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sélection réelle de la voie et relâchement",
+      "automation": "partial_oem_only",
+      "blockers": [
+        "Main microphone PTT executed; alternate A/B PTT behavior not fully qualified"
+      ]
+    },
+    {
+      "id": "ihm.lcd",
+      "group": "ihm",
+      "title": "Écran et rendu",
+      "scope": "oem_candidate",
+      "keyword": "Back Light",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "GPIO LCD bus decoder"
+        }
+      ],
+      "acceptance": "pixels, veille, réveil et mises à jour concurrentes",
+      "automation": "none",
+      "blockers": [
+        "GPIO LCD bus decoder"
+      ]
+    },
+    {
+      "id": "ihm.backlight",
+      "group": "ihm",
+      "title": "Rétroéclairage écran",
+      "scope": "oem_candidate",
+      "keyword": "Back Light",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "lighting channel 8 caller and bus evidence"
+        }
+      ],
+      "acceptance": "luminosité et extinction commandées sur le bus",
+      "automation": "none",
+      "blockers": [
+        "lighting channel 8 caller and bus evidence"
+      ]
+    },
+    {
+      "id": "ihm.key_lights",
+      "group": "ihm",
+      "title": "Éclairage des touches du poste",
+      "scope": "oem_candidate",
+      "keyword": "Key",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sorties électriques et intensités par groupe",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.status_led",
+      "group": "ihm",
+      "title": "LED de statut du poste",
+      "scope": "oem_candidate",
+      "keyword": "LED",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "measurements",
+          "level": "user_observed",
+          "locator": "LED de statut du poste"
+        },
+        {
+          "source": "led_bus",
+          "level": "executed_wire_observation",
+          "locator": "PE3/PE4 4E/46/56/46; bootloader 00/10"
+        }
+      ],
+      "acceptance": "séquence PE3/PE4 vert/repos/rouge/repos ; polarité et câblage physiques à confirmer",
+      "automation": "partial_oem_only",
+      "blockers": [
+        "Red/green bus sequence tested; physical continuity and other colours unverified"
+      ]
+    },
+    {
+      "id": "ihm.mic_led_main",
+      "group": "ihm",
+      "title": "Indicateurs de voie principale du microphone",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sélection A/B sans déduction depuis une variable OEM",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.mic_led_rt",
+      "group": "ihm",
+      "title": "Indicateurs RX/TX du microphone",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "trames radio vers microphone et état lumineux par voie",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.mic_backlight",
+      "group": "ihm",
+      "title": "Éclairage du clavier microphone",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "commande, alimentation, temporisation et intensité",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.locks",
+      "group": "ihm",
+      "title": "Verrouillages des commandes",
+      "scope": "oem_candidate",
+      "keyword": "Key Lock",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "façade, encodeur, clavier et touches haut/bas du microphone",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.menu_timeout",
+      "group": "ihm",
+      "title": "Sortie temporisée des menus",
+      "scope": "oem_candidate",
+      "keyword": "Menu Exit",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "délai virtuel et retour à la vue active",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.vfo_memory",
+      "group": "ihm",
+      "title": "VFO, mémoires et affichage",
+      "scope": "oem_candidate",
+      "keyword": "VFO",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "passage de mode et cohérence des fréquences",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.zones",
+      "group": "ihm",
+      "title": "Zones et listes de canaux",
+      "scope": "oem_candidate",
+      "keyword": "Zone",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "navigation, limites et persistance",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.main_sub",
+      "group": "ihm",
+      "title": "Voie principale et voie secondaire",
+      "scope": "oem_candidate",
+      "keyword": "Main Ch",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "permutation A/B et activation secondaire",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.beeps",
+      "group": "ihm",
+      "title": "Bips et avertissements sonores",
+      "scope": "oem_candidate",
+      "keyword": "Beep",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sortie audio réellement commandée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.startup",
+      "group": "ihm",
+      "title": "Affichage et options au démarrage",
+      "scope": "oem_candidate",
+      "keyword": "Start Display",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "initialisation et reprise sans capture RAM pour qualification",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.password",
+      "group": "ihm",
+      "title": "Mot de passe de démarrage",
+      "scope": "oem_candidate",
+      "keyword": "Start Up Pwd",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "acceptation, rejet et absence de corruption",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.device_info",
+      "group": "ihm",
+      "title": "Informations matérielles et versions",
+      "scope": "oem_candidate",
+      "keyword": "Device Info",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "provenance MCU, SCT et module Bluetooth",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "ihm.service",
+      "group": "ihm",
+      "title": "Mode TEST et réglages de maintenance",
+      "scope": "oem_candidate",
+      "keyword": "TEST MODE",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "conditions d’accès et conservation des alignements propres au poste",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.rx_frequency",
+      "group": "fm",
+      "title": "Accord réception",
+      "scope": "oem_candidate",
+      "keyword": "RX Freq",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "fréquence effective, bande et réception hors canal",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.tx_frequency",
+      "group": "fm",
+      "title": "Accord émission",
+      "scope": "oem_candidate",
+      "keyword": "TX Freq",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "fréquence effective et absence de porteuse au repos",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.offset",
+      "group": "fm",
+      "title": "Décalage relais",
+      "scope": "oem_candidate",
+      "keyword": "Offset",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sens positif, négatif et simplex",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.reverse",
+      "group": "fm",
+      "title": "Inversion relais",
+      "scope": "oem_candidate",
+      "keyword": "Reverse",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "permutation des fréquences et des tonalités",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.talkaround",
+      "group": "fm",
+      "title": "Communication directe",
+      "scope": "oem_candidate",
+      "keyword": "Talk Around",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "usage de la fréquence attendue sans modification du canal sauvegardé",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.steps",
+      "group": "fm",
+      "title": "Pas VFO",
+      "scope": "oem_candidate",
+      "keyword": "Freq Step",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "arrondis, limites et mémorisation",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.bands",
+      "group": "fm",
+      "title": "Bandes et limites de fréquence",
+      "scope": "oem_candidate",
+      "keyword": "Freq",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "bornes, variantes régionales et interdiction hors plages configurées",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.bandwidth",
+      "group": "fm",
+      "title": "Largeur de canal",
+      "scope": "oem_candidate",
+      "keyword": "Band Width",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "filtres RX et déviation TX cohérents",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.power",
+      "group": "fm",
+      "title": "Niveaux de puissance",
+      "scope": "oem_candidate",
+      "keyword": "TX Power",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "commandes des niveaux et alignements ; watts à mesurer sur matériel",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.squelch",
+      "group": "fm",
+      "title": "Squelch porteuse",
+      "scope": "oem_candidate",
+      "keyword": "Ana SQ",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "synthetic discriminator/status inputs only"
+        }
+      ],
+      "acceptance": "seuil, hystérésis, retard et fermeture",
+      "automation": "partial_oem_only",
+      "blockers": [
+        "synthetic discriminator/status inputs only"
+      ]
+    },
+    {
+      "id": "fm.rssi",
+      "group": "fm",
+      "title": "Indication du niveau reçu",
+      "scope": "oem_candidate",
+      "keyword": "RSSI",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "courbe brute puis étalonnage du niveau physique",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.monitor",
+      "group": "fm",
+      "title": "Écoute forcée",
+      "scope": "oem_candidate",
+      "keyword": "Monitor",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "ouverture audio et retour au filtrage normal",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.ctcss_tx",
+      "group": "fm",
+      "title": "CTCSS émission",
+      "scope": "oem_candidate",
+      "keyword": "TCDT",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "fréquence, amplitude, phase et suppression en fin de transmission",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.ctcss_rx",
+      "group": "fm",
+      "title": "CTCSS réception",
+      "scope": "oem_candidate",
+      "keyword": "RCDT",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "bonne tonalité, mauvaise tonalité, absence et délais",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.dcs_tx",
+      "group": "fm",
+      "title": "DCS émission",
+      "scope": "oem_candidate",
+      "keyword": "DCS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "code, polarité et fin de transmission",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.dcs_rx",
+      "group": "fm",
+      "title": "DCS réception",
+      "scope": "oem_candidate",
+      "keyword": "DCS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "code, polarité, faux positifs et temps de détection",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.squelch_logic",
+      "group": "fm",
+      "title": "Combinaisons de critères de réception",
+      "scope": "oem_candidate",
+      "keyword": "Squelch mode",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "porteuse, sous-tonalité et signalisation optionnelle",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.tail",
+      "group": "fm",
+      "title": "Traitement de fin de porteuse",
+      "scope": "oem_candidate",
+      "keyword": "Tone",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "silence, phase CTCSS et bruit de fermeture",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.dual_rx",
+      "group": "fm",
+      "title": "Réception simultanée A/B",
+      "scope": "oem_candidate",
+      "keyword": "Sub Ch",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "deux signaux indépendants et routage sans échange de voie",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.crossband",
+      "group": "fm",
+      "title": "Répéteur entre bandes",
+      "scope": "oem_candidate",
+      "keyword": "Repeater",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "RX sur une voie vers TX sur l’autre avec protections",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.scan",
+      "group": "fm",
+      "title": "Balayage mémoire et priorités",
+      "scope": "oem_candidate",
+      "keyword": "Scan",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "arrêt, reprise et priorité",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.vfo_scan",
+      "group": "fm",
+      "title": "Balayage VFO programmé",
+      "scope": "oem_candidate",
+      "keyword": "Program Scan",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "bornes et pas effectifs",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.scan_resume",
+      "group": "fm",
+      "title": "Modes de reprise du balayage",
+      "scope": "oem_candidate",
+      "keyword": "Scan Mode",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "porteur, temporisation et arrêt manuel",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.tbst",
+      "group": "fm",
+      "title": "Tonalité d’ouverture relais",
+      "scope": "oem_candidate",
+      "keyword": "TBST",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "fréquence, durée et combinaison PTT/haut-bas",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.dtmf_tx",
+      "group": "fm",
+      "title": "DTMF émission",
+      "scope": "oem_candidate",
+      "keyword": "DTMF Enc",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "fréquences, niveaux, cadence et contenu",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.dtmf_rx",
+      "group": "fm",
+      "title": "DTMF réception",
+      "scope": "oem_candidate",
+      "keyword": "DTMF",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "détection, sélection et rejet des trames invalides",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.two_tone",
+      "group": "fm",
+      "title": "Signalisation deux tons",
+      "scope": "oem_candidate",
+      "keyword": "2Tone",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "émission, réception et temporisations",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.five_tone",
+      "group": "fm",
+      "title": "Signalisation cinq tons",
+      "scope": "oem_candidate",
+      "keyword": "5Tone",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "séquence, cadence, réception et rejet",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.ptt_id",
+      "group": "fm",
+      "title": "Identifiant au début ou à la fin du PTT",
+      "scope": "oem_candidate",
+      "keyword": "PTT ID",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "moment, contenu et coexistence avec APRS",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.compander",
+      "group": "fm",
+      "title": "Compandeur",
+      "scope": "oem_candidate",
+      "keyword": "Compander",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "réponse dynamique et saturation",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.scrambler",
+      "group": "fm",
+      "title": "Inversion audio",
+      "scope": "oem_candidate",
+      "keyword": "Scrambler",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "transformation, paramètres et désactivation",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.broadcast",
+      "group": "fm",
+      "title": "Réception FM radiodiffusion",
+      "scope": "oem_candidate",
+      "keyword": "FM Radio",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "accord et retour aux voies radio",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.broadcast_monitor",
+      "group": "fm",
+      "title": "Priorité radio sur radiodiffusion",
+      "scope": "oem_candidate",
+      "keyword": "FM Radio Moni",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "interruption et reprise",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.weather",
+      "group": "fm",
+      "title": "Réception et alerte météo selon variante",
+      "scope": "oem_candidate",
+      "keyword": "Weather",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "présence conditionnelle et priorité",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "fm.alarm",
+      "group": "fm",
+      "title": "Alarme et travail isolé",
+      "scope": "oem_candidate",
+      "keyword": "Work Alone",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "délais, avertissements, acquittement et émission contrôlée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.mic_input",
+      "group": "audio",
+      "title": "Entrée audio microphone",
+      "scope": "oem_candidate",
+      "keyword": "Mic Level",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "polarisation, gain, saturation et coupure",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.volume_a",
+      "group": "audio",
+      "title": "Volume de la voie A",
+      "scope": "oem_candidate",
+      "keyword": "Volume",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "échantillons ADC et gain réel",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.volume_b",
+      "group": "audio",
+      "title": "Volume de la voie B",
+      "scope": "oem_candidate",
+      "keyword": "Volume",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "échantillons ADC et gain réel",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.internal_speaker",
+      "group": "audio",
+      "title": "Haut-parleur interne",
+      "scope": "oem_candidate",
+      "keyword": "Speaker Mode",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sélection, mute et gain",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.mic_speaker",
+      "group": "audio",
+      "title": "Haut-parleur du microphone",
+      "scope": "oem_candidate",
+      "keyword": "Speaker Mode",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "measurements",
+          "level": "user_observed",
+          "locator": "Haut-parleur du microphone"
+        }
+      ],
+      "acceptance": "sélection microphone/poste/les deux et choix de la voie A ou B",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.external_a",
+      "group": "audio",
+      "title": "Sortie haut-parleur externe A",
+      "scope": "oem_candidate",
+      "keyword": "Speaker",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "routage et effet du contact mécanique de prise",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.external_b",
+      "group": "audio",
+      "title": "Sortie haut-parleur externe B",
+      "scope": "oem_candidate",
+      "keyword": "Speaker",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "routage et effet du contact mécanique de prise",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.max_volume",
+      "group": "audio",
+      "title": "Limitation du volume",
+      "scope": "oem_candidate",
+      "keyword": "Max Vol",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "plafonnement et mode intérieur",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.codec",
+      "group": "audio",
+      "title": "Codec et liaisons audio numériques",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "SCT codec bypass writes retained, samples not routed"
+        }
+      ],
+      "acceptance": "horloges, routage, gains et échantillons sans présumer le câblage du codec",
+      "automation": "none",
+      "blockers": [
+        "SCT codec bypass writes retained, samples not routed"
+      ]
+    },
+    {
+      "id": "audio.filtering",
+      "group": "audio",
+      "title": "Filtres et préaccentuation",
+      "scope": "oem_candidate",
+      "keyword": "Mic",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "réponse en fréquence et déviation sans coefficients inventés",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "audio.record",
+      "group": "audio",
+      "title": "Enregistrement analogique optionnel",
+      "scope": "oem_candidate",
+      "keyword": "Record",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "présence de la carte et absence de fausse prise en charge",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.tot",
+      "group": "safety",
+      "title": "Limitation de durée émission",
+      "scope": "oem_candidate",
+      "keyword": "TX Timer",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "coupure indépendante d’un PTT maintenu",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.busy",
+      "group": "safety",
+      "title": "Interdiction émission sur canal occupé",
+      "scope": "oem_candidate",
+      "keyword": "Busy Lock",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "combinaisons porteuse et CTCSS/DCS",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.rx_only",
+      "group": "safety",
+      "title": "Canal réception seule",
+      "scope": "oem_candidate",
+      "keyword": "TX Prohibit",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "aucune activation PA malgré toutes les sources de PTT",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.tx_allow",
+      "group": "safety",
+      "title": "Critères autorisant émission",
+      "scope": "oem_candidate",
+      "keyword": "TX Allow",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "priorité des interdictions et cohérence entre voies",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.temperature",
+      "group": "safety",
+      "title": "Mesure de température",
+      "scope": "oem_candidate",
+      "keyword": "Temp",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "relation capteur/ADC et valeurs impossibles",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.fan",
+      "group": "safety",
+      "title": "Ventilateur",
+      "scope": "oem_candidate",
+      "keyword": "Fan Open",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "bank 0 page 0 register 0x25 bit 1 observed"
+        }
+      ],
+      "acceptance": "modes PTT/température/les deux, seuils et hystérésis",
+      "automation": "none",
+      "blockers": [
+        "bank 0 page 0 register 0x25 bit 1 observed"
+      ]
+    },
+    {
+      "id": "safety.overheat",
+      "group": "safety",
+      "title": "Protection thermique",
+      "scope": "oem_candidate",
+      "keyword": "Temp",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "action OEM à confirmer ; ne pas présumer une protection absente",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.voltage",
+      "group": "safety",
+      "title": "Mesure tension alimentation",
+      "scope": "oem_candidate",
+      "keyword": "Voltage",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "OEM ADC conversion observed"
+        }
+      ],
+      "acceptance": "conversion brute, calibration et seuils",
+      "automation": "none",
+      "blockers": [
+        "OEM ADC conversion observed"
+      ]
+    },
+    {
+      "id": "safety.supply_fault",
+      "group": "safety",
+      "title": "Défauts alimentation",
+      "scope": "oem_candidate",
+      "keyword": "Voltage",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sous-tension, chute TX et politique OEM à identifier",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.auto_off",
+      "group": "safety",
+      "title": "Arrêt automatique",
+      "scope": "oem_candidate",
+      "keyword": "Auto Power",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "inactivité et état de sortie",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.watchdog",
+      "group": "safety",
+      "title": "Surveillance et reset",
+      "scope": "oem_candidate",
+      "keyword": "Reset",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "FWDGT request only"
+        }
+      ],
+      "acceptance": "détection puis redémarrage et sorties sûres",
+      "automation": "none",
+      "blockers": [
+        "FWDGT request only"
+      ]
+    },
+    {
+      "id": "safety.storage_fault",
+      "group": "safety",
+      "title": "Défauts de mémoire",
+      "scope": "oem_candidate",
+      "keyword": "Reset",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "données corrompues, coupure et conservation des alignements",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "safety.startup_ptt",
+      "group": "safety",
+      "title": "PTT au démarrage ou perte du microphone",
+      "scope": "oem_candidate",
+      "keyword": "PTT",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "politique explicite et absence de transmission incontrôlée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "usb.read",
+      "group": "usb",
+      "title": "Lecture et identification CPS",
+      "scope": "oem_candidate",
+      "keyword": "PC READ",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "user confirmed original Windows CPS full read; Python probe"
+        }
+      ],
+      "acceptance": "réponses produites par le firmware et contrôles des blocs",
+      "automation": "none",
+      "blockers": [
+        "user confirmed original Windows CPS full read; Python probe"
+      ]
+    },
+    {
+      "id": "usb.write",
+      "group": "usb",
+      "title": "Écriture des mémoires",
+      "scope": "oem_candidate",
+      "keyword": "PC WRITE",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "name roundtrip and cold restart validated"
+        }
+      ],
+      "acceptance": "modification et récupération après démarrage complet",
+      "automation": "none",
+      "blockers": [
+        "name roundtrip and cold restart validated"
+      ]
+    },
+    {
+      "id": "usb.channel_edit",
+      "group": "usb",
+      "title": "Édition complète des canaux",
+      "scope": "oem_candidate",
+      "keyword": "New Chan",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "création, suppression, fréquence, tonalités, zones et persistance",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "usb.alignment",
+      "group": "usb",
+      "title": "Alignements individuels",
+      "scope": "oem_candidate",
+      "keyword": "TEST MODE",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sauvegarde et non-écrasement inter-postes",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "usb.update",
+      "group": "usb",
+      "title": "Mise à jour et récupération",
+      "scope": "oem_candidate",
+      "keyword": "MCU UPDATE",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "bornes, interruption, bootloader et restauration",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.enable",
+      "group": "gps",
+      "title": "Activation du module",
+      "scope": "oem_candidate",
+      "keyword": "GPS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "commandes et alimentation si câblage connu",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.presence",
+      "group": "gps",
+      "title": "Module absent ou présent",
+      "scope": "oem_candidate",
+      "keyword": "GPS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "silence, démarrage et détection",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.fix",
+      "group": "gps",
+      "title": "Acquisition et perte de position",
+      "scope": "oem_candidate",
+      "keyword": "GPS",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "ordered OEM acquisition/loss scenario oracle exists; no generic hardware verdict"
+        }
+      ],
+      "acceptance": "messages valides, fix, perte et réacquisition",
+      "automation": "partial_oem_only",
+      "blockers": [
+        "ordered OEM acquisition/loss scenario oracle exists; no generic hardware verdict"
+      ]
+    },
+    {
+      "id": "gps.coordinates",
+      "group": "gps",
+      "title": "Coordonnées et heure",
+      "scope": "oem_candidate",
+      "keyword": "GPS Info",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "signes, hémisphères, date et validité",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.parser",
+      "group": "gps",
+      "title": "Robustesse NMEA",
+      "scope": "oem_candidate",
+      "keyword": "GPS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "checksum, fragmentation, débit, débordement et données périmées",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.constellations",
+      "group": "gps",
+      "title": "Choix de constellation selon module",
+      "scope": "oem_candidate",
+      "keyword": "GPS Mode",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "vraies commandes du module et variante",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "gps.forward",
+      "group": "gps",
+      "title": "Transfert des données GPS vers USB",
+      "scope": "oem_candidate",
+      "keyword": "GPS UP-PC",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "direction, format et disponibilité selon configuration",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.configuration",
+      "group": "aprs",
+      "title": "Configuration APRS analogique",
+      "scope": "oem_candidate",
+      "keyword": "Ana APRS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "identités, chemin, symbole, texte et fréquence",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.manual",
+      "group": "aprs",
+      "title": "Déclenchement manuel",
+      "scope": "oem_candidate",
+      "keyword": "Aprs Send",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "une trame au bon moment et bon retour RX",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.ptt_start",
+      "group": "aprs",
+      "title": "Balise au début PTT",
+      "scope": "oem_candidate",
+      "keyword": "PTT Upload",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "ordre, délai et coexistence avec phonie",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.ptt_end",
+      "group": "aprs",
+      "title": "Balise en fin PTT",
+      "scope": "oem_candidate",
+      "keyword": "PTT Upload",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "ordre et retour RX",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.interval",
+      "group": "aprs",
+      "title": "Balises périodiques",
+      "scope": "oem_candidate",
+      "keyword": "Intervals",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "temps virtuel, annulation et dérive",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.fixed",
+      "group": "aprs",
+      "title": "Position fixe",
+      "scope": "oem_candidate",
+      "keyword": "Fixed Beacon",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "trame conforme même sans acquisition GPS si autorisé",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.gps",
+      "group": "aprs",
+      "title": "Position du module GPS",
+      "scope": "oem_candidate",
+      "keyword": "GPS Beacon",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "validité et absence d’utilisation silencieuse d’une position périmée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.modulation",
+      "group": "aprs",
+      "title": "Chaîne de modulation OEM",
+      "scope": "oem_candidate",
+      "keyword": "Aprs Data",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "DMA, échantillons, AFSK, FM puis décodage indépendant depuis I/Q",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.power",
+      "group": "aprs",
+      "title": "Fréquence et puissance des balises",
+      "scope": "oem_candidate",
+      "keyword": "Upload Power",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "commandes RF propres à la balise et restitution du canal",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.busy",
+      "group": "aprs",
+      "title": "Arbitrage avec réception et PTT",
+      "scope": "oem_candidate",
+      "keyword": "APRS",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "comportement OEM à mesurer et politique OpenD578 explicite",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "aprs.receive",
+      "group": "aprs",
+      "title": "Réception APRS — étape ultérieure",
+      "scope": "later_stage",
+      "keyword": "APRS Receive",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "branche PRO/PLUS et éventuelle carte optionnelle ; chaîne non validée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "satellite.orbits",
+      "group": "satellite",
+      "title": "Éléments orbitaux et temps UTC",
+      "scope": "extension",
+      "keyword": "Satellite",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "source",
+          "level": "project_requirement",
+          "locator": "satellite roadmap"
+        }
+      ],
+      "acceptance": "extension OpenD578, pas une fonction OEM D578 démontrée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "satellite.doppler",
+      "group": "satellite",
+      "title": "Correction Doppler RX/TX",
+      "scope": "extension",
+      "keyword": "Satellite",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "source",
+          "level": "project_requirement",
+          "locator": "satellite roadmap"
+        }
+      ],
+      "acceptance": "valeurs de référence indépendantes et fréquences commandées",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "satellite.channels",
+      "group": "satellite",
+      "title": "Canaux et tonalités satellite",
+      "scope": "extension",
+      "keyword": "Satellite",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "source",
+          "level": "project_requirement",
+          "locator": "satellite roadmap"
+        }
+      ],
+      "acceptance": "liaisons montante/descendante et identification du profil",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "satellite.ptt",
+      "group": "satellite",
+      "title": "Suivi pendant émission",
+      "scope": "extension",
+      "keyword": "Satellite",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "source",
+          "level": "project_requirement",
+          "locator": "satellite roadmap"
+        }
+      ],
+      "acceptance": "arbitrage, stabilité RF et politique de mise à jour",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "satellite.ui",
+      "group": "satellite",
+      "title": "Affichage et commandes satellite",
+      "scope": "extension",
+      "keyword": "Satellite",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "source",
+          "level": "project_requirement",
+          "locator": "satellite roadmap"
+        }
+      ],
+      "acceptance": "intégration exclusive de l’écran et retour au mode normal",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.identity",
+      "group": "bluetooth",
+      "title": "Module, version et transport",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "partial",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        },
+        {
+          "source": "source",
+          "level": "partial_implementation",
+          "locator": "documented ET12 AT subset only"
+        }
+      ],
+      "acceptance": "référence ET12/B707 disponible ; processeur et carte à qualifier",
+      "automation": "none",
+      "blockers": [
+        "documented ET12 AT subset only"
+      ]
+    },
+    {
+      "id": "bluetooth.pairing",
+      "group": "bluetooth",
+      "title": "Découverte et appairage",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "états, succès, refus et délais",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.reconnect",
+      "group": "bluetooth",
+      "title": "Connexion et perte du lien",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "reconnexion et retour à un chemin audio défini",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.mic",
+      "group": "bluetooth",
+      "title": "Microphone Bluetooth",
+      "scope": "oem_candidate",
+      "keyword": "BT MIC",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sélection et gain du chemin entrant",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.speaker",
+      "group": "bluetooth",
+      "title": "Écoute Bluetooth",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "sélection et gain du chemin sortant",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.ptt",
+      "group": "bluetooth",
+      "title": "PTT Bluetooth",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "appui, relâchement, perte du lien et sécurités",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.audio_controls",
+      "group": "bluetooth",
+      "title": "Volume et routage Bluetooth",
+      "scope": "oem_candidate",
+      "keyword": "MICGAIN",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "coexistence avec micro filaire et sorties du poste",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    },
+    {
+      "id": "bluetooth.firmware",
+      "group": "bluetooth",
+      "title": "Firmware interne du module",
+      "scope": "oem_candidate",
+      "keyword": "Bluetooth",
+      "model": "unimplemented",
+      "evidence": [
+        {
+          "source": "manual",
+          "level": "documented_family",
+          "locator": "sections 3–7; confirm variant before claiming OEM presence"
+        }
+      ],
+      "acceptance": "inventaire disponible ; exécution du firmware non implémentée",
+      "automation": "none",
+      "blockers": [
+        "No end-to-end automated qualification"
+      ]
+    }
+  ]
+}

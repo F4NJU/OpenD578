@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 from bench_version import APPLICATION, BUILD_FILES, build_id, server_matches
 import web_launcher
+from web_endpoint import record_endpoint
 
 
 class WebVersionTests(unittest.TestCase):
@@ -53,12 +54,25 @@ class WebVersionTests(unittest.TestCase):
 
     def test_matching_server_opens_browser_without_starting_another_process(self):
         with patch.object(web_launcher,'build_id',return_value='matching'), \
+             patch.object(web_launcher,'read_endpoint',side_effect=ValueError('no remembered endpoint')), \
              patch.object(web_launcher,'reusable_server',return_value=True), \
              patch.object(web_launcher.webbrowser,'open') as open_browser, \
              patch.object(web_launcher.subprocess,'Popen') as start:
             web_launcher.main()
         start.assert_not_called()
         open_browser.assert_called_once_with('http://127.0.0.1:8765')
+
+    def test_matching_server_on_remembered_random_port_is_reused(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);url='http://127.0.0.1:54321'
+            record_endpoint(root,url,'matching')
+            with patch.object(web_launcher,'ROOT',root), \
+                 patch.object(web_launcher,'build_id',return_value='matching'), \
+                 patch.object(web_launcher,'reusable_server',return_value=True), \
+                 patch.object(web_launcher.webbrowser,'open') as open_browser, \
+                 patch.object(web_launcher.subprocess,'Popen') as start:
+                web_launcher.main()
+            start.assert_not_called();open_browser.assert_called_once_with(url)
 
 
 if __name__ == '__main__':

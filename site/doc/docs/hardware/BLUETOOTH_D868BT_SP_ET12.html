@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code></p>
+<article class="markdown-body"><h1 id="carte-bluetooth-d868bt-sp-module-radio-blinde-et-firmware-et12">Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</h1>
+<p><strong>Perimetre :</strong> AnyTone D578UV PRO GD32 V1.21 en priorite ; observations de variantes PLUS et comparaisons D878. <strong>Etat :</strong> interface logicielle partiellement caracterisee, identification physique du module blinde et brochage non verifies. Date : 5 novembre 2026.</p>
+<h2 id="1-inventaire-de-trois-niveaux-distincts">1. Inventaire de trois niveaux distincts</h2>
+<table>
+<thead>
+<tr>
+  <th>Niveau</th>
+  <th>Ce qui est documente</th>
+  <th>Niveau de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Carte support</td>
+  <td>Une carte fille interne est marquee <strong><code>D868BT-SP</code></strong> selon le releve sur le poste. Elle porte un deuxieme PCB soude.</td>
+  <td><strong>Observation du poste</strong> (designation de variante/position a preciser lors des photos).</td>
+</tr>
+<tr>
+  <td>Module BT blinde</td>
+  <td>Le deuxieme PCB possede un capot/blindage metallique. Le modele precis du SoC en dessous <strong>n'est pas lu</strong>.</td>
+  <td><strong>Observation du poste</strong> ; hypothese BK3260 uniquement par comparaison d'une ancienne generation D878.</td>
+</tr>
+<tr>
+  <td>Micrologiciel / API logique</td>
+  <td>Identifiant connu : <code>ET12_AQQX_V10043</code> ; reference d'image <code>B707_Audio_AGHF_ET12_QX-V10043.bin</code>.</td>
+  <td><strong>Documentation fabricant</strong> et <strong>modele de banc</strong> (<code>bench/uart_serial.py</code>). Ne prouve ni le SoC reel ni l'identite des PCB entre modeles.</td>
+</tr>
+</tbody>
+</table>
+<p>Le marquage <strong><code>D868BT-SP</code> ne demontre pas</strong> que la carte est electroniquement identique a celle des D878, ni que le shield renferme un BK3260. Une publication sur les D878 historiques decrit BK3260 et parfois BK2452 ; le D878UVII ajoute une architecture Bluetooth/APRS avec un autre firmware/circuit. Il faut donc distinguer carte support, carte Bluetooth sous blindage et carte APRS/FM additionnelle. La carte <strong>RF de reception AM</strong> du D578 PLUS est encore un autre sous-ensemble.</p>
+<h2 id="2-architecture-logique-de-travail">2. Architecture logique de travail</h2>
+<pre><code class="language-text">MCU GD32F303 (D578 PRO / PLUS, selon relevés)
+   |
+   +-- UART3 logique observee dans le banc  --&gt; [support D868BT-SP ?]
+   |                                              |
+   |                                              +-- [module radio ET12 ? sous shield]
+   |                                                       |
+   |                                                       +-- Liaison BT audio + commandes --&gt; BT01
+   |                                                       +-- Liaison PTT et etat batterie --&gt; BP-02
+   |                                                       +-- Casque / mains libres BT
+   +-- Chemin audio analogique (mapping exact au module : INCONNU)
+   +-- Controle radio/PTT (aucun GPIO PTT Bluetooth materiel attribue)
+</code></pre>
+<p>Les fleches UART3 et module sont fonctionnelles, <strong>pas des pistes PCB identifiees</strong>. Ne pas presenter les pins PC10/PC11 ou d'autres pins comme des connexions confirmees a ce stade. Le manuel Bluetooth constructeur et son guide BT01 prouvent les fonctions, pas le cable interne.</p>
+<h2 id="3-dialogue-firmware-connu-sur-uart3-perimetre-exact">3. Dialogue firmware connu sur UART3 : perimetre exact</h2>
+<p>Le simulateur local <code>bench/uart_serial.py</code> emule <strong>UART3</strong> avec un pair facultatif ET12. Il comprend <strong>seulement</strong> le jeu de commandes AT ci-dessous. La qualite de preuve est limitee au modele existant et a la reference binaire dont les reponses ont ete extraites ; aucune capture sur le vrai PCB n'a encore ete comparee.</p>
+<table>
+<thead>
+<tr>
+  <th>Commande envoyee par le GD32</th>
+  <th>Reponse dans le modele ET12</th>
+  <th>Interpretation prudente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>AT+VER?\r\n</code></td>
+  <td><code>\r\n+VER:ET12_AQQX_V10043\r\n</code></td>
+  <td>Interrogation de version.</td>
+</tr>
+<tr>
+  <td><code>AT+AGHF=0\r\n</code></td>
+  <td><code>\r\n+AGHF:0\r\n</code></td>
+  <td>Regle un etat AGHF a 0.</td>
+</tr>
+<tr>
+  <td><code>AT+AGHF=1\r\n</code></td>
+  <td><code>\r\n+AGHF:1\r\n</code></td>
+  <td>Regle un etat AGHF a 1.</td>
+</tr>
+<tr>
+  <td><code>AT+AGHF?\r\n</code></td>
+  <td><code>\r\n+AGHF:0</code> ou <code>:1</code> suivi de <code>\r\n</code></td>
+  <td>Lit l'etat AGHF courant.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Les octets <code>\r\n</code> representent <code>0D 0A</code> ; les commandes non reconnues provoquent dans le banc un <strong>arret explicite</strong>, pas un <code>OK</code> fabrique.</li>
+<li><code>AGHF</code> est un etat du <strong>modele</strong> ; sa semantique complete (profil audio, activation mains libres, routage, etc.) <strong>n'est pas qualifiee</strong>. Ne pas en deduire un controle audio a partir de son nom.</li>
+<li><code>BT_SHA</code> du banc pour l'image de reference ET12 : <code>b712048f8e0a3c352b68e8c213894c12d1341756f4ef7d9e435d4a487e3ff40f</code> (a verifier uniquement contre le binaire que possede l'utilisateur).</li>
+<li>Autres informations presentes dans l'OEM possibles : appairage, nom, batterie, PTT, audio, watchdog, reprogrammation ; <strong>pas encore decodees dans ce modele</strong>.</li>
+<li><strong>Ni l'adresse du peripherique UART3 en memoire, ni un numero de pin MCU, ni le baudrate reel ne suffisent a definir le cable interne</strong>. On doit extraire et verifier les initialisations RCC/GPIO/AF et comparer a la mesure.</li>
+</ul>
+<h2 id="4-versions-et-mises-a-jour-sans-interchanger-les-images">4. Versions et mises a jour, sans interchanger les images</h2>
+<table>
+<thead>
+<tr>
+  <th>Bloc</th>
+  <th>Reference / contrainte constructeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Programme principal du poste</td>
+  <td>V1.x pour les modeles D578UV PRO GD32 ; le PLUS suit son propre jeu d'images. Le MCU similaire n'autorise PAS le croisement des images.</td>
+</tr>
+<tr>
+  <td>DSP / DMR</td>
+  <td>SCT3258, micrologiciel distinct.</td>
+</tr>
+<tr>
+  <td>Bluetooth interne ET12</td>
+  <td><code>ET12_AQQX_V10043</code> ou version prise en charge par le modele ; mise a jour officiellement proposee via Android et l'utilitaire Bluetooth constructeur.</td>
+</tr>
+<tr>
+  <td>BT01</td>
+  <td>Firmware <strong>propre au microphone</strong>, mis a jour separement via USB depuis l'outil constructeur.</td>
+</tr>
+<tr>
+  <td>PLUS APRS / BT</td>
+  <td>Carte ou firmware supplementaire pour le RX APRS ; ne pas l'assimiler a <code>D868BT-SP</code> sans photo et continuite.</td>
+</tr>
+</tbody>
+</table>
+<p>Pour les versions de compatibilite et leurs limites, consulter le guide BT01 officiel. Un paquet de mise a jour Bluetooth ET12 n'est <strong>pas</strong> une image GD32 ni une preuve du silicium contenu sous le blindage.</p>
+<h2 id="5-comment-retrouver-la-liaison-dans-le-firmware-constructeur-v121">5. Comment retrouver la liaison dans le firmware constructeur V1.21</h2>
+<ol>
+<li><strong>Analyse statique, sans poste :</strong> retrouver les chaines <code>AT+VER?</code>, <code>AT+AGHF</code>, <code>ET12</code>, <code>Bluetooth</code>, <code>PTT</code>, <code>RfBT</code>, les appels de transfert de caracteres <code>\r\n</code>, puis etablir les <em>xrefs</em> en Ghidra.</li>
+<li>Remonter jusqu'aux routines d'initialisation UART3 (horloge RCC, nombre de bits, parite, stop, diviseur de baud, IRQ, DMA si applicable). Aucune valeur de baud n'est revendiquee ici.</li>
+<li>Retrouver le pinmux GPIO applique <strong>a l'initialisation OEM</strong> ; les broches doivent etre etablies par les ecritures de registres et validees contre le MCU, pas par un nom peripherique ou une datasheet generique.</li>
+<li>Etablir le dispatch des commandes AT/reponses et les transitions d'etat (BT off/ready/pairing/connected/BT01 mode). Differencier donnees de controle et audio.</li>
+<li>Localiser les options OEM et tables <em>codeplug</em> : <code>BT On</code>, <code>BT PTT Pair</code>, <code>PTT Hold</code>, <code>PTT Sleep</code>, gains de RX/TX et reglage de commande BT01. <strong>Les adresses OEM et les offsets de NAND ne sont pas encore attribues</strong>.</li>
+<li>En hardware : controler <code>GND</code>, rails 3,3/5 V, <code>TX</code>, <code>RX</code>, <code>EN</code>, <code>RST</code>, <code>STATE</code>, lignes audio et sortie antenne du connecteur entre <strong>carte support</strong> et GD32. Relever le nombre de pads ; photographier les deux faces, sans dessouder pour le moment.</li>
+<li>Capturer au niveau logique <strong>passivement</strong> en ecoute, au demarrage, pendant <code>BT On</code>, appairage du PTT, connexion BT01, changement de canal, reception puis transmission sur charge adaptee en environnement de test reglementaire. Chaque trace doit enregistrer horodatage, direction, baud, bytes hex et contexte.</li>
+</ol>
+<p><strong>Limite de ce travail</strong> : le binaire OEM V1.21 complet n'est pas dans les sources publiques presentes ici ; une nouvelle adresse de routine ou de GPIO Bluetooth non deja verifiee serait donc inventee. Les utilitaires <code>tools/audit_bluetooth_strings.py</code> et <code>tools/decode_bt_uart.py</code> permettent une premiere qualification <strong>lecture seule</strong>, si l'image ou la trace originale est fournie.</p>
+<h2 id="6-matrice-dobservations-a-completer">6. Matrice d'observations a completer</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>Logiciel disponible</th>
+  <th>Physique manquant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Presence/version</td>
+  <td>ET12 V10043, <code>AT+VER?</code> du modele</td>
+  <td>Reponse reelle, sortie UART3 sur connecteur</td>
+</tr>
+<tr>
+  <td>Mise sous tension et reset</td>
+  <td>Menus OEM ; modele AT limite</td>
+  <td>Broche enable/reset, polarite, rail alimente</td>
+</tr>
+<tr>
+  <td>Audio RX</td>
+  <td>Support audio dans le produit</td>
+  <td>Entrée/sortie et niveau, mute, branchements codec/amplis</td>
+</tr>
+<tr>
+  <td>Audio TX</td>
+  <td>Support microphone BT01/casque</td>
+  <td>Injection vers FM/DMR, ajustement gain, protection PTT</td>
+</tr>
+<tr>
+  <td>PTT BP-02</td>
+  <td>Mode momentane/verrouille dans le manuel</td>
+  <td>Trame radio/AT reelle, timeout et deconnexion</td>
+</tr>
+<tr>
+  <td>BT01 / gestion ecran</td>
+  <td>Etats et menus dans la notice</td>
+  <td>Transport des donnees d'affichage, protocole de synchro et priorite UI</td>
+</tr>
+<tr>
+  <td>Parametres memorises</td>
+  <td>Champs exposes dans le CPS et qdmr</td>
+  <td>Adresse NAND, format exact, CRC/migration</td>
+</tr>
+<tr>
+  <td>Firmware interne</td>
+  <td>Nom ET12 et outils de MAJ</td>
+  <td>Bootrom/module SoC, dump/hashes, format image et secu de MAJ</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-references-externes-verifiables">7. References externes verifiables</h2>
+<ul>
+<li>Manuel Bluetooth AnyTone D578 : <a href="https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/BT%20manual.pdf">https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/BT%20manual.pdf</a></li>
+<li>Guide officiel BT01 : <a href="https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf">https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf</a></li>
+<li>Conditions de mise a jour / BT01 : <a href="https://www.bridgecomsystems.com/pages/bluetooth-speaker-mic-quick-start-guide">https://www.bridgecomsystems.com/pages/bluetooth-speaker-mic-quick-start-guide</a></li>
+<li>Methode de mise a jour Bluetooth ET12 pour D578/D878 : <a href="https://pnwdigital.net/wp-content/files/documents/Anytone/BT_FW_Upgrade_578_878.pdf">https://pnwdigital.net/wp-content/files/documents/Anytone/BT_FW_Upgrade_578_878.pdf</a></li>
+<li>Sources techniques familiales D868/D878 : <a href="https://radio.carstenbauer.net/878techmods.htm">https://radio.carstenbauer.net/878techmods.htm</a></li>
+<li>Photographies internes D578 : <a href="https://radio.carstenbauer.net/578techmods.htm">https://radio.carstenbauer.net/578techmods.htm</a></li>
+<li>QDMR, structures de parametres Bluetooth (definitions semantiques, pas offsets OEM prouvés) : <a href="https://static.dm3mat.de/qdmr/manual/ch04s04.html">https://static.dm3mat.de/qdmr/manual/ch04s04.html</a></li>
+<li>Logiciel du banc : <code>bench/uart_serial.py</code>, <code>bench/test_uart_serial.py</code>, <code>bench/emulate_lcd_v121.py</code>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

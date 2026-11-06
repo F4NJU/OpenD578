@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPU, Flash interne, boot, USB et SWD - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>CPU, Flash interne, boot, USB et SWD</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/02_CPU_FLASH_BOOT_USB_SWD.md">Modifier sur GitHub</a><a download href="../../raw/docs/02_CPU_FLASH_BOOT_USB_SWD.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code></p>
+<article class="markdown-body"><h1 id="cpu-flash-interne-boot-usb-et-swd">CPU, Flash interne, boot, USB et SWD</h1>
+<h2 id="identification-environnements-et-provenance">Identification, environnements et provenance</h2>
+<p>[MATERIEL] GD32F303VKT6 (Cortex-M4, LQFP100), Flash 3 145 728 octets, SRAM 98 304 octets (96 Kio). [EXTERNE] Le fabricant GigaDevice donne 3072 K Flash et 96 K SRAM : <a href="https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32f303vkt6">https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32f303vkt6</a> . Horloge maxi nominale 120 MHz, pas une fréquence mesurée du poste pendant les simulations.</p>
+<p>[UTILISATEUR/MATERIEL] FTDI C232HD-DDHSP-0 / FT232H, OpenOCD 0.12.0 Debian, MPSSE SWD, liaisons déclarées: SWCLK orange -&gt; pad2 PA14; SWDIO jaune via 470 ohms et vert -&gt; pad4 PA13; GND noir -&gt; pad3; 3,3 V -&gt; pad1; NRST non câblé. En mode MCU Update à LED rouge clignotante, lecture DPIDR 0x2BA01477, AHB-AP 0x24770011, Cortex-M4 r0p1. <strong>La description de câblage n'est pas une procédure d'alimentation recommandée sans contrôle du schéma réel.</strong> L'utilisateur précise que le bouton Power est une entrée vers le MCU, pas une coupure directe de son alimentation (notamment lorsqu'alimenté via l'USB/SWD).</p>
+<p>[OBSERVATION USB] La branche GD32 expose <code>28e9:018a</code>, CDC ACM <code>GD32 Virtual ComPort</code>, numéro série <code>000000010000</code> rapporté; modes normal et MCU Update peuvent partager ces descripteurs, donc ne pas détecter le mode sur le seul VID:PID. Des observations de « Boot Mode for Sct » n'ont pas prouvé un bootloader de récupération indépendant. Aucune commande USB write n'a été validée.</p>
+<h2 id="images-et-sha-de-reference-non-incluses-si-la-colonne-statut-le-signale">Images et SHA de référence (non incluses si la colonne statut le signale)</h2>
+<table>
+<thead>
+<tr>
+  <th>Fichier</th>
+  <th style="text-align:right">Longueur</th>
+  <th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>App OEM GD V1.20, base 0x08006000</td>
+  <td style="text-align:right">1 020 096</td>
+  <td><code>1cdf1817f8abbbee72901357316953aea28763e192fe35b913c82520db31453b</code></td>
+</tr>
+<tr>
+  <td>App OEM GD V1.21 .CDD, base 0x08006000</td>
+  <td style="text-align:right">1 020 300</td>
+  <td><code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code></td>
+</tr>
+<tr>
+  <td>Boot physique 24 Kio</td>
+  <td style="text-align:right">24 576</td>
+  <td><code>c098c74d2a979e162d6dd901c9d59d7ed3f0a4c9d526a168a1db78fba316fdeb</code></td>
+</tr>
+<tr>
+  <td>Dump Flash physique 3 Mio, double passe</td>
+  <td style="text-align:right">3 145 728</td>
+  <td><code>e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e</code></td>
+</tr>
+<tr>
+  <td><code>D578UV_Setup_1.21.exe</code></td>
+  <td style="text-align:right">5 961 204</td>
+  <td><code>7602fe26c4733e86f4b12d1e34ab55f32dbbd58fd3b381b55ae1f5a38a82949e</code></td>
+</tr>
+<tr>
+  <td><code>QX_Firmware_Update.exe</code> du CPS</td>
+  <td style="text-align:right">non reporté ici</td>
+  <td><code>3303e9c7be4163f07b516a91b14e66dcd701d8101296f1a564d521cfb09fbee7</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="occupation-flash-selon-les-deux-dumps-physiques">Occupation Flash selon les deux dumps physiques</h2>
+<p>Les bornes sont inclusives, sur espace ARM. Une valeur <code>FF</code> est un état de lecture, pas un titre de propriété de secteur.</p>
+<table>
+<thead>
+<tr>
+  <th>Plage</th>
+  <th style="text-align:right">Octets</th>
+  <th>Interprétation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x08000000..0x08005FFF</code></td>
+  <td style="text-align:right">24 576</td>
+  <td>Boot OEM, protéger.</td>
+</tr>
+<tr>
+  <td><code>0x08006000..0x080FF18B</code></td>
+  <td style="text-align:right">1 020 300</td>
+  <td>Application OEM V1.21, identique octet pour octet à CDD.</td>
+</tr>
+<tr>
+  <td><code>0x080FF18C..0x080FF19F</code></td>
+  <td style="text-align:right">20</td>
+  <td>Zéros hors CDD, page occupée.</td>
+</tr>
+<tr>
+  <td><code>0x080FF1A0..0x082F57FF</code></td>
+  <td style="text-align:right">2 057 824</td>
+  <td>FF sur deux captures, <strong>non alloués au satellite</strong>.</td>
+</tr>
+<tr>
+  <td><code>0x082F5800..0x082FF81F</code></td>
+  <td style="text-align:right">40 992</td>
+  <td>Données constructeur, cache/ressources, non FF.</td>
+</tr>
+<tr>
+  <td><code>0x082FF820..0x082FFFFF</code></td>
+  <td style="text-align:right">2 016</td>
+  <td>FF, dernière page affectée OEM.</td>
+</tr>
+</tbody>
+</table>
+<p>896 pages observées: 256 pages de 2 Kio et 640 pages de 4 Kio; 504 totalement FF, 392 non FF; 0 réservée au satellite. Flash haute gérée par l'OEM, possible rechargement depuis NAND; ne pas implanter une extension sur une zone candidate sans preuve de non-utilisation/consistance.</p>
+<h2 id="execution-du-boot-fonctions-statiques">Exécution du boot, fonctions statiques</h2>
+<ul>
+<li>Boot MSP <code>0x20001E50</code>; vecteur Reset boot <code>0x080004D9</code> (bit Thumb), code <code>0x080004D8</code>; littéraux <code>0x08000500</code> et <code>0x08000504</code> vers <code>0x080002F9</code> et <code>0x08000131</code>.</li>
+<li>App vecteur base <code>0x08006000</code>, Reset_Handler code <code>0x08006D38</code>; VTOR positionné par la séquence <code>0x08006384</code> / STR <code>0x08006388</code>.</li>
+<li>Routine boot de programmation FMC candidate <code>0x0800436E</code>, filtre seulement sur adresse <strong>initiale</strong> <code>0x08000000 &lt;= r8 &lt; 0x08100000</code>; cela ne prouve pas une borne de longueur ni un droit d'écraser l'application.</li>
+<li>Routine constructeur haute <code>0x0808CE72</code>, transferts depuis NAND vers Flash en <code>0x082F5800</code>; sources NAND candidates <code>0x00200000</code>, <code>0x02B00000</code>, <code>0x02B20000</code>, <code>0x02B80000</code>, <code>0x02BA0000</code>.</li>
+<li>Chaîne <code>UPDATE -&gt; buffer 32 octets -&gt; FMC</code> en audit statique, sans test de restauration.</li>
+</ul>
+<h2 id="risque-majeur">Risque majeur</h2>
+<p>Le SWD a permis <strong>la lecture</strong> de deux copies de la Flash et du boot; cela ne démontre ni déverrouillage option bytes, ni possibilité de rétablir l'application en cas de panne, ni sûreté de l'outil MCU Update. Le patch Thumb expérimental de phase60 est encore pass-through. Le blob ROM <code>satellite_rom_ONLY_STAGE60.bin</code>, lorsqu'il sera retrouvé, <strong>ne doit jamais être utilisé comme fichier update</strong>.</p>
+<h2 id="sources-directes-recuperees">Sources directes récupérées</h2>
+<ul>
+<li><code>05_TEXTES_EXTRAITS_DES_ARCHIVES/RAPPORT_PHASE35_D578.txt</code></li>
+<li><code>05_TEXTES_EXTRAITS_DES_ARCHIVES/PHASE35_FLASH3M_PASS1_AUDIT.txt</code></li>
+<li><code>05_TEXTES_EXTRAITS_DES_ARCHIVES/RAPPORT_PHASE32_D578.txt</code></li>
+<li><code>05_TEXTES_EXTRAITS_DES_ARCHIVES/D578_PHASE35_FLASH_PAGE_MAP_896.txt</code> (extraction textuelle du CSV)</li>
+<li><code>07_CODE_SIMULATEURS_ET_SOURCES_RECUPEREES/D578_PHASE53_OFFLINE_2026-11-03/tools/audit_v121.py</code></li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

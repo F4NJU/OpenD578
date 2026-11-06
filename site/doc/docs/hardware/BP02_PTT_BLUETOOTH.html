@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Bouton PTT Bluetooth AnyTone : BP-02, appairage et surete d&#x27;emission - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Bouton PTT Bluetooth AnyTone : BP-02, appairage et surete d&#x27;emission</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BP02_PTT_BLUETOOTH.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BP02_PTT_BLUETOOTH.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/BP02_PTT_BLUETOOTH.md</code></p>
+<article class="markdown-body"><h1 id="bouton-ptt-bluetooth-anytone-bp-02-appairage-et-surete-demission">Bouton PTT Bluetooth AnyTone : BP-02, appairage et surete d'emission</h1>
+<p>Le <strong>BP-02</strong> (nom de modele utilise dans le manuel BT01) est un emetteur de commandes PTT Bluetooth <strong>separe du microphone BT01</strong>. Il ne constitue pas une liaison audio et n'encode pas, a notre connaissance, les echantillons de voix. Il peut etre associe au D578 pour piloter l'emission avec un casque ou le BT01.</p>
+<h2 id="1-modele-fonctionnel-documente">1. Modele fonctionnel documente</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction menu</th>
+  <th>Comportement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>BT PTT Pair</code></td>
+  <td>Appairage du bouton avec le poste par le module Bluetooth interne.</td>
+</tr>
+<tr>
+  <td><code>PTT Name</code></td>
+  <td>Nom d'appairage du bouton.</td>
+</tr>
+<tr>
+  <td><code>PTT Hold</code> OFF</td>
+  <td>PTT momentane : enfonce = demande TX ; relache = RX.</td>
+</tr>
+<tr>
+  <td><code>PTT Hold</code> ON</td>
+  <td>PTT verrouillable : une pression active, la pression suivante desactive.</td>
+</tr>
+<tr>
+  <td><code>PTT Sleep</code></td>
+  <td>Mise en veille configurable (environ 1 a 4 min ou infinie suivant guide).</td>
+</tr>
+<tr>
+  <td><code>PTT BatVolt</code></td>
+  <td>Niveau batterie expose par l'interface du poste.</td>
+</tr>
+</tbody>
+</table>
+<p>Le guide BT01 decrit une sequence <strong>d'abord appairer le BP-02 au D578, puis le microphone BT01</strong> pour le mode mains-libres avec PTT externe. Cela ne signifie pas que le BP-02 est appaire au BT01 directement : la liaison de controle passe par le <strong>poste</strong>.</p>
+<h2 id="2-machine-a-etats-dun-pilote-alternatif-conception-pas-protocole-capture">2. Machine a etats d'un pilote alternatif (conception, PAS protocole capture)</h2>
+<pre><code class="language-text">NON_APPAIRE --(pair confirme)--&gt; REPOS
+REPOS --(PTT ON et RF autorisee)--&gt; TX_DEMANDE
+TX_DEMANDE --(controle RF valide)--&gt; TX_ACTIVE
+TX_ACTIVE --(PTT OFF / timeout / deconnexion / coupure)--&gt; REPOS / INHIBIT
+Tout etat --(defaut critique)--&gt; TX_INTERDIT, PTT force OFF
+</code></pre>
+<p>Ne pas utiliser uniquement un evenement <code>PTT pressed</code> sans traiter le <code>PTT released</code>/expiration. En mode verrouille, une deconnexion doit forcer la fin d'emission. Le firmware alternatif doit conserver une <strong>duree maximale locale de TX</strong> independante des profils radio BT, ainsi que les verrous frequences et modes de la chaine RF. Un paquet Bluetooth n'est jamais une autorisation suffisante a activer la puissance RF.</p>
+<h2 id="3-ce-quil-faut-retrouver-dans-loem-v121">3. Ce qu'il faut retrouver dans l'OEM V1.21</h2>
+<ul>
+<li>Commandes d'activation de l'appairage PTT et recherche d'adresse/nom.</li>
+<li>Format et canal de retour des evenements bouton, de la batterie, des expirations et de la deconnexion.</li>
+<li>Stockage du profil <code>PTT Hold</code> et du nom dans codeplug/NAND (offsets encore inconnus).</li>
+<li>Ordre des arbitrages entre PTT filaire, PTT BT01, BP-02, VOX, DMR et ACL TX.</li>
+<li>Protection de TX si radio hors bande, canal RX-only, perte de Bluetooth, alimentation instable ou erreur modem.</li>
+</ul>
+<h2 id="4-mesures-faisables-sans-emission-rf">4. Mesures faisables sans emission RF</h2>
+<ol>
+<li>Dans le menu PTT, verifier la version, appairer puis lire le nom et la batterie.</li>
+<li>Activer <code>PTT Hold</code> ON/OFF et tracer la communication serie <strong>passivement</strong> sans autoriser la RF (poste en configuration RX-only sous controle).</li>
+<li>Comparer les evenements appui/relache, deux pressions, reveil de veille, deconnexion, reconnexion et batterie faible.</li>
+<li>Realiser les essais TX uniquement avec installation RF instrumentee, charge adaptee et conditions radioamateur autorisees ; ne pas provoquer d'emission sur un canal quelconque depuis le banc de recherche.</li>
+</ol>
+<h2 id="5-sources">5. Sources</h2>
+<ul>
+<li>AnyTone, Bluetooth(BT) UserGuide D578 : <a href="https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/BT%20manual.pdf">https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/BT%20manual.pdf</a></li>
+<li>AnyTone, BT01 User Guide : <a href="https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf">https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf</a></li>
+<li>QDMR, options <code>pttLatch</code> et <code>pttSleepTimer</code> : <a href="https://static.dm3mat.de/qdmr/manual/ch04s04.html">https://static.dm3mat.de/qdmr/manual/ch04s04.html</a></li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

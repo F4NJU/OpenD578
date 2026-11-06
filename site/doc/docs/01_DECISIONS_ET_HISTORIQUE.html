@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Décisions et chronologie technique du portage satellite D578 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Décisions et chronologie technique du portage satellite D578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/01_DECISIONS_ET_HISTORIQUE.md">Modifier sur GitHub</a><a download href="../../raw/docs/01_DECISIONS_ET_HISTORIQUE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/01_DECISIONS_ET_HISTORIQUE.md</code></p>
+<article class="markdown-body"><h1 id="decisions-et-chronologie-technique-du-portage-satellite-d578">Décisions et chronologie technique du portage satellite D578</h1>
+<h2 id="contrat-logiciel-impose-par-lutilisateur">Contrat logiciel imposé par l'utilisateur</h2>
+<p>Le poste cible est l'<strong>AnyTone D578UV PRO branche GD32</strong>, avec <strong>GD_Ver 1.21</strong>. La branche AT32, le D578UVII PLUS V2.x et les firmwares D878 ne doivent pas être confondus avec cette cible. Deux postes D578UV PRO ont été signalés, dont un autre en V1.15c. La cible a été ouverte et identifiée comme GD32F303VKT6.</p>
+<p><strong>[UTILISATEUR]</strong> Le firmware doit rester léger, simple, fluide et stable, conserver la FM, le DMR, le GPS/APRS, les mémoires, le CPS, les fréquences/offsets, le CTCSS/DCS, les données et la calibration. Aucun module satellite ne doit détourner une émission, introduire une deuxième tâche, monopoliser l'interface, réécrire la NAND ou imposer un ordonnanceur supplémentaire.</p>
+<p><strong>[UTILISATEUR]</strong> Le code satellite doit être intégré <strong>de façon additive</strong> si possible. Les retraits de fonctions sont autorisés en dernier recours seulement, avec analyse des dépendances : enregistrement vocal (Record), 2Tone/5Tone, Work Alone, Weather Alarm, réception FM commerciale, roaming DMR, CH Ranging, Scrambler, Digital Encryption. Ne pas supprimer ces fonctions par simple suppression de chaînes. Ne pas toucher aux fonctions critiques même indirectement. La conception tient compte des instabilités signalées sur l'ancien mode satellite de l'AnyTone D878.</p>
+<p><strong>[UTILISATEUR]</strong> L'écran satellite doit appartenir au rendu OEM, avec exclusivité sur l'afficheur, sans collision de commandes LCD. Reproduire exactement les pixels OpenGD77 n'est pas un objectif. Réutiliser les polices et dimensions natives de l'AnyTone.</p>
+<p><strong>[UTILISATEUR]</strong> Fonction déclenchée idéalement par une <strong>mémoire analogique FM normale dont le nom commence par <code>SAT:</code></strong>, par exemple <code>SAT:SO50</code>, les champs RX/TX et CTCSS étant définis par le CPS. Activer le Doppler au changement de canal et présenter une interface courte de type fenêtre APRS, si l'API OEM le permet. Aucun suivi ne doit s'activer sur un canal DMR ou une éphéméride absente. Le projet ne doit pas écrire le Doppler dans la NAND/codeplug.</p>
+<p>La variation de fréquence en émission a été discutée, mais la règle conservatrice du développement est : <strong>aucun changement TX pendant PTT ou TX actif</strong>, ni lorsque l'état est inconnu; la vitesse réelle de reprogrammation et le pas minimal du synthétiseur n'ont pas été qualifiés. Une émission ne doit pas basculer de fréquence sans contrôle RF OEM.</p>
+<h2 id="chronologie-et-jalons-sans-requalification-indue">Chronologie et jalons, sans requalification indue</h2>
+<table>
+<thead>
+<tr>
+  <th>Phases / dates</th>
+  <th>Contenu vérifiable ou rapporté</th>
+  <th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1-8, 01/11-02/11</td>
+  <td>Comparaison V1.20, repérage menus/handlers, premiers composants passages à la demande OpenGD77. Phase3: 106 libellés et 231 xrefs.</td>
+  <td>Archives initiales fragmentaires.</td>
+</tr>
+<tr>
+  <td>9-14</td>
+  <td>PLAN13 comparé à OpenGD77 (30/30 AOS/LOS sur vecteurs), UI simulee et cache NAND RO (50 000 consultations pour une lecture en simulation).</td>
+  <td>Aucun lien matériel.</td>
+</tr>
+<tr>
+  <td>15-26</td>
+  <td>UI/RTOS, NAND/Flash, tables TBB/TBH, dépendances des menus et options. Phase26: 43 dispatchs TBB/TBH résolus dans chacune de deux images, 78 tables statiques, ~186 500 candidats, 2 372 points d'entrée candidats, 133 tests Python, 18 modules ARM 16 503 o non liés.</td>
+  <td>Les candidats statiques ne sont pas une couverture dynamique.</td>
+</tr>
+<tr>
+  <td>27-32, 02/11</td>
+  <td>UI et garde RF simulés, API hôte, analyse CPS et enveloppes update, observation USB de deux radios; correction live du callback busy/PTT phase32.</td>
+  <td>Aucune API OEM RX/TX certifiée.</td>
+</tr>
+<tr>
+  <td>33-35, 02-03/11</td>
+  <td>Liaison SWD réelle, deux captures boot 24 Kio, deux captures Flash 3 Mio identiques, égalité de l'application OEM V1.21 avec CDD officielle, carte des 896 pages Flash.</td>
+  <td>Lecture n'établit pas récupération/flashage sûr.</td>
+</tr>
+<tr>
+  <td>36-40, 03/11</td>
+  <td>BOOT/FMC, copie Flash haute, lease LCD en simulation, budget PLAN13 8 itérations/100 ms, plafond UI 8 commandes, pile statique individuelle réduite; 21 modules 19 129 o et 288 o BSS non liés.</td>
+  <td>FPU/libm externes et piles RTOS non qualifiés.</td>
+</tr>
+<tr>
+  <td>41-44, 03/11</td>
+  <td>Worker UI et sémaphore OEM RAM 0x20000128 avec guards RTOS; 37 acquisitions et 38 releases au niveau statique, paires et règles contrôlées.</td>
+  <td>Pas de droit de hook ni d'ABI exclusive certifiée.</td>
+</tr>
+<tr>
+  <td>45-47 logiciel, 03/11</td>
+  <td>Chaînes RF/BCD, écritures VFO RAM, exclusions de faux setters, pilote série, appels NAND, 21 tests phase47.</td>
+  <td>Setter RX/TX et état PTT toujours non prouvés.</td>
+</tr>
+<tr>
+  <td>46 NAND forensique, 03/11</td>
+  <td>Dump NAND 264 Mio entrelacé + 256 Mio main + 8 Mio auxiliaires + 128 Kio statuts ECC. Cartographie et erreurs ECC.</td>
+  <td>Image non garantie restaurable à cause des ECC 0x20.</td>
+</tr>
+<tr>
+  <td>48-52, 03/11</td>
+  <td>RF/NAND, encodeur/PTT/VFO, simulation de RX/TX Doppler et restauration. Phase52: 22 modules, 20 039 o non liés, 288 BSS, 28 externes.</td>
+  <td>Aucune connexion OEM.</td>
+</tr>
+<tr>
+  <td>53, 03/11</td>
+  <td>Audit autonome des adresses et hashes V1.21, 12 tests unitaires contenus dans l'archive récupérée, exécutés avec succès; pas de firmware.</td>
+  <td>Reste un outil de recherche statique.</td>
+</tr>
+<tr>
+  <td>54-59, 03/11</td>
+  <td>Pré-intégrations ARM non flashables, softfloat, prévisualisation ROM, sans preuve de lien OEM. Archives listées mais non exportées.</td>
+  <td>Les noms ZIP ne démontrent pas le comportement du code non lu.</td>
+</tr>
+<tr>
+  <td>60 EXP06, 03/11</td>
+  <td>Détection <code>SAT:ID</code>, sélection TLE (25 slots), modèle popup, 30 sources ARM liées, softfloat, 14 680 octets texte/constantes, BSS 288 o, aperçu à 0x080F0000.</td>
+  <td>Aucune image installable, aucun raccord RAM/LCD/RF/TLE.</td>
+</tr>
+<tr>
+  <td>SIM V1, 04/11</td>
+  <td>Audit démarrage C et 94 432 octets SRAM initialisés, deux motifs A5/5A, indépendance du décodeur.</td>
+  <td>Ce n'est pas une mesure RAM en charge.</td>
+</tr>
+<tr>
+  <td>SIM V2, 04/11</td>
+  <td>Reset/horloge RCU/PLL, GPIO/AFIO, SysTick; arrêt sur PA15 demandé par lecture NAND 9F.</td>
+  <td>NAND non encore simulée.</td>
+</tr>
+<tr>
+  <td>SIM V3, 04/11</td>
+  <td>Modèle NAND bit-série, lecture de vrais buffers, WFI/Power/EXTI/SysTick; arrêt ADC DMA.</td>
+  <td>ADC/LCD visuel/GPS/DMR non simulés.</td>
+</tr>
+</tbody>
+</table>
+<p>Le détail des phases anciennes figure dans les rapports textuels récupérés, en particulier <code>PASSATION_D578_SATELLITE_PHASE47_NAND_2026-11-03.txt</code> et les <code>RAPPORT_PHASE*.txt</code>. Plusieurs archives cumulatives contiennent le code réel, mais n'ont pas été matériellement exportées dans ce ZIP.</p>
+<h2 id="ne-pas-alterer-les-timings-et-protections-deja-decides">Ne pas altérer les timings et protections déjà décidés</h2>
+<ul>
+<li>PLAN13: budget 8 itérations/tranche, 100 ms entre tranches de calcul de passages, sans thread en plus.</li>
+<li>UI: budget 8 opérations de dessin/tranche pour la page sélectionnée, protection de génération et d'écran, acquittement propriétaire OEM.</li>
+<li>PTT/busy: vérifier un état <strong>frais</strong> juste avant toute proposition de modification RF; état inconnu = aucune commande.</li>
+<li>Canal <code>SAT:</code>: codeplug 64 octets, champ nom à +0x23 selon qdmr, mais <strong>position du champ dans la représentation RAM OEM non prouvée</strong>.</li>
+<li>L'utilisation de la fonction d'affichage APRS OEM à réception d'une trame est une piste de recherche; le slot précis et son ABI sont encore inconnus.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>CPS intégré V11.6 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>CPS intégré V11.6</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/CPS_INTEGRE_V11_6.md">Modifier sur GitHub</a><a download href="../../raw/docs/CPS_INTEGRE_V11_6.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/CPS_INTEGRE_V11_6.md</code></p>
+<article class="markdown-body"><h1 id="cps-integre-v116">CPS intégré V11.6</h1>
+<p>L’onglet <strong>CPS intégré</strong> utilise les échanges USB du firmware exécuté : PROGRAM,
+identification, lecture R, écriture W et END. Il ne lit ni ne modifie directement
+la NAND. Aucun port COM virtuel n’est nécessaire pour cet onglet.</p>
+<ol>
+<li>Fermer le CPS externe et son pont CONNECTER_CPS. Un seul client USB à la fois.</li>
+<li>Démarrer le moteur OEM V1.21. Pour sauvegarder la NAND après arrêt normal,
+cocher cette option avant le démarrage.</li>
+<li>Choisir un groupe de 32 emplacements parmi les 128 premiers et cliquer Lire.</li>
+<li>Exporter éventuellement la dernière lecture en JSON. Cet export est propre
+au banc, sans import et incompatible avec le fichier CPS constructeur.</li>
+<li>Modifier un nom existant (1 à 16 caractères ASCII imprimables), puis Écrire.</li>
+<li>Après END, laisser le moteur finir les écritures NAND, arrêter puis redémarrer le moteur et relire. Un ACK
+ne suffit pas à prouver la finalisation ou la persistance après redémarrage.</li>
+</ol>
+<p>Les fréquences RX/TX, le mode et la puissance sont affichés en lecture seule.
+Les noms vides ou non reconnus ne sont pas éditables. Le bitmap des canaux actifs
+n’est pas interprété : la liste présente des emplacements, pas une liste certifiée
+de canaux activés. Zones, contacts, création/suppression, CTCSS, calibrations et
+importation des codeplugs constructeur ne sont pas inclus.</p>
+<p>Le format décodé est limité au codeplug D578UV constructeur. Un firmware
+expérimental qui change ce format doit disposer de son propre adaptateur.
+Le protocole USB connu ne constitue pas une compréhension de tous les champs.</p>
+<h2 id="ecriture-et-erreurs">Écriture et erreurs</h2>
+<p>Chaque groupe correspond à une page logique de 2 048 octets. Avant écriture,
+le CPS relit la page et la compare à l’instantané affiché. Il refuse une page
+changée. Seuls les octets des noms sont modifiés ; le reste est conservé.
+Les adresses sont bornées à 0x00800000–0x00801FFF (128 enregistrements de 64 octets).
+Les réponses de lecture sont contrôlées : commande, adresse, longueur, checksum,
+ACK. Les écritures ne sont pas répétées automatiquement après un échec ambigu.
+Si un transfert d’écriture échoue, ne pas supposer la page cohérente : sauvegarder
+le diagnostic, redémarrer le banc si nécessaire et relire avant de reprendre.
+Il n’existe pas de verrou exclusif entre cet éditeur et un client externe :
+la fermeture du pont est nécessaire. La comparaison avant écriture ne protège
+pas contre un autre client qui écrit simultanément.</p>
+<h2 id="validation">Validation</h2>
+<p>Tests Node : BCD/fréquence avec offset, changement de nom, préservation des
+champs voisins, refus des noms invalides, instantané périmé et modification
+hors noms ; pas de répétition automatique de END après délai ambigu.
+Le scénario d’intégration utilise le même module JavaScript que la page et
+un vrai moteur OEM. Le compte rendu précise la portée exacte des essais.
+L’interface graphique navigateur n’a pas été exercée automatiquement.</p>
+<p>Référence de format consultée dans les sources qdmr :
+<a href="https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_codeplug.cc">https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_codeplug.cc</a>
+et <a href="https://github.com/hmatuschek/qdmr/blob/master/doc/code/d578uv_channel.txt">https://github.com/hmatuschek/qdmr/blob/master/doc/code/d578uv_channel.txt</a>
+Implémentation du banc indépendante, sans copie de code qdmr.</p>
+<p>Une lecture maintient la programmation active pour permettre une modification ou
+une autre lecture. Le bouton Terminer envoie END sans modifier les mémoires.
+Après END, le retour immédiat à une session CPS reste non qualifié ; redémarrer
+le moteur. Activer la persistance NAND avant démarrage pour conserver une écriture.</p>
+<p>Résultat du scénario V11.6 : identification, lecture de 2 048 octets,
+nouvelle entrée PROGRAM, comparaison avant écriture, changement d’un nom,
+écriture complète et END, finalisation NAND, arrêt normal, redémarrage
+applicatif sans capture RAM, puis identification et relecture intégrale.
+La page relue correspond exactement à la page modifiée ; seuls les octets du
+nom ciblé diffèrent de l’original. Voir validation_v11_6.json.
+203 tests Python existants réussis, plus les contrôles Node du module CPS.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

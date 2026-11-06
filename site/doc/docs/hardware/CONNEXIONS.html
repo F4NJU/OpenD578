@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Liaisons inter-composants et niveaux de preuve - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Liaisons inter-composants et niveaux de preuve</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/CONNEXIONS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/CONNEXIONS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/CONNEXIONS.md</code></p>
+<article class="markdown-body"><h1 id="liaisons-inter-composants-et-niveaux-de-preuve">Liaisons inter-composants et niveaux de preuve</h1>
+<p>La carte interactive utilise le fichier unique <code>hardware/models/d578uv-pro-gd32-v121.json</code>. Chaque liaison possede un identifiant, un type de bus, un niveau de preuve, une liste de signaux <strong>si elle est connue</strong>, des reservations et les documents qui etayent les informations.</p>
+<h2 id="comment-interpreter-le-dessin">Comment interpreter le dessin</h2>
+<ul>
+<li><strong>Materiel observe :</strong> releve effectif sur le poste ou liaison debug testee. Cela ne valide pas necessairement toutes les caracteristiques electriques.</li>
+<li><strong>Trace constructeur :</strong> GPIO, routine ou commande obtenus par analyse et/ou execution OEM. La continuite physique vers une patte externe peut rester inconnue.</li>
+<li><strong>Emulation :</strong> niveaux de bus ou transfert reproduits par le banc a partir du pilote OEM, sans mesure de piste.</li>
+<li><strong>Hypothese :</strong> attribution candidate; ne pas en faire une constante dans un firmware alternatif.</li>
+<li><strong>Inconnu :</strong> interaction fonctionnelle citee sans correspondance de broches certifiee.</li>
+</ul>
+<p><strong>Rappel de securite :</strong> une broche identifiee en lecture seule ne doit jamais etre pilotee par essai au hasard. En particulier, les zones NAND de calibration et les secteurs Flash de boot doivent rester intacts.</p>
+<h2 id="liaisons-bien-documentees-cote-logiciel">Liaisons bien documentees cote logiciel</h2>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Destination</th>
+  <th>Interface</th>
+  <th>Preuve / limites</th>
+  <th>Notice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>GD32</td>
+  <td>LCD</td>
+  <td>PE7..PE14, PB10..PB13</td>
+  <td>GPIO OEM; continuites FPC non toutes mesurees</td>
+  <td><a href="../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">LCD</a></td>
+</tr>
+<tr>
+  <td>GD32</td>
+  <td>NAND</td>
+  <td>PB8/PB15/PB14/PA15 (candidats)</td>
+  <td>Pilote OEM et niveaux de bus simules; continuite a confirmer</td>
+  <td><a href="../03_NAND_LECTURES_ECC_CARTE.html">NAND</a></td>
+</tr>
+<tr>
+  <td>GD32</td>
+  <td>Touches, codeur et volumes</td>
+  <td>PA0, PA1, PB0/1, PC2/5/8/9</td>
+  <td>Chemins OEM, essais du banc; placement physique a confirmer</td>
+  <td><a href="../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Facade</a></td>
+</tr>
+<tr>
+  <td>GD32</td>
+  <td>Microphone</td>
+  <td>USART0 PA9/PA10 candidats</td>
+  <td>Protocole observe et pinout prise publie; sens et continuite a verifier</td>
+  <td><a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Microphone</a></td>
+</tr>
+<tr>
+  <td>GD32</td>
+  <td>LED et eclairages</td>
+  <td>PE3/4, PA5, PB3/4</td>
+  <td>Commandes OEM observees; chaines LED a cartographier</td>
+  <td><a href="../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Facade</a></td>
+</tr>
+<tr>
+  <td>GD32</td>
+  <td>Amplification HP</td>
+  <td>PA7 et registre RF bank 1/page 0/0x25 bit4</td>
+  <td>Selection Speaker Mode observee, amplis non traces</td>
+  <td><a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Microphone</a></td>
+</tr>
+</tbody>
+</table>
+<p>| GD32 | Support Bluetooth D868BT-SP / ET12 | UART3 <strong>dans le simulateur</strong> ; aucune pin, frequence/baud ou ligne audio physique assignee | <a href="BLUETOOTH_D868BT_SP_ET12.html">Bluetooth ET12</a> |
+| Module BT | Microphone BT01 | Liaison sans fil, commandes d'ecran, touches et audio ; details de trames non captures | <a href="BT01_MICROPHONE_BLUETOOTH.html">BT01</a> |
+| Module BT | BP-02 | Commandes PTT sans fil ; pas de bus MCU direct etablit | <a href="BP02_PTT_BLUETOOTH.html">PTT BP-02</a> |</p>
+<p>Les interfaces GPS, DMR, Bluetooth, codec audio et RF n'ont pas de table exhaustive de broches propre a la carte GD32. Elles apparaissent comme liaisons <strong>a qualifier</strong>, et non comme cablage certifie.</p>
+<h2 id="ajouter-ou-corriger-une-connexion">Ajouter ou corriger une connexion</h2>
+<p>Modifier directement <code>hardware/models/d578uv-pro-gd32-v121.json</code> avec une liste <code>pins</code> et une note <code>details</code> indiquant la source; conserver un niveau de preuve explicite. Si une correction resulte d'un nouveau relevé, joindre une photo ou trace non sensible dans <code>hardware/photos/</code> et une explication dans un <code>.md</code> source. Le site est regenere au prochain commit sur <code>main</code>.</p>
+<h3 id="complement-materiel">Complément matériel</h3>
+<p>Consulter <a href="PLAN_INVESTIGATION_BROCHAGES.html">PLAN INVESTIGATION BROCHAGES</a> et <a href="AUDIT_FONCTIONS_PARTIELLES.html">audit des fonctions partielles</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

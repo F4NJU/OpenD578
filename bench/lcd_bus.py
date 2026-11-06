@@ -7,6 +7,7 @@ claiming the exact physical LCD controller or electrical pin continuity.
 from collections import Counter
 import hashlib
 import struct
+import time
 from pathlib import Path
 from PIL import Image
 from emulate_clock_v121 import StopModel
@@ -36,6 +37,7 @@ class LcdBus:
         self.dirty = False
         self.step = 0
         self.empty_windows=[]
+        self._rgb_buffer=None
 
     def gpio(self, before, after, data_levels):
         if self.armed and not before & 0x400 and after & 0x400 and not after & 0x2000:
@@ -60,6 +62,7 @@ class LcdBus:
             self.columns = self.rows = None
             self.pixel_format = self.madctl = None
             self.pixels.clear()
+            self._rgb_buffer=None
             self.dirty = True
             self.display_on = False
             self.sleeping = True
@@ -90,7 +93,10 @@ class LcdBus:
                 return
             color = (self.high_byte << 8) | value
             self.high_byte = None
+            self.ensure_rgb_buffer()
             self.pixels[self.x, self.y] = color
+            offset=(self.y*512+self.x)*3
+            self._rgb_buffer[offset:offset+3]=bytes(self.rgb(color))
             self.total_pixels += 1
             self.dirty = True
             self.x += 1
@@ -129,23 +135,35 @@ class LcdBus:
         red, green, blue = (r << 3) | (r >> 2), (g << 2) | (g >> 4), (b << 3) | (b >> 2)
         return (blue, green, red) if bgr else (red, green, blue)
 
+    def ensure_rgb_buffer(self):
+        if getattr(self,'_rgb_buffer',None) is None:
+            self._rgb_buffer=bytearray(512*512*3)
+            for (x,y),color in self.pixels.items():
+                offset=(y*512+x)*3
+                self._rgb_buffer[offset:offset+3]=bytes(self.rgb(color))
+
     def frame(self, honor_display=True, bgr=False):
-        width, height = max(1, self.width), max(1, self.height)
-        result = Image.new('RGB', (width, height))
-        if not honor_display or (self.display_on and not self.sleeping):
-            target = result.load()
-            for (x, y), color in self.pixels.items():
-                if x < width and y < height:
-                    target[x, y] = self.rgb(color, bgr)
-        return result
+        width,height=max(1,self.width),max(1,self.height)
+        if honor_display and not (self.display_on and not self.sleeping):
+            return Image.new('RGB',(width,height))
+        self.ensure_rgb_buffer()
+        return Image.frombytes('RGB',(width,height),bytes(self._rgb_buffer),
+                               'raw','BGR' if bgr else 'RGB',512*3,1)
 
     def save(self, filename, honor_display=True):
         path = Path(filename)
         path.parent.mkdir(parents=True, exist_ok=True)
         temporary = path.with_name(path.stem + '.tmp.png')
         self.frame(honor_display).save(temporary)
-        temporary.replace(path)
-        self.dirty = False
+        for attempt in range(4):
+            try:
+                temporary.replace(path)
+                self.dirty = False
+                return True
+            except PermissionError:
+                if attempt<3:time.sleep(.002)
+        self.dirty=True
+        return False
 
     def describe(self):
         image = self.frame(honor_display=False)

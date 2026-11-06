@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "transport": "JavaScript mini CPS -> HTTP -> USB PMA -> executed OEM firmware",
+  "page_bytes": 2048,
+  "readback_matches": true,
+  "only_name_changed": true,
+  "original_CPS_executed": false,
+  "browser_UI_executed": false,
+  "cold_restart_tested": true
+}

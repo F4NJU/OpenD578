@@ -5,3 +5,5 @@
 footer button{font-size:11px;padding:5px 9px;background:transparent;color:var(--muted)}
 
 .neutral-led{display:block;width:9px;height:9px;border-radius:50%;background:#53635d;border:1px solid #91a29b;margin:0 auto -5px}
+
+pre{white-space:pre-wrap;overflow-wrap:anywhere}a{color:var(--accent,#82c7da)}

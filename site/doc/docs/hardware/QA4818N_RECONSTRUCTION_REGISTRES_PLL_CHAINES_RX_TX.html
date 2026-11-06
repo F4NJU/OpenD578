@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md</code></p>
+<article class="markdown-body"><h1 id="qa4818n-x4-reconstruction-du-protocole-des-frequences-des-banques-et-des-commandes-rf">QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</h1>
+<p><strong>OpenD578, variante PRO GD32 V1.21, étude du 6 novembre 2026.</strong></p>
+<p><strong>Statut : pilote de codage et analyseur de trames disponibles, pas de firmware RF matériellement validé.</strong> Les séquences du constructeur <em>peuvent</em> être mesurées par le banc <code>bench/rf_spi.py</code>, mais <strong>aucune capture complète et authentifiée d'un changement de fréquence RX/TX n'a été retrouvée dans les archives publiques actuellement accessibles</strong>. Les valeurs numériques ci-dessous proviennent soit d'une équation publiée pour l'AT1846S, soit d'un scénario explicitement hypothétique. Il serait incorrect de les appeler « mots observés du D578 » sans enregistrer un <code>RF_control_spi.frames</code> ou <code>radio.frames</code> exécuté avec l'application OEM.</p>
+<h2 id="1-objectif-de-cette-reconstruction">1. Objectif de cette reconstruction</h2>
+<p>Développer séparément :</p>
+<ol>
+<li>Le <strong>décodeur de bus</strong> vérifiable sur les écritures GPIO de l'OEM, déjà réalisé dans <code>bench/rf_spi.py</code>.</li>
+<li>Un <strong>analyseur de traces</strong> lisant les registres par banque, les rapprochant des fréquences du VFO et des FI, sans stimuler le poste (<code>tools/qa4818n_trace.py</code>).</li>
+<li>Un <strong>encodeur de fréquence C</strong> pour les registres <code>0x29/0x2A</code>, fondé sur la convention documentée pour l'AT1846S et entièrement indépendant des fonctions/adresses RAM OEM (<code>firmware/rf/qa4818n_frequency.[ch]</code>).</li>
+<li>Un <strong>transport de test injecté</strong> qui ne connaît ni GPIO ni PA et ne peut pas écrire si l'activation explicite manque (<code>firmware/rf/qa4818n_transport.[ch]</code>).</li>
+<li>Les futures phases de portage : identification physique des quatre circuits, initialisation horloge/bande, changements RX/TX, RF switches, filtres à varicaps, contrôle de puissance, CTCSS/squelch, DMR et gestion des conflits entre voies.</li>
+</ol>
+<h2 id="2-architecture-materielle-etablie-pour-la-famille-non-attribuee-sur-chaque-pcb">2. Architecture matérielle : établie pour la famille, non attribuée sur chaque PCB</h2>
+<p>Une documentation technique du D578 par VK7ZJA décrit : quatre QA4818N en LQFP32, des références 26 MHz, <strong>deux oscillateurs locaux indépendants</strong> (VFO A/B) et <strong>deux circuits de réception à conversion directe</strong>, placés après des filtres FI de <strong>38,550 MHz / 38,850 MHz</strong>. La réception utilise donc un premier changement de fréquence, puis une démodulation de FI. La présence de quatre boîtiers grattés, dont un près d'un composant « 26.00 », a été rapportée sur le poste étudié. <strong>La correspondance des quatre boîtiers, des quatre banques série et des deux FI reste inconnue.</strong></p>
+<p>Le QA4818N serait compatible avec le brochage de l'AT1846S, mais il est décrit comme plus capable. On ne peut donc pas transposer sans test ses limites de bandes, ses registres non documentés, ses séquences de calibration ou la formule du synthétiseur.</p>
+<p>Conséquences sur la fréquence :</p>
+<ul>
+<li><strong>Fréquence affichée RX</strong> : fréquence reçue à l'antenne ; pas nécessairement fréquence programmée dans le QA utilisé comme oscillateur local.</li>
+<li><strong>Fréquence d'oscillateur local</strong> : pour une première FI positive, un mélangeur idéal permet deux possibilités, injection haute ou basse : <code>F_LO = F_RX + F_IF</code> et <code>F_LO = F_RX - F_IF</code> (cette dernière n'a de sens ici que si elle est positive). La sélection effective, l'oscillateur qui produit cette fréquence et son éventuelle multiplication/division ne sont pas vérifiés.</li>
+<li><strong>Fréquence du QA de réception FI</strong> : pourrait être proche de 38,550 ou 38,850 MHz ; il faudra le démontrer par comparaison des registres et par mesure.</li>
+<li><strong>TX</strong> : le schéma de synthèse en émission peut différer du schéma de réception ; n'appliquer <strong>aucune</strong> des équations RX au TX sans preuve.</li>
+<li>Les chiffres 38,550 et 38,850 ne permettent pas, seuls, de décider quel filtre correspond à A ou B ni s'il existe un réglage de décalage supplémentaire.</li>
+</ul>
+<h2 id="3-gpio-et-interface-serie-reconstitues-dans-le-banc-v121">3. GPIO et interface série reconstitués dans le banc V1.21</h2>
+<p>Source locale : <code>bench/rf_spi.py</code> et contrôles croisés OEM décrits dans <code>docs/RF_SPI_INTERRUPT_FIX.md</code>.</p>
+<table>
+<thead>
+<tr>
+  <th>Signal logique</th>
+  <th>GPIO observé dans le modèle</th>
+  <th>Signification</th>
+  <th>Niveau de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>SCLK</td>
+  <td>PB3</td>
+  <td>Horloge des transactions RF</td>
+  <td>Décodage GPIO OEM dans le banc, non mesuré au CI</td>
+</tr>
+<tr>
+  <td>SDIO</td>
+  <td>PB4</td>
+  <td>Données série bidirectionnelles, change de direction à la lecture</td>
+  <td>Idem</td>
+</tr>
+<tr>
+  <td>CS banque 0</td>
+  <td>PB5, actif bas</td>
+  <td>Sélection logique 0</td>
+  <td>Idem</td>
+</tr>
+<tr>
+  <td>CS banque 1</td>
+  <td>PB2, actif bas</td>
+  <td>Sélection logique 1</td>
+  <td>Idem</td>
+</tr>
+<tr>
+  <td>CS banque 2</td>
+  <td>PC13, actif bas</td>
+  <td>Sélection logique 2</td>
+  <td>Idem</td>
+</tr>
+<tr>
+  <td>CS banque 3</td>
+  <td>PE1, actif bas</td>
+  <td>Sélection logique 3</td>
+  <td>Idem</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trame d'écriture constatée dans le modèle :</strong> <code>commande/adresse</code> sur 8 bits, puis valeur de registre 16 bits, MSB d'abord, soit 24 fronts d'horloge. Le bit 7 du premier octet distingue lecture (<code>1</code>) et écriture (<code>0</code>), les 7 autres bits contiennent l'adresse <code>0x00..0x7F</code>.</p>
+<p>Lors d'une lecture, l'OEM libère SDIO et le modèle présente 16 bits. Il faut reproduire sur le matériel la polarité des fronts, les temps de maintien, la configuration GPIO et le comportement de la ligne avant d'utiliser un pilote électrique autonome.</p>
+<p>Le banc crée <strong>quatre banques logiques</strong>. Rien ne démontre encore que <code>bank 0 = LO A</code>, <code>bank 1 = LO B</code>, etc. Les lecteurs OEM de statut RX simulés en banques 0/1 rendent <strong>plausible</strong> un rôle de réception pour ces banques ; cela reste une hypothèse de correspondance, et pas un relevé de continuité.</p>
+<p><strong>Mode trois fils de l'AT1846S</strong> : dans sa documentation, les broches <code>SCLK=2</code>, <code>SDIO=3</code>, <code>XTAL1=5</code>, <code>XTAL2=6</code>, <code>MODE=7</code>, <code>SENB=8</code> concernent un boîtier de la famille AT. La numérotation des QA4818N réels n'est pas validée par une mesure sur le PCB.</p>
+<h3 id="format-des-mots-exemple-de-preparation-de-transaction">Format des mots, exemple de préparation de transaction</h3>
+<p>Une écriture de la valeur <code>0x0023</code> dans le registre <code>0x29</code> s'exprime sous forme de <strong>trois octets</strong> <code>29 00 23</code>; pour <code>0x85C0</code> dans <code>0x2A</code>, <code>2A 85 C0</code>. Ces octets sont produits par les encodeurs <strong>hors ligne</strong>. Ils ne doivent pas être interprétés comme une séquence suffisante pour changer de fréquence : page, initialisation, recalibration, état radio et ordres d'écriture peuvent entrer en jeu.</p>
+<h3 id="pagination">Pagination</h3>
+<p>Le registre <code>0x7F</code> est utilisé comme sélecteur de page. Le banc conserve une page <strong>par banque</strong> et différencie les registres <code>(bank, page, address)</code>. Toute extraction doit préserver cette granularité ; une écriture <code>0x29</code> en page 1 ne doit pas être prise pour une programmation de fréquence en page 0.</p>
+<h2 id="4-decodage-de-frequence-at1846s-a-eprouver-sur-qa4818n">4. Décodage de fréquence AT1846S, à éprouver sur QA4818N</h2>
+<p>Selon le guide de programmation AT1846S :</p>
+<pre><code class="language-text">N = F_MHz * 16000
+  = F_Hz / 62,5
+reg[0x29] bits [13:0] = (N &gt;&gt; 16) &amp; 0x3FFF
+reg[0x2A] bits [15:0] = N &amp; 0xFFFF
+F_Hz = N * 62,5
+</code></pre>
+<p><code>0x29[15:14]</code> n'appartient pas au champ fréquence de 30 bits. L'encodeur C utilise des entiers sur 64 bits et arrondit à l'unité la plus proche ; l'inverse renvoie un nombre de <strong>demi-Hz</strong>, sans perte des pas fractionnaires. <strong>62,5 Hz est la résolution du champ numérique dans la documentation AT1846S</strong>, pas nécessairement la largeur de pas radio validée du D578.</p>
+<table>
+<thead>
+<tr>
+  <th>Scénario <em>calculé</em></th>
+  <th style="text-align:right">F (MHz)</th>
+  <th><code>0x29</code></th>
+  <th><code>0x2A</code></th>
+  <th>Lecture possible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Fréquence FI 1</td>
+  <td style="text-align:right">38,550</td>
+  <td><code>0x0009</code></td>
+  <td><code>0x6960</code></td>
+  <td>QA récepteur FI, hypothèse</td>
+</tr>
+<tr>
+  <td>Fréquence FI 2</td>
+  <td style="text-align:right">38,850</td>
+  <td><code>0x0009</code></td>
+  <td><code>0x7C20</code></td>
+  <td>QA récepteur FI, hypothèse</td>
+</tr>
+<tr>
+  <td>RF VHF</td>
+  <td style="text-align:right">145,500</td>
+  <td><code>0x0023</code></td>
+  <td><code>0x85C0</code></td>
+  <td>RF directe ou autre architecture</td>
+</tr>
+<tr>
+  <td>LO VHF, injection haute FI1</td>
+  <td style="text-align:right">184,050</td>
+  <td><code>0x002C</code></td>
+  <td><code>0xEF20</code></td>
+  <td><code>145,500 + 38,550</code></td>
+</tr>
+<tr>
+  <td>LO VHF, injection basse FI1</td>
+  <td style="text-align:right">106,950</td>
+  <td><code>0x001A</code></td>
+  <td><code>0x1C60</code></td>
+  <td><code>145,500 - 38,550</code></td>
+</tr>
+<tr>
+  <td>RF UHF</td>
+  <td style="text-align:right">435,000</td>
+  <td><code>0x006A</code></td>
+  <td><code>0x3380</code></td>
+  <td>RF directe ou autre architecture</td>
+</tr>
+<tr>
+  <td>LO UHF, injection haute FI1</td>
+  <td style="text-align:right">473,550</td>
+  <td><code>0x0073</code></td>
+  <td><code>0x9CE0</code></td>
+  <td><code>435,000 + 38,550</code></td>
+</tr>
+<tr>
+  <td>LO UHF, injection basse FI1</td>
+  <td style="text-align:right">396,450</td>
+  <td><code>0x0060</code></td>
+  <td><code>0xCA20</code></td>
+  <td><code>435,000 - 38,550</code></td>
+</tr>
+<tr>
+  <td>LO UHF, injection haute FI2</td>
+  <td style="text-align:right">473,850</td>
+  <td><code>0x0073</code></td>
+  <td><code>0xAFA0</code></td>
+  <td><code>435,000 + 38,850</code></td>
+</tr>
+<tr>
+  <td>LO UHF, injection basse FI2</td>
+  <td style="text-align:right">396,150</td>
+  <td><code>0x0060</code></td>
+  <td><code>0xB760</code></td>
+  <td><code>435,000 - 38,850</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Aucun de ces mots n'est encore une mesure QA4818N.</strong> Les exemples permettent de tester le décodeur et de générer des signatures à chercher dans une capture OEM authentifiée. L'écart de 300 kHz entre les deux FI rend le test A/B particulièrement discriminant.</p>
+<h3 id="horloge-26-mhz">Horloge 26 MHz</h3>
+<p>Guide AT1846S : <code>0x04[0]=0</code> choisit le groupe 25,6/26 MHz ; <code>0x30[14]=1</code> distingue 26 MHz de 25,6 MHz. Le composant <code>26.00</code> photographié peut être un quartz ou un oscillateur. Ni son type ni sa distribution aux quatre circuits n'ont été mesurés. Il faudra rechercher les écritures <code>0x04</code>, <code>0x30</code> et les registres de référence <code>0x2B/0x2C</code>, sans réutiliser mécaniquement les valeurs AT1846S.</p>
+<h2 id="5-registres-et-signaux-a-reconstruire">5. Registres et signaux à reconstruire</h2>
+<table>
+<thead>
+<tr>
+  <th>Adresse</th>
+  <th>AT1846S : repère public</th>
+  <th>D578 : preuve présente</th>
+  <th>Travaux restants</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x04</code></td>
+  <td>Choix famille d'horloges</td>
+  <td>Non qualifié dans la capture courante</td>
+  <td>Valeur de chaque banque au reset</td>
+</tr>
+<tr>
+  <td><code>0x0F</code></td>
+  <td>Band select sur AT1846S</td>
+  <td>Pas de valeur validée QA</td>
+  <td>Cartographie VHF/UHF/LO</td>
+</tr>
+<tr>
+  <td><code>0x15</code></td>
+  <td>Réglage IF et bande</td>
+  <td>Pas de calibration QA qualifiée</td>
+  <td>Séquence de calibration par voie</td>
+</tr>
+<tr>
+  <td><code>0x24</code></td>
+  <td>Contrôle de PLL/reset</td>
+  <td>Pas de lecture de verrou matériel</td>
+  <td>Mesurer lock / relock et timing</td>
+</tr>
+<tr>
+  <td><code>0x29</code> / <code>0x2A</code></td>
+  <td>Mot de fréquence sur 30 bits</td>
+  <td>Appels OEM identifiés, format sur banc</td>
+  <td>Corrélation VFO/banque/mots</td>
+</tr>
+<tr>
+  <td><code>0x2B</code> / <code>0x2C</code></td>
+  <td>Référence/ADC clock</td>
+  <td>Hypothèse AT seulement</td>
+  <td>Vérifier horloge 26 MHz</td>
+</tr>
+<tr>
+  <td><code>0x30</code></td>
+  <td>Power/modes RX/TX/clock</td>
+  <td>Aucune séquence RF entière qualifiée</td>
+  <td>Mute, RX off, TX off, lock</td>
+</tr>
+<tr>
+  <td><code>0x44</code></td>
+  <td>Contrôle de gain/volume AT</td>
+  <td>Modèle initialise <code>0x00FF</code>; écritures OEM conservées</td>
+  <td>Mesurer l'effet analogique</td>
+</tr>
+<tr>
+  <td><code>0x7F</code></td>
+  <td>Page du registre</td>
+  <td>Suivi explicite en simulateur</td>
+  <td>Repérer pages et tables</td>
+</tr>
+<tr>
+  <td><code>0x0C</code> / <code>0x60</code> / <code>0x61</code> / <code>0x65</code> / <code>0x67</code></td>
+  <td>États/mesures selon modèle et appels OEM</td>
+  <td><strong>Valeurs synthétiques au repos</strong> dans le banc</td>
+  <td>Déterminer RSSI, bruit, portes, AF et squelch réels</td>
+</tr>
+<tr>
+  <td>Page 1, <code>0x17</code></td>
+  <td>Bits de contrôle vus dans l'OEM</td>
+  <td>Lecture/modification dans certaines routines</td>
+  <td>Signification exacte bits <code>[14:8]</code></td>
+</tr>
+<tr>
+  <td>Page 0, <code>0x25</code></td>
+  <td>Commandes liées au haut-parleur/ventilateur vues dans le modèle</td>
+  <td>Valeurs OEM observées pour certains scénarios</td>
+  <td>Décider si registre RF ou commande d'interface externe</td>
+</tr>
+<tr>
+  <td>Page 0, <code>0x51</code></td>
+  <td>Chemin contrôle lu/modifié</td>
+  <td>Présent dans les modèles</td>
+  <td>Mesurer fonction physique</td>
+</tr>
+</tbody>
+</table>
+<p>Les définitions fonctionnelles de l'AT1846S sont <strong>une piste</strong>, pas un dictionnaire certifié du QA4818N. L'accès RF du D578 est <strong>trois fils avec sélections GPIO</strong>, contrairement aux pilotes AT1846S d'autres postes qui utilisent I²C à 7 bits <code>0x2E</code> : <strong>ne pas réutiliser leurs appels I²C</strong>.</p>
+<h2 id="6-sequence-rf-a-identifier-sans-emission">6. Séquence RF à identifier sans émission</h2>
+<p>Pour chaque voie A/B, relever au minimum la matrice suivante :</p>
+<table>
+<thead>
+<tr>
+  <th>Phase</th>
+  <th>Scénario</th>
+  <th>Réponse à obtenir du banc OEM</th>
+  <th>Ambiguïté à lever</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0</td>
+  <td>Après Power/reset, RX désactivée</td>
+  <td>Toutes les écritures <code>(bank,page,reg,valeur)</code> dans l'ordre</td>
+  <td>Init globale, délais, pages</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>RX A 145,500 MHz, B non utilisée</td>
+  <td>Fréquences RF décodées et 4 banques actives</td>
+  <td>Association A/banques</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>RX A 145,5125 MHz</td>
+  <td>Différences de <code>0x29/2A</code> et autres registres</td>
+  <td>Sens de l'offset, pas, auto-calibration</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>RX A 145,500 MHz, RX B 435,000 MHz</td>
+  <td>Différences entre 4 banques</td>
+  <td>VFO A/B, double réception</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Permuter VFO A/B, sans changer les fréquences</td>
+  <td>Différence des sélections et routage</td>
+  <td>VFO physique vs logique</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Basculer 12,5/25 kHz</td>
+  <td>Modifications hors fréquence</td>
+  <td>Filtres et déviation</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>RX avec CTCSS désactivé / activé</td>
+  <td>Registres changeants et lecture états</td>
+  <td>CTCSS et squelch</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Réception de station faible/forte</td>
+  <td>Statut de registres et signal RF mesuré</td>
+  <td>RSSI/AGC et seuils</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>Demander TX <strong>uniquement en simulateur</strong></td>
+  <td>Chaîne commande OEM, PA/commutateur, timing</td>
+  <td>Effet réel TX séparé des mots registre</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>Firmware PRO puis PLUS (dumps distincts)</td>
+  <td>Profils de commande comparés</td>
+  <td>Variantes, calibrations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>La chronologie compte autant que les valeurs.</strong> Un seul <code>0x29/0x2A</code> peut être insuffisant si l'OEM désactive un chemin, met à jour des tensions BH2226, prépare la commutation RF et attend la PLL avant d'activer la réception.</p>
+<h2 id="7-exporter-des-traces-de-notre-banc">7. Exporter des traces de notre banc</h2>
+<p>Le banc complet produit <code>resultat.json</code> accessible aussi via son API locale <code>/api/report</code>. Selon le moteur, la liste se trouve dans <code>radio.frames</code> ou <code>RF_control_spi.frames</code>. Les frames contiennent généralement <code>step</code>, <code>bank</code>, <code>page</code>, <code>register</code>, <code>direction</code>, <code>value</code>. <strong>Les simulations avec valeurs RSSI/squelch injectées restent synthétiques</strong>, même si le code OEM a réellement généré les commandes d'écriture.</p>
+<pre><code class="language-bash">python3 tools/qa4818n_trace.py chemin/vers/resultat.json --display-hz 145500000 --capture-name RX_A_145500 --out analyse_rx_a.json
+</code></pre>
+<p>Si plusieurs tests sont effectués, créer un <code>manifest.json</code> :</p>
+<pre><code class="language-json">{
+  &quot;captures&quot;: [
+    {&quot;name&quot;: &quot;RX_A_145500&quot;, &quot;file&quot;: &quot;rx_a_145500.json&quot;, &quot;mode&quot;: &quot;RX&quot;, &quot;display_hz&quot;: 145500000, &quot;provenance&quot;: &quot;OEM_GD32_V1.21_EMULATOR&quot;},
+    {&quot;name&quot;: &quot;RX_A_1455125&quot;, &quot;file&quot;: &quot;rx_a_1455125.json&quot;, &quot;mode&quot;: &quot;RX&quot;, &quot;display_hz&quot;: 145512500, &quot;provenance&quot;: &quot;OEM_GD32_V1.21_EMULATOR&quot;}
+  ]
+}
+</code></pre>
+<p>Puis :</p>
+<pre><code class="language-bash">python3 tools/qa4818n_trace.py --manifest chemin/vers/manifest.json --out comparaison_qa.json
+</code></pre>
+<p>L'outil : lit JSON, JSONL ou CSV ; contrôle les quatre banques ; ignore les lectures pour déterminer les valeurs programmées ; ne mélange pas les pages ; reconstruit un mot lorsqu'il a rencontré la paire complète ; propose les candidats <code>F affichée</code>, <code>F affichée ± FI1/FI2</code>, <code>FI1</code>, <code>FI2</code> ; et produit un rapport JSON. <strong>Il ne devine pas le sens physique d'une broche ou une fréquence non écrite.</strong> Les traces de démo portent <code>synthetic=true</code> et ressortent comme <code>SYNTHETIC_NOT_OEM</code>.</p>
+<p>Pour capturer les changements de fréquence, il faut conserver le <strong>scénario exact d'entrée</strong> (VFO, canal, mode, fréquence RX et TX, CTCSS, bande passante, RX A/B, température et version OEM). Un écart de quelques registres peut traduire une calibration d'usine plutôt que la fréquence.</p>
+<h2 id="8-architecture-du-pilote-alternatif">8. Architecture du pilote alternatif</h2>
+<p>Sources : <code>firmware/rf/qa4818n_frequency.[ch]</code>, <code>firmware/rf/qa4818n_transport.[ch]</code>.</p>
+<ul>
+<li><code>qa4818_encode_frequency_at1846s()</code> : conversion entière et testable, indépendante des variables OEM.</li>
+<li><code>qa4818_plan_frequency_at1846s()</code> : crée uniquement les deux écritures potentielles <code>0x29</code> / <code>0x2A</code>, pour une banque logique donnée.</li>
+<li><code>qa4818_pack_write_at1846s()</code> : représentation MSB-first des trois octets de données, <strong>sans contrôle GPIO</strong>.</li>
+<li><code>qa4818_apply_plan_to_bench()</code> : transporte le plan dans un <strong>enregistreur injecté</strong>, et refuse toute écriture si l'autorisation expérimentale est fausse.</li>
+</ul>
+<p>Le code <strong>n'active aucun PA, PTT, VCO, sortie RF, module DMR, DAC ou bus physique</strong>. Il ne définit pas les délais de validation PLL, les filtres d'antenne, la garde RX/TX ni les niveaux de puissance. Le pilote matériel ultérieur devra disposer d'une table <code>board_profile</code> différente pour PRO/PLUS avec GPIO mesurés, calibration sauvegardée et politique fail-closed.</p>
+<p><strong>Test C :</strong></p>
+<pre><code class="language-bash">gcc -std=c11 -Wall -Wextra -Werror \
+  firmware/rf/qa4818n_frequency.c \
+  firmware/rf/qa4818n_transport.c \
+  firmware/tests/test_qa4818n_frequency.c -o /tmp/test_qa4818n
+/tmp/test_qa4818n
+</code></pre>
+<p><strong>Test du décodeur :</strong></p>
+<pre><code class="language-bash">python3 -m unittest discover -s tools -p 'test_qa4818n_trace.py' -v
+</code></pre>
+<h2 id="9-conditions-avant-tout-usage-sur-le-poste-physique">9. Conditions avant tout usage sur le poste physique</h2>
+<p>Aucune écriture GD32 ou QA ne sera autorisée tant que les conditions suivantes ne sont pas satisfaites : identification GPIO/boîtier par continuité ; vérification de la fréquence par instrument RF ; séparation contrôlée des deux RX et des LO ; confirmation du mapping bande/varicaps ; récupération de l'état OEM et du bootloader ; procédures de reset sans émission ; temporisations de PLL ; verrouillage TX hors bande, sans charge et en cas de défaut ; et qualification des deux branches du firmware.</p>
+<p>Les valeurs d'alignement, la compensation de TCXO, les gains, les délais, les tables d'accord RF et la puissance TX sont propres à chaque poste. Les recopier depuis une autre radio peut rendre le poste non conforme ou provoquer un dysfonctionnement d'étage de puissance. Aucune émission n'est nécessaire pour terminer le décodage de fréquence RX.</p>
+<h2 id="10-ce-que-lon-peut-deduire-seul-et-ce-qui-reste-inaccessible-sans-nouvelles-donnees">10. Ce que l'on peut déduire seul et ce qui reste inaccessible sans nouvelles données</h2>
+<table>
+<thead>
+<tr>
+  <th>Peut être déduit des sources / traces</th>
+  <th>Exige un nouvel enregistrement ou une mesure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Protocole numérique, pages, mots, paramètres et ordre d'écriture</td>
+  <td>GPIO vers broche exacte des quatre boîtiers ; mapping physique des CS</td>
+</tr>
+<tr>
+  <td>Mot de fréquence AT1846S et comparaison de plusieurs hypothèses de conversion</td>
+  <td>Vérifier que QA4818N utilise le même facteur et qu'il commande bien la fréquence attendue</td>
+</tr>
+<tr>
+  <td>Selon capture OEM : banques qui évoluent quand les fréquences RX/TX changent</td>
+  <td>Mesurer fréquence OL et FI, côté injection, harmoniques, bruit de phase et lock réel</td>
+</tr>
+<tr>
+  <td>Tables de paramètres usine adressées par le code OEM si image accessible</td>
+  <td>Calibrations complètes pour la radio donnée et contrôle de leur application</td>
+</tr>
+<tr>
+  <td>Organisation d'un vrai HAL indépendant du firmware constructeur</td>
+  <td>Régler les niveaux réels RF, duplexage et puissance sans danger</td>
+</tr>
+<tr>
+  <td>Comparaison des branches PRO V1.21 et PLUS lorsqu'elles sont toutes deux disponibles</td>
+  <td>Compatibilité réelle des cartes et composants par mesure</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-sources-et-tracabilite">11. Sources et traçabilité</h2>
+<ul>
+<li><a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA : architecture D578, quatre QA4818N et FI</a></li>
+<li><a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry : inventaire matériel AnyTone</a></li>
+<li><a href="https://manuals.plus/m/3c3831cb8a4faeacfd8c45ad662fb36c9ff3232018d83d1e7ece0938337cb578">Guide AT1846S, champs de fréquence et d'horloge</a></li>
+<li><a href="https://github.com/OpenRTX/openrtx.github.io/blob/master/at1846_registers.md">Table de registres AT1846S, projet OpenRTX</a></li>
+<li>Code libre de comparaison <a href="https://git.hswro.org/fleg/OpenRTX/src/commit/c887a6159928ee47c2af9d5e2821e3f475647e96/platform/drivers/baseband/AT1846S_UV3x0.c">OpenRTX pilote AT1846S</a>, <strong>I²C sur un autre matériel, non applicable directement au bus RF D578</strong>.</li>
+<li>Traces / banc locaux : <code>bench/rf_spi.py</code>, <code>bench/hardware_runner.py</code>, <code>docs/RF_SPI_INTERRUPT_FIX.md</code>, <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>.</li>
+</ul>
+<p><strong>Prochaine preuve décisive :</strong> une capture OEM réelle des changements A/B, à deux fréquences espacées de 12,5 kHz, avec les quatre banques et la paire <code>0x29/0x2A</code>. Tant qu'elle manque, ne pas présenter les tables calculées comme une reproduction exacte des signaux du QA4818N.</p>
+<h3 id="authenticite-de-limage-oem-v121">Authenticité de l'image OEM V1.21</h3>
+<p>L'image historique analysée dans OpenD578 est identifiée sous le nom <code>D578UV_GD_V1.21_20240619.CDD</code>, charge applicative <code>0x08006000</code> et SHA-256 <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>. Une archive officielle de firmware V1.21 est référencée publiquement par le distributeur <a href="https://anytoneusa.com/Downloads/">AnyTone USA</a>. Une tentative d'accès à son fichier ZIP lors de cette session n'a pas abouti. Le site ne fournit pas le fichier constructeur et n'affirme pas l'avoir désassemblé à nouveau le 6 novembre.</p>
+<p>Le banc V11.7 peut générer un <code>resultat.json</code> en présence des images constructeur authentifiées, mais les anciennes archives publiques du dépôt ne contiennent ni cette image ni une matrice de trames RF de plusieurs fréquences. Pour un firmware <strong>effectivement fonctionnel</strong>, il faut récupérer cette preuve avant de fixer définitivement le mapping des banques, la formule QA et l'initialisation.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

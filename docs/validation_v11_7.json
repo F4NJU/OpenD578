@@ -1,0 +1,160 @@
+{
+  "version": "V11.7",
+  "catalog_requirements": 117,
+  "inventory_exhaustive": false,
+  "executed_OEM_regressions": [
+    {
+      "scenario": "FM",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "carrier applied",
+          "step": 61600001
+        },
+        {
+          "phase": "audio opened",
+          "step": 64581892
+        },
+        {
+          "phase": "carrier removed",
+          "step": 66600208
+        },
+        {
+          "phase": "audio closed",
+          "step": 66875652
+        }
+      ],
+      "executed_instructions": 9000000
+    },
+    {
+      "scenario": "GPS",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "fix stimulus",
+          "step": 61600000
+        },
+        {
+          "phase": "position acquired",
+          "step": 64526594
+        },
+        {
+          "phase": "loss stimulus",
+          "step": 67100187
+        },
+        {
+          "phase": "position lost",
+          "step": 71264516
+        }
+      ],
+      "executed_instructions": 13000000
+    },
+    {
+      "scenario": "PTT",
+      "physical_radio_certified": false,
+      "status": "passed",
+      "reason": "ordered stimuli/responses and scenario invariants",
+      "observed_phases": [
+        {
+          "phase": "PTT pressed",
+          "step": 61600001
+        },
+        {
+          "phase": "TX and fan requested",
+          "step": 62204161
+        },
+        {
+          "phase": "PTT released",
+          "step": 63100161
+        },
+        {
+          "phase": "TX and fan cleared",
+          "step": 64225537
+        }
+      ],
+      "executed_instructions": 4000000
+    }
+  ],
+  "LED_bus": {
+    "scenario": "LED_bus",
+    "scope": "decoded GPIO command sequence only",
+    "physical_radio_certified": false,
+    "mapping_confidence": "firmware_correlated_with_user_observation",
+    "status": "passed",
+    "reason": "Observed green / off / red / off from GPIO bus after external stimuli",
+    "observed": [
+      {
+        "step": 63600138,
+        "kind": "carrier",
+        "on": true
+      },
+      {
+        "step": 64476778,
+        "kind": "wire",
+        "value": 78
+      },
+      {
+        "step": 66600206,
+        "kind": "carrier",
+        "on": false
+      },
+      {
+        "step": 66819559,
+        "kind": "wire",
+        "value": 70
+      },
+      {
+        "step": 68600078,
+        "kind": "PTT",
+        "on": true
+      },
+      {
+        "step": 69160085,
+        "kind": "wire",
+        "value": 86
+      },
+      {
+        "step": 71100184,
+        "kind": "PTT",
+        "on": false
+      },
+      {
+        "step": 72759596,
+        "kind": "wire",
+        "value": 70
+      }
+    ],
+    "executed_instructions": 13000000
+  },
+  "static_analysis": {
+    "image_sha256": "02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a",
+    "candidate_entries": 3042,
+    "features_with_string_candidates": 110,
+    "complete": false
+  },
+  "browser_UI_executed": false,
+  "Windows_launchers_executed": false,
+  "physical_radio_certified": false,
+  "remaining": [
+    "FM/audio full firmware-to-IQ coupling",
+    "microphone LED payload decoding",
+    "all speaker routes",
+    "GPS generic hardware oracle",
+    "OEM APRS modulation DMA",
+    "satellite firmware integration",
+    "Bluetooth pairing/audio/firmware execution"
+  ],
+  "unit_tests_passed": 216,
+  "packaged_USB_smoke": {
+    "passed": true,
+    "status_source": "worker_pipe_memory",
+    "live_USB_file_used": false,
+    "original_CPS_executed": false,
+    "Windows_cmd_executed": false,
+    "read_SHA256": "8208b74207d2956a56751cd8a70ec35a99bc43b1c84fbf9607b970c09a969957"
+  }
+}

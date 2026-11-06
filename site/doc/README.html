@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../index.html">Vue eclatee</a>
+<a class="active" href="../docs.html">Documents</a>
+<a href="../cps.html">CPS / USB</a>
+<a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="../firmware.html">Firmware</a>
+<a href="../photos.html">Photos</a>
+<a href="../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/README.md">Modifier sur GitHub</a><a download href="../raw/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>README.md</code></p>
+<article class="markdown-body"><h1 id="opend578">OpenD578</h1>
+<p><strong>Documentation GitHub Pages :</strong> <a href="https://telectroboy.github.io/OpenD578/">https://telectroboy.github.io/OpenD578/</a> (active après publication).</p>
+<p><strong><a href="docs/evidence/INDEX.html">Centre de preuves (RTC, GPS, brochage 100 broches, monographies)</a></strong> : composants documentes, provenance, hypotheses de liaisons et mesures restantes. <strong><a href="docs/CHANGELOG_PREUVES_RTC_GPS_20261105.html">Changelog des nouvelles preuves</a></strong>.</p>
+<p><strong><a href="docs/cps/README.html">Programmation PC, USB et CPS</a></strong> : protocole OEM V1.21, codeplug, simulation CDC/COM, outils de lecture passive et tests.</p>
+<p><strong><a href="docs/PUBLICATION_GITHUB_DEPOT_COMPLET.html">Installation d’un dépôt GitHub neuf</a></strong> et <strong><a href="docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.html">changelog de consolidation</a></strong>.</p>
+<p>Base logicielle publique : banc <strong>V11.7</strong>, accompagné des notices matériel/microphone/LCD <strong>V11.8</strong>. Les sources exécutables V11.8 complètes n’ont pas été récupérées pour ce paquet.</p>
+<p>Experimental firmware research, a digital board emulator, and hardware
+documentation for the <strong>AnyTone AT-D578UV PRO with GD32 MCU</strong>.</p>
+<p><strong>Current status: research and emulator development. There is no installable
+OpenD578 radio firmware release yet.</strong> The original contract probe exercises
+the emulator; it is not a replacement firmware or a file to flash to a radio.</p>
+<p>The V11.7 bench adds an open qualification catalog (117 requirements), a firmware
+clue scanner and JSON/JUnit reports. The 4 bounded regressions (including GPIO status-light outputs) are distinct
+from full hardware qualification. Windows CPS reading was confirmed by the user;
+channel-name persistence was checked with the integrated partial CPS. See
+<a href="docs/QUALIFICATION_ANALOGIQUE.html">qualification scope</a>.</p>
+<p>The project starts with the D578. Other radios, including D878 variants, may
+be investigated later; shared components do not establish compatibility.</p>
+<h2 id="release-goals">Release goals</h2>
+<table>
+<thead>
+<tr>
+  <th>Stage</th>
+  <th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Research</td>
+  <td>Publish the board findings, reproducible peripheral models and tests; continue the satellite integration work.</td>
+</tr>
+<tr>
+  <td>First usable version</td>
+  <td>A simple VFO, analog memories readable/writable from a PC, FM receive/transmit, CTCSS receive/transmit and <strong>APRS transmission</strong>, using the radio's retained calibration data.</td>
+</tr>
+<tr>
+  <td>Second stage</td>
+  <td><strong>APRS reception</strong> and the DMR work needed for use with a local hotspot.</td>
+</tr>
+</tbody>
+</table>
+<p>DMR is an essential project goal. M17 is not a project target. The intended
+operation should feel familiar to an OpenGD77 user, with a small VFO interface
+for the first version. Importing OpenGD77 source requires checking the exact
+upstream version and its license; no OpenGD77 firmware modules are bundled in
+this initial repository.</p>
+<h2 id="emulator-modes">Emulator modes</h2>
+<table>
+<thead>
+<tr>
+  <th>Mode</th>
+  <th>Purpose</th>
+  <th>Firmware dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>run_hardware.py</code></td>
+  <td>Run a raw Cortex-M4 image against the known D578 peripheral subset</td>
+  <td>No OEM instruction-address hooks, no OEM RAM structures, no OEM startup snapshot.</td>
+</tr>
+<tr>
+  <td><code>run_lcd.py</code></td>
+  <td>Retain the V1.21-specific OEM analysis and regression bench</td>
+  <td>Requires the user's matching OEM files and captures; validates observation anchors.</td>
+</tr>
+</tbody>
+</table>
+<p>The hardware mode accepts a different program layout, a different stack
+location inside physical SRAM, and code executed from SRAM. It samples the
+GPIO buses without assuming the MCU uses a particular register or OEM helper
+function. Unsupported peripheral behavior remains an explicit <strong>model
+boundary</strong>. It is not reported as proof that a new firmware is faulty.</p>
+<p>The physical memory map still matters: 3 MiB Flash, 96 KiB SRAM, and modeled
+peripheral addresses. An image for another MCU or board is not automatically
+compatible. The model is not cycle accurate and is not a physical RF test.</p>
+<h2 id="quick-start-no-manufacturer-files-required">Quick start: no manufacturer files required</h2>
+<p>Python 3.11 or newer:</p>
+<pre><code class="language-bash">python -m venv .venv
+# Linux/macOS: source .venv/bin/activate
+# Windows: .venv\Scripts\activate
+python -m pip install -r bench/requirements.txt
+python -m unittest discover -s bench -v
+python bench/contract_firmware.py work/contract.bin
+python bench/run_hardware.py work/contract.bin --carrier match --instructions 12000 --out-dir work/contract
+</code></pre>
+<p>The original Thumb contract program draws two RGB565 pixels through GPIO,
+writes and executes code near the top of SRAM, sends a radio-register write,
+and samples synthetic carrier/CTCSS decoder states through GPIO. It contains
+no manufacturer code. Tests also relocate it to the Flash origin and to an
+address previously used by a V1.21 NAND observer.</p>
+<p>To run a different raw application:</p>
+<pre><code class="language-bash">python bench/run_hardware.py path/to/application.bin --load-address 0x08006000 --instructions 100000 --out-dir work/my-image
+</code></pre>
+<p>The first two words must be an initial stack pointer and a Thumb reset vector.
+<code>--load-address</code> identifies where the supplied vector table belongs. It defaults
+to the application address; <code>0x08000000</code> can be used for an autonomous image.
+Reports include the image hash, stop reason/category, peripherals and memory
+access evidence. A synthetic erased NAND is used unless <code>--nand-dir</code> supplies
+the user's authenticated capture.</p>
+<h2 id="known-limits">Known limits</h2>
+<ul>
+<li>The DSP/AMBE program is not executed. PCM voice and DMR are not implemented.</li>
+<li>RF stimuli represent digital receiver/CTCSS status, not a demodulated waveform.
+They are not yet constrained by the programmed RF frequency.</li>
+<li>The APRS modulation DMA path is incomplete. The first usable version is a
+target, not a claim that APRS transmission already works in this emulator.</li>
+<li>LCD, serial, clocks, ADC/DMA, timers, NAND, flash and CPU exceptions implement
+explicit subsets. Nested/FPU exception frames and all Flash modes are not covered.</li>
+<li>The legacy accelerated engine has a known eight-instruction IRQ55 difference
+on one GPS scenario. Hardware mode currently uses the instruction observer.</li>
+</ul>
+<p>See <a href="docs/EMULATOR.html">the emulator design</a>, <a href="docs/EMULATOR_PERFORMANCE.html">V11.2 performance</a>, <a href="docs/ROADMAP.html">the roadmap</a>,
+<a href="docs/PROGRAMMING_AND_CALIBRATION.html">programming and calibration</a>,
+<a href="docs/RESEARCH_INDEX.html">the research index</a>, and <a href="README_FR.html">the French introduction</a>.</p>
+<h2 id="contributions">Contributions</h2>
+<p>Useful work includes peripheral traces, independent reproductions, GD32 radio
+board identification, SCT3258 protocol work, and small regression tests for new
+hardware behavior. Each finding should distinguish measurement, emulation,
+static analysis and hypothesis. Include the firmware hash and board variant
+when reporting a result. See <a href="CONTRIBUTING.html">CONTRIBUTING.md</a>.</p>
+<p>Manufacturer firmware images, radio dumps, calibration data, codeplugs and
+recorded OEM sessions are supplied locally by their users and are not part of
+this repository. See <a href="PROVENANCE.html">PROVENANCE.md</a>.</p>
+<p>Project initiated by <strong>F4EGM</strong>. Original OpenD578 code is licensed under
+GPL-3.0-or-later; dependencies retain their own licenses.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>KiCad : reconstruction de brochage, PAS le schema AnyTone original - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../../docs/evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel / CAO et brochage</div>
+<div class="doc-heading"><h1>KiCad : reconstruction de brochage, PAS le schema AnyTone original</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/hardware/kicad/README.md">Modifier sur GitHub</a><a download href="../../../raw/hardware/kicad/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>hardware/kicad/README.md</code></p>
+<article class="markdown-body"><h1 id="kicad-reconstruction-de-brochage-pas-le-schema-anytone-original">KiCad : reconstruction de brochage, PAS le schema AnyTone original</h1>
+<p>Fichiers <strong>nouveaux</strong>, reconstruits le 05/11/2026 a partir de la datasheet GigaDevice.
+Ils ne remplacent pas le fichier historique <code>D578_GD32_Brochage_KiCad_V0_3.zip</code>, dont les octets originaux sont indisponibles.</p>
+<ul>
+<li><code>.kicad_sym</code> : 100 broches physiques de l'encombrement GD32F303VKT6 LQFP100, regroupement de symboles par numero pour la lisibilite.</li>
+<li><code>.kicad_sch</code> : feuille <strong>sans aucun fil</strong>, une reference de brochage uniquement.</li>
+<li><code>../pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv</code> : hypothese de fonction par broche et provenance.</li>
+</ul>
+<p>Les fichiers ont ete controles lexicalement et par nombre de broches, mais <strong>pas ouverts dans KiCad dans cette session</strong> ; avant modification, les ouvrir dans la version locale de KiCad et verifier l'affichage.</p>
+<p>Datasheet : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a> ; section 2.6.2 / Table 2-5.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

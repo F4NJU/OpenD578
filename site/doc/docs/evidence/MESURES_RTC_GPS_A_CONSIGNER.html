@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Fiche de mesures : deux sauvegardes du PCB CPU - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Preuves et tracabilite</div>
+<div class="doc-heading"><h1>Fiche de mesures : deux sauvegardes du PCB CPU</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.md">Modifier sur GitHub</a><a download href="../../../raw/docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.md</code></p>
+<article class="markdown-body"><h1 id="fiche-de-mesures-deux-sauvegardes-du-pcb-cpu">Fiche de mesures : deux sauvegardes du PCB CPU</h1>
+<p>La presence de sauvegardes sur la carte CPU est un <strong>releve de l'utilisateur</strong>. L'attribution RTC/arriere et GPS/avant, ainsi que <code>XH414HG IV01E</code>, proviennent d'une <strong>documentation externe sur une autre revision D578</strong>. Mesurer avant de figer le schema du PRO ou du PLUS.</p>
+<h2 id="identification-sans-alimentation-et-sans-injection">Identification, sans alimentation et sans injection</h2>
+<table>
+<thead>
+<tr>
+  <th>Observation a noter</th>
+  <th>PRO GD32 V1.21</th>
+  <th>PLUS GD32 (revision precise a consigner)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Marquage du composant pres de la nappe (arriere)</td>
+  <td>a photographier</td>
+  <td>a photographier</td>
+</tr>
+<tr>
+  <td>Marquage du composant entre potentiometres (avant)</td>
+  <td>a photographier</td>
+  <td>a photographier</td>
+</tr>
+<tr>
+  <td>Diametre / hauteur / polarite / orientation</td>
+  <td>a mesurer</td>
+  <td>a mesurer</td>
+</tr>
+<tr>
+  <td>Tension residuelle aux bornes, instrument &gt; 10 Mohm</td>
+  <td>a mesurer</td>
+  <td>a mesurer</td>
+</tr>
+<tr>
+  <td>Pin MCU VBAT (physique 6 LQFP100) -&gt; sauvegarde RTC</td>
+  <td>a mesurer <strong>hors tension et reserve dechargee</strong></td>
+  <td>a mesurer apres confirmation package MCU</td>
+</tr>
+<tr>
+  <td>Version exacte du ATGM336H et broche VBAT</td>
+  <td>a identifier</td>
+  <td>a identifier</td>
+</tr>
+<tr>
+  <td>Continuite composant GPS -&gt; VBAT GNSS</td>
+  <td>a mesurer avec alimentation deconnectee</td>
+  <td>a mesurer avec alimentation deconnectee</td>
+</tr>
+<tr>
+  <td>Tension sur reserve RTC et GPS avec alimentation connectee, sans bouton POWER</td>
+  <td>a mesurer sans court-circuit</td>
+  <td>a mesurer sans court-circuit</td>
+</tr>
+<tr>
+  <td>Comportement heure apres une coupure prolongée</td>
+  <td>a observer</td>
+  <td>a observer</td>
+</tr>
+<tr>
+  <td>Temps premier fix GPS a froid / apres redemarrage court</td>
+  <td>a observer</td>
+  <td>a observer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Securite electrique :</strong> ne pas utiliser le test de continuite sur un composant encore charge ; ne pas placer une CR2032 en remplacement d'un condensateur XH414HG ; ne pas raccorder une alimentation de laboratoire directement a la reserve. Les tests de tension en fonctionnement ne se font que si l'acces physique est sur, avec pointes isolees et masses identifiees.</p>
+<h2 id="preuves-a-archiver">Preuves a archiver</h2>
+<ul>
+<li><code>hardware/photos/pro-gd32/...</code> ou <code>hardware/photos/plus-gd32/...</code> : photos nettes des deux faces, des deux composants et de la reference du module GPS.</li>
+<li>Tableau local de mesures : tension, temperature, alimentations, duree depuis derniere mise sous tension, instrument, date, numero de revision.</li>
+<li>Pour chaque mesure : chemin vers photo/trace, broche physique et sens du connecteur, reference datasheet, commentaire de l'operateur.</li>
+<li>Seules les mesures <strong>effectivement realisees</strong> doivent changer le statut des liaisons dans les JSON de l'explorateur.</li>
+</ul>
+<p>Pour l'identification des pins GD32, lire <a href="../../hardware/kicad/README.html">la carte de brochage KiCad reconstituee</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

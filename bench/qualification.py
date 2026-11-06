@@ -1,6 +1,9 @@
 """Bounded scenario verdicts using ordered stimuli, responses and invariants."""
 
 def assess(name,result):
+    if name=='LED_bus':
+        from indicator_qualification import assess_status_led
+        return assess_status_led(result)
     verdict=dict(scenario=name,physical_radio_certified=False)
     def finish(status,reason,**details):
         return dict(verdict,status=status,reason=reason,**details)

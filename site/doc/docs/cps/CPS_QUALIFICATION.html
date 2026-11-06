@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Plan de tests CPS D578 et critères de sécurité d&#x27;écriture - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / CPS / programmation</div>
+<div class="doc-heading"><h1>Plan de tests CPS D578 et critères de sécurité d&#x27;écriture</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/cps/CPS_QUALIFICATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/cps/CPS_QUALIFICATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/cps/CPS_QUALIFICATION.md</code></p>
+<article class="markdown-body"><h1 id="plan-de-tests-cps-d578-et-criteres-de-securite-decriture">Plan de tests CPS D578 et critères de sécurité d'écriture</h1>
+<p>Le tableau ci-dessous distingue le niveau atteint dans le banc de la validation qui manque pour un firmware alternatif ou une utilisation sur un appareil. La réussite d'un test local ne transforme pas l'ensemble du poste en firmware réinscriptible.</p>
+<table>
+<thead>
+<tr>
+  <th>Contrôle</th>
+  <th>Situation dans les analyses V11.5-V11.7</th>
+  <th>Critère final</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Énumération USB et CDC</td>
+  <td>Observée dans simulation</td>
+  <td>Descripteurs + endpoint + état après reset sur carte réelle</td>
+</tr>
+<tr>
+  <td><code>PROGRAM</code> et identité</td>
+  <td>Réponse V1.21 observée</td>
+  <td>Identité de modèle et de révision, pas seulement ASCII générique</td>
+</tr>
+<tr>
+  <td><code>R</code> de 16 octets</td>
+  <td>Réponse contrôlée dans banc</td>
+  <td>Contrôle longueur, adresse, somme, bornes, débit et temps</td>
+</tr>
+<tr>
+  <td><code>W</code> et ACK bloc</td>
+  <td>Écriture d'un seul nom testée</td>
+  <td>Les secteurs voisins et états inconnus restent identiques</td>
+</tr>
+<tr>
+  <td><code>END</code> et finalisation</td>
+  <td>Dépôt d'overlay après séquence OEM</td>
+  <td>Attendre fin physique de NAND et journal d'index, pas seulement ACK</td>
+</tr>
+<tr>
+  <td>Reset complet et relecture</td>
+  <td>Un cycle réussi sur banc</td>
+  <td>Plusieurs cycles sur matériel secondaire et coupures contrôlées</td>
+</tr>
+<tr>
+  <td>CPS Windows original</td>
+  <td>Lecture complète signalée par l'utilisateur ; pas exécutée dans la campagne automatisée</td>
+  <td>Captures session complète lecture/écriture supervisées</td>
+</tr>
+<tr>
+  <td>Éditeur 128 canaux</td>
+  <td>Noms seulement</td>
+  <td>RX/TX, CTCSS/DCS, bande, flags, modes, zones, scans, contacts</td>
+</tr>
+<tr>
+  <td>Codeplug PLUS V2.08</td>
+  <td>Non qualifié par même suite</td>
+  <td>Matrice de formats propre au PLUS</td>
+</tr>
+<tr>
+  <td>Calibration RF</td>
+  <td>Cartes connues, conservation prévue</td>
+  <td>Hash avant/après, refus des écritures génériques dans ces régions</td>
+</tr>
+<tr>
+  <td>Perte de connexion USB</td>
+  <td>Scénarios partiels du pont</td>
+  <td>Aucune écriture invisible, relecture et retour sûr à une session</td>
+</tr>
+<tr>
+  <td>Perte d'alimentation</td>
+  <td>Non qualifié</td>
+  <td>Journal/rollback/ECC et secteur valide après reprise</td>
+</tr>
+<tr>
+  <td>CRC/ECC NAND</td>
+  <td>Géométrie et statuts relevés</td>
+  <td>Correction/erreur sans perte du codeplug ou des alignements</td>
+</tr>
+<tr>
+  <td>DMR ID / enregistrements</td>
+  <td>Adresses rapportées par sources externes</td>
+  <td>Validation spécifique de chaque zone, limite, format et capacité</td>
+</tr>
+</tbody>
+</table>
+<h2 id="campagne-de-lecture-recommandee">Campagne de lecture recommandée</h2>
+<ol>
+<li>Consigner la <strong>variante exacte</strong> et les versions : MCU, baseband, BT, firmware et CPS.</li>
+<li>Enregistrer une copie locale du codeplug avec le logiciel constructeur sans publier les données personnelles.</li>
+<li>Lancer l'hôte CDC et collecter les descripteurs, puis une lecture d'une région de test connue.</li>
+<li>Exporter un journal <code>--log</code> du pont en <strong>local privé</strong>. Le faire analyser avec <code>python3 tools/cps_trace_audit.py --input trace.jsonl --output resume.json</code>.</li>
+<li>Vérifier séquences, tailles, checksums, longueurs, dépassements et erreurs de session dans ce résumé ; en cas d'anomalie, annoter le journal source en local.</li>
+<li>Comparer un export de codeplug obtenu indépendamment, en masquant ses données avant publication.</li>
+</ol>
+<h2 id="campagne-decriture-banc-exclusivement-jusqua-qualification">Campagne d'écriture (banc exclusivement jusqu'à qualification)</h2>
+<ul>
+<li>Choisir un nom de canal dans une zone et une page <strong>entièrement</strong> comprises ; sauvegarder la page initiale et tous les secteurs jouxtants par empreintes.</li>
+<li>Réaliser une seule modification du champ nom ; lire immédiatement puis après <code>END</code>, puis après terminaison des métadonnées et après redémarrage.</li>
+<li>Conserver SHA256 d'avant/après sur les régions non modifiées, notamment données RF de la zone <code>0x02F00000...</code> et informations locales <code>0x02FA0000...</code>.</li>
+<li>Simuler une coupure en plusieurs points précis du cycle de page : avant programmation, après ACK de sous-bloc, après ACK de END, pendant mise à jour de métadonnées, après validation.</li>
+<li>Refuser les écritures par défaut sur les étalonnages, contacts et paramètres non interprétés ; ne jamais générer des octets zéro/FF pour « combler » une zone inconnue.</li>
+</ul>
+<h2 id="criteres-obligatoires-avant-un-firmware-opend578-programmable">Critères obligatoires avant un firmware OpenD578 programmable</h2>
+<ul>
+<li>Empêcher une émission TX accidentelle lors d'un transfert USB ; pas de commande CPS assimilée à un PTT.</li>
+<li>Un seul maître d'écriture à la fois et transaction bornée (pas de pont concurrent).</li>
+<li>Contrôle de l'identité matérielle, de la révision et des limites de la mémoire avant toute commande NAND write/erase.</li>
+<li>Prise en charge des coupures et validation après redémarrage, ou fonctionnement <strong>lecture seule</strong>.</li>
+<li>Conservation indépendante de toutes les données propres au poste (calibrations, option bits, paramètres de sécurité).</li>
+<li>Tests de non-régression de l'USB après échec d'écriture, veille, réveil et changement d'alimentation.</li>
+</ul>
+<h2 id="traces-et-confidentialite">Traces et confidentialité</h2>
+<p>Les captures du trafic CPS contiennent parfois des contacts, des numéros DMR, des fréquences et des paramètres d'alignement. Le dépôt ne doit publier que des résumés anonymisés et des fixtures synthétiques. Le validateur <code>tools/cps_trace_audit.py</code> ne décode ni n'exporte les données de payload : il ne renvoie que le type d'opération, l'adresse, la longueur et le résultat du checksum.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

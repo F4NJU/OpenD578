@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>L7805CV : alimentation régulée +5 V et séquencement du D578 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>L7805CV : alimentation régulée +5 V et séquencement du D578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/ALIMENTATION_L7805CV.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/ALIMENTATION_L7805CV.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/ALIMENTATION_L7805CV.md</code></p>
+<article class="markdown-body"><h1 id="l7805cv-alimentation-regulee-5-v-et-sequencement-du-d578">L7805CV : alimentation régulée +5 V et séquencement du D578</h1>
+<p><strong>Observation :</strong> boîtier marqué <code>L7805CV</code> en format <strong>TO-220</strong>. Référence connue du régulateur linéaire de tension fixe +5 V, dont la variante STMicroelectronics est donnée pour un courant de l'ordre de 1,5 A <strong>dans les limites d'échauffement, de dissipation et de chute de tension</strong>.</p>
+<h2 id="1-brochage-du-to-220-a-verifier-sur-la-photo">1. Brochage du TO-220, à vérifier sur la photo</h2>
+<p>Vu de <strong>face, inscription lisible, broches orientées vers le bas</strong> sur la variante ST <strong>L7805CV</strong>, les contacts sont :</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Pin</th>
+  <th>Signal</th>
+  <th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>IN</td>
+  <td>Entrée non régulée</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>GND</td>
+  <td>Référence masse</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>OUT</td>
+  <td>+5 V nominal sous conditions normales</td>
+</tr>
+<tr>
+  <td style="text-align:right">Languette</td>
+  <td>Masse</td>
+  <td>Liaison de refroidissement et masse, selon boîtier ST</td>
+</tr>
+</tbody>
+</table>
+<p>La puissance dissipée peut être estimée par <code>P ≈ (VIN − 5 V) × IOUT</code>. Cette relation explique le besoin d'un radiateur et de condensateurs appropriés, mais <strong>ne donne pas la consommation du poste</strong>, inconnue pour cette branche.</p>
+<h2 id="2-ce-qui-est-connu-sur-la-carte">2. Ce qui est connu sur la carte</h2>
+<p>Le bouton <strong>Power</strong> est une <strong>entrée GPIO <code>PA0</code></strong> et ne coupe pas directement l'alimentation du GD32 pendant l'essai SWD réalisé. Cela prouve une possibilité de contrôle logique/sommeil, mais ne suffit pas à déterminer quelle ligne met sous tension le régulateur L7805CV.</p>
+<p>Le connecteur microphone comprend une broche <strong>5 V</strong> (contact 2 du schéma constructeur). La sortie L7805CV pourrait participer à ce rail ; <strong>aucune continuité n'a été mesurée</strong> et le site garde cette liaison inconnue.</p>
+<h2 id="3-verifications-a-faire-pour-batir-larbre-dalimentation">3. Vérifications à faire pour bâtir l'arbre d'alimentation</h2>
+<ol>
+<li>Hors tension, relever le fil d'entrée du 7805 jusqu'au relais, fusible et protection de polarité, en gardant la référence de masse ; mesurer la continuité du 5 V jusqu'à ses charges.</li>
+<li>Identifier les éventuels transistors de commutation EN/standby et les régulateurs de <strong>3,3 V</strong> secondaires.</li>
+<li>En fonctionnement normal, mesurer en trois points <code>VIN</code>, <code>VOUT</code>, masse, et les états quand Power est relâché/appuyé.</li>
+<li>Relever les courants consommateurs avec instrumentation appropriée, sans court-circuiter ni ouvrir au hasard la ligne 5 V.</li>
+<li>Documenter la mise sous tension du DMR, GPS, NAND, tuner FM, amplificateurs et afficheur par <strong>mesures</strong> séparées.</li>
+</ol>
+<h2 id="4-ce-que-le-gd32-commande">4. Ce que le GD32 commande</h2>
+<p>Un L7805CV n'a pas d'interface programmable. Son pilotage éventuel passe <strong>en amont</strong> par un MOSFET/relais/régulateur de validation encore inconnu. Un firmware alternatif doit éviter de désactiver sans preuve un rail alimentant la logique ou les mémoires.</p>
+<h2 id="references">Références</h2>
+<ul>
+<li>STMicroelectronics, famille L78 : <a href="https://www.st.com/en/power-management/l7805.html">https://www.st.com/en/power-management/l7805.html</a></li>
+<li><a href="../02_CPU_FLASH_BOOT_USB_SWD.html">Accès CPU/Power et SWD</a> ; <a href="../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">broche Power de façade</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

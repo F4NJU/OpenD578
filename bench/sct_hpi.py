@@ -32,6 +32,7 @@ class SctHpi:
         self.codec_page=0
         self.codec_writes=[]
         self.firmware_reference=None
+        self.empty_read_strobes=0
 
     def load_reference(self,path):
         data=path.read_bytes()
@@ -124,8 +125,10 @@ class SctHpi:
                 # OEM 0932DC asserts HRDN before changing the MCU direction.
                 # Validate direction at the actual input-register sample.
                 if upper_mode==0x88888888:
-                    if not self.rx:raise StopModel('SCT HPI read with empty output FIFO')
-                    self.read_latch=self.rx[0]
+                    # A control strobe alone is not an MCU data sample. Power
+                    # down changes these pins with no subsequent ISTAT read.
+                    if self.rx:self.read_latch=self.rx[0]
+                    else:self.empty_read_strobes=getattr(self,'empty_read_strobes',0)+1
             elif not before&0x10 and after&0x10 and self.read_latch is not None:
                 self.rx.popleft()
                 self.read_latch=None
@@ -148,4 +151,5 @@ class SctHpi:
             frames=self.frames,controls={f'{key:02X}':bytes(value).hex() for key,value in self.controls.items()},
             codec_configuration_writes=self.codec_writes,firmware_reference=self.firmware_reference,
             DSP_or_AMBE_firmware_executed=False,RF_or_audio_simulated=False,
+            empty_read_strobes=getattr(self,'empty_read_strobes',0),
             pins=dict(HCSN='PD2',HWRN='PD3',HRDN='PD4',HOBIB='PD5',DATA='PD8..PD15'))

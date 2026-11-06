@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Changelog de consolidation : site et protocole CPS, 05/11/2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Changelog de consolidation : site et protocole CPS, 05/11/2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md">Modifier sur GitHub</a><a download href="../../raw/docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md</code></p>
+<article class="markdown-body"><h1 id="changelog-de-consolidation-site-et-protocole-cps-05112026">Changelog de consolidation : site et protocole CPS, 05/11/2026</h1>
+<h2 id="sources-reellement-reunies">Sources réellement réunies</h2>
+<ul>
+<li>Base du dépôt et documentation du site GitHub Pages antérieur : sources publiques V11.2, notices et relevés mis à jour.</li>
+<li><strong>Fusion du paquet public OpenD578 V11.7</strong> : scripts de banc plus récents, hôte USB CDC, pont COM/PTY, CPS intégré, catalogues de 117 exigences, outils d'audit et rapports publics de validation.</li>
+<li>Documents récents conservés : LCD V11.8, boutons/GPIO/éclairages, microphone V11.8, composants RF, audio, Bluetooth D868BT-SP, BT01 et PTT BP-02.</li>
+<li>Deux variantes matérielles : D578UV PRO GD32 V1.21 et D578UV PLUS GD32 avec carte airband additionnelle.</li>
+<li>Documents CPS distincts : architecture USB, commandes et trames OEM, canal de 64 octets, compatibilité PRO/PLUS, essais et sources externes.</li>
+<li><strong>Outil de lecture passive</strong> <code>tools/cps_trace_audit.py</code>, avec tests synthétiques et aucune commande vers le poste.</li>
+<li>Onglet CPS/USB dans le site statique ; nouveaux blocs PC/CPS et USB dans l'explorateur.</li>
+</ul>
+<h2 id="limites-et-etat-des-sources">Limites et état des sources</h2>
+<p>Les notices du banc <strong>V11.8</strong> décrivent des améliorations du microphone et du LCD, mais <strong>les sources V11.8 complètes ne font pas partie des matériaux publics récupérés</strong>. La base logiciel de banc assemblée ici est la V11.7. Aucune fonction introduite uniquement en V11.8 n'est annoncée comme testée dans le code V11.7.</p>
+<p>Le firmware constructeur PRO V1.21 a été exécuté en simulation dans les campagnes référencées, et certains échanges CPS ont été observés. Ces observations n'autorisent ni une écriture sur le poste réel ni une annonce de compatibilité CPS Windows exhaustive.</p>
+<p>Les mesures de connexion physique (GPIO, montage, oscillateur, quartz et interconnexions des circuits grattés) restent à effectuer. Les circuits QA4818N et KT09xx non marqués restent candidats lorsque leur identification n'est pas certaine.</p>
+<h2 id="validation-avant-publication">Validation avant publication</h2>
+<p>Les tests ciblés du site, de la cartographie matérielle, du mini-CPS JavaScript, du décodeur CPS et de l'audit Bluetooth sont déclarés dans le dossier d'attestation livré à la racine. Les tests matériels, les exécutables Windows, les campagnes sur l'OEM V1.21 ou sur le PRO/PLUS physique ne sont pas rejoués par cette construction de site.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

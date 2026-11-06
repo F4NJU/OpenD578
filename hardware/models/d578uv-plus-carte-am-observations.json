@@ -1,0 +1,632 @@
+{
+  "id": "d578uv-plus-carte-am-observations",
+  "title": "AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)",
+  "version": "Variante PLUS - carte RF additionnelle",
+  "status": "reference_incomplete",
+  "mcu": "GD32F303 observe sur le PLUS (suffixe exact a photographier)",
+  "updated": "2026-11-05",
+  "diagram_note": "Vue specifiquement PLUS avec GD32F303 confirme utilisateur. Carte RF AM observee. Sauvegardes RTC/GPS issues de comparaison historique, pas de mesure sur cette variante.",
+  "groups": [
+    {
+      "id": "facade",
+      "label": "Facades et commandes"
+    },
+    {
+      "id": "logique",
+      "label": "Carte logique et acces"
+    },
+    {
+      "id": "peripheriques",
+      "label": "Memoires et peripheriques"
+    },
+    {
+      "id": "radio",
+      "label": "RF et antenne"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "carte_plus",
+      "label": "Carte fille RF PLUS",
+      "group": "radio",
+      "x": 985,
+      "y": 90,
+      "w": 260,
+      "h": 74,
+      "subtitle": "CI KT09?5R + quartz + RF",
+      "description": "Carte additionnelle rapportée par l’utilisateur ; fonction AM probable.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "kt_ambig",
+      "label": "KT0905R / KT09S5R ?",
+      "group": "radio",
+      "x": 985,
+      "y": 202,
+      "w": 260,
+      "h": 74,
+      "subtitle": "référence exacte non résolue",
+      "description": "Marquage du CI incertain ; pas de pilote ni de registres attribuables.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "quartz_plus",
+      "label": "Quartz carte PLUS",
+      "group": "radio",
+      "x": 985,
+      "y": 314,
+      "w": 260,
+      "h": 74,
+      "subtitle": "fréquence non relevée",
+      "description": "Oscillateur associé au module ; fréquence non identifiée.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "rf_in_plus",
+      "label": "Entrée RF carte PLUS",
+      "group": "radio",
+      "x": 985,
+      "y": 426,
+      "w": 260,
+      "h": 74,
+      "subtitle": "ligne RF sans schéma",
+      "description": "Un chemin RF arrive au module, origine et filtrage non attribués.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "connect_plus",
+      "label": "Connecteur PLUS monté",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 90,
+      "w": 260,
+      "h": 74,
+      "subtitle": "nombre contacts inconnu",
+      "description": "Présent sur carte PLUS, absent selon observation sur PRO ; pinout non établi.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "rda_plus",
+      "label": "RDA5802N voisin",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 202,
+      "w": 260,
+      "h": 74,
+      "subtitle": "proximité mécanique seulement",
+      "description": "La proximité du tuner FM de diffusion ne prouve pas que le bus est commun.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/RDA5802N_RECEPTION_FM.md"
+      ]
+    },
+    {
+      "id": "amp_plus",
+      "label": "UTC PA1517G - PLUS",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 314,
+      "w": 260,
+      "h": 74,
+      "subtitle": "ampli 2×6W classe B",
+      "description": "Ampli audio relevé sur PLUS ; broche 8 M/SS, connectivité non mesurée.",
+      "confidence": "identified",
+      "docs": [
+        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md"
+      ]
+    },
+    {
+      "id": "am_plus",
+      "label": "Réception AM airband",
+      "group": "facade",
+      "x": 25,
+      "y": 90,
+      "w": 260,
+      "h": 74,
+      "subtitle": "fonction PLUS 108-137 MHz",
+      "description": "La carte additionnelle est probablement destinée à la fonction de réception AM aéronautique.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "mcu_plus",
+      "label": "MCU GD32F303 PLUS",
+      "group": "logique",
+      "x": 345,
+      "y": 90,
+      "w": 260,
+      "h": 74,
+      "subtitle": "meme famille GD32 que PRO",
+      "description": "GD32F303 observe sur PLUS par utilisateur; suffixe et mapping exact a relever; ne pas y flasher le binaire PRO.",
+      "confidence": "identified",
+      "docs": [
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/hardware/VERSIONS.md"
+      ]
+    },
+    {
+      "id": "bt_support_plus",
+      "label": "Carte support Bluetooth",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 426,
+      "w": 260,
+      "h": 74,
+      "subtitle": "D868BT-SP ? revision a relever",
+      "description": "Support Bluetooth present sur PLUS selon documentation ; reference D868BT-SP sur carte relevee mais variante exacte a attribuer.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "bt_et12_plus",
+      "label": "Module BT ET12 PLUS",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 538,
+      "w": 260,
+      "h": 74,
+      "subtitle": "petit PCB blinde / SoC inconnu",
+      "description": "ET12_AQQX documente sur la famille, la puce sous blindage ne peut pas etre assimilee au BK3260 sans marquage ou analyse.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "bt01_plus",
+      "label": "BT01 microphone",
+      "group": "facade",
+      "x": 25,
+      "y": 202,
+      "w": 260,
+      "h": 74,
+      "subtitle": "telecommande / micro / HP",
+      "description": "Microphone afficheur sans fil et version filaire compatible avec D578 PLUS.",
+      "confidence": "identified",
+      "docs": [
+        "docs/hardware/BT01_MICROPHONE_BLUETOOTH.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "bp02_plus",
+      "label": "BP-02 PTT Bluetooth",
+      "group": "facade",
+      "x": 25,
+      "y": 314,
+      "w": 260,
+      "h": 74,
+      "subtitle": "bouton externe",
+      "description": "PTT Bluetooth et appairage indep. du BT01; telecommande d emission selon menu.",
+      "confidence": "identified",
+      "docs": [
+        "docs/hardware/BP02_PTT_BLUETOOTH.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "bt_audio_plus",
+      "label": "Routage audio Bluetooth",
+      "group": "logique",
+      "x": 345,
+      "y": 202,
+      "w": 260,
+      "h": 74,
+      "subtitle": "gains / mute / entree sortie",
+      "description": "Audio Bluetooth du PLUS a suivre jusqu a UTC PA1517G et codec ; aucune attribution de GPIO depuis PRO.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md"
+      ]
+    },
+    {
+      "id": "pc_cps_plus",
+      "label": "PC / CPS D578 PLUS",
+      "group": "facade",
+      "x": 25,
+      "y": 426,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Client externe ; layout PLUS distinct",
+      "description": "Programmation du PLUS GD32 V2.xx ; protocole et zones memoire à vérifier sur ce matériel.",
+      "confidence": "partial",
+      "docs": [
+        "docs/cps/COMPATIBILITE_PRO_PLUS.md"
+      ]
+    },
+    {
+      "id": "usb_cdc_plus",
+      "label": "USB CDC et CPS PLUS",
+      "group": "logique",
+      "x": 345,
+      "y": 314,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Mêmes fonctions, détails à confirmer",
+      "description": "Le PLUS utilise un GD32F303 mais le protocole exact et les descripteurs n ont pas été qualifiés par le banc PRO.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/cps/USB_CDC_GD32_V121.md",
+        "docs/cps/COMPATIBILITE_PRO_PLUS.md"
+      ]
+    },
+    {
+      "id": "nand_plus",
+      "label": "NAND / codeplug PLUS",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 650,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Cartographie V2.xx à mesurer",
+      "description": "Zone de mémoire de programmation : structure précise et offset USB non affirmés pour la variante PLUS.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/cps/COMPATIBILITE_PRO_PLUS.md",
+        "docs/cps/CODEPLUG_CANAL_OEM_V121.md"
+      ]
+    },
+    {
+      "id": "rtc_plus",
+      "label": "Sauvegarde RTC PLUS ?",
+      "group": "logique",
+      "x": 345,
+      "y": 770,
+      "w": 260,
+      "h": 74,
+      "subtitle": "GD32 VBAT pin 6 - a verifier",
+      "description": "Les D578 historiques disposent de sauvegarde RTC. Sur notre PLUS, presence, composant et continuite non mesures par ce dossier.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+        "docs/evidence/INDEX.md"
+      ]
+    },
+    {
+      "id": "gps_plus",
+      "label": "GPS ATGM336H PLUS ?",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 770,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Reference de la famille, PCB a verifier",
+      "description": "GPS familial et la sauvegarde GNSS sont documentes sur D578 anciens ; identification precise du module et du rail sur cette revision PLUS a relever.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md"
+      ]
+    },
+    {
+      "id": "backup_gps_plus",
+      "label": "Sauvegarde hot start PLUS ?",
+      "group": "peripheriques",
+      "x": 665,
+      "y": 880,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Composant et montage a verifier",
+      "description": "La reference XH414HG est publiee pour des D578 historiques ; le montage de notre PLUS n a pas ete releve dans cette documentation.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md"
+      ]
+    },
+    {
+      "id": "protection_plus",
+      "label": "Protection alim PLUS ?",
+      "group": "logique",
+      "x": 345,
+      "y": 880,
+      "w": 260,
+      "h": 74,
+      "subtitle": "Relais/diode historiques",
+      "description": "Relais et diode rapportes par VK7ZJA sur des revisions D578, a verifier sur la carte PLUS.",
+      "confidence": "candidate",
+      "docs": [
+        "docs/hardware/ETAGES_RF_PROTECTION_FI.md"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "plus-connecteur-carte",
+      "source": "connect_plus",
+      "target": "carte_plus",
+      "label": "Connecteur carte fille",
+      "bus": "contacts non identifiés",
+      "status": "physical",
+      "pins": [],
+      "details": "Connexion enfichable présente selon le relevé utilisateur ; aucun numéro de broche ni signal attribué.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-rf-carte",
+      "source": "rf_in_plus",
+      "target": "carte_plus",
+      "label": "Entrée RF constatée",
+      "bus": "RF analogique",
+      "status": "physical",
+      "pins": [],
+      "details": "Une entrée RF est visible. Fréquence, filtres et gain non mesurés.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-carte-kt",
+      "source": "carte_plus",
+      "target": "kt_ambig",
+      "label": "CI sur la carte fille",
+      "bus": "implantation",
+      "status": "physical",
+      "pins": [],
+      "details": "Boîtier marqué KT09?5R sur le PCB selon l’observation ; identification constructeur incertaine.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-carte-quartz",
+      "source": "carte_plus",
+      "target": "quartz_plus",
+      "label": "Quartz sur carte fille",
+      "bus": "horloge à déterminer",
+      "status": "physical",
+      "pins": [],
+      "details": "Composant quartz visible, sa fréquence et sa connexion au KT non mesurées.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-kt-am",
+      "source": "kt_ambig",
+      "target": "am_plus",
+      "label": "Rôle AM présumé",
+      "bus": "réception radio",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Fonction PLUS airband documentée et carte RF présente ; CI exact non attribué.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-rda-carte",
+      "source": "rda_plus",
+      "target": "carte_plus",
+      "label": "Proximité du RDA",
+      "bus": "aucun bus supposé",
+      "status": "unknown",
+      "pins": [],
+      "details": "Les circuits sont proches, mais il n’est pas prouvé qu’ils partagent l’horloge, l’audio ou l’I²C.",
+      "docs": [
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md",
+        "docs/hardware/RDA5802N_RECEPTION_FM.md"
+      ]
+    },
+    {
+      "id": "plus-amp-am",
+      "source": "amp_plus",
+      "target": "am_plus",
+      "label": "Ampli audio de carte mère",
+      "bus": "audio analogique",
+      "status": "unknown",
+      "pins": [],
+      "details": "La sélection de la source AM vers UTC PA1517G reste inconnue.",
+      "docs": [
+        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+      ]
+    },
+    {
+      "id": "plus-gd32-bluetooth",
+      "source": "mcu_plus",
+      "target": "bt_support_plus",
+      "label": "Controle Bluetooth PLUS",
+      "bus": "UART candidat ; exact non verifie",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Le PLUS utilise un GD32F303 et un module Bluetooth documente ET12. L UART3 du simulateur PRO n est pas transpose comme brochage physique du PLUS.",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md"
+      ]
+    },
+    {
+      "id": "plus-support-module-bt",
+      "source": "bt_support_plus",
+      "target": "bt_et12_plus",
+      "label": "Support et module BT",
+      "bus": "assemblage de deux PCB a confirmer par variante",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Structure double PCB rapportee pour le D578 ; photographier le PLUS pour confirmer l inscription D868BT-SP et le nombre de soudures.",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "plus-bt01",
+      "source": "bt_et12_plus",
+      "target": "bt01_plus",
+      "label": "BT01 sur PLUS",
+      "bus": "Bluetooth audio/telecommandes",
+      "status": "datasheet",
+      "pins": [],
+      "details": "Compatible selon manuel constructeur ; synchro UI, commandes et audio du PLUS a tracer independamment du PRO.",
+      "docs": [
+        "docs/hardware/BT01_MICROPHONE_BLUETOOTH.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "plus-bp02",
+      "source": "bt_et12_plus",
+      "target": "bp02_plus",
+      "label": "BP-02 sur PLUS",
+      "bus": "Bluetooth PTT",
+      "status": "datasheet",
+      "pins": [],
+      "details": "Menu BP-02 et PTT Hold documentes. Aucun GPIO ni trame radio reelle mesuree.",
+      "docs": [
+        "docs/hardware/BP02_PTT_BLUETOOTH.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+      ]
+    },
+    {
+      "id": "plus-bt-audio",
+      "source": "bt_et12_plus",
+      "target": "bt_audio_plus",
+      "label": "Audio Bluetooth PLUS",
+      "bus": "chemin audio interne inconnu",
+      "status": "unknown",
+      "pins": [],
+      "details": "Le mode BT fonctionne en produit, mais les etages analogiques exacts ne sont pas raccordes par mesure.",
+      "docs": [
+        "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md"
+      ]
+    },
+    {
+      "id": "plus-bt-audio-amp",
+      "source": "bt_audio_plus",
+      "target": "amp_plus",
+      "label": "Ampli PLUS depuis audio BT",
+      "bus": "analogue, mute et gains inconnus",
+      "status": "unknown",
+      "pins": [],
+      "details": "UTC PA1517G monte sur PLUS ; sa presence ne prouve pas la connexion directe du module BT a cet ampli.",
+      "docs": [
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md"
+      ]
+    },
+    {
+      "id": "plus-pc-usb",
+      "source": "pc_cps_plus",
+      "target": "usb_cdc_plus",
+      "label": "Programmation CPS PLUS",
+      "bus": "USB CDC candidat",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Version GD32 identique confirmée, mais échanges USB et format codeplug PLUS à comparer indépendamment ; ne pas reproduire le WRITE OEM V1.21 sans preuve.",
+      "docs": [
+        "docs/cps/COMPATIBILITE_PRO_PLUS.md"
+      ]
+    },
+    {
+      "id": "plus-usb-mcu",
+      "source": "usb_cdc_plus",
+      "target": "mcu_plus",
+      "label": "Connexion USB vers GD32 PLUS",
+      "bus": "USB CDC candidat",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Port de programmation attendu sur PLUS ; identifiants, brochage et protocoles non mesurés dans cette révision.",
+      "docs": [
+        "docs/cps/USB_CDC_GD32_V121.md"
+      ]
+    },
+    {
+      "id": "plus-mcu-nand",
+      "source": "mcu_plus",
+      "target": "nand_plus",
+      "label": "Stockage codeplug PLUS",
+      "bus": "NAND série à qualifier",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "L architecture de stockage PLUS est à confirmer : copie du schéma PRO interdite sans capture du PLUS.",
+      "docs": [
+        "docs/cps/CODEPLUG_CANAL_OEM_V121.md"
+      ]
+    },
+    {
+      "id": "rtc_plus-mcu_plus",
+      "source": "rtc_plus",
+      "target": "mcu_plus",
+      "label": "RTC backup vers GD32 PLUS ?",
+      "bus": "Sauvegarde",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "GD32F303 sur PLUS confirme par utilisateur; reference VBAT pin 6 si meme suffixe de boitier LQFP100, liaison physique non mesuree.",
+      "docs": [
+        "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md"
+      ]
+    },
+    {
+      "id": "backup_gps_plus-gps_plus",
+      "source": "backup_gps_plus",
+      "target": "gps_plus",
+      "label": "Hot start GNSS PLUS ?",
+      "bus": "Sauvegarde",
+      "status": "hypothesis",
+      "pins": [],
+      "details": "Pour D578 historique, deuxieme sauvegarde frontale. Piste GPS de cette carte PLUS non mesuree.",
+      "docs": [
+        "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md"
+      ]
+    },
+    {
+      "id": "gps_plus-mcu_plus",
+      "source": "gps_plus",
+      "target": "mcu_plus",
+      "label": "GNSS -> GD32 PLUS ?",
+      "bus": "UART candidat",
+      "status": "unknown",
+      "pins": [],
+      "details": "Aucun numero de GPIO ni de pin module GPS ne doit etre assigne a ce modele PLUS sans trace.",
+      "docs": [
+        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md"
+      ]
+    },
+    {
+      "id": "protection_plus-mcu_plus",
+      "source": "protection_plus",
+      "target": "mcu_plus",
+      "label": "Alimentation et protection PLUS",
+      "bus": "Alimentation",
+      "status": "unknown",
+      "pins": [],
+      "details": "Relais/diode de la famille, schema de la carte PLUS inconnu.",
+      "docs": [
+        "docs/hardware/ETAGES_RF_PROTECTION_FI.md"
+      ]
+    }
+  ],
+  "source_docs": [
+    "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md",
+    "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+    "docs/hardware/VERSIONS.md"
+  ]
+}

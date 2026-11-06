@@ -1,0 +1,62 @@
+name: Deploy OpenD578 documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install documentation renderer
+        run: python -m pip install -r site-requirements.txt
+      - name: Validate hardware evidence and build
+        run: |
+          python tools/generate_gd32_pinout.py
+          python tools/build_evidence_catalog.py
+          python tools/validate_hardware_model.py
+          python -m unittest discover -s tools -p test_evidence.py -v
+          python tools/build_site.py
+          python tools/test_site.py
+          python -m unittest discover -s tools -p test_bluetooth_tools.py -v
+      - name: Validate QA4818N frequency and trace analyzers
+        run: |
+          python -m unittest discover -s tools -p test_qa4818n_trace.py -v
+          cc -std=c11 -Wall -Wextra -Werror firmware/rf/qa4818n_frequency.c firmware/rf/qa4818n_transport.c firmware/tests/test_qa4818n_frequency.c -o /tmp/test_qa4818n
+          /tmp/test_qa4818n
+      - name: Validate CPS trace auditor
+        run: python -m unittest discover -s tools -p test_cps_trace_audit.py -v
+      - name: Validate CPS browser protocol
+        run: node bench/web/test_mini_cps.cjs
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

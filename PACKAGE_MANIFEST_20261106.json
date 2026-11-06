@@ -1,0 +1,3199 @@
+{
+  "project": "OpenD578",
+  "release": "2026-11-06 QA4818N frequency and RF evidence",
+  "date": "2026-11-06",
+  "sources": "Prior V4 provenance, bench V11.7, published AT1846S guide, VK7ZJA D578 study",
+  "oem_images_included": false,
+  "radio_firmware_flashable": false,
+  "qa_silicon_registers_fully_verified": false,
+  "qa_frequency_test_status": "AT1846S candidate encoder plus four-bank parser; zero actual OEM capture matrices in public package",
+  "docs_source_is_single_truth": true,
+  "files_count_excluding_manifest": 637,
+  "entries": [
+    {
+      "path": ".github/workflows/pages.yml",
+      "size": 1950,
+      "sha256": "8e5b4da3fe4ae0ae98de23dd34fdc52fafebea38ba48317a287f3721102e293b"
+    },
+    {
+      "path": ".github/workflows/tests.yml",
+      "size": 1186,
+      "sha256": "a62c592c3e9c701ef74c972196de4ff1e160f06280fe48c5cf04748aa19e791d"
+    },
+    {
+      "path": ".gitignore",
+      "size": 253,
+      "sha256": "1113a0ce7ff4acb87ce176492319550d529491748e512706b1bcc23a30256d0f"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 1120,
+      "sha256": "76de92ddbe13f4ee91d31f04a84ce3b98b363b8be4eb1a945022055ad1b434db"
+    },
+    {
+      "path": "INSTALLATION_GITHUB.txt",
+      "size": 1851,
+      "sha256": "599cd215c77b35fdd363819fc7c1a10bbd37e11abcd5501b781fe4cb8e87418f"
+    },
+    {
+      "path": "LICENSE",
+      "size": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "size": 3861,
+      "sha256": "61fd7c83f8e497b116f292ccba744bd1363c6f81cc978d1d0a1d4936ec5d6b78"
+    },
+    {
+      "path": "README.md",
+      "size": 6765,
+      "sha256": "85abfae1eaf421a902274f975e4448de65da314fafbbd14967f50626a965920b"
+    },
+    {
+      "path": "README_FR.md",
+      "size": 3885,
+      "sha256": "453d7e69d184beff672ca3c3a22058aa3a05486ccb47705172eb687df835a11f"
+    },
+    {
+      "path": "README_SITE.md",
+      "size": 4376,
+      "sha256": "f26900649d59f6bd13b460c8230562b7bdad32afc06c9ee63b252173703bbfc6"
+    },
+    {
+      "path": "bench/CONNECTER_CPS.cmd",
+      "size": 295,
+      "sha256": "a73bb53af3769267a360dc8655f6b4d17b849d73e38cfeb1161bda78a8104d6f"
+    },
+    {
+      "path": "bench/CONNECTER_CPS.sh",
+      "size": 225,
+      "sha256": "e13fba27587916ac6bed5a6d1a7156f2b0827ddac3ff363cb2a1299de6e22f1a"
+    },
+    {
+      "path": "bench/LIAISON_CPS.txt",
+      "size": 5521,
+      "sha256": "e08bd8600ef7ded69e453c22267c2e0d892310f1c12536c229850385ee203e55"
+    },
+    {
+      "path": "bench/OUVRIR_BANC_WEB.cmd",
+      "size": 390,
+      "sha256": "2c35aa7f3da366ed85fa16de2cb2cc9f618263195779b41b8eb2b8392e02d81c"
+    },
+    {
+      "path": "bench/OUVRIR_BANC_WEB.sh",
+      "size": 597,
+      "sha256": "eccdc9afa6843894ea9e7612ea5cf26ffdf15fb67342597a5c944c566d4737d9"
+    },
+    {
+      "path": "bench/TESTER_BASES.cmd",
+      "size": 405,
+      "sha256": "f9c006a4138581d9ada2f6742e0691047483b131cd89bc7d614a3e3af9095c74"
+    },
+    {
+      "path": "bench/TESTER_BASES.sh",
+      "size": 195,
+      "sha256": "e5cf9cfef175503191611c0615cd84c91d463aa3dbab40c1105272573a9407f1"
+    },
+    {
+      "path": "bench/TESTER_USB.cmd",
+      "size": 198,
+      "sha256": "02fa3f8a58641b576dae14c6f80a4cdf6f00a8c5970e5459fb2f54a496873f4e"
+    },
+    {
+      "path": "bench/adc_dma.py",
+      "size": 15707,
+      "sha256": "affcf6e0eaf0df7d58edf4b81b726a98489233ee9fa51cd1e018cc552aaeb784"
+    },
+    {
+      "path": "bench/audio_iq.py",
+      "size": 9586,
+      "sha256": "e5fd8656618f112da8336e77893f84308fb672df9d8c0ba69d1c8770b59d40ca"
+    },
+    {
+      "path": "bench/audit_ram_v121.py",
+      "size": 11263,
+      "sha256": "d05ecb446dfc9eb2cd6a1c2cdeb289cc57653451a9e02a09d04e96cbf0c69fc9"
+    },
+    {
+      "path": "bench/ax25_afsk.py",
+      "size": 3886,
+      "sha256": "bd94f83f7d4c37723818a6f2b6092dde9d4d3eaca06fc5a6e64063673230cf58"
+    },
+    {
+      "path": "bench/backup_rtc.py",
+      "size": 3794,
+      "sha256": "3911ec6fd2ad0619cece5f8ee927bdb5130ed43b6e2970781871d3b31bdc9c26"
+    },
+    {
+      "path": "bench/bench_runner.py",
+      "size": 5946,
+      "sha256": "b5d7a4a5e270bd3c00b79298b3a8f9e2baae90a71b3175ad93528a49c716a2a6"
+    },
+    {
+      "path": "bench/bench_version.py",
+      "size": 1777,
+      "sha256": "2139314c8ddd62c19d8350788dcdb3062a1e4c9894d49735c4d35855abc091fb"
+    },
+    {
+      "path": "bench/board_clock.py",
+      "size": 2203,
+      "sha256": "7f841d17ce5c90eebc4359f530412f29e0517fb59a48d8ac0764512e94779326"
+    },
+    {
+      "path": "bench/board_image.py",
+      "size": 1818,
+      "sha256": "955444628b7074af62fef7bb095b72576dd49cfe2007029174007465dd1afcc5"
+    },
+    {
+      "path": "bench/board_observations.py",
+      "size": 2005,
+      "sha256": "f5c90cbb5396b43f63cefee6245617d9d206c20e428c7c5772a4250638aedda0"
+    },
+    {
+      "path": "bench/build_lcd_bridge.py",
+      "size": 1517,
+      "sha256": "e7a60ce3034757004620adc5d5b9c4f9d7777a04b53d8955df66ca3376aff25b"
+    },
+    {
+      "path": "bench/build_native.py",
+      "size": 1556,
+      "sha256": "204e25c89758c7c92860cf1a82d2d3f352005babc8cad8b401980a1735971858"
+    },
+    {
+      "path": "bench/cdc_channel.py",
+      "size": 1136,
+      "sha256": "1ff5541aa9b69c8231eab9069012c2d5061879c0256e231d34a0f5b7819062c0"
+    },
+    {
+      "path": "bench/compare_engines.py",
+      "size": 4223,
+      "sha256": "6eeb751c0b14e4c1fd469323d16bc25315505a741bddc2ba2c648b7b07a01ee7"
+    },
+    {
+      "path": "bench/contract_firmware.py",
+      "size": 3972,
+      "sha256": "8beb0916619d1704c3f5afa12950a789f7c98fc6a057339e11b343af28d3174f"
+    },
+    {
+      "path": "bench/cortex_exceptions.py",
+      "size": 8746,
+      "sha256": "1779f3beee355864209fc570440563bd0fbe1e2629da9d6a0f8458c77d35c951"
+    },
+    {
+      "path": "bench/cps_bridge.py",
+      "size": 10779,
+      "sha256": "86c2dce0c71715f4762f0ce8dd67ee1e8a824d4a0b70d25d336308d078ea0e0b"
+    },
+    {
+      "path": "bench/cps_probe.py",
+      "size": 2276,
+      "sha256": "fa6a478cf49c443e9aaf7226d3f21b890ef2dc79ee801d66addd0f39b4983f50"
+    },
+    {
+      "path": "bench/emulate_adc_v121.py",
+      "size": 6370,
+      "sha256": "13072bcf5cb972f7773116c0b99d25b1a774e347dd8c70781d7067aefafbbd5c"
+    },
+    {
+      "path": "bench/emulate_clock_v121.py",
+      "size": 21519,
+      "sha256": "811b1147c706434473b4ac1bde83af4989f7f63d79a2eecb68cf174545b01ee2"
+    },
+    {
+      "path": "bench/emulate_front_v121.py",
+      "size": 21028,
+      "sha256": "486e76fc6b938ebf0857f305c42b2829f647e3d9cbf900ecdc602755c27aca80"
+    },
+    {
+      "path": "bench/emulate_lcd_v121.py",
+      "size": 11341,
+      "sha256": "bc9029b0f4697e41b77b98262f7f438dc0b2782ce8cd0de786e4f637a3d81b24"
+    },
+    {
+      "path": "bench/emulate_nand_v121.py",
+      "size": 36746,
+      "sha256": "7d9fcfb357768c2f75953c763ca0f974dd5ae948c90b08dcbf11f069348f33c8"
+    },
+    {
+      "path": "bench/ensure_environment.py",
+      "size": 904,
+      "sha256": "176ba6e89c7aeb1ded8aa9a32054ef272d6a6b332ccd2d456a0674afc9de1c7f"
+    },
+    {
+      "path": "bench/execution_coverage.py",
+      "size": 1010,
+      "sha256": "31c1f2f57a3ca843f6e04f568d6a765345f168ef78531c351abff8e55eac0ea9"
+    },
+    {
+      "path": "bench/firmware_input.py",
+      "size": 3361,
+      "sha256": "e1d80607c89d902514a82b2dceeeaaef6750d0b1fc918dfc246c2d52d62ff76d"
+    },
+    {
+      "path": "bench/firmware_inventory.py",
+      "size": 3444,
+      "sha256": "3e754511a12e6dee16d36cc25d510f642d83bd4bdc0233cb94860c96448c7d9c"
+    },
+    {
+      "path": "bench/firmware_profile.py",
+      "size": 2884,
+      "sha256": "05f1e13fd4a04079437bde2e1f5701220361c7b3e099fe94a0d64b5296cb441d"
+    },
+    {
+      "path": "bench/flash_cache.py",
+      "size": 3404,
+      "sha256": "024bbf609ec096d078c6e051502dca2b6dac69a6734d2d8b3a5834de11ea512a"
+    },
+    {
+      "path": "bench/fm_i2c.py",
+      "size": 3603,
+      "sha256": "280a3e30f2aff59b76cd68e4eb2eccd495be8c02a7aa8c9d79bf5392928395f6"
+    },
+    {
+      "path": "bench/front_window.py",
+      "size": 11449,
+      "sha256": "d70e68b5dc5d9cb41f02d784dc73cf75cbd7a83d75efdb0efab99be375c8c713"
+    },
+    {
+      "path": "bench/front_window_v9.py",
+      "size": 26625,
+      "sha256": "36f21c5624658c755812c7bc64712a1ee5f1680e4cba3eadd819e47fad3116fa"
+    },
+    {
+      "path": "bench/full_flash.py",
+      "size": 2274,
+      "sha256": "ae502c619da791afd274c5a879bc4be159b325aeeee65516be9dc76b6b124ce3"
+    },
+    {
+      "path": "bench/hardware_runner.py",
+      "size": 28924,
+      "sha256": "22870ad447d971b043cf18f7159357fffec6a83d52b4e017d309b5ffc992d08b"
+    },
+    {
+      "path": "bench/indicator_qualification.py",
+      "size": 2658,
+      "sha256": "d57b6faf2e328e5fff784b5ecf7b754262994cfacb8fa602a765f758e91cc8e2"
+    },
+    {
+      "path": "bench/interactive_runtime.py",
+      "size": 5290,
+      "sha256": "5817c3ef8b05ccea8b881272d02b10498755ae15e0ef818f436c3f2948ebc908"
+    },
+    {
+      "path": "bench/lab_inputs.py",
+      "size": 5147,
+      "sha256": "e971860ed0358943d8decf0d763254a2964b8d81a2e4f1a1c8d9df1b9762de9b"
+    },
+    {
+      "path": "bench/lab_runner.py",
+      "size": 15478,
+      "sha256": "51fb29b25eee46778ba660a8e482d27fb935d78117dfa48d98bf4dbb500d97f6"
+    },
+    {
+      "path": "bench/lcd_bridge.c",
+      "size": 5066,
+      "sha256": "e57357edbd7700a13d141786ccb8e6ffeb8c09cf12476a53fd5b2e441698f492"
+    },
+    {
+      "path": "bench/lcd_bridge.py",
+      "size": 6970,
+      "sha256": "2af3d1d542e25b6f90ead5f6944f6cfbf073f21cc80936c2de45c693b09a54cf"
+    },
+    {
+      "path": "bench/lcd_bus.py",
+      "size": 7917,
+      "sha256": "bed06ef85d6fe3ad9c63e7f76e182ba6d21d962f7b5a001fe126f3a1fb968906"
+    },
+    {
+      "path": "bench/lighting.py",
+      "size": 1904,
+      "sha256": "3a82d2164f753042e41b2ebd1ebeb50ee5dfbaeee068ee440b82fa88a3e7fa89"
+    },
+    {
+      "path": "bench/live_io.py",
+      "size": 665,
+      "sha256": "703b510da84611a6eaf70f43b6ab488a8b5e807c6a7cc0368ccfcd347cdfc2ed"
+    },
+    {
+      "path": "bench/memory_watch.py",
+      "size": 3636,
+      "sha256": "7cbfd4af223be9be5ce2f2ff3bca6454a30766b0da5eaee72442c6a92c9e0b62"
+    },
+    {
+      "path": "bench/nand_overlay.py",
+      "size": 3971,
+      "sha256": "d9aa5c18549001661a2b62d3e7f0d0e95b229ac06fc6d8dc3015697baf9232f9"
+    },
+    {
+      "path": "bench/nand_state.py",
+      "size": 2392,
+      "sha256": "bccbd9853acecdb24b27dd2c2b3bff3240588ed7925d3498f8a77910e3cb0099"
+    },
+    {
+      "path": "bench/native_gate.c",
+      "size": 1635,
+      "sha256": "9070d4cc5bfb66013c400efd93a62c37e896121def12791bfe26117ab9c1c4ad"
+    },
+    {
+      "path": "bench/native_gate.py",
+      "size": 10498,
+      "sha256": "fcc0ffff9a54f22851bf3d981f2a409333355322f57aaa262d39a74f62af39f6"
+    },
+    {
+      "path": "bench/oem_discovery.py",
+      "size": 2597,
+      "sha256": "fc92a0b013fb3f4400b92a81305fa40631ed2af2ad0f69763f4ba9e8d1829b5c"
+    },
+    {
+      "path": "bench/oem_options.py",
+      "size": 3856,
+      "sha256": "311ae0d50b6f9ef0a86a2ef5a170dc6149b381ab60a0fc4b75fff443e34d728e"
+    },
+    {
+      "path": "bench/prepare_inputs.py",
+      "size": 6943,
+      "sha256": "b8e34d1b111d385c217dedec9f5a3a6da1ca4cce5573b7c2b2d9f258c20d4c67"
+    },
+    {
+      "path": "bench/probe_test_mode.py",
+      "size": 5271,
+      "sha256": "ffbd4379d1dab43042e33e039959a0a0d8295c5fdf27c6cad08fad8258583eef"
+    },
+    {
+      "path": "bench/profiles/diagnostic.json",
+      "size": 220,
+      "sha256": "359a603f005a9fa76cfca36ecd37f023f2d0dd6c2a9d369ee3ca084f51aa295a"
+    },
+    {
+      "path": "bench/profiles/front_panel.json",
+      "size": 226,
+      "sha256": "ed789fb90dcdd2e4eae00c6b4f8338c923eac52840ffd34cbec8c6130de4fa24"
+    },
+    {
+      "path": "bench/qualification.py",
+      "size": 6531,
+      "sha256": "29fc3ffe0073bdfa04b0e8caa413dacbc4f1d8c489264d09abea13085b5b4138"
+    },
+    {
+      "path": "bench/qualification_data/catalog.json",
+      "size": 72915,
+      "sha256": "5d1fb0f5f263f61f7282f462bb0b77e0e822d16faec6870cafe5867677eca294"
+    },
+    {
+      "path": "bench/qualification_data/catalog.schema.json",
+      "size": 1188,
+      "sha256": "a6b7979c2fbab05550503abc17a88459af3bc7f5b8f341be6510b2ca50ac7fa5"
+    },
+    {
+      "path": "bench/ready_session.py",
+      "size": 3978,
+      "sha256": "641007911aae5a60a5e1d7db73c7c177ec689b5712d40548a2979963e7bd3c10"
+    },
+    {
+      "path": "bench/requirements.txt",
+      "size": 73,
+      "sha256": "11745048245e04c1a25004bd0eefe66dd633040ae4c12664a386b74c7d1fcd37"
+    },
+    {
+      "path": "bench/rf_spi.py",
+      "size": 7445,
+      "sha256": "a3c4607158fb6e7856cb14c4904cc6581650506181c83753595b24391d53bf1f"
+    },
+    {
+      "path": "bench/run_base_tests.py",
+      "size": 1136,
+      "sha256": "fb0b81448e8e55173f73c53a9cd498de535810e6aed1d837d07c8f9d1ab02d1f"
+    },
+    {
+      "path": "bench/run_bench.py",
+      "size": 3927,
+      "sha256": "c49b0db42ec84db49c310c69dd367458791af060eb72c3fbe703a220dabf0e97"
+    },
+    {
+      "path": "bench/run_hardware.py",
+      "size": 4196,
+      "sha256": "b9ecbd259d1e89dad803ee9f71ec8e911c5344f6eef965d45c93721876187381"
+    },
+    {
+      "path": "bench/run_lcd.py",
+      "size": 10712,
+      "sha256": "a727f2fa4ba3af2aa882d9589054276a8e2e24c00447d996a57115039d3dd576"
+    },
+    {
+      "path": "bench/scenarios/FM_carrier.json",
+      "size": 200,
+      "sha256": "30aec3372ba041220780d30569076bb1a135c8e42040af5a41bcbc8f1044b080"
+    },
+    {
+      "path": "bench/scenarios/GPS_PTT_APRS_incomplete.json",
+      "size": 396,
+      "sha256": "e8524acb47f25184d2bbf585d0580303e0c33012f88d3368131e8e5cf4e42dba"
+    },
+    {
+      "path": "bench/scenarios/GPS_loss.json",
+      "size": 226,
+      "sha256": "b191dc36ece959e940a9494024531fe342671dacf1ff8d238f2cff2e7f75d7fa"
+    },
+    {
+      "path": "bench/scenarios/LED_RX_TX.json",
+      "size": 642,
+      "sha256": "4cb72a9146bd05717fb32818e65f2fca8b1bd1ed6a21279201f94122ce43d2a1"
+    },
+    {
+      "path": "bench/scenarios/micro_PTT.json",
+      "size": 260,
+      "sha256": "3a18c80459bb82b2200611bcabf32923c91a911ea5bd56fba21c436fd96693d8"
+    },
+    {
+      "path": "bench/sct_hpi.py",
+      "size": 7776,
+      "sha256": "a70d657bdd990f320b131823c56a626388c2cc20e027597d02baa00706d59d66"
+    },
+    {
+      "path": "bench/selftest_report.py",
+      "size": 3781,
+      "sha256": "53a2ca7ac1d9ea4a38c82c0b331a803ab9e5e93e2c6248c764cebcd2cdb217ba"
+    },
+    {
+      "path": "bench/simulator_window.py",
+      "size": 11451,
+      "sha256": "42646054f8efa99022e0819dae1a0abd13eb40aa3e46f3926d1fa2f9cc23cafa"
+    },
+    {
+      "path": "bench/status_led.py",
+      "size": 1734,
+      "sha256": "d8e4134e998c1e36d4c6d5a9fed17e483e68bc01d7cc36e1efda3079569f7ccd"
+    },
+    {
+      "path": "bench/test_adc_dma.py",
+      "size": 10704,
+      "sha256": "1fb88cf7afa06f35a8718fa73ff52084c1e8e21cd6ecd28ba55dafa595664f82"
+    },
+    {
+      "path": "bench/test_audio_iq.py",
+      "size": 4071,
+      "sha256": "510dcb0068a002b3dadecd297076bcde972fa08aedcd09e0b85ff59696c5eb2a"
+    },
+    {
+      "path": "bench/test_bench_contract.py",
+      "size": 2875,
+      "sha256": "632f247c1d693ded8d982b2b0eb7f2213e1c170912111d1563422760af28e124"
+    },
+    {
+      "path": "bench/test_board_observations.py",
+      "size": 1047,
+      "sha256": "366dae27b411197e3e7ec8f2dae44b19b7d6113004de8b9bb082c4e0eaf7402a"
+    },
+    {
+      "path": "bench/test_cdc_channel.py",
+      "size": 3244,
+      "sha256": "6f181a74a3cdd95627bf674f1974c0ea5863eb16998df33785e051a80bb31a0a"
+    },
+    {
+      "path": "bench/test_cdc_status_access.py",
+      "size": 3972,
+      "sha256": "3b2fd8b59f1924db3d898defdf618fd461bcca677c73d49b3ded371ad0dc8a32"
+    },
+    {
+      "path": "bench/test_cps_endpoint.py",
+      "size": 3521,
+      "sha256": "a89527263faf817fcff48d73bda19457398193d81aafb8746f640a69bf5e733a"
+    },
+    {
+      "path": "bench/test_external_buses.py",
+      "size": 4762,
+      "sha256": "838c6721c5dec83bfc09e406e677dc5f2eb77ef76932af1386f9be62d9ecfdc6"
+    },
+    {
+      "path": "bench/test_front_devices.py",
+      "size": 3077,
+      "sha256": "b39a865d485378ad91afc4099d77376ef0ec2d514dabc25ae7a28d1d783d6c3a"
+    },
+    {
+      "path": "bench/test_hardware_extended.py",
+      "size": 9204,
+      "sha256": "6b40543163fe16f749e22d7c90b89aca40ad103e914c07f7a2c0ab712d4322c3"
+    },
+    {
+      "path": "bench/test_hardware_runner.py",
+      "size": 4072,
+      "sha256": "2ae5f975d78358049fcf53f9d101ba29703dc19f8ca273d69f9e986b86141fca"
+    },
+    {
+      "path": "bench/test_indicator_qualification.py",
+      "size": 1362,
+      "sha256": "a46d83a372a7272c2c2fadf6e73944793b542a2603cfd37f28296c0f4bf8d9e3"
+    },
+    {
+      "path": "bench/test_interactive.py",
+      "size": 5962,
+      "sha256": "c3cd459e035accd3ee760fd9629f2a32d4ef7e62392f375fd06227369efd5f52"
+    },
+    {
+      "path": "bench/test_interrupted_observers.py",
+      "size": 2295,
+      "sha256": "735e5de0bce08917bbc43c010161d998343860187b33dc74af9902bbbb887b60"
+    },
+    {
+      "path": "bench/test_lab_inputs.py",
+      "size": 2406,
+      "sha256": "f33ce02e14ce09d62077bbd263f4c6441c335dd4d9fefbc4cb8c2c5d9cbfb6d0"
+    },
+    {
+      "path": "bench/test_lcd_bridge.py",
+      "size": 6995,
+      "sha256": "933b85f644bf932896ac92f8fd0f8a87425ba6380fb56138119dcbb3b0306d68"
+    },
+    {
+      "path": "bench/test_lcd_bus.py",
+      "size": 4171,
+      "sha256": "4b3d625a25c2c425072c922ca26d1b0e19a6fc1343d2e0726ba076499d08a1cc"
+    },
+    {
+      "path": "bench/test_nand_state.py",
+      "size": 1346,
+      "sha256": "df1500733989066ed95d1c356d03015f56faa0ff4e0c905fe72ae5f1da8b5f7f"
+    },
+    {
+      "path": "bench/test_native_masks.py",
+      "size": 1883,
+      "sha256": "1a9d332f47f6265bcc5329fc00b8d3ce1960d24f0f75fc5530dbc30e2c47e7b9"
+    },
+    {
+      "path": "bench/test_oem_options.py",
+      "size": 2525,
+      "sha256": "13fec53393e7728b35a1e6b6eeebb4d69edc75029b6590659d304ba10cab2f51"
+    },
+    {
+      "path": "bench/test_prepare_inputs.py",
+      "size": 6136,
+      "sha256": "435036342e9e47ec56f251b44e1690ff2f2199ff3107d1b2ceb1929c58cd8a8d"
+    },
+    {
+      "path": "bench/test_selftest_report.py",
+      "size": 2110,
+      "sha256": "f8830d3c174f37c281a2019d9c6a2b3fdab3c83800253ec08ae060c01b5386dc"
+    },
+    {
+      "path": "bench/test_status_led.py",
+      "size": 1265,
+      "sha256": "deec5ded044abad4689a5c2cdc202c68d9262e7e500257272a02e58e2e05b8a9"
+    },
+    {
+      "path": "bench/test_swd_trace.py",
+      "size": 1101,
+      "sha256": "d69b4e6144a3633a324a5c488b40dc565adb10108e6513e5eb85e533c62b0cf7"
+    },
+    {
+      "path": "bench/test_uart_serial.py",
+      "size": 2316,
+      "sha256": "27271757d22a274c42079bd463576fcd9b3249c57c2357afcc5ecd998e39fbd7"
+    },
+    {
+      "path": "bench/test_usb_cdc.py",
+      "size": 3988,
+      "sha256": "39990add82d3f8b24b638ed9c1283c02a1c11070412f848f466346da0ed5c196"
+    },
+    {
+      "path": "bench/test_v11.py",
+      "size": 7069,
+      "sha256": "ceddb14490c5908da0c587652e368ae11af70dc7dc062083d91f36dd8c7e2355"
+    },
+    {
+      "path": "bench/test_web_server.py",
+      "size": 7402,
+      "sha256": "80cd514aa459baed252c6d3f6e18df8eb7a185da25b1b6c7ec69ca9c412885e0"
+    },
+    {
+      "path": "bench/test_web_version.py",
+      "size": 4095,
+      "sha256": "30ec0cbffb0c21e8b2d9386a463467e8384ed8bcef5451b9072d468ee5061a43"
+    },
+    {
+      "path": "bench/timers.py",
+      "size": 2684,
+      "sha256": "29cc80b0d1207ecafdc89adc5d3ae5bd5676c65464d2ee8b3c2175469ae08b32"
+    },
+    {
+      "path": "bench/uart_serial.py",
+      "size": 7362,
+      "sha256": "155ec23bc36bceec6e8da71b0a657fe4de76b136463698eebae4b4ac82702997"
+    },
+    {
+      "path": "bench/usb_cdc.py",
+      "size": 9403,
+      "sha256": "177da21e040bcc18b3cc60ef905a86504e94fb811cff2b48688ef40ab65057e8"
+    },
+    {
+      "path": "bench/usb_cdc_runtime.py",
+      "size": 2587,
+      "sha256": "f50730d0164d7aa2a6251afb36c6d16ab0de772efe74e1acfbe6c5257403492a"
+    },
+    {
+      "path": "bench/usbd_host.py",
+      "size": 7071,
+      "sha256": "4a2c8a464a51c846d3878f53e95cd0b92616bdaaa27c010f474c16f7ff895cd2"
+    },
+    {
+      "path": "bench/usbd_idle.py",
+      "size": 1968,
+      "sha256": "610d250520c40556eab78b615d44b3fd75c68a675107ba7db00edcde65007e76"
+    },
+    {
+      "path": "bench/verify_front_oem.py",
+      "size": 7450,
+      "sha256": "4b62ba87c38f282969fcb40d2a7d29178a6763064ba7a1fc584024b3a474cfa7"
+    },
+    {
+      "path": "bench/verify_overlay_spi.py",
+      "size": 2552,
+      "sha256": "5229666814be9ded2580ebc1a8fdeb4d0c3e633e1abc72ecfbe9796df21094fd"
+    },
+    {
+      "path": "bench/verify_spi_wire.py",
+      "size": 3584,
+      "sha256": "319b600d0003edd15fb6c1c8fe831cf9a5b2a4058f941adb04969f8d10c30092"
+    },
+    {
+      "path": "bench/verify_uart_oem.py",
+      "size": 3984,
+      "sha256": "78f0d6b73d72530f5a263ce919977ef0d52c46b613250bd8928fcdd764b2880d"
+    },
+    {
+      "path": "bench/watchdog.py",
+      "size": 1996,
+      "sha256": "6a6559b318a15b4392e716fb56f5cc0e80e6ff7132a231fe4eec41fff5a2aa79"
+    },
+    {
+      "path": "bench/web/app.js",
+      "size": 16912,
+      "sha256": "a4df1db6f73d03434ed900e7ff11bc76e6277b4dd331e72b82641790ae9e48c5"
+    },
+    {
+      "path": "bench/web/audio_capture_worklet.js",
+      "size": 224,
+      "sha256": "30eae48c302fbbd3007e63060a48d027228f410268997d343bd524e4180f5b76"
+    },
+    {
+      "path": "bench/web/audio_lab.js",
+      "size": 4677,
+      "sha256": "fd5a0c42de7679dc34a859ed870d8f6e1a62517595ff09f358b0ab56b330c3bd"
+    },
+    {
+      "path": "bench/web/cps_link.js",
+      "size": 1283,
+      "sha256": "e5a7fbee43894e3da5400cd949d4d5d99bfe5876d36d2f8779c6be8bd619e042"
+    },
+    {
+      "path": "bench/web/index.html",
+      "size": 21072,
+      "sha256": "c0b9239bf67ce2826fc195e369fd304b97d77a1ba3c0defced859a25b69009be"
+    },
+    {
+      "path": "bench/web/mini_cps.js",
+      "size": 3793,
+      "sha256": "bf7b3a0d1bd6ac39f578680856928c77c05e03478dff93bb160b432590aadd27"
+    },
+    {
+      "path": "bench/web/mini_cps_protocol.js",
+      "size": 5445,
+      "sha256": "4e5a63cd0478bfc705be413ea859b5a9b3c0a0eb01ac3bcce14f08822a0035cc"
+    },
+    {
+      "path": "bench/web/qualification.js",
+      "size": 1798,
+      "sha256": "71f347f7bf152e7aef57b68885faa94acc8063c28654d05c896c5dd91e05e737"
+    },
+    {
+      "path": "bench/web/style.css",
+      "size": 6463,
+      "sha256": "95e008fe294077c7616ec895cf18549798e233a6238313bfd53f63c8db15cfc0"
+    },
+    {
+      "path": "bench/web/test_mini_cps.cjs",
+      "size": 1520,
+      "sha256": "8012b58bb84260aff2f397e9569551e0aad74a0645194608e3b49fd1c5627574"
+    },
+    {
+      "path": "bench/web_endpoint.py",
+      "size": 1609,
+      "sha256": "fd1b4d79d51a1c165e426aa5100b2aa0740fdf119f6fe8cb49216efa492382d6"
+    },
+    {
+      "path": "bench/web_launcher.py",
+      "size": 1844,
+      "sha256": "b0db73844c004e190fc56c321d1cda8499025ef078de89238ab0c95230e3593f"
+    },
+    {
+      "path": "bench/web_server.py",
+      "size": 24286,
+      "sha256": "6925e9f616afddb1906a5f9fa43514f41aa0e8c21c90cee651c8b6c4b8174136"
+    },
+    {
+      "path": "bench/window_capture.py",
+      "size": 2178,
+      "sha256": "747afb40e3a5a2cb95170c4024828e8f4c650799aaba4e92a9061eb1243b102e"
+    },
+    {
+      "path": "docs/01_DECISIONS_ET_HISTORIQUE.md",
+      "size": 6998,
+      "sha256": "8285bee1d989fd0def48c3edd3117f9b8b46f5188b9f959f8ebde2007bab3229"
+    },
+    {
+      "path": "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+      "size": 4967,
+      "sha256": "a861f3df28036c6f3462226faecd0aa1def4a4254dd3b8125964580b3cb38aa0"
+    },
+    {
+      "path": "docs/03_NAND_LECTURES_ECC_CARTE.md",
+      "size": 5946,
+      "sha256": "104a90396f7e72383f70e0a1946ac5acaf4988bf9442bd1d790382573feebaec"
+    },
+    {
+      "path": "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+      "size": 7111,
+      "sha256": "6ba8e2d2a6da112c1fbf2fb5070b20c7daf9a9428ed406098e32d48d29bb801e"
+    },
+    {
+      "path": "docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md",
+      "size": 7647,
+      "sha256": "4a7f2b30e9a6123dc841398d20a1e5503ad03e83a286d86e895531fe7748b767"
+    },
+    {
+      "path": "docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.md",
+      "size": 7150,
+      "sha256": "dfcc8f634d2fa643bfa2134d94e9c68f76d0241c0270a71f3a54e626c54bda3b"
+    },
+    {
+      "path": "docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md",
+      "size": 7302,
+      "sha256": "2d49e285ea9ca379e869e2422454582320de9515f977e9809253206538479ef9"
+    },
+    {
+      "path": "docs/08_LIENS_COMPLETS_ANNOTES.md",
+      "size": 4727,
+      "sha256": "bbfe36f9bb9e15bd0a2a261c70858483c8d52ad483162796e22f2ede5ca5ba93"
+    },
+    {
+      "path": "docs/09_REPRISE_PRIORITES_TESTS_ET_INFOS_MANQUANTES.md",
+      "size": 4611,
+      "sha256": "e9f2df181b5eab9105b1640e9a81a8ca3fc0460ab47a8005285cc4184fe08609"
+    },
+    {
+      "path": "docs/AUDIO_IQ_V11_4.md",
+      "size": 3950,
+      "sha256": "316a6b5c5b29e182468ea750aeb683a3b1430c206d186b9a8ce94358b1366175"
+    },
+    {
+      "path": "docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md",
+      "size": 2304,
+      "sha256": "74364126b7b0f0fe548f6ac61bb0791b671f3d236e948460634fd04b7c703884"
+    },
+    {
+      "path": "docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md",
+      "size": 2230,
+      "sha256": "9ab67d93f27083ce920be9d08b359c59af766450021dfade2a7e80d8909f1d54"
+    },
+    {
+      "path": "docs/CHANGELOG_QA4818N_20261106.md",
+      "size": 1425,
+      "sha256": "4012520b0b1b0f99eaec95039b50120e80fb90ccdbd1b1421995a09df4592908"
+    },
+    {
+      "path": "docs/CHANGELOG_V11_7.md",
+      "size": 22242,
+      "sha256": "5c15d4888f63f4b7d65c53b29a4d48d24977bf3eb370626078e360fcbb48597d"
+    },
+    {
+      "path": "docs/CPS_INTEGRE_V11_6.md",
+      "size": 4121,
+      "sha256": "e65a3b2edaccbdf4497054662b74f512c5cd3242a79e006b22afb4a68a599341"
+    },
+    {
+      "path": "docs/EMULATOR.md",
+      "size": 5080,
+      "sha256": "22aa7739055ad34ae506148f591c70f8abdc91615e20086cfd4f7189e9f526ad"
+    },
+    {
+      "path": "docs/EMULATOR_PERFORMANCE.md",
+      "size": 4363,
+      "sha256": "e673e8296b689a650e73e4f0c34ef434662d8a0e16f20f0d21583dc43c5998c7"
+    },
+    {
+      "path": "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+      "size": 30754,
+      "sha256": "fdd2faf35edff253be87da867096ce1b19b0c481c835c79f28dfce0357ec8ca1"
+    },
+    {
+      "path": "docs/FUNCTION_MATRIX.csv",
+      "size": 19564,
+      "sha256": "868976c104f5501f5b7dcff279a107c4a14d24cc8098e8ea39067d64e2396f48"
+    },
+    {
+      "path": "docs/HARDWARE_COVERAGE.md",
+      "size": 7545,
+      "sha256": "3fa6e1d300c6ce71186bf25d7327adbd0f6d4fcf9483599fb1598fa414d5c2dc"
+    },
+    {
+      "path": "docs/INVENTAIRE_RE_RESTANTS_20261105.md",
+      "size": 4335,
+      "sha256": "3a15981b908ea31f6c19379f07b3691518e0f2dd96f17f5911b59e750b192f55"
+    },
+    {
+      "path": "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+      "size": 24155,
+      "sha256": "83280eee8d26558bf3dc4bda0153da1375d686d55f4e723cee9e0ba908753b1a"
+    },
+    {
+      "path": "docs/LED_STATUS_BUS.md",
+      "size": 3331,
+      "sha256": "37ee6741391d399b3703a1590850c83464f478deedde69f0671614c6cb9cd4ad"
+    },
+    {
+      "path": "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
+      "size": 14962,
+      "sha256": "55be38acbc337ec91f3e6332af0199c367e891391245006f326104babc871154"
+    },
+    {
+      "path": "docs/PROGRAMMING_AND_CALIBRATION.md",
+      "size": 3709,
+      "sha256": "61f0d1a7f5adac09a586933232994526dd29513986cd0795ec47c105f6ed3c16"
+    },
+    {
+      "path": "docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md",
+      "size": 3879,
+      "sha256": "77575f1a38137a525fffa457c5b93f7b4a2f81e46d3b948160a03ff486749dda"
+    },
+    {
+      "path": "docs/QUALIFICATION_ANALOGIQUE.md",
+      "size": 8208,
+      "sha256": "29f5d02b83fc5ff949298d9da822b38e28bba4c4cf23335aae71d35777f715b2"
+    },
+    {
+      "path": "docs/RESEARCH_INDEX.md",
+      "size": 3558,
+      "sha256": "f0dbb5efef4a4769999230a0384b1a3aa5ab057523e10503b34a39fcd4c9ff2e"
+    },
+    {
+      "path": "docs/RF_SPI_INTERRUPT_FIX.md",
+      "size": 2311,
+      "sha256": "73579ac7754e3cf0664be228f33cbd4562fd1ba6f73878da4aeb2212e339ac3e"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "size": 3056,
+      "sha256": "7f8d7e60699e69d7bb85bbcd3a8635c1691f0bb8fdd68b8496f96787858c7d88"
+    },
+    {
+      "path": "docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.md",
+      "size": 5209,
+      "sha256": "25d9f6da655be8565a1a509f9034f25840dc369a6744c386c263409e632720e6"
+    },
+    {
+      "path": "docs/TEST_MODE_OPTIONS.md",
+      "size": 4572,
+      "sha256": "2bec9dcb48c155d0b5f6d63351e8403344a853d317d777a3ab766f5eeec4b49a"
+    },
+    {
+      "path": "docs/USB_404_FIX_V11_5_1.md",
+      "size": 2375,
+      "sha256": "d89982034cfbe728e1f06c59aa8102a5f355b29e5ab662b655791a2cf1ab2e2b"
+    },
+    {
+      "path": "docs/USB_CPS_PLAN.md",
+      "size": 4981,
+      "sha256": "b797290719ba248bb4a9285a84b9e4960696cee7802b2c6cec30b38877f6bfeb"
+    },
+    {
+      "path": "docs/USB_CPS_V11_5.md",
+      "size": 6067,
+      "sha256": "b16314ce4ee06989dbf666d9b837b2217ecea5ed0ff206341ec40290d21a1efa"
+    },
+    {
+      "path": "docs/USB_DEBUG_AND_RECOVERY.md",
+      "size": 4061,
+      "sha256": "443bdeddf9321385f069fdd1c5b264ae932b1a6ec2a6cf1dca4ca6c29f99ad91"
+    },
+    {
+      "path": "docs/USB_PIPE_FIX_V11_5_3.md",
+      "size": 3316,
+      "sha256": "cdb54a5ddcc5e09c6cf256b5ff615c23d400ae4e18f0d2594f1748c120867571"
+    },
+    {
+      "path": "docs/USB_STATUS_FIX_V11_5_2.md",
+      "size": 2603,
+      "sha256": "ba09f616999d708bc55939d0d39b50633438db308a5feb547d101bbb8b94136b"
+    },
+    {
+      "path": "docs/USB_V121_DESCRIPTORS.json",
+      "size": 2723,
+      "sha256": "c6988295c7f3e85d270295b43789b8ee3a68f3a7d7a32d01d4928ffdd6011354"
+    },
+    {
+      "path": "docs/archives/ORIGINAUX_A_RECUPERER.md",
+      "size": 3035,
+      "sha256": "bcaa438b68f2f5dadc0d41ab47dcfb76e01a0596f26d6a7844130e779b60f78e"
+    },
+    {
+      "path": "docs/archives/PACKAGE_MANIFEST_20261105.json",
+      "size": 108494,
+      "sha256": "8586a2d2d7c8efbd0be506f3309873707ae2d740716c8b3cd7900aa49a0a0d36"
+    },
+    {
+      "path": "docs/cps/CODEPLUG_CANAL_OEM_V121.md",
+      "size": 5926,
+      "sha256": "4eadfacb4e5315c9a161baff900ecf4aacbae8b0971221b31b1dd5bc92679f03"
+    },
+    {
+      "path": "docs/cps/COMPATIBILITE_PRO_PLUS.md",
+      "size": 4374,
+      "sha256": "54a70a1d4cd4f36b9f527806626bddb53401630fb8e34361e93309d0f1ee2882"
+    },
+    {
+      "path": "docs/cps/CPS_ARCHITECTURE_SIMULATION.md",
+      "size": 7144,
+      "sha256": "698388a44aa9121eec3a725df4d0cba0ebbe1c7dcba8804890658fc25b610fdb"
+    },
+    {
+      "path": "docs/cps/CPS_QUALIFICATION.md",
+      "size": 4984,
+      "sha256": "70daf8fd1c249fb130a77286663a9cfb6deb3ecb085110c1a738ddc56d57d5a3"
+    },
+    {
+      "path": "docs/cps/PROTOCOLE_OEM_V121.md",
+      "size": 6212,
+      "sha256": "8d07211d8e201b4d6c3bdcd303a0882b55f7dbd2ca739e96decc473f75b1bec8"
+    },
+    {
+      "path": "docs/cps/README.md",
+      "size": 4030,
+      "sha256": "7e7f515a9bda25a84c79d6960c492ea926e4b1a7387607750545978f36dfafae"
+    },
+    {
+      "path": "docs/cps/USB_CDC_GD32_V121.md",
+      "size": 5004,
+      "sha256": "a72ce034e4f6295068274b147c9bd01dd6349b4d64eb19e91b828f3048666a96"
+    },
+    {
+      "path": "docs/evidence/CLAIMS.json",
+      "size": 13100,
+      "sha256": "5a6b0d108ea87cb78a407837f8f4022d16f3af4ac4ccfba77f78f5789f46baf1"
+    },
+    {
+      "path": "docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md",
+      "size": 2943,
+      "sha256": "32adefcedf2e55b579fd343f218b57c6aac5e2c162018a5c6fa70c15ec76a39d"
+    },
+    {
+      "path": "docs/evidence/INDEX.md",
+      "size": 5178,
+      "sha256": "f7ed4e23a9be6cb06b733f59ea4c20d457c5aa9609797a066a08563daa735db2"
+    },
+    {
+      "path": "docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.md",
+      "size": 2540,
+      "sha256": "2f9370a55790de11868abae9ce6dcf632bc60d2f51dca0ef1821be0b7b7e1e15"
+    },
+    {
+      "path": "docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md",
+      "size": 5259,
+      "sha256": "8800d6156cba9a8a92dfd9ca6b231eff332382013afe8385358b587a5aff3e9d"
+    },
+    {
+      "path": "docs/evidence/VALIDATION_DU_DEPOT.md",
+      "size": 1937,
+      "sha256": "3a8429bb77c269a205c69208c8b12ee3d97e6593c6ea01b861a69db12c9df839"
+    },
+    {
+      "path": "docs/firmware/ARCHITECTURE.md",
+      "size": 2127,
+      "sha256": "fa83e5a87ddd8d2dd4526d32e476a072ec878dc07d4f58195c9e55005a26d0b9"
+    },
+    {
+      "path": "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
+      "size": 3858,
+      "sha256": "0669e21582847f63ba876ad82f2a2df59176d850fd39ebfbb57e38860069eef2"
+    },
+    {
+      "path": "docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md",
+      "size": 5719,
+      "sha256": "88a76137823a43757c84e7893274642016a0b51a2f1fe39f814ea0e796917fbb"
+    },
+    {
+      "path": "docs/firmware/VALIDATION.md",
+      "size": 1352,
+      "sha256": "1e78279cb7c88e85f1d50032a69c30c03fe0de0514e18d4c26c6a2c1efdfcdde"
+    },
+    {
+      "path": "docs/firmware_discovery_v121.json",
+      "size": 511949,
+      "sha256": "14d67d97b2055a5e48b1a347b5f6f7e423e023328a3824dd1cbcb01aff6afc28"
+    },
+    {
+      "path": "docs/hardware/ALIMENTATION_L7805CV.md",
+      "size": 2848,
+      "sha256": "b7ff9b0cf42ed6357a0689bbf7028fdf46b291b273b495ad221900e8c62fa5dd"
+    },
+    {
+      "path": "docs/hardware/AUDIO.md",
+      "size": 1273,
+      "sha256": "b14a3866eab97f4cd325cbcc67ab8d2146e7523e4b2baa0900509fabc5a2045e"
+    },
+    {
+      "path": "docs/hardware/AUDIO_MC34119_SGM8272.md",
+      "size": 3884,
+      "sha256": "080384209eae5e67dafad77246ef0ef05b72b3cde2d216f39019fa08ac5db087"
+    },
+    {
+      "path": "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+      "size": 3587,
+      "sha256": "b7a91bf6ca66615e0b93bbebbddc87609a004c5f5725fef552cd05b02a940d24"
+    },
+    {
+      "path": "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+      "size": 11229,
+      "sha256": "a5e843a3b57d786bb9ab4ebb700d91b221554afd5551cbb7998a492b0121b36f"
+    },
+    {
+      "path": "docs/hardware/BH2226_H2226_DAC_RF.md",
+      "size": 4734,
+      "sha256": "594363ad19f790b74924339cb9baa85565ddadc6f1e48037efc4953cb2be71e1"
+    },
+    {
+      "path": "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+      "size": 9370,
+      "sha256": "4a9bf8481c4c18b0a2af6b598558e07318a4d487dbe6a46e7397e85e28d51092"
+    },
+    {
+      "path": "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+      "size": 3284,
+      "sha256": "18d4eb8c8ce3fa57cf2be2e228142109b390167bb4aa759a942b67c51ef729fb"
+    },
+    {
+      "path": "docs/hardware/BP02_PTT_BLUETOOTH.md",
+      "size": 3440,
+      "sha256": "53b009d48a9c043dbd629ff804807664ae8ed0297e0409ab03fb2f7d38af3896"
+    },
+    {
+      "path": "docs/hardware/BT01_MICROPHONE_BLUETOOTH.md",
+      "size": 5514,
+      "sha256": "905861d3a15b8fd08d2e2ba6ab2a3fababaeaab8cda34fd673247c8e9b15d863"
+    },
+    {
+      "path": "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md",
+      "size": 3670,
+      "sha256": "d46d3d4c58a0f6b4d26eee241b173f6c6a259de582727505ee99691104c8f7ac"
+    },
+    {
+      "path": "docs/hardware/COMPOSANTS.md",
+      "size": 5032,
+      "sha256": "677be4b75724a810515da6934c69ecd96e7ea4b88802b2bc85355e64e09788f9"
+    },
+    {
+      "path": "docs/hardware/CONNEXIONS.md",
+      "size": 3618,
+      "sha256": "2ffe3690f6d122d758cc823786a5c287434f6f942e02f56a19018456febec610"
+    },
+    {
+      "path": "docs/hardware/DMR.md",
+      "size": 1242,
+      "sha256": "5b7f3307eae74e27c0e9d347643b06920370a94fde8cb31b2ce387ae7942ee15"
+    },
+    {
+      "path": "docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+      "size": 2565,
+      "sha256": "c780fbcedf29d2ac9dfe191e96eb50c4618b04a62cf57d5b8018c74f131f02b2"
+    },
+    {
+      "path": "docs/hardware/GPS.md",
+      "size": 1312,
+      "sha256": "22d238fc8b3bd731e554555e156b5c4ec13828565420c7ce1002328653c0c047"
+    },
+    {
+      "path": "docs/hardware/PA_RF_AFT05MP075N.md",
+      "size": 2918,
+      "sha256": "9dd89c9c9288db6111cc07b3fd5e348ce58a119b62b9527b43cb7118a87ca969"
+    },
+    {
+      "path": "docs/hardware/PHOTOS.md",
+      "size": 1574,
+      "sha256": "0ea3584a77ea2809b0b3e551720a022218fdb131e74cbae3ed233b95165f6b91"
+    },
+    {
+      "path": "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md",
+      "size": 3428,
+      "sha256": "bbffa4046a259927e176d572095ec97c3017ff95d6aa67bbb4d7f49c97d71397"
+    },
+    {
+      "path": "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+      "size": 7033,
+      "sha256": "d521cdc691ba535da6b1ec7712f6d82d2e4e79efc3407beb640df1ed55109360"
+    },
+    {
+      "path": "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "size": 19855,
+      "sha256": "8e8cdb05a5207d2ea4b9ca42cb4959465651baa2642179e3014b1263df592a61"
+    },
+    {
+      "path": "docs/hardware/RDA5802N_RECEPTION_FM.md",
+      "size": 5616,
+      "sha256": "3f24a13f9cb7feb4d99e6395b04585b851b6f3769f3c39baefbb437860dcbcab"
+    },
+    {
+      "path": "docs/hardware/RF.md",
+      "size": 1384,
+      "sha256": "fd23e5e7a501d5ae403bb612e13f88b7dceaa8d8f2660203a3866278380e15de"
+    },
+    {
+      "path": "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "size": 7304,
+      "sha256": "6b1141826e73c1f08a8aa536d171d83f963401e1cf0d884e78a8dec5e3cd8379"
+    },
+    {
+      "path": "docs/hardware/VERSIONS.md",
+      "size": 1948,
+      "sha256": "be48b29c114ca7dc9827c7f8a13e9f9e2b65cfcb92855e52ea36725f7dc9585e"
+    },
+    {
+      "path": "docs/hardware/VOLUME_U2429G.md",
+      "size": 4698,
+      "sha256": "fa68e13ea4321a3af85fdaeda2a7b8d671e7b49d470c6b746b7910ca1f78f27e"
+    },
+    {
+      "path": "docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+      "size": 9747,
+      "sha256": "dd67cf35937ccf078f23f499d4f9bd1497440d911c1b7f4f608aaa5c9d980fdd"
+    },
+    {
+      "path": "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+      "size": 7981,
+      "sha256": "7b9bcd2c0fc3e2246788c9215077e0c9d1254bac01583207f3a0f3fe7f49a9bf"
+    },
+    {
+      "path": "docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+      "size": 9027,
+      "sha256": "4021b8a239abfd9ef7f441a3e1e5297fe79c686bf11d55136df753ca8088a082"
+    },
+    {
+      "path": "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+      "size": 8808,
+      "sha256": "398634134e0c1b94f9809835f690ea3e783c4f5dc6cdd7103adfdce6b3905d73"
+    },
+    {
+      "path": "docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+      "size": 8481,
+      "sha256": "64a90c8c65d2923f10671143e696ce6b8a4a116b728d7df83aee597cc5d2c0c9"
+    },
+    {
+      "path": "docs/selftest_v11_7.json",
+      "size": 39569,
+      "sha256": "f7ad186267eb1e4d5f9bdb9d011886ad96c21c83b084bcc10a1bc444cf2f6551"
+    },
+    {
+      "path": "docs/selftest_v11_7.junit.xml",
+      "size": 17459,
+      "sha256": "fb90cf5a0218b80d5b89b587684a8a0472fc558438281b57be39239f739b8f1a"
+    },
+    {
+      "path": "docs/test_mode_20261104.json",
+      "size": 717,
+      "sha256": "0f9249d554eb673a09140992ac4f3021ebb2087e51d6dc943c833dc18802f9f6"
+    },
+    {
+      "path": "docs/validation_20261104.json",
+      "size": 2369,
+      "sha256": "cac54b867d0967f062493e9eba719f9870921bcc003c5674746e122d2161699b"
+    },
+    {
+      "path": "docs/validation_v11_2.json",
+      "size": 2500,
+      "sha256": "0fd717f0a15fc7c20d4a95ca9d3f0ca8996519e6b63c77aef4b4a247522c55aa"
+    },
+    {
+      "path": "docs/validation_v11_3.json",
+      "size": 4313,
+      "sha256": "72f5535214cd12e662c67c716f9e1012181f894905f74113ac6d8cefffb42d5f"
+    },
+    {
+      "path": "docs/validation_v11_5.json",
+      "size": 1550,
+      "sha256": "3bffc72654c09369f0a0f97a8a9a30e5dc0a264bc2745fb5116aad5bbd3f29d8"
+    },
+    {
+      "path": "docs/validation_v11_5_1.json",
+      "size": 979,
+      "sha256": "e5907a0aff4816bedfbdbddceebeb9cd86aa6f4033a2e428c7c3837f115ea54a"
+    },
+    {
+      "path": "docs/validation_v11_5_2.json",
+      "size": 1111,
+      "sha256": "e2ddf951e93bb4be1519352a4f51c59e22f90478e20240dbadb0dc4de044ccc2"
+    },
+    {
+      "path": "docs/validation_v11_5_3.json",
+      "size": 1642,
+      "sha256": "bf4719163a2100b31df74a42081eac31033d1d465b5d8fd7ed8ba10bc4d67113"
+    },
+    {
+      "path": "docs/validation_v11_6.json",
+      "size": 278,
+      "sha256": "6bb8e09dd2aaf9f0526096cb02ab6e213d08f886b2358325068a0be1e68246f8"
+    },
+    {
+      "path": "docs/validation_v11_7.json",
+      "size": 3888,
+      "sha256": "0d45b4e66bbd462baffa47579bdf3528f93f386db0e15904aa088e813e31abfa"
+    },
+    {
+      "path": "firmware/README.md",
+      "size": 782,
+      "sha256": "d47cabea1b2757460fb13ae24f9340602c396313723beff11750779a6fd6f236"
+    },
+    {
+      "path": "firmware/app/README.md",
+      "size": 194,
+      "sha256": "5ef1b00a9ed3a12bf5928696f217b612b1a3537817bd9b625d0c7e4c5dd2bf4c"
+    },
+    {
+      "path": "firmware/hal/README.md",
+      "size": 582,
+      "sha256": "f996701adc3c7e894dd61e2dacdff261ea35f85acb8ddfb06a3913f037ef0876"
+    },
+    {
+      "path": "firmware/hal/serial_command_encoders.c",
+      "size": 1331,
+      "sha256": "e54ded959e22ec6f82816c669bba3a10b1202a2240c54dd9005c04bfb9632a8d"
+    },
+    {
+      "path": "firmware/hal/serial_command_encoders.h",
+      "size": 746,
+      "sha256": "78ff83e6e153251971b688f1e9ddc73b458faddada570233d9c189186e224d16"
+    },
+    {
+      "path": "firmware/rf/qa4818n_frequency.c",
+      "size": 1345,
+      "sha256": "7041e31133370f698e9ca49e2930f2b8ea6b7958a305c7635bf1a309d10590c9"
+    },
+    {
+      "path": "firmware/rf/qa4818n_frequency.h",
+      "size": 1110,
+      "sha256": "a8adfc6f0acb207a48bfe1e2ab772c5d1d40fd9c433098259be1104b5711e673"
+    },
+    {
+      "path": "firmware/rf/qa4818n_transport.c",
+      "size": 762,
+      "sha256": "120d24e17e5e9d884a79b95f4f4067ef9c1dc4e85ef45941d56a8debf7c96c92"
+    },
+    {
+      "path": "firmware/rf/qa4818n_transport.h",
+      "size": 927,
+      "sha256": "e173ea4bf9e325970082710d4816f7a2ca51c5458e09c3042cb54ea3d6aa44e8"
+    },
+    {
+      "path": "firmware/tests/README.md",
+      "size": 181,
+      "sha256": "856339a5075842566077d4d0b0092cf3f113ec173e81e3adc6143e77028daadb"
+    },
+    {
+      "path": "firmware/tests/test_qa4818n_frequency.c",
+      "size": 1840,
+      "sha256": "70047b425bc9192eac7d3fbb42787e9f5ed8c73d1d72518eed5c09192cb6273b"
+    },
+    {
+      "path": "firmware/tests/test_serial_command_encoders.c",
+      "size": 1305,
+      "sha256": "15bd37ec42dc41fea32db6f0d64efa534afc76d31598e76eb06f1955fb2b6b46"
+    },
+    {
+      "path": "hardware/kicad/OpenD578_GD32F303VKT6_RECONSTITUE.kicad_sch",
+      "size": 22154,
+      "sha256": "e321fb6d5221560458926a54be4744c7e64763df75cc26f05e7567e37e675332"
+    },
+    {
+      "path": "hardware/kicad/OpenD578_GD32F303VKT6_RECONSTITUE.kicad_sym",
+      "size": 15561,
+      "sha256": "829f5de6473afbf9cf8609d84c093b683c3b5776a750becbcb0423eea79a0b88"
+    },
+    {
+      "path": "hardware/kicad/README.md",
+      "size": 938,
+      "sha256": "f110c87304aad5ddaeb2bfff170c8ff995b4505761c440f21ad888a2e3322025"
+    },
+    {
+      "path": "hardware/models/d578uv-plus-carte-am-observations.json",
+      "size": 20217,
+      "sha256": "9df7d98c61fb3cac8abeff6d42085ddf076cf3e5cc5541e7cf24a68a65087a46"
+    },
+    {
+      "path": "hardware/models/d578uv-pro-gd32-v121.json",
+      "size": 63196,
+      "sha256": "c5e2ea5058922c9955d9e57d4b042c665750676dd9df73e08eee929c039bafd9"
+    },
+    {
+      "path": "hardware/photos/d578uv-plus-carte-am-observations/manifest.json",
+      "size": 67,
+      "sha256": "f9d829382cd1e0139da9845878e0f2079a1ede01391a58512b6c0edacd4d9e44"
+    },
+    {
+      "path": "hardware/photos/d578uv-pro-gd32-v121/manifest.json",
+      "size": 156,
+      "sha256": "cbc0cf08af9b2b2ed10f066a232d13ce1381f1a763ee3ed687543f223fc332ac"
+    },
+    {
+      "path": "hardware/pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv",
+      "size": 7903,
+      "sha256": "686ca6121ddd945a36984f915c366a65e557f95ebac5ac5c2e2f73971c1189fd"
+    },
+    {
+      "path": "site-assets/site.css",
+      "size": 8089,
+      "sha256": "e7724771fb1ed73c3b56998b9043132cc27813625a557944104a5a069882890b"
+    },
+    {
+      "path": "site-assets/site.js",
+      "size": 12504,
+      "sha256": "5b35e5bdf31b82a580e2b2470c9f7a2bf9f4985d95dc0e73b87eb0a00d1f1e32"
+    },
+    {
+      "path": "site-requirements.txt",
+      "size": 16,
+      "sha256": "ef350deb44bb0ce43b1949e2c89f11473fd91f04d68e89969ba16469a841af7c"
+    },
+    {
+      "path": "site/.nojekyll",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "site/assets/models.js",
+      "size": 64009,
+      "sha256": "67431bc70b4dba6094078d62e4e53ccef402000868afc3aaaefbffc86e582841"
+    },
+    {
+      "path": "site/assets/search-data.js",
+      "size": 537413,
+      "sha256": "940b5b5c680bb46f480da2d20dc969e6ce99cfcd74adf9db68aec57d20f0ace0"
+    },
+    {
+      "path": "site/assets/site.css",
+      "size": 8089,
+      "sha256": "e7724771fb1ed73c3b56998b9043132cc27813625a557944104a5a069882890b"
+    },
+    {
+      "path": "site/assets/site.js",
+      "size": 12504,
+      "sha256": "5b35e5bdf31b82a580e2b2470c9f7a2bf9f4985d95dc0e73b87eb0a00d1f1e32"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/am_plus.html",
+      "size": 2478,
+      "sha256": "895650204001ff7b806130499f3820e57ba238d96117b90ee5dfbafa5f878f23"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/amp_plus.html",
+      "size": 2466,
+      "sha256": "1bf40b04ecf50de997de4e5890f0c710a67eebcaf374c55851c2e89e56a17b33"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/backup_gps_plus.html",
+      "size": 2369,
+      "sha256": "f5651a901c924712959ebdfbb0a1e18efab90458916155d3241f0bd2d1266356"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/bp02_plus.html",
+      "size": 2557,
+      "sha256": "58eeeb51880ceea1f31380f1109617c4bdb559d3a16147fc5791ee39f161ec1a"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/bt01_plus.html",
+      "size": 2568,
+      "sha256": "2fda541a23955bc0376e193dc0d33c1a8b0fd46d21dc221e614af27a7eed319e"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/bt_audio_plus.html",
+      "size": 3058,
+      "sha256": "c3f73aada78d3b3c3fd764677e673f02be569a105831e0e4eeaf66ff6d24b7c9"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/bt_et12_plus.html",
+      "size": 3116,
+      "sha256": "80cd1026fc5b5e4445351903be65480a1c8a46c5e80d06ec141e796c2ca0bde3"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/bt_support_plus.html",
+      "size": 2819,
+      "sha256": "335e337c9f97d16960992f56f9aa93551711ecbe04647050448dde1283c37805"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/carte_plus.html",
+      "size": 2973,
+      "sha256": "903c7c67522bef20d3585ca50f4cb427a9e654d76eab92c06da4160774697c14"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/connect_plus.html",
+      "size": 2312,
+      "sha256": "7e473c1b8dee3022c79199f459035117648a96bcdaee8e05badcf4c2fc60a14b"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/gps_plus.html",
+      "size": 2867,
+      "sha256": "92fef17a9591203838b3e6bc4da148d45d617375320c20bd12859c7e08a106e7"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/kt_ambig.html",
+      "size": 2450,
+      "sha256": "cbc07cbc85eb70ccde2d859214800cb619c93fca5d611efac45599e61d3aa53f"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/mcu_plus.html",
+      "size": 3439,
+      "sha256": "82964f03cd05c8d374c90c9624174c32bb6ad1afc7680ce723c20b81727b7a21"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/nand_plus.html",
+      "size": 2550,
+      "sha256": "e545df2bdc4bb46cfa00f09108cda79911e51bb135e5247245d425b6e81dfc8c"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/pc_cps_plus.html",
+      "size": 2274,
+      "sha256": "96161034decd48266e700e65ccdcd433f2ce782dbcf23cc424036140f84afd96"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/protection_plus.html",
+      "size": 2328,
+      "sha256": "01409b7a718d10a8ac860b23879475a7c34fa07cd769a4bb6b31d5654d612b74"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/quartz_plus.html",
+      "size": 2271,
+      "sha256": "a2a78ef164fb030f19eb345c8d595efe53c64f6db55fb128fcc267fd1ec7f565"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/rda_plus.html",
+      "size": 2268,
+      "sha256": "56a7840ccc58bf683241b92082117b3331b8dd551958bc1477fe1f02cfdb81e6"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/rf_in_plus.html",
+      "size": 2280,
+      "sha256": "6649e194a58defeaddad596471bfdd2d36468e92cebcd73dbd91c39ed946768f"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/rtc_plus.html",
+      "size": 2538,
+      "sha256": "0d15fc7ffd39852ecb0b329794f4ec51a937324bab811b50a8862799b1c37210"
+    },
+    {
+      "path": "site/component/d578uv-plus-carte-am-observations/usb_cdc_plus.html",
+      "size": 2709,
+      "sha256": "4a25d95164ec014af3d8aa9817f1fefa2e2d4ff53b71312c0e222b7dbeff9f3f"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/adc0.html",
+      "size": 2762,
+      "sha256": "d0fbd325c11abee23133ad9578d86fc6d570bcf7d5132dbd25e1bc9f17562521"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/aft_uhf.html",
+      "size": 2160,
+      "sha256": "1489ce021ded1003669dd84179bd5d8155427b0935a3cbef0457ad36275175c7"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/aft_vhf.html",
+      "size": 2204,
+      "sha256": "45be2050c58ee16875604e47a451d2adfdef297193d57af21179f2a82f27409c"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/antenna.html",
+      "size": 2420,
+      "sha256": "adf0b486ed1e0b94912d2dbec9c0c2dc9a2f1052ff8c94aec1045335b4466d65"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/audio.html",
+      "size": 4127,
+      "sha256": "8cd99bb14c21dd34f3aebc8b00dec044edbaff14cd49e94953df3805fe240d59"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/backup_gps.html",
+      "size": 2777,
+      "sha256": "88c230ee7b2dddabd542d572ef8f9a4f7b784b447022cee00db33d02b9783b64"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/backup_rtc.html",
+      "size": 2699,
+      "sha256": "fabc6894cb15107606059874cc9d224cc27212c0a857e6ef64e20bfb4ced7e7b"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bh2226.html",
+      "size": 2541,
+      "sha256": "9baf39b219b17f7cbba86de78b6471c7a245ac2306f5159e5a8831e4372f6cd1"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bluetooth.html",
+      "size": 3489,
+      "sha256": "8e62b37e66e96201e9ced30392f8875ae56dcb47c51a422cdbf2918f118ce83b"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bp02.html",
+      "size": 2490,
+      "sha256": "6dc3a79c0d71402c9f1b970a4fd3f31e04edb8eb2179edd25a50c05d90b5e9b4"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bt01.html",
+      "size": 2719,
+      "sha256": "bdfcbfdd18f52aa2d1d38f88b229967de9612ed8266c1598e83179bb12901ea3"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bt_antenna.html",
+      "size": 2442,
+      "sha256": "2f5975a96d2c6633efffdc43c1da717976dc99927832350cdd3498b2aebf9a42"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bt_audio.html",
+      "size": 3155,
+      "sha256": "f3a404577fcbb84704c33de735f4fa56327981211fe74e20468692e6eee18757"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bt_et12.html",
+      "size": 3659,
+      "sha256": "b7d96e5e3671b63bdc1d1ecff7bfa797d7e1e09f8260918704b5b9df762a09e2"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/bt_shield.html",
+      "size": 2536,
+      "sha256": "25419b5f58ff417b843ef158c775a2fec6161fc5f9c73961b01c4a06d953970c"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/codec.html",
+      "size": 2863,
+      "sha256": "1b131101da01ae87e727efc9f346120acbb49ff228fbf049ee3dacab0f84b55c"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/dmr.html",
+      "size": 3050,
+      "sha256": "09614419df0c26829efb2239780912a5ce6fb9304c42df6550452a034d22af1f"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/encoder.html",
+      "size": 2769,
+      "sha256": "1e19b5c3738850e25ebf68c1ca001e30ee8f6e14e708650fe2856f7ce19186ca"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/fi_spare.html",
+      "size": 2290,
+      "sha256": "2ba62ad433ef1086020d67b515715431d339b5472007fa267a1c4fe8ec3c2b5b"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/gps.html",
+      "size": 2898,
+      "sha256": "f071454419805788e82497e22bd28ed3a40442af2ca3c880f585d6389b04b518"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/keys.html",
+      "size": 2507,
+      "sha256": "9371b8a898dab531588d5b904f1cd514fdc9a94132bc024723f7a72ffd185be5"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/l7805.html",
+      "size": 2560,
+      "sha256": "aef13ef7f85bb81cac0fb47ecf995570308681743d45aefc8446bfb1443b80bb"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/lcd.html",
+      "size": 2469,
+      "sha256": "8071ec738e0f5dae6f64368ac64046d7e0b66ccaebc4aac93ab8ba91e9854221"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/lights.html",
+      "size": 2790,
+      "sha256": "b56e0ebe1c05db7b87b4310a3ce21619b5ce22678f31eebea3fadcaf4bed3554"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/mc34119.html",
+      "size": 2340,
+      "sha256": "f4cd4e97b5bf9a3a0fe9148cf48176515a4fedbfaa4348872ff7ea7e8bbef308"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/mcu.html",
+      "size": 6223,
+      "sha256": "a3d988c9b9cc48448e0475ea61ba7a27f774bbdb1fa9678c698d3d7061d73a9a"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/microphone.html",
+      "size": 2857,
+      "sha256": "77c653458da2fedf679809b449149f2f9adc52c09268c462169a70562ab7679d"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/nand.html",
+      "size": 2882,
+      "sha256": "85c7eda3d5113d37074f414b10bfe1ea26c3858aa10e80d7ae978c4d44a055da"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/pa.html",
+      "size": 3145,
+      "sha256": "37e57ec8b9a3044449dfe13e0a6b68deee7cd0c9316ce67430fc024d637b5c20"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/pc_cps.html",
+      "size": 2436,
+      "sha256": "50cc12db716041bc8e92a8f4da39815df0e77dafdbaf1a195f9c0a23004649d7"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/power.html",
+      "size": 3854,
+      "sha256": "2154e9ce9acb0678e42ea22259393f9240599d1f2c4531abaaecdce3b14885f1"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/protection_supply.html",
+      "size": 2759,
+      "sha256": "e44d0822512237a9ee33003c0f0fea018c32d227e941c9e17b8fa95438c800ca"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/qa_if_a.html",
+      "size": 2582,
+      "sha256": "cc96795a057a855e3795375bc66d7809d47c13d55c5a5af0a4223d6c73b02bbb"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/qa_if_b.html",
+      "size": 2748,
+      "sha256": "20a5ce0e8f2dd24542ad6a788e07574ac9b5b5901efdfc8d7739804a19f2eb20"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/qa_lo_a.html",
+      "size": 2602,
+      "sha256": "4cd233a65b734015523c44cb8cdf816c255bb9e092dc3ff6a8cebeab8bff58a6"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/qa_lo_b.html",
+      "size": 2563,
+      "sha256": "ff02b2d01fe2461d3fff21973a3bba14d29bb76ffeb8d64034e6425d7dbf424d"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/rda5802n.html",
+      "size": 2407,
+      "sha256": "1544fde3efc5103f25d5e3eed7858a0fdf27a36e442ac59854472924c2670306"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/ref26.html",
+      "size": 2250,
+      "sha256": "28e52abb8aac4aea59de8c24e48ce030c6cc3f6189cefc8c0871c49e92213d70"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/rf.html",
+      "size": 3736,
+      "sha256": "a2b354c76f78cd6226d2ba256cd9f1c60fb0ebfe007563888478fd1ff2e9743f"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/rf_spi.html",
+      "size": 3221,
+      "sha256": "53ed3bc3e74fb322fea1231587fa8025b41b8400780c594be54194fbb702071e"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/sgm8272.html",
+      "size": 2192,
+      "sha256": "1aea9e061475229f74e920020d4506b5e7a08133ecca8e98e5e522058a9171d2"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/swd.html",
+      "size": 2430,
+      "sha256": "d017992dc9ace3d4246e4c6b5e5dd31a3651b2a8a6d3a28ae5024fd768fcc447"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/u2429.html",
+      "size": 2538,
+      "sha256": "00fd175336187b4ba5ead872010a0afde196bf00deb9179c4e25c5335c51c540"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/usb_cdc.html",
+      "size": 2605,
+      "sha256": "5f66231869e8c8cf4736747de17169def9c6202fd88617fe9b3d6da5147ef500"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/varicaps_rx.html",
+      "size": 2678,
+      "sha256": "5ba316d852b9641d726406abce007011e18c72d3a20eccf5da6fde0343b610d6"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/volumes.html",
+      "size": 2682,
+      "sha256": "48611d5fc54ad08c97f29cbaa528be438e5240f7c6ed60dd23f36fc0661304c5"
+    },
+    {
+      "path": "site/component/d578uv-pro-gd32-v121/yd1517.html",
+      "size": 2395,
+      "sha256": "9e3465491a6c893befdd66dd528b9d14bd300ade427f9deb1549bbbe85fcd847"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/backup_gps_plus-gps_plus.html",
+      "size": 2555,
+      "sha256": "094b55c3a357fd973260993ea37deb2feaf7babef9f619eb9b5bfbf8ed76cb2a"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/gps_plus-mcu_plus.html",
+      "size": 2572,
+      "sha256": "7d1cb32e449afa33078b75298ff2b2e47a8f7f36bd7b7a90fa3f25680e54dba1"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-amp-am.html",
+      "size": 2790,
+      "sha256": "bc5f69ff8b438e1c5cdd74e02bb84e704f2334efcc466e17807667fd796a8cc0"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-bp02.html",
+      "size": 2785,
+      "sha256": "d68c6330aa877ccc8f3052bc5d40941046266e60bd47f978bbaa7cb57131d226"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-bt-audio-amp.html",
+      "size": 2868,
+      "sha256": "e91ca8f85ab9a7f69d92564e39d668ce43b363828c9f1227828f07686332937a"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-bt-audio.html",
+      "size": 3134,
+      "sha256": "671e32a465ff023c9f8298f3cae9abdb2c6ac3188c561b7d353df0f03db98112"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-bt01.html",
+      "size": 2851,
+      "sha256": "dfa5603478460685a3ecd5277d8d55b52535c94e84894d21c94276821eca8810"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-carte-kt.html",
+      "size": 2546,
+      "sha256": "3b18c0f9aa1046424027921c4bc580eb969c3a5b2895c80c08e30b31d0430f4e"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-carte-quartz.html",
+      "size": 2540,
+      "sha256": "37d2ea03d9b3d5d34726c1f95fefcafbe47483eaf5194bd17510e571189917c9"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-connecteur-carte.html",
+      "size": 2582,
+      "sha256": "8a92e2087d2737f6f90b7eb6212cd6430c988ff003f258635261e283dd8dc4db"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-gd32-bluetooth.html",
+      "size": 3193,
+      "sha256": "b0fbdb2c367b59a5505e9a2f96fe4320a612acb2a81079e10d2f5096a41ed85b"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-kt-am.html",
+      "size": 2524,
+      "sha256": "449742c6dfce1b7f4839bfc0fcf188e8a4fc12455f8eee2f8cae60641793f752"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-mcu-nand.html",
+      "size": 2530,
+      "sha256": "543ca96268d844fdb1795d3f55253f105144e4e3a59598728eb90bae4db86053"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-pc-usb.html",
+      "size": 2586,
+      "sha256": "1d5e4d202fdddb59bc967dd125034b19b1f7a7f609574391f7e3d720601ad435"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-rda-carte.html",
+      "size": 2821,
+      "sha256": "0ed6a0f1409b268d9bfe3186381f2fd1892d7874844af45b63b362209876b3c0"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-rf-carte.html",
+      "size": 2521,
+      "sha256": "c9677f1372c7bc8d555ab2969041a956a89d255f2f2906b28fd216e10fb75831"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-support-module-bt.html",
+      "size": 2913,
+      "sha256": "120f2b04be8036319fec55519c84d0c6abd3fc6ab5668f124316486b0292a8d2"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/plus-usb-mcu.html",
+      "size": 2526,
+      "sha256": "e6baf82305298433ff8d47330c1a0d8513b353f3f357fab69c6783c63e5cbaa5"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/protection_plus-mcu_plus.html",
+      "size": 2543,
+      "sha256": "cd708646a59bc498696483baecc26485ca05688555bfeae844900b645bd972b2"
+    },
+    {
+      "path": "site/connection/d578uv-plus-carte-am-observations/rtc_plus-mcu_plus.html",
+      "size": 2581,
+      "sha256": "005694056f00c7594359204945434cb8de22592a612422edbe91547a5e81bff5"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/audio-mc34119.html",
+      "size": 2438,
+      "sha256": "edb8db2d1807f798267de2918783355e5355ac0347a75b918d6a0fb89cea8fae"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/backup_gps-gps.html",
+      "size": 2875,
+      "sha256": "e204746ccc667c8496ed40243222e0afd5cd6b281a7282db1b8ad1d221d62abe"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/backup_rtc-mcu.html",
+      "size": 2770,
+      "sha256": "b9f6d603aec472e1455941d66ec4301623b79d42610e426b10c3132ba7f2fbee"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bh2226-sgm8272.html",
+      "size": 2709,
+      "sha256": "586abf1fdb3523086f01bbff592c087a58f72d45a3bcf16bbf6c1f0bb0b13816"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bh2226-varicaps_rx.html",
+      "size": 2788,
+      "sha256": "ab6a5f907e7348d38e2563403bf877006848e83f62b222bd518d41314fb7b4d9"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-antenne-module.html",
+      "size": 2668,
+      "sha256": "ea7a8426b6c3ee66a03cf6191e22a429fa0794aa88511e1c0f3e21d975a96972"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-audio-routage.html",
+      "size": 2990,
+      "sha256": "0f1af906cdddaef6510a7257f55c66cae4fc9f48fb9096bb905deb801f7ca196"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-bp02.html",
+      "size": 2783,
+      "sha256": "5da7f68366a2acb68c33831670255ee8809e1be14c2336fbea8dd82b858c888c"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-bt01.html",
+      "size": 2813,
+      "sha256": "947cfa0e22707e55f2c81705c9540635488e0def7b4d599267ae0ab10211ef81"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-module-audio.html",
+      "size": 2991,
+      "sha256": "fa126037ea7c38930830d9575c305b58a98e64783f9df7d050067661ab6e7610"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-module-shield.html",
+      "size": 2815,
+      "sha256": "4d285a701f6f71fade5e75ddf4d062ec5034b6a7366bc97b620dc9a6f40ad706"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-power.html",
+      "size": 2749,
+      "sha256": "f658f57d21f041876e8870a050ae6a2801e9852ba0c9c76a42a76dde41052dea"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt-support-module.html",
+      "size": 2875,
+      "sha256": "f62a3f308ca1ec7a2f163bd6e8a4de50da745df42356dad41d63a8cbf9d99869"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/bt01-microphone-cable.html",
+      "size": 2846,
+      "sha256": "c437bc84bf92079e1ff1a136a8e596de3c9b61922e7abf9b1f17fdca1c52b2ab"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/cdc-gd32.html",
+      "size": 2481,
+      "sha256": "7e5849df37809be7169e567ad16428b29c72c8b4c9100be560a124ec24181bb2"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/codec-audio.html",
+      "size": 2682,
+      "sha256": "0235422ad38dcdfe9576bf9e2fda5dbf83a3386376cef7bf7b8e0f58fbc80e86"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/dmr-codec.html",
+      "size": 2720,
+      "sha256": "1b6c956ff3a359505392a360a946b63eabc0a5da24277199c4470304d0c2de10"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/gd32-codeplug.html",
+      "size": 2746,
+      "sha256": "83a53ac228135ee4fb3599a074d2a83de22839cf841ad26bd43bf04685e360a5"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/l7805-micro.html",
+      "size": 2484,
+      "sha256": "cb1a4683244dc32ebc7c107eb2641d953d459fdb74f0c0307dcdede2f7054da4"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-adc0.html",
+      "size": 2825,
+      "sha256": "270eb4a0af323ce43e3ebe6ceb9a3f8aec6d9da859f03546e9025cacbe466e61"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-audio.html",
+      "size": 2847,
+      "sha256": "da83f58c99ca289de94a7c2108a9d71406dc951b6c33bd5c3362627b7ea659e2"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-bh2226.html",
+      "size": 2432,
+      "sha256": "c1c2f44df2a13b1a8add61e0801e7d9580c88d5ae6ae5f11661fac600c80a1ee"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-bluetooth.html",
+      "size": 2886,
+      "sha256": "537375ba2e4cae91651bb52d89cafc9a3a43a63b62055d8dacede9512804e3d7"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-dmr.html",
+      "size": 2598,
+      "sha256": "57a1d69952a61b18569ad558abc932c065f1a01c203e4772d7fb11ca79b6d6e4"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-encoder.html",
+      "size": 2886,
+      "sha256": "447a6277de9169782a15cc50310e99f7c6bc2dc9f547534d85de9aff0a203819"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-gps.html",
+      "size": 2421,
+      "sha256": "0dfa1c2fc8614b30db12e1429bb387391634bb469a20b4c542ef48976f3cade6"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-keys.html",
+      "size": 2657,
+      "sha256": "a9ecc199736c9c71b87ed39ecad1ce94b9ef956ff92e28b56636d5ba1879464f"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-lcd.html",
+      "size": 3206,
+      "sha256": "e907613d21ebcf68f94811272150e9ccfb0f1d6994545abb499e06b4d1b06706"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-lights.html",
+      "size": 3197,
+      "sha256": "ee3f0caa17f1949b77b36bee30ede3cd8c6fb171e5a144ad7f8350b3ba34a2d6"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-mc34119.html",
+      "size": 2440,
+      "sha256": "b6a78ee412566c5c829a83ea5b9835637b078c24acd357daa8a057cd2b7a8723"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-micro.html",
+      "size": 2997,
+      "sha256": "a23730accf1dec7e32fcc4958bc22e0045d333edcd2ba106ee5a1c8c009ab08d"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-nand.html",
+      "size": 2976,
+      "sha256": "eead968fc54fc9ee9e43d113d126d3b5fe7cc83fc02ef10ee5fae1792315242f"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-rda5802n.html",
+      "size": 2625,
+      "sha256": "2911e0a16f9513b68e08acc9a61d581adc7db2bc38bf9f2627dc7d2b843a5e40"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-rf-spi.html",
+      "size": 3305,
+      "sha256": "0124f287e8984b315988de63573d0e068c0d57dfc0e7326ec633a0604bdd2ab2"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-rf.html",
+      "size": 2979,
+      "sha256": "40e9e360e75e19a7045d9dedcb32b4e23f58602b19c71bf516e760820f5e6170"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-swd.html",
+      "size": 2656,
+      "sha256": "7ae9e97852ded348971a7badbcb8a469bb6b19f8dc1bf04bdb8f34368ddde07d"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-u2429.html",
+      "size": 2455,
+      "sha256": "97a954cb949326dc64225c558aa22a11d68802803c73a28a0fbbd21b90798d6e"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-volumes.html",
+      "size": 2590,
+      "sha256": "0ece98fecb6fc31565117039c667aa4435234ee83938fca3ae90818d834f45b8"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/mcu-yd1517.html",
+      "size": 2814,
+      "sha256": "a9ab3dde011d82c61426d3342db611655120148e7d3884a3c0f5bb7d976ac030"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/pa-antenna.html",
+      "size": 2371,
+      "sha256": "3e24395dd23b1632a3d0cb28c49cbcc214d2b8a197776a9ded336f0eaaf1bc28"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/pc-cps-usb.html",
+      "size": 2785,
+      "sha256": "95b90ad9aea876f6d9c8c4e16e1c573728503e177a059dd2840632154231bbdc"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/power-backup_gps.html",
+      "size": 2507,
+      "sha256": "86d6d5ef2434f2fa6efef2024bb4abd02ead84e2f1e25608fbdfab554fbbc43c"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/power-backup_rtc.html",
+      "size": 2527,
+      "sha256": "2955d333468bf5caed4737018ffead8ecaf8915437bfd1b32919a8b63061887b"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/power-l7805.html",
+      "size": 2485,
+      "sha256": "3f2740b77126eaef62907ebe53cdcccfa7548cf942510bfabddf81a3e114daea"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/power-mcu.html",
+      "size": 2892,
+      "sha256": "91b937fd311f00ed01695bde0d3c26d098aecdc5be7d96963c3fca3fe52c51b4"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/power-protection_supply.html",
+      "size": 2550,
+      "sha256": "9253b2c847208a12f53b93174a445c342519bada04adb7e2b26b4e6cf832701d"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/protection_supply-l7805.html",
+      "size": 2776,
+      "sha256": "9753b9335a879b8c6afc6c4474c3565e0e206dd1d1de3bc93c64eed36cf66030"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rda-audio.html",
+      "size": 2733,
+      "sha256": "5338b0da5862efeb7c9d947b63efc8d3d5555789672dc4a0e84f23974135915b"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/ref26-qaif.html",
+      "size": 2880,
+      "sha256": "130be0ea8e7128aac0003d2cedf9e006f3f464d55b1e9a9e103de467e55fbe5b"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rf-aft-uhf.html",
+      "size": 2452,
+      "sha256": "a7198942b7afb22af521c3d78f7e1498e8dbfb1e5f2395641f016d0fb72b1fa4"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rf-aft-vhf.html",
+      "size": 2452,
+      "sha256": "1a5c1e9ffb2a35e337a89660215162f9b6f62bf70d032576b5e26c42d48b83c4"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rf-fi_spare.html",
+      "size": 2504,
+      "sha256": "685e56950fb6a547761823b96f6208da8d32bb3c7c5eb06890c2233e6af2e069"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rf-pa.html",
+      "size": 2956,
+      "sha256": "2b58f2c25834cfeaedea44f4815484f720bcd24f497820defeb1dd3b97844545"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rf-varicaps_rx.html",
+      "size": 2486,
+      "sha256": "a00f2d7363662b6777615af89ef25265e9a490b42d77b16b96ea3bd02f287709"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rfspi-qa_if_a.html",
+      "size": 2957,
+      "sha256": "17fae4666cbbe323a3df3c7b7f302c12a10eaf13438aeefda880e48977f063a0"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rfspi-qa_if_b.html",
+      "size": 2957,
+      "sha256": "e35a8afe4b66b81ed5a4c95e8ededf54eee7fdaa3bc7f905e688697b90aa090b"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rfspi-qa_lo_a.html",
+      "size": 2957,
+      "sha256": "c38b1e486b423e8fed41fcc8352df2478c97070abd1b9d749c18beaa6de9d6cf"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/rfspi-qa_lo_b.html",
+      "size": 2957,
+      "sha256": "e1938b260c79f7127d1159a5672817328c7834cd291f80ec37f6d6abdab0d577"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/u2429-yd1517.html",
+      "size": 2796,
+      "sha256": "d38a0f6c93ea0a269b8bfd130ee2eee4bf5ce952acc12994c1e5caf74a0591de"
+    },
+    {
+      "path": "site/connection/d578uv-pro-gd32-v121/volumes-u2429.html",
+      "size": 2836,
+      "sha256": "c87105d7b3e75e9d55909bc5896a2669e8da2bff6f5ff9ab9d4bf74ad10a27d2"
+    },
+    {
+      "path": "site/cps.html",
+      "size": 3560,
+      "sha256": "978527bb415219067689cb9e2d13cf69ff6e25060260cd88387dd287efd2a1b9"
+    },
+    {
+      "path": "site/doc/CONTRIBUTING.html",
+      "size": 2941,
+      "sha256": "9e9eda4cfc9c83b3292fe914cb1d30df09537e119eb057fe0e0ac02eaec2750c"
+    },
+    {
+      "path": "site/doc/PROVENANCE.html",
+      "size": 6023,
+      "sha256": "f61f82dfab1af992e1b9627fbec3192cd4d0fcb4f3f27c1ddf41da1bab991d94"
+    },
+    {
+      "path": "site/doc/README.html",
+      "size": 9621,
+      "sha256": "864511b9142247e17acdbd47c0af603025e1e2f8f069e2c8341b7bf0efb15a5a"
+    },
+    {
+      "path": "site/doc/README_FR.html",
+      "size": 6286,
+      "sha256": "c3298f8b6985a344c5cee73244ca65df7e0a9f54fbe4525d44c26c342e6e0a24"
+    },
+    {
+      "path": "site/doc/README_SITE.html",
+      "size": 7235,
+      "sha256": "985ef7df520a0f3ead13b15d7dae79b4e936110eadcd734c1d4bdf42565c31f6"
+    },
+    {
+      "path": "site/doc/docs/01_DECISIONS_ET_HISTORIQUE.html",
+      "size": 10123,
+      "sha256": "8d73a445b75808c104c7cb3515291e5b5232dfd8bd6e7212c07f813ff1c872fa"
+    },
+    {
+      "path": "site/doc/docs/02_CPU_FLASH_BOOT_USB_SWD.html",
+      "size": 8919,
+      "sha256": "d6b3e6ad9513d35b4545773b2723530680a395f98016deb50135bc296b4d28df"
+    },
+    {
+      "path": "site/doc/docs/03_NAND_LECTURES_ECC_CARTE.html",
+      "size": 10245,
+      "sha256": "f28b7e08f77855f50a9fe62261c07f2d0ef22ff69ee7934028a5944781c55208"
+    },
+    {
+      "path": "site/doc/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.html",
+      "size": 12114,
+      "sha256": "e142fa4b17abfcec3b0862c8ecd6ff21e0c239637996a09a7953a8e407a974d6"
+    },
+    {
+      "path": "site/doc/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.html",
+      "size": 11372,
+      "sha256": "72249d3008abbfc886dbe1b6ebb975507df106c2fc69fbf9d0d5224bcaedbbee"
+    },
+    {
+      "path": "site/doc/docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.html",
+      "size": 11327,
+      "sha256": "2dbef73dfb62c37ac3163e5dd855e7af730b57553d8fc872d6077a5e857a775e"
+    },
+    {
+      "path": "site/doc/docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.html",
+      "size": 10838,
+      "sha256": "d51b21fa0e7833dcd42eab6c8a74fef5b363e87e4d81b868e736e63c9ab96a2b"
+    },
+    {
+      "path": "site/doc/docs/08_LIENS_COMPLETS_ANNOTES.html",
+      "size": 7556,
+      "sha256": "c1fd179761371f4c1278e25f8c4ba0972e375d84184310448fe388b0e7f3d98c"
+    },
+    {
+      "path": "site/doc/docs/09_REPRISE_PRIORITES_TESTS_ET_INFOS_MANQUANTES.html",
+      "size": 7190,
+      "sha256": "5bcb4328367dec2160c8e63762e63bc0007d7f0e19fbf7237a6ab7f5b7fe03e1"
+    },
+    {
+      "path": "site/doc/docs/AUDIO_IQ_V11_4.html",
+      "size": 6022,
+      "sha256": "7b0ac26a8dc19c479e6bab20c9c793350d9da28f065733e47641ccf4e222f250"
+    },
+    {
+      "path": "site/doc/docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.html",
+      "size": 4599,
+      "sha256": "9aa8ce56d2d1cbe340e28882cfd68c62343742b5802dabe1c078479f009e5add"
+    },
+    {
+      "path": "site/doc/docs/CHANGELOG_PREUVES_RTC_GPS_20261105.html",
+      "size": 4601,
+      "sha256": "50385df34764192c16d0d627699615c1ddf5bbcb2ce0efb745f82478cbef95d2"
+    },
+    {
+      "path": "site/doc/docs/CHANGELOG_QA4818N_20261106.html",
+      "size": 3541,
+      "sha256": "db3cc0ef4aac8937643d9ad6a5d85d8c836c715e06cc94cdd1f9c95f20bbdd02"
+    },
+    {
+      "path": "site/doc/docs/CHANGELOG_V11_7.html",
+      "size": 30719,
+      "sha256": "a373671580f7475ab2466904ccefed40210d5b904a470563ade65732174b47c4"
+    },
+    {
+      "path": "site/doc/docs/CPS_INTEGRE_V11_6.html",
+      "size": 6295,
+      "sha256": "d4a2e50d50b5c2a96c289ec969c3da5f9cfffa67b7fd8845e0db6c0ae2441b54"
+    },
+    {
+      "path": "site/doc/docs/EMULATOR.html",
+      "size": 7933,
+      "sha256": "6e893f21c3052d03a8bf352eeb7c20882be33a564ed7cf72adbfbee2a2dffd99"
+    },
+    {
+      "path": "site/doc/docs/EMULATOR_PERFORMANCE.html",
+      "size": 6752,
+      "sha256": "d809125809dd2a5d22cfc482f9fee2676c102e96ae9a4d0a75f03499d86013df"
+    },
+    {
+      "path": "site/doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html",
+      "size": 39604,
+      "sha256": "d95b9a6dc68de20a59a3a7ae104527df21f2dd2f6a892806ffc2c4e6dde406a9"
+    },
+    {
+      "path": "site/doc/docs/HARDWARE_COVERAGE.html",
+      "size": 10837,
+      "sha256": "39cd396a9270f0b3ed89bb5243207e1f0a152197df16acf8a0b9d08309dc5c15"
+    },
+    {
+      "path": "site/doc/docs/INVENTAIRE_RE_RESTANTS_20261105.html",
+      "size": 7266,
+      "sha256": "451f60dab301aa1d9eb6adc6bc6a982e96abe508ce973e243a30ec91890728be"
+    },
+    {
+      "path": "site/doc/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html",
+      "size": 32835,
+      "sha256": "d72050063e5dc7dc5609ed6d784f8d584e43e693b796684ae6ebc6e6d91d033b"
+    },
+    {
+      "path": "site/doc/docs/LED_STATUS_BUS.html",
+      "size": 5785,
+      "sha256": "a534547576e9a5f5ad4a802847fe709da61d943f04e61339d0a90fd47f1fce67"
+    },
+    {
+      "path": "site/doc/docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.html",
+      "size": 21688,
+      "sha256": "b7a12bc9d3acd536b63f847eee673d86cc7900572c8251938095b6ccf49ee38f"
+    },
+    {
+      "path": "site/doc/docs/PROGRAMMING_AND_CALIBRATION.html",
+      "size": 6143,
+      "sha256": "ee4b4a6063234e1295ebf393e87dc72f5f6f978744c17118225bf42f339fbffe"
+    },
+    {
+      "path": "site/doc/docs/PUBLICATION_GITHUB_DEPOT_COMPLET.html",
+      "size": 6939,
+      "sha256": "a1514a769844d2fb01aebb356ec05a76797023f75f544579adabcc581994eb3d"
+    },
+    {
+      "path": "site/doc/docs/QUALIFICATION_ANALOGIQUE.html",
+      "size": 10849,
+      "sha256": "7d67034ec58876f45eb8b2e8583964059e52d8ff57793b611e1501151ee1a53c"
+    },
+    {
+      "path": "site/doc/docs/RESEARCH_INDEX.html",
+      "size": 6354,
+      "sha256": "d3e11be9c026e3033d69bc951cb72bf88e9046fff0e9df337823040ae8949f4d"
+    },
+    {
+      "path": "site/doc/docs/RF_SPI_INTERRUPT_FIX.html",
+      "size": 4282,
+      "sha256": "2c42a6af214e4289c4fef2bdc0e9566672f03c531b28ae69c128ce1c5c5f85e4"
+    },
+    {
+      "path": "site/doc/docs/ROADMAP.html",
+      "size": 5342,
+      "sha256": "4acc3e1dbae6a5395cc5c0071be598b3d710e7da0b8ae7c7d692a7e42a034823"
+    },
+    {
+      "path": "site/doc/docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.html",
+      "size": 8615,
+      "sha256": "25b41856d458a57d23a7cf68aa329050d9163fb9e2aa79d4258d74f3333c78f0"
+    },
+    {
+      "path": "site/doc/docs/TEST_MODE_OPTIONS.html",
+      "size": 7536,
+      "sha256": "7cf7db459df36edad8f66c65775a695a86faf0c78cbc35ff95b307668937a92f"
+    },
+    {
+      "path": "site/doc/docs/USB_404_FIX_V11_5_1.html",
+      "size": 4380,
+      "sha256": "a2c1da79c2ee29c59b94990a76f35e0aa89c968b535cb57fac2f1c88406ffea1"
+    },
+    {
+      "path": "site/doc/docs/USB_CPS_PLAN.html",
+      "size": 7999,
+      "sha256": "6eb489c135b35a25c3e36fdfd2fdf674703858753cad53eb4440867299b48f74"
+    },
+    {
+      "path": "site/doc/docs/USB_CPS_V11_5.html",
+      "size": 8330,
+      "sha256": "d7ba568c3a75d1b6a2200531a50dc16ef7cfdd042890f06aaaa8e475bc899be8"
+    },
+    {
+      "path": "site/doc/docs/USB_DEBUG_AND_RECOVERY.html",
+      "size": 6708,
+      "sha256": "03a81bd0b86cac72094dda7e42f7fdde1f1de389a4487e7bd2d341d986ef1be3"
+    },
+    {
+      "path": "site/doc/docs/USB_PIPE_FIX_V11_5_3.html",
+      "size": 5390,
+      "sha256": "bb84a562d7248f16f8ef63c2018932a2679988d030ec0593ff0442d6b3951fb7"
+    },
+    {
+      "path": "site/doc/docs/USB_STATUS_FIX_V11_5_2.html",
+      "size": 4656,
+      "sha256": "36708d5ce644f1dcc48ceb7a543b0abbd42989a50e1e98f18f98288552d3ec57"
+    },
+    {
+      "path": "site/doc/docs/archives/ORIGINAUX_A_RECUPERER.html",
+      "size": 5933,
+      "sha256": "82d82831575848a9ef5756c500bdc395cf35e3a367fdce374173811b27aa1276"
+    },
+    {
+      "path": "site/doc/docs/cps/CODEPLUG_CANAL_OEM_V121.html",
+      "size": 9745,
+      "sha256": "9376503394008a8d97f43358c9d2271e740dba7d6a21666be3186e88d60c9999"
+    },
+    {
+      "path": "site/doc/docs/cps/COMPATIBILITE_PRO_PLUS.html",
+      "size": 7606,
+      "sha256": "2faa4115d92d69d5404cfb39ea84a47ce4328307f19c509b9022b32c863946d7"
+    },
+    {
+      "path": "site/doc/docs/cps/CPS_ARCHITECTURE_SIMULATION.html",
+      "size": 10995,
+      "sha256": "cef3f8d283559f368df92d802a868a8b24dbcf44e0ec118e4e5a0e78e156677e"
+    },
+    {
+      "path": "site/doc/docs/cps/CPS_QUALIFICATION.html",
+      "size": 8131,
+      "sha256": "05150bdb78e9950254da23ecd335fa84116dffdf1f6c94b0e80f53eb7a7497b3"
+    },
+    {
+      "path": "site/doc/docs/cps/PROTOCOLE_OEM_V121.html",
+      "size": 9947,
+      "sha256": "1498d97910e4a3c1a56e7ff60c794b1f2b9cd668a8ec4b02d9686166ff2c9d35"
+    },
+    {
+      "path": "site/doc/docs/cps/README.html",
+      "size": 6831,
+      "sha256": "113140bfca9adea71bbd53d873e6f7a9c02aaab373f36f49f3ba2454b0e092c6"
+    },
+    {
+      "path": "site/doc/docs/cps/USB_CDC_GD32_V121.html",
+      "size": 8371,
+      "sha256": "bbc4329c31fe668168687afdf5e345df163027071f7df39a103a644efb5322cc"
+    },
+    {
+      "path": "site/doc/docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.html",
+      "size": 5831,
+      "sha256": "cbd527bcc44c00c76a642a4d637d68f4118ce76669d09b6e888dbd9d00bcb61b"
+    },
+    {
+      "path": "site/doc/docs/evidence/INDEX.html",
+      "size": 9177,
+      "sha256": "32f9544a0485336d9c08c84c1697642dacde5bdd6a8f662239b16fc2c44003b5"
+    },
+    {
+      "path": "site/doc/docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.html",
+      "size": 5257,
+      "sha256": "6f08f57601ddd78d5ae95d8e3fa5e53e910a2c76b888768131be360558c269c8"
+    },
+    {
+      "path": "site/doc/docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.html",
+      "size": 8456,
+      "sha256": "6dc613671fda94f4ac145a59027e3f7c007e48e5c5e47122144a3dad64c97cf8"
+    },
+    {
+      "path": "site/doc/docs/evidence/VALIDATION_DU_DEPOT.html",
+      "size": 4602,
+      "sha256": "c07c28c426fefe513023234402832d4d81addcf2d75e5d143362373323540e53"
+    },
+    {
+      "path": "site/doc/docs/firmware/ARCHITECTURE.html",
+      "size": 4525,
+      "sha256": "cbe9e5bddcfc68125c96b3139132704d812b30ca952cf5c02759552de668198b"
+    },
+    {
+      "path": "site/doc/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.html",
+      "size": 6944,
+      "sha256": "a5417a7a32ffec7432d90a19b9314ce9e04c54d0a7da1ca904ab99d1fdbead70"
+    },
+    {
+      "path": "site/doc/docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.html",
+      "size": 9543,
+      "sha256": "207d1a7af2da745afccbd25a59cdb1b94d22c91b49f3eb28bccd13d655233cce"
+    },
+    {
+      "path": "site/doc/docs/firmware/VALIDATION.html",
+      "size": 3516,
+      "sha256": "42a3a4b8c0d52c3fc4e3b9e423d2dc1efdf0df1b122c9c0289562e9b6a945c95"
+    },
+    {
+      "path": "site/doc/docs/hardware/ALIMENTATION_L7805CV.html",
+      "size": 5860,
+      "sha256": "8327d3a8a67ecf74bd6f0aeeda14f457431ba9dce07767ddd6751494636fe4a0"
+    },
+    {
+      "path": "site/doc/docs/hardware/AUDIO.html",
+      "size": 3382,
+      "sha256": "09d8cb2b646b98b971397e2bbb8aa19cab66a1ca5bd055e8b12a9cf789097268"
+    },
+    {
+      "path": "site/doc/docs/hardware/AUDIO_MC34119_SGM8272.html",
+      "size": 7822,
+      "sha256": "5d2809b1194d58da8623532dfef4c5eac4821e08a78d6ebd2a41a60b79ad1c2c"
+    },
+    {
+      "path": "site/doc/docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.html",
+      "size": 7150,
+      "sha256": "f9575825fc591cecfac1cabb6a6405716b277acc825ac5d46cd37425a8b7c2f1"
+    },
+    {
+      "path": "site/doc/docs/hardware/AUDIT_FONCTIONS_PARTIELLES.html",
+      "size": 16177,
+      "sha256": "cb4280d19029e4852b1e3a50f5cdab9b3fe0565b48547989e52ab12d3f76a910"
+    },
+    {
+      "path": "site/doc/docs/hardware/BH2226_H2226_DAC_RF.html",
+      "size": 8398,
+      "sha256": "afb7361a025535b81da866ae436ab248086c2b19cee2df1135a3487fe77e1521"
+    },
+    {
+      "path": "site/doc/docs/hardware/BLUETOOTH_D868BT_SP_ET12.html",
+      "size": 14455,
+      "sha256": "ab5b43a3d6c65b03d876180dc670c53670339b384520df663926d6204c2469c3"
+    },
+    {
+      "path": "site/doc/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html",
+      "size": 6546,
+      "sha256": "15581f933f4333af931bd202b7765f6ca7974616cb7a1f0c7d6047a029eb2451"
+    },
+    {
+      "path": "site/doc/docs/hardware/BP02_PTT_BLUETOOTH.html",
+      "size": 6618,
+      "sha256": "1197bb1eb8b00901a1f13662f95262aab977d8043bcd51fc30705ec8f15e58ec"
+    },
+    {
+      "path": "site/doc/docs/hardware/BT01_MICROPHONE_BLUETOOTH.html",
+      "size": 9142,
+      "sha256": "e046aca2a7edf24468e887f2d1760666a9bc8be0c341113e7b71e3fce2ff8e79"
+    },
+    {
+      "path": "site/doc/docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.html",
+      "size": 6646,
+      "sha256": "5b0da945efc45f361ee653592f4b03da0df2af61e0f3067c87137f6e9e02c752"
+    },
+    {
+      "path": "site/doc/docs/hardware/COMPOSANTS.html",
+      "size": 8486,
+      "sha256": "80dffbcba419b6e189022e3f9b1ebbd11185dc8787054fe8cb7a0d3179db8d35"
+    },
+    {
+      "path": "site/doc/docs/hardware/CONNEXIONS.html",
+      "size": 6569,
+      "sha256": "8621ba443734c009bd3bb5607d51e38ea0b35d880786be90769dcacd3ef615a9"
+    },
+    {
+      "path": "site/doc/docs/hardware/DMR.html",
+      "size": 3299,
+      "sha256": "ba9cf56a8dd6a7d114a8000415f7e589f563901187b54ff7e52c291c79fd36d5"
+    },
+    {
+      "path": "site/doc/docs/hardware/ETAGES_RF_PROTECTION_FI.html",
+      "size": 5433,
+      "sha256": "03f3a4294df2958ac928e2e2eee32608b5bcf5cc00224e4e9b29ee7d3dbb0478"
+    },
+    {
+      "path": "site/doc/docs/hardware/GPS.html",
+      "size": 3321,
+      "sha256": "246be31b962d45f9d3e0d226f6030d60a28e51ec7e97162e6b1b5713baf1c50d"
+    },
+    {
+      "path": "site/doc/docs/hardware/PA_RF_AFT05MP075N.html",
+      "size": 5493,
+      "sha256": "e9b01573d5097e428b4d2315953ab324f726b188f85b1defb73bd3273aeefebf"
+    },
+    {
+      "path": "site/doc/docs/hardware/PHOTOS.html",
+      "size": 3806,
+      "sha256": "4322e26dc13d5e1866f418079f292de7055c5a56d01f2929d4dd5f359aa5d8a2"
+    },
+    {
+      "path": "site/doc/docs/hardware/PLAN_INVESTIGATION_BROCHAGES.html",
+      "size": 6316,
+      "sha256": "642ebf3ada7387e4c156dea21a14075c0e29e53970005da6ca513702f3f79432"
+    },
+    {
+      "path": "site/doc/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html",
+      "size": 11176,
+      "sha256": "39d4b624082b2dcb545997cbc90ea16c7f30f77c1e273cacbd7f6260b51e2257"
+    },
+    {
+      "path": "site/doc/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html",
+      "size": 28330,
+      "sha256": "0bec2c58e5fb4a8f2df94a082684e33e9ae08aeba0117c4562cd8b788675f744"
+    },
+    {
+      "path": "site/doc/docs/hardware/RDA5802N_RECEPTION_FM.html",
+      "size": 9055,
+      "sha256": "707de179bcfb6943d71ca2fde7e88aaaa446b20f13662eaaa7af6b59286bcd34"
+    },
+    {
+      "path": "site/doc/docs/hardware/RF.html",
+      "size": 3469,
+      "sha256": "8dfa0cba93c0874efaa95e632320307406be1b890b41263e0e904b9a1a31c370"
+    },
+    {
+      "path": "site/doc/docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.html",
+      "size": 11439,
+      "sha256": "624c22d6dbc9983d07fd81c252a7a29ce953cc9e9bd12f2a197202dd4403811e"
+    },
+    {
+      "path": "site/doc/docs/hardware/VERSIONS.html",
+      "size": 4239,
+      "sha256": "a1e1e685115bbdeecca9d2dd541f6b3b95c9a66772cd637e3f0b74c129678a8d"
+    },
+    {
+      "path": "site/doc/docs/hardware/VOLUME_U2429G.html",
+      "size": 8381,
+      "sha256": "933ec36500a2e2687d4b44f1c2fd0406f1f2805c34403e767629cf03cbd4bb2f"
+    },
+    {
+      "path": "site/doc/docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html",
+      "size": 16037,
+      "sha256": "6e83197cb9fa27dc785fbd03350aa60414d3a7c571361baeacccc1f531b63c43"
+    },
+    {
+      "path": "site/doc/docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.html",
+      "size": 12523,
+      "sha256": "96a5850979669d5e4dfdb46802812ee181c61c724b6c22b11818d31962e66e07"
+    },
+    {
+      "path": "site/doc/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html",
+      "size": 13813,
+      "sha256": "f1022ec923e2475abedf165919a33a56f93e375473a467ed432e7befc79fa39f"
+    },
+    {
+      "path": "site/doc/docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html",
+      "size": 13598,
+      "sha256": "f9d2c703d6b5f40591fd12fec1f9e866308c879bf3adf48dbc4e40d7029e4d16"
+    },
+    {
+      "path": "site/doc/docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html",
+      "size": 13972,
+      "sha256": "2c3382ff759f3950bc33a5571d6f01ff05dae237205b5fe607f7ca8f4972bac1"
+    },
+    {
+      "path": "site/doc/firmware/README.html",
+      "size": 2790,
+      "sha256": "9b91555a5a3920ebc5b357d0facba076320a0daa0f2957234cee118c37bf9b08"
+    },
+    {
+      "path": "site/doc/firmware/app/README.html",
+      "size": 2136,
+      "sha256": "4b42e99e156cc991fc31b7d72f2d60c48443ec436eac234dc652752453ed0ef0"
+    },
+    {
+      "path": "site/doc/firmware/hal/README.html",
+      "size": 2606,
+      "sha256": "8bbc0608c6dc1674153fa1be2264bcdf5fd1be57137f2fb014d67517b62b4de1"
+    },
+    {
+      "path": "site/doc/firmware/tests/README.html",
+      "size": 2122,
+      "sha256": "70d572a488e39f9a7273afcef389d720136c5bf72c39bbcc6605ddfb2d184079"
+    },
+    {
+      "path": "site/doc/hardware/kicad/README.html",
+      "size": 3213,
+      "sha256": "b9c605a2ae851a482ff35911045f3f61cf4420ae56163003bef4052843c869c7"
+    },
+    {
+      "path": "site/docs.html",
+      "size": 1728,
+      "sha256": "88d7a5840f27f12080de379cea9c9093dda18c50ef4775bfadad5ef99a81e47d"
+    },
+    {
+      "path": "site/firmware.html",
+      "size": 3555,
+      "sha256": "a5f5a818c152b74a0de7064f691a38a01319b698b8d8d3dba9898044d130c662"
+    },
+    {
+      "path": "site/index.html",
+      "size": 4806,
+      "sha256": "682d526d532c93b3eb34b1862bd938f572bf8daa52f716250cbba99fc9b79496"
+    },
+    {
+      "path": "site/photos.html",
+      "size": 2256,
+      "sha256": "b54bb53d5c6e9dc22ea1ef2c3f4f88eecd01c1449060e35246063ef6a0db74d1"
+    },
+    {
+      "path": "site/raw/CONTRIBUTING.md",
+      "size": 1120,
+      "sha256": "76de92ddbe13f4ee91d31f04a84ce3b98b363b8be4eb1a945022055ad1b434db"
+    },
+    {
+      "path": "site/raw/PROVENANCE.md",
+      "size": 3861,
+      "sha256": "61fd7c83f8e497b116f292ccba744bd1363c6f81cc978d1d0a1d4936ec5d6b78"
+    },
+    {
+      "path": "site/raw/README.md",
+      "size": 6765,
+      "sha256": "85abfae1eaf421a902274f975e4448de65da314fafbbd14967f50626a965920b"
+    },
+    {
+      "path": "site/raw/README_FR.md",
+      "size": 3885,
+      "sha256": "453d7e69d184beff672ca3c3a22058aa3a05486ccb47705172eb687df835a11f"
+    },
+    {
+      "path": "site/raw/README_SITE.md",
+      "size": 4376,
+      "sha256": "f26900649d59f6bd13b460c8230562b7bdad32afc06c9ee63b252173703bbfc6"
+    },
+    {
+      "path": "site/raw/docs/01_DECISIONS_ET_HISTORIQUE.md",
+      "size": 6998,
+      "sha256": "8285bee1d989fd0def48c3edd3117f9b8b46f5188b9f959f8ebde2007bab3229"
+    },
+    {
+      "path": "site/raw/docs/02_CPU_FLASH_BOOT_USB_SWD.md",
+      "size": 4967,
+      "sha256": "a861f3df28036c6f3462226faecd0aa1def4a4254dd3b8125964580b3cb38aa0"
+    },
+    {
+      "path": "site/raw/docs/03_NAND_LECTURES_ECC_CARTE.md",
+      "size": 5946,
+      "sha256": "104a90396f7e72383f70e0a1946ac5acaf4988bf9442bd1d790382573feebaec"
+    },
+    {
+      "path": "site/raw/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+      "size": 7111,
+      "sha256": "6ba8e2d2a6da112c1fbf2fb5070b20c7daf9a9428ed406098e32d48d29bb801e"
+    },
+    {
+      "path": "site/raw/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md",
+      "size": 7647,
+      "sha256": "4a7f2b30e9a6123dc841398d20a1e5503ad03e83a286d86e895531fe7748b767"
+    },
+    {
+      "path": "site/raw/docs/06_SIMULATION_UNICORN_RAM_CLOCK_NAND_V1_V2_V3.md",
+      "size": 7150,
+      "sha256": "dfcc8f634d2fa643bfa2134d94e9c68f76d0241c0270a71f3a54e626c54bda3b"
+    },
+    {
+      "path": "site/raw/docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md",
+      "size": 7302,
+      "sha256": "2d49e285ea9ca379e869e2422454582320de9515f977e9809253206538479ef9"
+    },
+    {
+      "path": "site/raw/docs/08_LIENS_COMPLETS_ANNOTES.md",
+      "size": 4727,
+      "sha256": "bbfe36f9bb9e15bd0a2a261c70858483c8d52ad483162796e22f2ede5ca5ba93"
+    },
+    {
+      "path": "site/raw/docs/09_REPRISE_PRIORITES_TESTS_ET_INFOS_MANQUANTES.md",
+      "size": 4611,
+      "sha256": "e9f2df181b5eab9105b1640e9a81a8ca3fc0460ab47a8005285cc4184fe08609"
+    },
+    {
+      "path": "site/raw/docs/AUDIO_IQ_V11_4.md",
+      "size": 3950,
+      "sha256": "316a6b5c5b29e182468ea750aeb683a3b1430c206d186b9a8ce94358b1366175"
+    },
+    {
+      "path": "site/raw/docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md",
+      "size": 2304,
+      "sha256": "74364126b7b0f0fe548f6ac61bb0791b671f3d236e948460634fd04b7c703884"
+    },
+    {
+      "path": "site/raw/docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md",
+      "size": 2230,
+      "sha256": "9ab67d93f27083ce920be9d08b359c59af766450021dfade2a7e80d8909f1d54"
+    },
+    {
+      "path": "site/raw/docs/CHANGELOG_QA4818N_20261106.md",
+      "size": 1425,
+      "sha256": "4012520b0b1b0f99eaec95039b50120e80fb90ccdbd1b1421995a09df4592908"
+    },
+    {
+      "path": "site/raw/docs/CHANGELOG_V11_7.md",
+      "size": 22242,
+      "sha256": "5c15d4888f63f4b7d65c53b29a4d48d24977bf3eb370626078e360fcbb48597d"
+    },
+    {
+      "path": "site/raw/docs/CPS_INTEGRE_V11_6.md",
+      "size": 4121,
+      "sha256": "e65a3b2edaccbdf4497054662b74f512c5cd3242a79e006b22afb4a68a599341"
+    },
+    {
+      "path": "site/raw/docs/EMULATOR.md",
+      "size": 5080,
+      "sha256": "22aa7739055ad34ae506148f591c70f8abdc91615e20086cfd4f7189e9f526ad"
+    },
+    {
+      "path": "site/raw/docs/EMULATOR_PERFORMANCE.md",
+      "size": 4363,
+      "sha256": "e673e8296b689a650e73e4f0c34ef434662d8a0e16f20f0d21583dc43c5998c7"
+    },
+    {
+      "path": "site/raw/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+      "size": 30754,
+      "sha256": "fdd2faf35edff253be87da867096ce1b19b0c481c835c79f28dfce0357ec8ca1"
+    },
+    {
+      "path": "site/raw/docs/HARDWARE_COVERAGE.md",
+      "size": 7545,
+      "sha256": "3fa6e1d300c6ce71186bf25d7327adbd0f6d4fcf9483599fb1598fa414d5c2dc"
+    },
+    {
+      "path": "site/raw/docs/INVENTAIRE_RE_RESTANTS_20261105.md",
+      "size": 4335,
+      "sha256": "3a15981b908ea31f6c19379f07b3691518e0f2dd96f17f5911b59e750b192f55"
+    },
+    {
+      "path": "site/raw/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+      "size": 24155,
+      "sha256": "83280eee8d26558bf3dc4bda0153da1375d686d55f4e723cee9e0ba908753b1a"
+    },
+    {
+      "path": "site/raw/docs/LED_STATUS_BUS.md",
+      "size": 3331,
+      "sha256": "37ee6741391d399b3703a1590850c83464f478deedde69f0671614c6cb9cd4ad"
+    },
+    {
+      "path": "site/raw/docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
+      "size": 14962,
+      "sha256": "55be38acbc337ec91f3e6332af0199c367e891391245006f326104babc871154"
+    },
+    {
+      "path": "site/raw/docs/PROGRAMMING_AND_CALIBRATION.md",
+      "size": 3709,
+      "sha256": "61f0d1a7f5adac09a586933232994526dd29513986cd0795ec47c105f6ed3c16"
+    },
+    {
+      "path": "site/raw/docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md",
+      "size": 3879,
+      "sha256": "77575f1a38137a525fffa457c5b93f7b4a2f81e46d3b948160a03ff486749dda"
+    },
+    {
+      "path": "site/raw/docs/QUALIFICATION_ANALOGIQUE.md",
+      "size": 8208,
+      "sha256": "29f5d02b83fc5ff949298d9da822b38e28bba4c4cf23335aae71d35777f715b2"
+    },
+    {
+      "path": "site/raw/docs/RESEARCH_INDEX.md",
+      "size": 3558,
+      "sha256": "f0dbb5efef4a4769999230a0384b1a3aa5ab057523e10503b34a39fcd4c9ff2e"
+    },
+    {
+      "path": "site/raw/docs/RF_SPI_INTERRUPT_FIX.md",
+      "size": 2311,
+      "sha256": "73579ac7754e3cf0664be228f33cbd4562fd1ba6f73878da4aeb2212e339ac3e"
+    },
+    {
+      "path": "site/raw/docs/ROADMAP.md",
+      "size": 3056,
+      "sha256": "7f8d7e60699e69d7bb85bbcd3a8635c1691f0bb8fdd68b8496f96787858c7d88"
+    },
+    {
+      "path": "site/raw/docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.md",
+      "size": 5209,
+      "sha256": "25d9f6da655be8565a1a509f9034f25840dc369a6744c386c263409e632720e6"
+    },
+    {
+      "path": "site/raw/docs/TEST_MODE_OPTIONS.md",
+      "size": 4572,
+      "sha256": "2bec9dcb48c155d0b5f6d63351e8403344a853d317d777a3ab766f5eeec4b49a"
+    },
+    {
+      "path": "site/raw/docs/USB_404_FIX_V11_5_1.md",
+      "size": 2375,
+      "sha256": "d89982034cfbe728e1f06c59aa8102a5f355b29e5ab662b655791a2cf1ab2e2b"
+    },
+    {
+      "path": "site/raw/docs/USB_CPS_PLAN.md",
+      "size": 4981,
+      "sha256": "b797290719ba248bb4a9285a84b9e4960696cee7802b2c6cec30b38877f6bfeb"
+    },
+    {
+      "path": "site/raw/docs/USB_CPS_V11_5.md",
+      "size": 6067,
+      "sha256": "b16314ce4ee06989dbf666d9b837b2217ecea5ed0ff206341ec40290d21a1efa"
+    },
+    {
+      "path": "site/raw/docs/USB_DEBUG_AND_RECOVERY.md",
+      "size": 4061,
+      "sha256": "443bdeddf9321385f069fdd1c5b264ae932b1a6ec2a6cf1dca4ca6c29f99ad91"
+    },
+    {
+      "path": "site/raw/docs/USB_PIPE_FIX_V11_5_3.md",
+      "size": 3316,
+      "sha256": "cdb54a5ddcc5e09c6cf256b5ff615c23d400ae4e18f0d2594f1748c120867571"
+    },
+    {
+      "path": "site/raw/docs/USB_STATUS_FIX_V11_5_2.md",
+      "size": 2603,
+      "sha256": "ba09f616999d708bc55939d0d39b50633438db308a5feb547d101bbb8b94136b"
+    },
+    {
+      "path": "site/raw/docs/archives/ORIGINAUX_A_RECUPERER.md",
+      "size": 3035,
+      "sha256": "bcaa438b68f2f5dadc0d41ab47dcfb76e01a0596f26d6a7844130e779b60f78e"
+    },
+    {
+      "path": "site/raw/docs/cps/CODEPLUG_CANAL_OEM_V121.md",
+      "size": 5926,
+      "sha256": "4eadfacb4e5315c9a161baff900ecf4aacbae8b0971221b31b1dd5bc92679f03"
+    },
+    {
+      "path": "site/raw/docs/cps/COMPATIBILITE_PRO_PLUS.md",
+      "size": 4374,
+      "sha256": "54a70a1d4cd4f36b9f527806626bddb53401630fb8e34361e93309d0f1ee2882"
+    },
+    {
+      "path": "site/raw/docs/cps/CPS_ARCHITECTURE_SIMULATION.md",
+      "size": 7144,
+      "sha256": "698388a44aa9121eec3a725df4d0cba0ebbe1c7dcba8804890658fc25b610fdb"
+    },
+    {
+      "path": "site/raw/docs/cps/CPS_QUALIFICATION.md",
+      "size": 4984,
+      "sha256": "70daf8fd1c249fb130a77286663a9cfb6deb3ecb085110c1a738ddc56d57d5a3"
+    },
+    {
+      "path": "site/raw/docs/cps/PROTOCOLE_OEM_V121.md",
+      "size": 6212,
+      "sha256": "8d07211d8e201b4d6c3bdcd303a0882b55f7dbd2ca739e96decc473f75b1bec8"
+    },
+    {
+      "path": "site/raw/docs/cps/README.md",
+      "size": 4030,
+      "sha256": "7e7f515a9bda25a84c79d6960c492ea926e4b1a7387607750545978f36dfafae"
+    },
+    {
+      "path": "site/raw/docs/cps/USB_CDC_GD32_V121.md",
+      "size": 5004,
+      "sha256": "a72ce034e4f6295068274b147c9bd01dd6349b4d64eb19e91b828f3048666a96"
+    },
+    {
+      "path": "site/raw/docs/evidence/CPS_QDMR_CAPTURE_DE_REFERENCE.md",
+      "size": 2943,
+      "sha256": "32adefcedf2e55b579fd343f218b57c6aac5e2c162018a5c6fa70c15ec76a39d"
+    },
+    {
+      "path": "site/raw/docs/evidence/INDEX.md",
+      "size": 5178,
+      "sha256": "f7ed4e23a9be6cb06b733f59ea4c20d457c5aa9609797a066a08563daa735db2"
+    },
+    {
+      "path": "site/raw/docs/evidence/MESURES_RTC_GPS_A_CONSIGNER.md",
+      "size": 2540,
+      "sha256": "2f9370a55790de11868abae9ce6dcf632bc60d2f51dca0ef1821be0b7b7e1e15"
+    },
+    {
+      "path": "site/raw/docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md",
+      "size": 5259,
+      "sha256": "8800d6156cba9a8a92dfd9ca6b231eff332382013afe8385358b587a5aff3e9d"
+    },
+    {
+      "path": "site/raw/docs/evidence/VALIDATION_DU_DEPOT.md",
+      "size": 1937,
+      "sha256": "3a8429bb77c269a205c69208c8b12ee3d97e6593c6ea01b861a69db12c9df839"
+    },
+    {
+      "path": "site/raw/docs/firmware/ARCHITECTURE.md",
+      "size": 2127,
+      "sha256": "fa83e5a87ddd8d2dd4526d32e476a072ec878dc07d4f58195c9e55005a26d0b9"
+    },
+    {
+      "path": "site/raw/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
+      "size": 3858,
+      "sha256": "0669e21582847f63ba876ad82f2a2df59176d850fd39ebfbb57e38860069eef2"
+    },
+    {
+      "path": "site/raw/docs/firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.md",
+      "size": 5719,
+      "sha256": "88a76137823a43757c84e7893274642016a0b51a2f1fe39f814ea0e796917fbb"
+    },
+    {
+      "path": "site/raw/docs/firmware/VALIDATION.md",
+      "size": 1352,
+      "sha256": "1e78279cb7c88e85f1d50032a69c30c03fe0de0514e18d4c26c6a2c1efdfcdde"
+    },
+    {
+      "path": "site/raw/docs/hardware/ALIMENTATION_L7805CV.md",
+      "size": 2848,
+      "sha256": "b7ff9b0cf42ed6357a0689bbf7028fdf46b291b273b495ad221900e8c62fa5dd"
+    },
+    {
+      "path": "site/raw/docs/hardware/AUDIO.md",
+      "size": 1273,
+      "sha256": "b14a3866eab97f4cd325cbcc67ab8d2146e7523e4b2baa0900509fabc5a2045e"
+    },
+    {
+      "path": "site/raw/docs/hardware/AUDIO_MC34119_SGM8272.md",
+      "size": 3884,
+      "sha256": "080384209eae5e67dafad77246ef0ef05b72b3cde2d216f39019fa08ac5db087"
+    },
+    {
+      "path": "site/raw/docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+      "size": 3587,
+      "sha256": "b7a91bf6ca66615e0b93bbebbddc87609a004c5f5725fef552cd05b02a940d24"
+    },
+    {
+      "path": "site/raw/docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+      "size": 11229,
+      "sha256": "a5e843a3b57d786bb9ab4ebb700d91b221554afd5551cbb7998a492b0121b36f"
+    },
+    {
+      "path": "site/raw/docs/hardware/BH2226_H2226_DAC_RF.md",
+      "size": 4734,
+      "sha256": "594363ad19f790b74924339cb9baa85565ddadc6f1e48037efc4953cb2be71e1"
+    },
+    {
+      "path": "site/raw/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
+      "size": 9370,
+      "sha256": "4a9bf8481c4c18b0a2af6b598558e07318a4d487dbe6a46e7397e85e28d51092"
+    },
+    {
+      "path": "site/raw/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+      "size": 3284,
+      "sha256": "18d4eb8c8ce3fa57cf2be2e228142109b390167bb4aa759a942b67c51ef729fb"
+    },
+    {
+      "path": "site/raw/docs/hardware/BP02_PTT_BLUETOOTH.md",
+      "size": 3440,
+      "sha256": "53b009d48a9c043dbd629ff804807664ae8ed0297e0409ab03fb2f7d38af3896"
+    },
+    {
+      "path": "site/raw/docs/hardware/BT01_MICROPHONE_BLUETOOTH.md",
+      "size": 5514,
+      "sha256": "905861d3a15b8fd08d2e2ba6ab2a3fababaeaab8cda34fd673247c8e9b15d863"
+    },
+    {
+      "path": "site/raw/docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md",
+      "size": 3670,
+      "sha256": "d46d3d4c58a0f6b4d26eee241b173f6c6a259de582727505ee99691104c8f7ac"
+    },
+    {
+      "path": "site/raw/docs/hardware/COMPOSANTS.md",
+      "size": 5032,
+      "sha256": "677be4b75724a810515da6934c69ecd96e7ea4b88802b2bc85355e64e09788f9"
+    },
+    {
+      "path": "site/raw/docs/hardware/CONNEXIONS.md",
+      "size": 3618,
+      "sha256": "2ffe3690f6d122d758cc823786a5c287434f6f942e02f56a19018456febec610"
+    },
+    {
+      "path": "site/raw/docs/hardware/DMR.md",
+      "size": 1242,
+      "sha256": "5b7f3307eae74e27c0e9d347643b06920370a94fde8cb31b2ce387ae7942ee15"
+    },
+    {
+      "path": "site/raw/docs/hardware/ETAGES_RF_PROTECTION_FI.md",
+      "size": 2565,
+      "sha256": "c780fbcedf29d2ac9dfe191e96eb50c4618b04a62cf57d5b8018c74f131f02b2"
+    },
+    {
+      "path": "site/raw/docs/hardware/GPS.md",
+      "size": 1312,
+      "sha256": "22d238fc8b3bd731e554555e156b5c4ec13828565420c7ce1002328653c0c047"
+    },
+    {
+      "path": "site/raw/docs/hardware/PA_RF_AFT05MP075N.md",
+      "size": 2918,
+      "sha256": "9dd89c9c9288db6111cc07b3fd5e348ce58a119b62b9527b43cb7118a87ca969"
+    },
+    {
+      "path": "site/raw/docs/hardware/PHOTOS.md",
+      "size": 1574,
+      "sha256": "0ea3584a77ea2809b0b3e551720a022218fdb131e74cbae3ed233b95165f6b91"
+    },
+    {
+      "path": "site/raw/docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md",
+      "size": 3428,
+      "sha256": "bbffa4046a259927e176d572095ec97c3017ff95d6aa67bbb4d7f49c97d71397"
+    },
+    {
+      "path": "site/raw/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+      "size": 7033,
+      "sha256": "d521cdc691ba535da6b1ec7712f6d82d2e4e79efc3407beb640df1ed55109360"
+    },
+    {
+      "path": "site/raw/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+      "size": 19855,
+      "sha256": "8e8cdb05a5207d2ea4b9ca42cb4959465651baa2642179e3014b1263df592a61"
+    },
+    {
+      "path": "site/raw/docs/hardware/RDA5802N_RECEPTION_FM.md",
+      "size": 5616,
+      "sha256": "3f24a13f9cb7feb4d99e6395b04585b851b6f3769f3c39baefbb437860dcbcab"
+    },
+    {
+      "path": "site/raw/docs/hardware/RF.md",
+      "size": 1384,
+      "sha256": "fd23e5e7a501d5ae403bb612e13f88b7dceaa8d8f2660203a3866278380e15de"
+    },
+    {
+      "path": "site/raw/docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
+      "size": 7304,
+      "sha256": "6b1141826e73c1f08a8aa536d171d83f963401e1cf0d884e78a8dec5e3cd8379"
+    },
+    {
+      "path": "site/raw/docs/hardware/VERSIONS.md",
+      "size": 1948,
+      "sha256": "be48b29c114ca7dc9827c7f8a13e9f9e2b65cfcb92855e52ea36725f7dc9585e"
+    },
+    {
+      "path": "site/raw/docs/hardware/VOLUME_U2429G.md",
+      "size": 4698,
+      "sha256": "fa68e13ea4321a3af85fdaeda2a7b8d671e7b49d470c6b746b7910ca1f78f27e"
+    },
+    {
+      "path": "site/raw/docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md",
+      "size": 9747,
+      "sha256": "dd67cf35937ccf078f23f499d4f9bd1497440d911c1b7f4f608aaa5c9d980fdd"
+    },
+    {
+      "path": "site/raw/docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+      "size": 7981,
+      "sha256": "7b9bcd2c0fc3e2246788c9215077e0c9d1254bac01583207f3a0f3fe7f49a9bf"
+    },
+    {
+      "path": "site/raw/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md",
+      "size": 9027,
+      "sha256": "4021b8a239abfd9ef7f441a3e1e5297fe79c686bf11d55136df753ca8088a082"
+    },
+    {
+      "path": "site/raw/docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+      "size": 8808,
+      "sha256": "398634134e0c1b94f9809835f690ea3e783c4f5dc6cdd7103adfdce6b3905d73"
+    },
+    {
+      "path": "site/raw/docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md",
+      "size": 8481,
+      "sha256": "64a90c8c65d2923f10671143e696ce6b8a4a116b728d7df83aee597cc5d2c0c9"
+    },
+    {
+      "path": "site/raw/firmware/README.md",
+      "size": 782,
+      "sha256": "d47cabea1b2757460fb13ae24f9340602c396313723beff11750779a6fd6f236"
+    },
+    {
+      "path": "site/raw/firmware/app/README.md",
+      "size": 194,
+      "sha256": "5ef1b00a9ed3a12bf5928696f217b612b1a3537817bd9b625d0c7e4c5dd2bf4c"
+    },
+    {
+      "path": "site/raw/firmware/hal/README.md",
+      "size": 582,
+      "sha256": "f996701adc3c7e894dd61e2dacdff261ea35f85acb8ddfb06a3913f037ef0876"
+    },
+    {
+      "path": "site/raw/firmware/tests/README.md",
+      "size": 181,
+      "sha256": "856339a5075842566077d4d0b0092cf3f113ec173e81e3adc6143e77028daadb"
+    },
+    {
+      "path": "site/raw/hardware/kicad/README.md",
+      "size": 938,
+      "sha256": "f110c87304aad5ddaeb2bfff170c8ff995b4505761c440f21ad888a2e3322025"
+    },
+    {
+      "path": "site/sources.html",
+      "size": 20626,
+      "sha256": "289781340963fed06212195446149248b67b898d277c73fb5a3c361ffa3c98c3"
+    },
+    {
+      "path": "tools/audit_bluetooth_strings.py",
+      "size": 3353,
+      "sha256": "ab40bfe998271b303f5c053eec405e7e73d86624b63012b465f905e495bfbdbd"
+    },
+    {
+      "path": "tools/build_evidence_catalog.py",
+      "size": 7628,
+      "sha256": "319a7f3c146f2b88521e1b0cf1f3473d311174dc12a3841c406b2818011de22d"
+    },
+    {
+      "path": "tools/build_site.py",
+      "size": 21626,
+      "sha256": "1179790df07bbbb78876f15ad075f8f5ed9c9190319da8aa711ac8fd50639f90"
+    },
+    {
+      "path": "tools/check_publication.py",
+      "size": 1129,
+      "sha256": "fa6814a92041f4ac2c58feb307e009d57f33ab95cd26548b482c15113f27c279"
+    },
+    {
+      "path": "tools/cps_trace_audit.py",
+      "size": 8858,
+      "sha256": "2758ea6f7aa337f55f518c283aadbb55748470539d004c56c1cd80038d0f38b0"
+    },
+    {
+      "path": "tools/decode_bt_uart.py",
+      "size": 2926,
+      "sha256": "7fb137f9d00ca2c08810485ba617bc76d3f3243c0bc0fc7f4bbf479bdd50e487"
+    },
+    {
+      "path": "tools/extend_board_evidence.py",
+      "size": 7583,
+      "sha256": "859e96f07451fb179f71be3acd397fb708d6906de7830a190fcbfd81fd1326c5"
+    },
+    {
+      "path": "tools/generate_gd32_pinout.py",
+      "size": 8726,
+      "sha256": "62ff1b54e173066055b2e575df143af0e37eb355cd828918f0edb1fcabe10b0c"
+    },
+    {
+      "path": "tools/inspect_usb_descriptors.py",
+      "size": 2281,
+      "sha256": "6eee4243cd639f62fe052d4d585c5f997e4c49cb4e836b4b44ed4ff4bd27d469"
+    },
+    {
+      "path": "tools/qa4818n_examples/SYNTHETIC_DEMO_ONLY.json",
+      "size": 529,
+      "sha256": "91714eb3973ed08069b6fca5ab51aeda65c79b2d85d4f7832592812411bd4b9b"
+    },
+    {
+      "path": "tools/qa4818n_trace.py",
+      "size": 11341,
+      "sha256": "dbdf5f9ee09d577a5c6b5b1a9edbe500d63701dd848ec133540e59a6a4c998ae"
+    },
+    {
+      "path": "tools/swd_trace.py",
+      "size": 1253,
+      "sha256": "c4851a5dba9f492335e8f85ab4137b6c2072b3611d1517a1b87e00e8a64bbfd0"
+    },
+    {
+      "path": "tools/test_bluetooth_tools.py",
+      "size": 1086,
+      "sha256": "5e639c0477575dd6fb4a14a6077113a706b38fa21e44694f93b0f95f280e9963"
+    },
+    {
+      "path": "tools/test_cps_trace_audit.py",
+      "size": 2873,
+      "sha256": "df83d6cd581b6064d6465f3328ecedb67e0326492152290f9c9d44ffe2a04a56"
+    },
+    {
+      "path": "tools/test_evidence.py",
+      "size": 1582,
+      "sha256": "ffe26fde7ed25c8cef50f01f11b33c43dfc5809ad1a5a0b91ce5b6c815f53acb"
+    },
+    {
+      "path": "tools/test_qa4818n_trace.py",
+      "size": 3433,
+      "sha256": "2ce097041bf7c7e3fb0a207d43b19d63ceabff0e19a41d7737be25fee69fae88"
+    },
+    {
+      "path": "tools/test_site.py",
+      "size": 2410,
+      "sha256": "8af2b3faa325d436bd9f5420214214e109772ffdd7cb06e4a6daaec2f0b3e4af"
+    },
+    {
+      "path": "tools/validate_hardware_model.py",
+      "size": 4573,
+      "sha256": "3ac8b4f9cefd41b2be9c23c2cdc84f663c0549af2e9c2471ebf457a18a0cbe0e"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Installer le dépôt complet OpenD578 sur GitHub - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Installer le dépôt complet OpenD578 sur GitHub</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md">Modifier sur GitHub</a><a download href="../../raw/docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md</code></p>
+<article class="markdown-body"><h1 id="installer-le-depot-complet-opend578-sur-github">Installer le dépôt complet OpenD578 sur GitHub</h1>
+<p>Ce paquet est destiné à un dépôt GitHub <strong>vide</strong> nommé <code>OpenD578</code> appartenant à <code>Telectroboy</code>. Il contient le dossier <code>OpenD578/</code> avec sources publiques du banc V11.7, documentation du matériel et Bluetooth, fiches CPS et site GitHub Pages compilé. Les images constructeur et captures privées ne sont <strong>pas</strong> incluses.</p>
+<h2 id="methode-simple-navigateur-github">Méthode simple : navigateur GitHub</h2>
+<ol>
+<li>Créer <code>OpenD578</code> (ou ouvrir le dépôt déjà créé) et initialiser <code>main</code>.</li>
+<li>Décompresser l'archive et <strong>copier le contenu du dossier <code>OpenD578/</code> à la racine du dépôt</strong> (ne pas créer <code>OpenD578/OpenD578/</code>).</li>
+<li>Importer les fichiers via <code>Add file</code> / <code>Upload files</code> si leur nombre et la taille le permettent. Pour un projet de cette taille, le client Git est généralement plus fiable que l'upload navigateur.</li>
+<li>Commiter sur <code>main</code> ; GitHub Actions doit exécuter <code>pages.yml</code>.</li>
+<li>Dans <code>Settings</code> &gt; <code>Pages</code> &gt; <code>Build and deployment</code>, choisir <strong>GitHub Actions</strong>.</li>
+<li>Suivre l'exécution <code>Deploy OpenD578 documentation</code> dans l'onglet <code>Actions</code> et consulter ensuite <code>https://telectroboy.github.io/OpenD578/</code>.</li>
+</ol>
+<h2 id="methode-git-recommandee">Méthode Git (recommandée)</h2>
+<pre><code class="language-sh">unzip OpenD578_COMPLET_CPS_ET_HARDWARE_20261105.zip
+cd OpenD578
+# Sur un dépôt neuf, sans autre contenu :
+git init -b main
+git add .
+git commit -m &quot;Initial public OpenD578 hardware, CPS and firmware research&quot;
+git remote add origin https://github.com/Telectroboy/OpenD578.git
+git push -u origin main
+</code></pre>
+<p>Si <code>OpenD578</code> contient déjà des commits, <strong>cloner le dépôt existant</strong>, puis copier le contenu de l'archive <strong>dans ce clone</strong> avant <code>git add/commit/push</code>. Ne pas forcer un <code>push --force</code> pour écraser un historique préexistant.</p>
+<h2 id="maintenance-une-seule-source-markdown">Maintenance : une seule source Markdown</h2>
+<ul>
+<li><strong>Modifier un document</strong> sous <code>docs/</code> ou <code>firmware/</code> : le site est régénéré automatiquement à chaque <code>push</code> sur <code>main</code>. Les fichiers <code>.md</code> du dépôt font foi ; pas de doublon HTML à éditer.</li>
+<li><strong>Ajouter une fiche composant</strong> : <code>docs/hardware/&lt;nom&gt;.md</code>.</li>
+<li><strong>Ajouter une connexion ou un composant cliquable</strong> : modifier <code>hardware/models/&lt;variante&gt;.json</code> en indiquant preuve et documents liés.</li>
+<li><strong>Ajouter des photos</strong> : sous <code>hardware/photos/&lt;variante&gt;/</code>, avec annotation des zones si le brochage et la révision sont confirmés. Ne pas redistribuer les photos FCC sans droits.</li>
+<li><strong>Ajouter un pilote</strong> : code sous <code>firmware/</code>, tests sous <code>firmware/tests/</code>, sans prétendre à un firmware flashable tant que la validation matérielle n'est pas effectuée.</li>
+<li><strong>Mettre à jour le dossier CPS</strong> : modifier <code>docs/cps/</code>, et compléter les outils du banc et leurs tests si des trames sont mesurées.</li>
+</ul>
+<h2 id="tester-localement">Tester localement</h2>
+<pre><code class="language-sh">python3 -m pip install -r site-requirements.txt
+python3 tools/validate_hardware_model.py
+python3 tools/build_site.py
+python3 tools/test_site.py
+node bench/web/test_mini_cps.cjs
+python3 -m unittest discover -s tools -p test_cps_trace_audit.py -v
+python3 -m unittest discover -s tools -p test_bluetooth_tools.py -v
+python3 -m http.server --directory site 8000
+</code></pre>
+<p>Site local : <code>http://localhost:8000/</code>. Le site est statique ; il ne transfère <strong>aucun</strong> paquet de firmware ni ne pilote physiquement la radio. Le banc PC est une application distincte.</p>
+<h2 id="ce-qui-nest-pas-livre-dans-une-publication-publique">Ce qui n'est pas livré dans une publication publique</h2>
+<ul>
+<li>Image OEM GD32 V1.21 / PLUS V2.08 <code>.CDD</code>, <code>.CDI</code>, <code>.spi</code> et programmes CPS Windows.</li>
+<li>Firmware du modem DMR et blobs tiers, dumps NAND complets, codeplug personnel, calibrations RF propres au numéro de série, logs port COM contenant des données privées.</li>
+<li>État d'exécution V11.8 non disponible sous forme de sources complètes : les documents V11.8 sont présents, <strong>le banc disponible est la source publique V11.7</strong>.</li>
+</ul>
+<p>Voir <a href="cps/README.html">périmètre et niveaux de preuve</a>, <a href="../PROVENANCE.html">licence et provenance</a>, <a href="firmware/ARCHITECTURE.html">état du firmware alternatif</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

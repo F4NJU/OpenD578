@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>01 - NAND serie TC58CVG1S3HRAIG : bus, lecture, ECC et cartographie - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>01 - NAND serie TC58CVG1S3HRAIG : bus, lecture, ECC et cartographie</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md</code></p>
+<article class="markdown-body"><h1 id="01---nand-serie-tc58cvg1s3hraig-bus-lecture-ecc-et-cartographie">01 - NAND serie TC58CVG1S3HRAIG : bus, lecture, ECC et cartographie</h1>
+<blockquote>
+<p><strong>RECONSTITUTION du 05/11/2026.</strong> Le document historique portant ce nom n'a pas ete retrouve octet pour octet. Celui-ci a ete recompose a partir de <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code>, des sources de banc, des empreintes de captures et des specifications externes. Il ne faut pas le presenter comme l'original ancien.</p>
+</blockquote>
+<h2 id="1-identification-du-composant-et-perimetre-des-preuves">1. Identification du composant et perimetre des preuves</h2>
+<ul>
+<li>NAND : <strong>TC58CVG1S3HRAIG</strong> Toshiba/KIOXIA ; identifiant lu sur le poste <strong>98 CB</strong>.</li>
+<li>Geometrie main : <strong>2048 blocs x 64 pages/bloc x 2048 octets/page = 268 435 456 octets (256 Mio)</strong>.</li>
+<li>Nombre de pages : <strong>131 072</strong> ; taille d'un bloc main : <strong>131 072 octets</strong> ; bloc = unite usuelle d'effacement NAND.</li>
+<li>Lecture avec ECC interne active lors de la capture 03/11 : <strong>64 octets auxiliaires</strong> par page, soit 8 Mio auxiliaires et 264 Mio entrelaces. Il ne faut pas assimiler ce fichier au contenu OOB physique brut obtenu avec les options ECC differemment configurees.</li>
+<li>La documentation fabricant annonce un cache par page, une logique ECC et les commandes SPI NAND. La capture utilisateur prouve des reponses de lecture dans un contexte precis ; elle ne prouve ni le comportement en ecriture ni la possibilite de restaurer cette image.</li>
+</ul>
+<h2 id="2-bus-gpio-reconstruit-pro-gd32-v121">2. Bus GPIO reconstruit (PRO GD32 V1.21)</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction serie</th>
+  <th>GPIO candidat MCU</th>
+  <th style="text-align:right">Broche LQFP100</th>
+  <th>Origine</th>
+  <th>Etat de continute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>CS#</td>
+  <td><code>PB8</code></td>
+  <td style="text-align:right">95</td>
+  <td>Trace OEM / banc SPI</td>
+  <td><strong>Non mesuree</strong></td>
+</tr>
+<tr>
+  <td>SCK</td>
+  <td><code>PB15</code></td>
+  <td style="text-align:right">54</td>
+  <td>Trace OEM / banc SPI</td>
+  <td>Non mesuree</td>
+</tr>
+<tr>
+  <td>SO0 / sortie DQ0 selon mode de lecture</td>
+  <td><code>PB14</code></td>
+  <td style="text-align:right">53</td>
+  <td>Trace OEM / banc SPI</td>
+  <td>Non mesuree</td>
+</tr>
+<tr>
+  <td>SO1 / sortie DQ1 selon mode de lecture</td>
+  <td><code>PA15</code></td>
+  <td style="text-align:right">77</td>
+  <td>Trace OEM / banc SPI</td>
+  <td>Non mesuree</td>
+</tr>
+<tr>
+  <td>VCC, WP#, HOLD# et decouplage</td>
+  <td>inconnus</td>
+  <td style="text-align:right">-</td>
+  <td>Composant et PCB non traces</td>
+  <td>A mesurer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attention :</strong> le firmware GD32 bit-bang les GPIO ; il n'est pas prouve que les memes pins puissent etre utilises via le SPI materiel en AF. PB14/PB15 ne correspondent pas aux roles SPI1 MOSI/MISO habituels dans ce mapping : tenir compte de l'ordre reels des bits sur GPIO. <code>PA15</code> peut etre multiplexee JTAG, d'ou la necessite d'initialiser le mode GPIO conforme au schema. La commande <code>0x3B</code> represente une lecture <strong>dual output</strong> et demande de reconstruire des bits venant de SO0 et SO1 sur les fronts de l'horloge.</p>
+<p>Source de simulation lisible : <code>bench/verify_spi_wire.py</code>, <code>bench/emulate_nand_v121.py</code>, <code>bench/nand_state.py</code>, <code>bench/nand_overlay.py</code>. Ces fichiers reproduisent une interface a partir de traces et ne prouvent pas seuls le timing electrique.</p>
+<h2 id="3-operations-identifiees-et-nature-de-la-preuve">3. Operations identifiees et nature de la preuve</h2>
+<table>
+<thead>
+<tr>
+  <th>Code</th>
+  <th>Operation serie NAND</th>
+  <th>Vue dans acquisition</th>
+  <th>Vue en logiciel OEM / datasheet</th>
+  <th>Risque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x9F</code></td>
+  <td>Read ID</td>
+  <td>Oui</td>
+  <td>Oui</td>
+  <td>Lecture</td>
+</tr>
+<tr>
+  <td><code>0x0F</code></td>
+  <td>Get Feature</td>
+  <td>Oui</td>
+  <td>Oui</td>
+  <td>Lecture et interpretation ECC</td>
+</tr>
+<tr>
+  <td><code>0x13</code></td>
+  <td>Page Read -&gt; cache</td>
+  <td>Oui</td>
+  <td>Oui</td>
+  <td>Lecture</td>
+</tr>
+<tr>
+  <td><code>0x03</code></td>
+  <td>Read from Cache, sortie simple</td>
+  <td>Oui</td>
+  <td>Oui</td>
+  <td>Lecture</td>
+</tr>
+<tr>
+  <td><code>0x3B</code></td>
+  <td>Read from Cache, dual output</td>
+  <td>Non dans les commandes de la capture utilisateur ; trace/simulation OEM</td>
+  <td>Oui</td>
+  <td>Lecture, attention mode de bus</td>
+</tr>
+<tr>
+  <td><code>0x06</code></td>
+  <td>Write Enable</td>
+  <td><strong>Non</strong></td>
+  <td>Identifie en analyse statique OEM</td>
+  <td>Modifie latch d'ecriture</td>
+</tr>
+<tr>
+  <td><code>0x02</code></td>
+  <td>Program Load</td>
+  <td><strong>Non</strong></td>
+  <td>Oui, datasheet et code OEM</td>
+  <td>Ecriture tampon</td>
+</tr>
+<tr>
+  <td><code>0x10</code></td>
+  <td>Program Execute</td>
+  <td><strong>Non</strong></td>
+  <td>Oui, datasheet et code OEM</td>
+  <td>Ecriture irreversible de page</td>
+</tr>
+<tr>
+  <td><code>0xD8</code></td>
+  <td>Block Erase</td>
+  <td><strong>Non</strong></td>
+  <td>Oui, datasheet et code OEM</td>
+  <td>Destructeur</td>
+</tr>
+<tr>
+  <td><code>0x1F</code></td>
+  <td>Set Feature</td>
+  <td><strong>Non</strong></td>
+  <td>Datasheet</td>
+  <td>Change comportement du peripherique</td>
+</tr>
+</tbody>
+</table>
+<p>Le logiciel de lecture doit <strong>forcer un jeu blanc de commandes autorisees</strong> (<code>9F/0F/13/03</code>, et <code>3B</code> si decode correct) pour l'acquisition non destructive. La simple presence de la commande <code>0x10</code> dans le desassemblage ne valide pas une routine d'ecriture OpenD578.</p>
+<h2 id="4-sequencement-de-lecture-cote-driver-alternatif">4. Sequencement de lecture, cote driver alternatif</h2>
+<ol>
+<li>Alimenter correctement la NAND et mettre les GPIO dans un mode inoffensif avant d'abaisser CS# ; respecter le niveau d'alimentation exact de la carte.</li>
+<li>Lire l'identifiant avec <code>0x9F</code>, confirmer le manufacturer/device attendu, refuser tout driver si la geometrie ne correspond pas.</li>
+<li>Lire les registres <code>GET_FEATURE</code> et conserver leur valeur brute et le mode ECC avant acquisition.</li>
+<li>Pour une page logique <code>p</code> dans <code>[0, 131071]</code>, demander <code>PAGE_READ 0x13</code> avec l'adresse de ligne conforme a la datasheet.</li>
+<li>Attendre fin d'operation par statut, avec timeout calibre par mesures et une condition d'erreur explicite. Ne pas appliquer de boucle temporelle non calibree issue du firmware OEM.</li>
+<li>Demander <code>READ_CACHE 0x03</code> ou <code>0x3B</code>, separer adresses de colonnes, dummy bytes et flux de donnees. En dual output, assembler SO0/SO1 sans inverser l'ordre des bits.</li>
+<li>Acquerir le statut ECC apres la page, l'enregistrer dans une table de <strong>131 072 octets</strong> ; garder le nombre de pages affectees par classe.</li>
+<li>Sauvegarder main et auxiliaires dans des fichiers distincts avec offsets, horodatage, statut ECC et SHA256 ; ne jamais appeler cette sauvegarde restaurable sans qualification des ECC20.</li>
+</ol>
+<h3 id="calcul-des-offsets">Calcul des offsets</h3>
+<p>Pour un fichier <code>main</code> continu, <code>offset_main = numero_page * 2048</code>, <code>block = numero_page // 64</code>, <code>page_in_block = numero_page % 64</code>. Pour l'image de cette capture, <code>offset_aux = numero_page * 64</code> et <code>offset_interleave = numero_page * 2112</code>. Ce sont des offsets <strong>de fichier</strong> et <strong>pas des adresses ARM</strong> ; ne pas les soustraire de <code>0x08000000</code>.</p>
+<h2 id="5-resultats-de-la-capture-du-03-novembre-2026">5. Resultats de la capture du 03 novembre 2026</h2>
+<table>
+<thead>
+<tr>
+  <th>Fichier absent de l'archive publique</th>
+  <th style="text-align:right">Taille exacte</th>
+  <th>SHA-256 publie dans le rapport</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>nand_main_256MiB.bin</code></td>
+  <td style="text-align:right">268 435 456</td>
+  <td><code>329d22165d234bf0df043e62af11397dea96327925b9db18f3c354230ff40945</code></td>
+</tr>
+<tr>
+  <td><code>nand_oob64_8MiB.bin</code></td>
+  <td style="text-align:right">8 388 608</td>
+  <td><code>9a999b9fd13a02b45ed4d38e68f9e9c7d1095994c751e36e04f4a62b2e4c5106</code></td>
+</tr>
+<tr>
+  <td><code>nand_ecc_status_128KiB.bin</code></td>
+  <td style="text-align:right">131 072</td>
+  <td><code>b40ebd3ebc3923f01d9d98a52a3b019b65785641ba76687127678b788ea793c6</code></td>
+</tr>
+<tr>
+  <td><code>nand_2112_interleaved_264MiB.bin</code></td>
+  <td style="text-align:right">276 824 064</td>
+  <td><code>568b6395f88e8ef1b27d16fc9c25aa5d94f8bcf5d47556910466baaeeefde1c9</code></td>
+</tr>
+</tbody>
+</table>
+<p>Statuts ECC mesures : <strong>130 610</strong> pages statut <code>00</code>, <strong>25</strong> statut <code>10</code>, <strong>437</strong> statut <code>20</code> non corrige dans la capture, <strong>0</strong> statut <code>30</code>. Parmi les 437 : 192 pages entierement 00, 235 marqueurs de fin (225+10), 10 pages non triviales. <strong>Ne pas fusionner les 437 en donnees fiables</strong>. Pages non triviales : 8324, 14848, 14912, 17024, 18817, 18818, 20992, 24256, 24320, 24448.</p>
+<p>La capture physique a ete conduite <strong>sans WRITE/ERASE NAND</strong> mais avec etat volatile SRAM/GPIO modifie durant la lecture via debug ; elle ne represente pas une capture passive sans aucune intervention.</p>
+<h2 id="6-cartographie-observations-propres-au-poste-et-comparatif-externe">6. Cartographie : observations propres au poste et comparatif externe</h2>
+<table>
+<thead>
+<tr>
+  <th>Plage NAND (octets main)</th>
+  <th>Attribution</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x00020000</code>, <code>0x03000000</code> (blocs 1,384)</td>
+  <td>Glyphes monochromes chinois 16 x 16, 32 octets par glyphe</td>
+  <td>Trouves dans dump</td>
+</tr>
+<tr>
+  <td><code>0x00800000</code></td>
+  <td>128 premiers canaux et suite du codeplug, record de 64 octets dans le CPS V11.6</td>
+  <td>Simulation + signatures dump</td>
+</tr>
+<tr>
+  <td><code>0x02F00000..0x02F80679</code></td>
+  <td>Calibration RF et copies selon VK7ZJA</td>
+  <td>Source externe, ne pas l'egaler a une carte totale de la revision</td>
+</tr>
+<tr>
+  <td><code>0x02FA0000..0x02FDFFFF</code></td>
+  <td>Configuration radio/copies ; <code>D578UV</code> a 0x02FA0010 et 0x02FC0010</td>
+  <td>Dump + source externe, zone critique</td>
+</tr>
+<tr>
+  <td><code>0x02FE0000</code></td>
+  <td><code>CHECKING DATA FOR D578UV</code></td>
+  <td>Signature dump</td>
+</tr>
+<tr>
+  <td><code>0x05500000...</code></td>
+  <td>Annuaire DMR probable</td>
+  <td>Noms/IDs du dump et cartographie historique</td>
+</tr>
+<tr>
+  <td><code>0x0C8E0000...</code></td>
+  <td>Audio enregistre selon etude VK7ZJA</td>
+  <td>Source externe ancienne, non revu sur dump projet</td>
+</tr>
+</tbody>
+</table>
+<p>Le guide externe detaille encore les fonts <code>0x00000000..0x0014FFFF</code>, bitmaps <code>0x00150000..0x001FFFFF</code>, codeplug <code>0x00800000..0x02A9FFFF</code>, images personnalisees <code>0x02AC0000</code>, <code>0x02B00000</code>, <code>0x02B80000</code>. Ces plages sont une <strong>reference historique</strong> a confronter a la branche GD32 V1.21 ; elles ne sont ni une table de partition formelle ni une preuve d'espace libre ailleurs.</p>
+<h2 id="7-ecriture-ecc-et-transactions-travail-non-qualifie">7. Ecriture, ECC et transactions : travail non qualifie</h2>
+<ul>
+<li>Reconstituer le contrat de synchronisation entre <code>PROGRAM LOAD</code>, <code>PROGRAM EXECUTE</code>, statut busy et invalidation des caches.</li>
+<li>Observer les pages programmee par le firmware au format CPS, les copies locales, la correction ECC et les secteurs de secours.</li>
+<li>Identifier le mapping des <strong>bad blocks</strong> ; une lecture logique ne suffit pas a reconstruire la remap physique.</li>
+<li>La valeur ACK du CPS n'atteste pas une persistance immediate ; la mise a jour peut se terminer apres <code>END</code> et apres l'ACK visible.</li>
+<li>Les plages <code>0x02F0....</code> de calibrage RF peuvent rendre l'emission dangereuse en cas de corruption. <strong>Aucune routine write/erase n'est fournie comme operation approuvee</strong>.</li>
+<li>Ne jamais utiliser les blocs FF observes comme allocation TLE, code ou journal avant d'avoir etabli les allocations OEM et une sauvegarde recuperable.</li>
+</ul>
+<h2 id="8-sources-et-tests-de-reference">8. Sources et tests de reference</h2>
+<ul>
+<li>Projet : <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code>, <code>docs/cps/PROTOCOLE_OEM_V121.md</code>, <code>bench/emulate_nand_v121.py</code>, <code>bench/nand_state.py</code>, <code>bench/verify_spi_wire.py</code>, <code>docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md</code>.</li>
+<li>KIOXIA, datasheet TC58CVG1S3HRAIG : <a href="https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/305/KIOXIA_TC58CVG1S3HRAIG_Rev2.0_E191001.pdf">https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/305/KIOXIA_TC58CVG1S3HRAIG_Rev2.0_E191001.pdf</a>.</li>
+<li>Implementation Linux pour TC58CVG1S3HRAIG ID <code>0xCB</code>, ECC 8 bits par 512 octets : <a href="https://cos.googlesource.com/third_party/kernel/+/5aa092beb12119ed7e0b9fc696e597ca0fba9721/drivers/mtd/nand/spi/toshiba.c">https://cos.googlesource.com/third_party/kernel/+/5aa092beb12119ed7e0b9fc696e597ca0fba9721/drivers/mtd/nand/spi/toshiba.c</a>.</li>
+<li>Specifications de commandes (source tiers) : <a href="https://spiflash.readthedocs.io/en/latest/chips/98cb-nand.html">https://spiflash.readthedocs.io/en/latest/chips/98cb-nand.html</a>.</li>
+<li>Carte NAND et precautions historiques : <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

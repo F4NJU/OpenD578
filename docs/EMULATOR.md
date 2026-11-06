@@ -1,5 +1,9 @@
 # Firmware-independent board mode
 
+The V11.3 web interface and the new USB/sleep/watchdog diagnostics are described
+in [HARDWARE_COVERAGE.md](HARDWARE_COVERAGE.md). The table there supersedes the
+older WFI and disconnected-USB limits below.
+
 The V1.21 bench originally combined two jobs: modeling peripherals and observing
 the manufacturer's functions and SRAM structures. Its exact PC/signature checks
 were useful for OEM analysis but inappropriate for a new program.
@@ -88,3 +92,5 @@ already present or supplied by the original archive. Optional ET12 Bluetooth
 also requires its matching manufacturer binary. None of these private inputs is
 included in this public repository. Use application reset when no matching OEM
 ready-session recording is available.
+
+The optional [V11.2 interactive OEM path](EMULATOR_PERFORMANCE.md) improves host-side bus dispatch and input delivery. Reference paths remain available.

@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 : façade, boutons, codeur, volumes et éclairages - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>OpenD578 : façade, boutons, codeur, volumes et éclairages</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">Modifier sur GitHub</a><a download href="../../raw/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code></p>
+<article class="markdown-body"><h1 id="opend578-facade-boutons-codeur-volumes-et-eclairages">OpenD578 : façade, boutons, codeur, volumes et éclairages</h1>
+<p>État des connaissances : 5 novembre 2026. Base étudiée : D578UV PRO GD32,
+application constructeur V1.21 et banc V11.8.</p>
+<p>Objectif : développer les entrées et sorties d’un firmware alternatif à partir
+des <strong>périphériques matériels</strong>. Les exemples ne lisent aucune variable RAM du
+firmware constructeur et n’appellent aucune de ses routines. Ils utilisent les
+registres du GD32 et leur propre état logiciel. Les adresses de périphériques
+ne changent pas lorsqu’on remplace le firmware sur la même carte.</p>
+<p>Ce document distingue les constats du firmware, les observations utilisateur,
+les stimuli synthétiques du banc et les choix proposés pour un nouveau pilote.
+Il ne remplace pas un schéma de continuité de la carte.</p>
+<h2 id="1-perimetre-et-comptage">1. Périmètre et comptage</h2>
+<p>Les dix boutons de façade pris en compte sont : P1, P2, P3, P4, P5, P6, MENU,
+EXIT, Power et l’appui du codeur. La rotation du codeur utilise deux autres
+contacts. Les touches du microphone sont traitées dans la note microphone.</p>
+<p>Concernant « 2 LED R/V », le relevé physique retenu dans le projet est :</p>
+<table>
+<thead>
+<tr>
+  <th>Emplacement</th>
+  <th>Éléments</th>
+  <th>Traitement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Poste</td>
+  <td>Un voyant bicolore, composantes rouge et verte</td>
+  <td>Bus GPIO PE3/PE4 décrit ici</td>
+</tr>
+<tr>
+  <td>Microphone</td>
+  <td>Deux voyants bicolores A et B</td>
+  <td>Commandes UART, rappel en section 10</td>
+</tr>
+<tr>
+  <td>Microphone</td>
+  <td>Deux voyants blancs MAIN A/B</td>
+  <td>Sélection du VFO, rappel en section 10</td>
+</tr>
+</tbody>
+</table>
+<p>Cette distinction évite d’inventer deux voyants bicolores sur le poste. Le
+nombre de dies et leur montage électrique exact restent à relever sur carte.</p>
+<h2 id="2-cartographie-materielle-de-travail">2. Cartographie matérielle de travail</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>GPIO / périphérique</th>
+  <th>Polarité ou format</th>
+  <th>Qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Power</td>
+  <td>PA0</td>
+  <td>Bas pendant l’appui</td>
+  <td>Code OEM et simulation d’entrée</td>
+</tr>
+<tr>
+  <td>Appui codeur</td>
+  <td>PA1</td>
+  <td>Bas pendant l’appui</td>
+  <td>Lecteur OEM exécuté avec ce stimulus</td>
+</tr>
+<tr>
+  <td>P1/P2/P3/MENU</td>
+  <td>PB0, ADC0 canal 8</td>
+  <td>Quatre plages analogiques</td>
+  <td>Décodeur OEM et acquisition ADC</td>
+</tr>
+<tr>
+  <td>P4/P5/P6/EXIT</td>
+  <td>PB1, ADC0 canal 9</td>
+  <td>Quatre plages analogiques</td>
+  <td>Décodeur OEM et acquisition ADC</td>
+</tr>
+<tr>
+  <td>Codeur, contact de déclenchement</td>
+  <td>PC8</td>
+  <td>Front descendant dans le chemin OEM</td>
+  <td>Configuration EXTI et gestionnaire exécuté</td>
+</tr>
+<tr>
+  <td>Codeur, phase de direction</td>
+  <td>PC9</td>
+  <td>Niveau lu lors du front PC8</td>
+  <td>Gestionnaire exécuté</td>
+</tr>
+<tr>
+  <td>Volume A, nom utilisé par le banc</td>
+  <td>PC2, ADC0 canal 12</td>
+  <td>Valeur 12 bits</td>
+  <td>Affectation du modèle ; position physique A/B à confirmer</td>
+</tr>
+<tr>
+  <td>Volume B, nom utilisé par le banc</td>
+  <td>PC5, ADC0 canal 15</td>
+  <td>Valeur 12 bits</td>
+  <td>Même réserve sur l’ordre des boutons</td>
+</tr>
+<tr>
+  <td>Voyant rouge/vert du poste, données</td>
+  <td>PE3</td>
+  <td>Mot de 8 bits, LSB d’abord</td>
+  <td>Bus OEM décodé</td>
+</tr>
+<tr>
+  <td>Voyant rouge/vert du poste, horloge</td>
+  <td>PE4</td>
+  <td>Donnée prise au front montant</td>
+  <td>Bus OEM décodé</td>
+</tr>
+<tr>
+  <td>Éclairages, validation de mot</td>
+  <td>PA5</td>
+  <td>Bas pendant le mot, haut à la fin</td>
+  <td>Bus OEM décodé</td>
+</tr>
+<tr>
+  <td>Éclairages, horloge</td>
+  <td>PB3</td>
+  <td>Front montant</td>
+  <td>Bus OEM décodé</td>
+</tr>
+<tr>
+  <td>Éclairages, données</td>
+  <td>PB4</td>
+  <td>4 bits adresse + 8 bits valeur, MSB d’abord</td>
+  <td>Bus OEM décodé</td>
+</tr>
+<tr>
+  <td>Rétroéclairage écran</td>
+  <td>Adresse 8 sur le bus précédent</td>
+  <td>Valeur brute 0..255</td>
+  <td>Corrélation menus/veille et bus</td>
+</tr>
+<tr>
+  <td>Éclairage individuel des touches</td>
+  <td>Adresses non toutes affectées</td>
+  <td>Voir section 9</td>
+  <td>Cartographie physique incomplète</td>
+</tr>
+</tbody>
+</table>
+<p>Les correspondances canal ADC → broche sont celles du MCU pour ces entrées.
+La continuité jusqu’aux contacts, curseurs et LED n’a pas été mesurée ici.
+Les deux volumes ne sont pas des broches « GPIO numériques » à lire haut/bas :
+leurs broches doivent être placées en mode analogique puis acquises par l’ADC.</p>
+<h2 id="3-registres-materiels-utiles">3. Registres matériels utiles</h2>
+<table>
+<thead>
+<tr>
+  <th>Port</th>
+  <th>Base</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>GPIOA</td>
+  <td>0x40010800</td>
+</tr>
+<tr>
+  <td>GPIOB</td>
+  <td>0x40010C00</td>
+</tr>
+<tr>
+  <td>GPIOC</td>
+  <td>0x40011000</td>
+</tr>
+<tr>
+  <td>GPIOE</td>
+  <td>0x40011800</td>
+</tr>
+</tbody>
+</table>
+<p>Offsets communs : CTL0 <code>+0x00</code>, CTL1 <code>+0x04</code>, ISTAT <code>+0x08</code>, OCTL <code>+0x0C</code>,
+BOP <code>+0x10</code>, BC <code>+0x14</code>. Les niveaux d’entrée doivent être lus dans ISTAT,
+pas dans OCTL. Le registre OCTL est le verrou de sortie et intervient notamment
+dans la sélection du pull-up/pull-down en mode entrée avec résistance interne.</p>
+<table>
+<thead>
+<tr>
+  <th>Périphérique</th>
+  <th>Base / registre</th>
+  <th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>AFIO</td>
+  <td>0x40010000</td>
+  <td>Routage EXTI et fonctions de débogage</td>
+</tr>
+<tr>
+  <td>EXTI</td>
+  <td>0x40010400</td>
+  <td>Interruptions externes</td>
+</tr>
+<tr>
+  <td>ADC0</td>
+  <td>0x40012400</td>
+  <td>Touches et volumes</td>
+</tr>
+<tr>
+  <td>ADC0 RDATA</td>
+  <td>0x4001244C</td>
+  <td>Résultat de conversion</td>
+</tr>
+<tr>
+  <td>DMA0</td>
+  <td>0x40020000</td>
+  <td>Acquisition régulière possible</td>
+</tr>
+<tr>
+  <td>RCU</td>
+  <td>0x40021000</td>
+  <td>Activation et division des horloges</td>
+</tr>
+</tbody>
+</table>
+<p>Configuration des broches par nibbles de quatre bits : analogique <code>0x0</code>,
+entrée flottante <code>0x4</code>, entrée avec pull-up/down <code>0x8</code>. Le sens de la résistance
+est alors choisi dans OCTL. Les sorties observées sur les bus utilisent le
+mode général push-pull. Conserver les nibbles des autres broches.</p>
+<p>Pour un firmware autonome, activer les horloges des ports nécessaires, AFIO
+si EXTI est utilisé, et ADC0. DMA0 n’est requis que pour une acquisition DMA.
+Ne pas réinitialiser globalement un port partagé pour installer un seul pilote.</p>
+<h2 id="4-les-huit-touches-analogiques">4. Les huit touches analogiques</h2>
+<h3 id="valeurs-attendues">Valeurs attendues</h3>
+<p>Deux réseaux résistifs sont vus par ADC0. Les décodeurs OEM comparent les
+résultats bruts 12 bits aux seuils 500, 1500, 2500 et 3500.</p>
+<table>
+<thead>
+<tr>
+  <th>Plage inclusive ADC</th>
+  <th>PB0 / canal 8</th>
+  <th>PB1 / canal 9</th>
+  <th style="text-align:right">Exemple injecté dans le banc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0..500</td>
+  <td>P1</td>
+  <td>P4</td>
+  <td style="text-align:right">250</td>
+</tr>
+<tr>
+  <td>501..1500</td>
+  <td>P2</td>
+  <td>P5</td>
+  <td style="text-align:right">1000</td>
+</tr>
+<tr>
+  <td>1501..2500</td>
+  <td>P3</td>
+  <td>P6</td>
+  <td style="text-align:right">2000</td>
+</tr>
+<tr>
+  <td>2501..3500</td>
+  <td>MENU</td>
+  <td>EXIT</td>
+  <td style="text-align:right">3000</td>
+</tr>
+<tr>
+  <td>3501..4095</td>
+  <td>Aucune</td>
+  <td>Aucune</td>
+  <td style="text-align:right">4095</td>
+</tr>
+</tbody>
+</table>
+<p>Les <strong>seuils viennent du code</strong>, les exemples centraux du simulateur. Ils ne
+sont pas des tensions mesurées sur les contacts ni la preuve de résistances
+exactes. Il faut relever les valeurs réelles, leurs dispersions et les tensions
+aux bornes du réseau pour fixer les marges de production.</p>
+<p>À titre de conversion seulement : <code>Ventrée = code × VREF / 4095</code>. Ne pas poser
+VREF = 3,3 V sans vérifier la référence analogique de la carte.</p>
+<p>Une entrée collée à zéro ressemble à la première touche : le seul seuil ne
+permet pas de distinguer un court-circuit d’un appui. Un nouveau firmware peut
+signaler une durée anormale sans déclarer arbitrairement cet appui impossible.</p>
+<h3 id="appuis-simultanes">Appuis simultanés</h3>
+<p>Les groupes peuvent être lus indépendamment. Deux touches d’un même réseau
+produisent une tension dépendant du câblage résistif, qui n’est pas entièrement
+relevé. On ne peut donc pas promettre leur identification séparée. Le banc
+refuse actuellement ces combinaisons pour ne pas inventer une tension.</p>
+<p>P4 + appui codeur + Power utilise un réseau analogique et deux entrées
+numériques distinctes ; cette combinaison est représentable électriquement.
+Elle ne suffit pas à garantir l’accès au test constructeur : les conditions
+de configuration du poste restent distinctes.</p>
+<h3 id="anti-rebond-et-evenements">Anti-rebond et événements</h3>
+<p>Le filtre OEM des touches analogiques attend plusieurs lectures cohérentes :
+changement → résultat provisoire, puis compteur avant acceptation. Le seuil
+observé est deux incréments après détection du changement. Cela ne donne pas
+un délai en millisecondes sans établir la cadence de tous les appelants.</p>
+<p>Pour le nouveau pilote, proposition explicite : échantillonner à 5 ms et
+accepter après 20 ms de stabilité. Produire ensuite des événements appui,
+relâchement, appui long et répétition dans une couche séparée. Par exemple,
+600 ms pour un appui long et 150 ms pour une répétition sont des choix produit,
+pas des timings OEM déjà mesurés.</p>
+<p>Une hystérésis autour des seuils évitera les oscillations lorsque la valeur
+brute est proche d’une frontière. Fixer sa largeur après mesures.</p>
+<h2 id="5-power-et-appui-du-codeur">5. Power et appui du codeur</h2>
+<h3 id="lecture-independante">Lecture indépendante</h3>
+<table>
+<thead>
+<tr>
+  <th>Entrée</th>
+  <th>Repos attendu</th>
+  <th>Appui attendu</th>
+  <th>Masque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>PA0 Power</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0x0001</td>
+</tr>
+<tr>
+  <td>PA1 appui codeur</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0x0002</td>
+</tr>
+</tbody>
+</table>
+<p>Power est un contact lu par le MCU, pas la preuve d’une coupure directe de son
+alimentation. Sur le montage étudié, le MCU peut notamment rester alimenté par
+le raccordement USB/SWD. La séquence d’arrêt, les lignes de maintien
+alimentation et le réveil doivent donc être traités séparément.</p>
+<p>Le lecteur OEM de l’appui codeur vérifie PA1, attend une courte boucle, puis
+le relit. Cette boucle n’est pas un délai calibré en microsecondes. Appliquer
+un vrai anti-rebond dans le pilote alternatif.</p>
+<p>EXTI0 peut être routé vers PA0 pour le réveil initial. Dans d’autres phases
+OEM, cette même ligne est routée vers un autre port. Ne pas supposer que
+l’IRQ EXTI0 signifie toujours « Power » ; vérifier AFIO et la source physique.
+Un firmware autonome peut choisir son propre routage ou une lecture périodique.</p>
+<h2 id="6-codeur-rotatif-pc8-pc9">6. Codeur rotatif PC8 / PC9</h2>
+<p>L’OEM configure PC8 et PC9 en entrées avec pull-up. Le chemin identifié route
+PC8 vers EXTI8 et déclenche sur front descendant ; EXTI5_9 partage l’IRQ 23.
+À l’interruption, il lit PC9 puis PC8 et compare leurs niveaux.</p>
+<p>Avec le front PC8 déjà bas :</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">PC8</th>
+  <th style="text-align:right">PC9</th>
+  <th>Interprétation du banc après passage dans le gestionnaire OEM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td>DIAL_UP</td>
+</tr>
+<tr>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+  <td>DIAL_DOWN</td>
+</tr>
+<tr>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td>Repos synthétique utilisé</td>
+</tr>
+</tbody>
+</table>
+<p>Le sens mécanique horaire/antihoraire et le nombre de transitions par cran
+restent à mesurer. Les noms UP/DOWN représentent les tests du banc, pas un
+relevé mécanique du codeur. L’injection d’un front synthétique ne qualifie pas
+les rebonds d’un véritable contact.</p>
+<p>Deux stratégies pour un autre firmware :</p>
+<ul>
+<li>Reprendre le front PC8 et lire PC9, avec filtrage adapté.</li>
+<li>Lire les deux phases et utiliser un décodeur quadrature qui rejette les
+transitions où les deux bits changent simultanément.</li>
+</ul>
+<p>Échantillonnage proposé pour la seconde stratégie : 0,5 à 1 ms, à vérifier à
+la vitesse maximale de rotation. En EXTI, lire les niveaux rapidement, puis
+mettre l’événement en file. Ne pas dessiner le LCD ou attendre 20 ms dans l’IRQ.
+Les groupes EXTI sont partagés : acquitter uniquement les bits traités.</p>
+<h2 id="7-acquisition-adc-et-deux-volumes">7. Acquisition ADC et deux volumes</h2>
+<h3 id="ce-que-lexecution-oem-configure">Ce que l’exécution OEM configure</h3>
+<p>La séquence régulière observée est <code>[6, 8, 9, 10, 11, 12, 15]</code>. ADC0 est en
+scan continu avec DMA0 canal 0. Les éléments sont des demi-mots, la destination
+s’incrémente et le tampon est circulaire sur sept conversions.</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Rang, à partir de 0</th>
+  <th style="text-align:right">Canal</th>
+  <th>Fonction dans ce document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">6</td>
+  <td>Autre mesure, non attribuée ici</td>
+</tr>
+<tr>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">8</td>
+  <td>Touches P1/P2/P3/MENU</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">9</td>
+  <td>Touches P4/P5/P6/EXIT</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">10</td>
+  <td>Autre mesure, non attribuée ici</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">11</td>
+  <td>Autre mesure, non attribuée ici</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">12</td>
+  <td>Volume nommé A par le banc</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">15</td>
+  <td>Volume nommé B par le banc</td>
+</tr>
+</tbody>
+</table>
+<p>Le rang dépend de la séquence programmée. Dans un firmware alternatif,
+<strong>définir son propre tableau de résultats</strong> ; ne pas reprendre les offsets
+d’un tampon constructeur.</p>
+<p>Quelques mots de configuration constatés, à titre de recoupement du protocole :
+ADC_CTL0 = <code>0x00000100</code>, ADC_CTL1 = <code>0x001E0103</code> en régime observé,
+ADC_RSQ0 = <code>0x00600000</code>, ADC_RSQ1 = <code>0x0000000F</code>, ADC_RSQ2 = <code>0x18B52506</code>.
+Le DMA a été configuré avec un compte initial de 7 et un contrôle <code>0x25A1</code>.
+Ces valeurs ne doivent pas être recopiées sans initialisation des horloges,
+calibration ADC et choix du tampon propre au nouveau programme.</p>
+<h3 id="volumes">Volumes</h3>
+<p>Les canaux 12 et 15 sont lus et moyennés par le code OEM. Dans le chemin
+initial relu pour cette note, quatre acquisitions sont additionnées avec une
+attente OEM de 1 ms entre lectures, puis divisées par quatre. Cela établit une
+mesure lente de commande ; ce ne sont pas des échantillons de voix.</p>
+<p>Restent à confirmer sur le matériel : quel bouton physique correspond à PC2
+ou PC5, le sens de variation, les valeurs aux butées, la résistance et la loi
+des potentiomètres, le filtrage RC, et leur éventuel rôle analogique parallèle.
+L’existence d’une mesure ADC ne prouve pas qu’aucun trajet audio ne traverse
+un autre élément du potentiomètre.</p>
+<p>Lire 0..4095 ne définit pas un gain audio. La conversion vers un gain du codec,
+du circuit radio ou d’un amplificateur doit être documentée séparément. Ne pas
+confondre ces mesures avec une valeur en dB ou avec une puissance RF.</p>
+<h3 id="configuration-proposee-pour-un-premier-pilote">Configuration proposée pour un premier pilote</h3>
+<p>Utiliser PB0/PB1/PC2/PC5 en mode analogique, une référence stable, ADC0 calibré
+et un temps d’échantillonnage suffisamment long pour l’impédance des réseaux.
+Une acquisition par scrutation suffit pour un diagnostic ; un scan DMA permet
+ensuite de lire les quatre entrées régulièrement.</p>
+<p>Le temps de conversion 12 bits dépend du temps d’échantillonnage et de
+l’horloge ADC. Vérifier les limites dans la documentation du MCU ; les
+64 instructions par conversion du banc sont un paramètre de simulation,
+<strong>pas un timing matériel</strong>. Ne pas en déduire la cadence d’un nouveau pilote.</p>
+<p>Proposition de filtrage : moyenne de quatre à huit mesures, actualisation des
+volumes toutes les 10 à 20 ms, puis hystérésis avant changement de gain. Ces
+valeurs sont des choix initiaux, à ajuster aux mesures et à l’ergonomie.</p>
+<h2 id="8-voyant-rougevert-du-poste-bus-pe3-pe4">8. Voyant rouge/vert du poste : bus PE3 / PE4</h2>
+<p>Les deux composantes ne sont pas pilotées ici comme deux GPIO directement
+reliés aux LED. Le code transmet un mot de huit bits sur PE3, cadencé par PE4,
+<strong>bit de poids faible d’abord</strong>. L’état est pris au front montant PE4.
+Aucune ligne de latch supplémentaire n’est identifiée dans ce chemin.</p>
+<table>
+<thead>
+<tr>
+  <th>Mot complet observé</th>
+  <th style="text-align:right">Vert, masque 0x08</th>
+  <th style="text-align:right">Rouge, masque 0x10</th>
+  <th>Situation de la trace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0x46</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td>Repos</td>
+</tr>
+<tr>
+  <td>0x4E</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+  <td>Réception, squelch ouvert</td>
+</tr>
+<tr>
+  <td>0x56</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+  <td>Émission</td>
+</tr>
+<tr>
+  <td>0x00 / 0x10</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0 / 1</td>
+  <td>Clignotement bootloader</td>
+</tr>
+</tbody>
+</table>
+<p>La correspondance couleur combine la séquence OEM et l’observation utilisateur.
+La continuité jusqu’au circuit récepteur et aux LED n’est pas encore mesurée.
+Les autres bits de <code>0x46</code> restent non attribués. Pour changer une couleur,
+conserver les autres bits du mot que le pilote possède et comprend ; ne pas
+supposer que les huit sorties servent exclusivement à ce voyant.</p>
+<p>Le chemin applicatif configure temporairement PE3/PE4 en sorties push-pull,
+envoie les huit bits, remet PE4 bas, puis repasse les broches en entrées avec
+pull-down. Cette restitution de direction fait partie du comportement observé.
+Ne pas conclure que les niveaux GPIO resteront en permanence égaux à la couleur.</p>
+<p>Le code introduit une boucle de valeur 2 autour des fronts. Ce sont deux tours
+d’une primitive, <strong>pas une preuve de 2 µs</strong>. Un premier émetteur peut prendre
+1 µs de setup et 1 µs haut/bas, puis être ajusté après capture logique. Le circuit
+récepteur, sa validation de mot et sa tolérance aux pauses restent à qualifier.</p>
+<p>Si les deux bits couleur sont mis à un, le banc expose les deux commandes.
+Il n’invente pas une priorité rouge/vert ni une couleur physique résultante.</p>
+<h2 id="9-eclairages-des-touches-et-de-lecran">9. Éclairages des touches et de l’écran</h2>
+<h3 id="protocole-commun-observe">Protocole commun observé</h3>
+<ul>
+<li>PA5 bas : début du mot.</li>
+<li>Envoyer les quatre bits d’adresse, MSB d’abord, sur PB4.</li>
+<li>Envoyer les huit bits de valeur, MSB d’abord.</li>
+<li>PB3 bas avant le bit, PB3 haut pour son acquisition.</li>
+<li>Après le douzième bit, PB3 bas puis PA5 haut : validation.</li>
+</ul>
+<p>Le mot est <code>(adresse &lt;&lt; 8) | valeur</code>. Exemple : adresse 8, donnée 128 →
+<code>0x880</code>, soit <code>1000 10000000</code>. Adresse 8, donnée 255 → <code>0x8FF</code>.</p>
+<p>Le firmware introduit des boucles de valeur 10 entre les fronts. Elles ne sont
+pas des délais certifiés de 10 µs. Le bus partage des broches avec d’autres
+fonctions du poste : les sélections des circuits et la propriété du bus doivent
+être coordonnées. Le routage JTAG de PB3/PB4 doit également être examiné sans
+supprimer SWD par erreur.</p>
+<h3 id="affectations-connues-et-inconnues">Affectations connues et inconnues</h3>
+<table>
+<thead>
+<tr>
+  <th>Adresse</th>
+  <th>Information fiable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>8</td>
+  <td>Luminosité LCD, valeurs 0 et 255 observées</td>
+</tr>
+<tr>
+  <td>12, 2, 10, 6, 1, 14</td>
+  <td>Écrivains OEM individuels retrouvés ; sorties physiques à attribuer</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Autre écrivain individuel retrouvé ; affectation non établie ici</td>
+</tr>
+<tr>
+  <td>9, 3, 15</td>
+  <td>Écritures d’initialisation observées ; rôle exact non attribué</td>
+</tr>
+</tbody>
+</table>
+<p>L’initialisation OEM envoie notamment les couples suivants, dans cet ordre :</p>
+<pre><code class="language-text">9:00  3:FF  F:FF  8:00  C:00  2:00  A:00  6:00  E:00  1:00
+</code></pre>
+<p>Cette liste est un <strong>relevé de mots</strong>, pas une autorisation d’assimiler chaque
+adresse à une LED ni de tout balayer au hasard sur le matériel. Certaines
+adresses peuvent être des registres de configuration du circuit récepteur.</p>
+<p>Les éclairages blancs de touches signalés sur la façade ne sont donc pas
+encore associés un à un aux sorties de ce bus. Le nombre de contacts P1..P6
+ne permet pas de déduire le nombre ni le câblage des LED. Aucun tableau
+« adresse → touche éclairée » complet n’est établi à ce stade.</p>
+<p>Pour terminer cette cartographie : relever le circuit récepteur et ses pistes,
+puis capturer les mots OEM pendant les changements d’éclairage et d’intensité.
+Sur le banc, comparer les mots bruts ; sur la carte, comparer les LED visibles.
+Une variation dans le menu peut affecter plusieurs canaux simultanément.</p>
+<h3 id="retroeclairage-ecran">Rétroéclairage écran</h3>
+<p>Il était déjà décrit dans <code>LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md</code>.
+Le rappel ci-dessus permet de développer la façade sans dépendre de ce fichier.
+La valeur est un octet brut, pas une mesure photométrique ni une tension PWM
+identifiée. Display On/Off du LCD, sommeil du contrôleur et éclairage sont
+indépendants : un dessin valide peut être invisible si le canal 8 vaut zéro.</p>
+<h2 id="10-rappel-pour-les-voyants-du-microphone">10. Rappel pour les voyants du microphone</h2>
+<p>Ils ne sont pas directement accessibles par un GPIO du GD32 par voyant.
+La liaison radio → microphone est USART0, associée à PA9/PA10 par l’analyse
+de configuration. Le raccordement exact jusqu’au connecteur doit être vérifié.</p>
+<p>Une trame de 16 octets commence par <code>53</code> et finit par <code>06</code>. Les champs 1/3
+et 4/6 portent les commandes réception/émission des voies, et l’octet 7 porte
+la sélection principale <code>0=A</code>, <code>1=B</code>. Cette dernière correspond fortement
+aux voyants blancs MAIN A/B, selon firmware, manuel et observation utilisateur.
+Le numéro des GPIO internes au microphone n’est pas identifié.</p>
+<p>Ne pas piloter PE3/PE4 en espérant commander les deux voyants du microphone.
+Le détail est dans <code>NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code>.</p>
+<h2 id="11-routines-c-independantes-des-variables-oem">11. Routines C indépendantes des variables OEM</h2>
+<p>Ce code est un squelette pour un programme propriétaire de ses périphériques.
+Il ne constitue pas une injection prête à lancer dans l’application OEM.
+<code>board_us()</code> et <code>board_wait_us()</code> doivent provenir d’une horloge du nouveau
+firmware. Le code n’emploie pas les boucles non calibrées de l’OEM.</p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define R32(a) (*(volatile uint32_t *)(uintptr_t)(a))
+#define GA 0x40010800u
+#define GB 0x40010C00u
+#define GC 0x40011000u
+#define GE 0x40011800u
+#define ADC0 0x40012400u
+
+extern uint32_t board_us(void);
+extern void board_wait_us(uint32_t us);
+
+static void gpio_set(uint32_t port, uint32_t mask) {
+    R32(port + 0x10u) = mask;
+}
+static void gpio_clear(uint32_t port, uint32_t mask) {
+    R32(port + 0x14u) = mask;
+}
+static void gpio_mode(uint32_t port, unsigned pin, uint32_t mode) {
+    uint32_t address = port + (pin &lt; 8u ? 0u : 4u);
+    unsigned shift = 4u * (pin &amp; 7u);
+    R32(address) = (R32(address) &amp; ~(15u &lt;&lt; shift)) |
+                   ((mode &amp; 15u) &lt;&lt; shift);
+}
+
+/* Horloges GPIO deja actives, usage autonome seulement. */
+static void panel_input_gpio_init(void) {
+    gpio_set(GA, 3u); /* pull-up propose sur PA0/PA1 */
+    gpio_mode(GA, 0, 8); gpio_mode(GA, 1, 8);
+    gpio_set(GC, 0x300u);
+    gpio_mode(GC, 8, 8); gpio_mode(GC, 9, 8);
+    gpio_mode(GB, 0, 0); gpio_mode(GB, 1, 0);
+    gpio_mode(GC, 2, 0); gpio_mode(GC, 5, 0);
+}
+
+static bool power_pressed(void) {
+    return (R32(GA + 8u) &amp; 1u) == 0;
+}
+static bool dial_pressed(void) {
+    return (R32(GA + 8u) &amp; 2u) == 0;
+}
+static uint8_t encoder_levels(void) {
+    return (uint8_t)((R32(GC + 8u) &gt;&gt; 8) &amp; 3u);
+}
+
+/* ADC deja alimente, calibre et configure en conversion unique :
+   scan/DMA/continu desactives, alignement droit, sequence de longueur 1,
+   declencheur logiciel selectionne et autorise, sample time adapte.
+   Aucun autre utilisateur ne modifie ADC0 pendant cet appel. */
+static bool adc_read_one(uint8_t channel, uint16_t *out) {
+    if (channel &gt; 15u || out == 0) return false;
+    R32(ADC0 + 0x34u) = channel; /* RSQ2, premier rang */
+    (void)R32(ADC0 + 0x4Cu);     /* consommer un ancien resultat */
+    R32(ADC0 + 8u) |= (1u &lt;&lt; 22); /* SWRCST */
+    uint32_t start = board_us();
+    while ((R32(ADC0) &amp; 2u) == 0u) {
+        if ((uint32_t)(board_us() - start) &gt;= 1000u) return false;
+    }
+    *out = (uint16_t)(R32(ADC0 + 0x4Cu) &amp; 4095u);
+    return true;
+}
+
+/* Codes propres au nouveau programme, sans dependance aux codes OEM. */
+enum Key { K_NONE, K_P1, K_P2, K_P3, K_MENU,
+           K_P4, K_P5, K_P6, K_EXIT, K_INVALID };
+
+static enum Key ladder_key(uint16_t sample, bool second_group) {
+    static const enum Key keys[2][4] = {
+        {K_P1, K_P2, K_P3, K_MENU}, {K_P4, K_P5, K_P6, K_EXIT}
+    };
+    if (sample &gt; 4095u) return K_INVALID;
+    unsigned slot = sample &lt;= 500u ? 0u : sample &lt;= 1500u ? 1u :
+                    sample &lt;= 2500u ? 2u : sample &lt;= 3500u ? 3u : 4u;
+    return slot == 4u ? K_NONE : keys[second_group ? 1u : 0u][slot];
+}
+
+struct Debounce {
+    enum Key candidate, stable;
+    uint32_t since_ms;
+};
+/* Appeler periodiquement. true = nouvel etat stable, y compris relachement. */
+static bool key_update(struct Debounce *d, enum Key raw, uint32_t now_ms) {
+    if (raw == K_INVALID) {
+        d-&gt;candidate = K_INVALID; d-&gt;since_ms = now_ms;
+        return false; /* invalider la stabilite et signaler la panne a part */
+    }
+    if (raw != d-&gt;candidate) {
+        d-&gt;candidate = raw; d-&gt;since_ms = now_ms;
+    }
+    if (raw != d-&gt;stable &amp;&amp; (uint32_t)(now_ms - d-&gt;since_ms) &gt;= 20u) {
+        d-&gt;stable = raw; return true;
+    }
+    return false;
+}
+
+/* Renvoie un mouvement de phase, pas necessairement un cran mecanique.
+   Initialiser previous avec encoder_levels() avant le premier appel. */
+static int encoder_phase(uint8_t *previous, uint8_t next) {
+    static const int8_t table[16] = {
+         0, 1,-1, 0, -1, 0, 0, 1,
+         1, 0, 0,-1,  0,-1, 1, 0
+    };
+    uint8_t old = *previous &amp; 3u;
+    next &amp;= 3u;
+    *previous = next;
+    return table[(old &lt;&lt; 2) | next];
+}
+
+/* Bus PE3/PE4, mots complets ; circuit recepteur encore a qualifier. */
+static void status_word(uint8_t word) {
+    gpio_clear(GE, 0x18u);
+    gpio_mode(GE, 3, 3); gpio_mode(GE, 4, 3);
+    for (unsigned i = 0; i &lt; 8; ++i) {
+        gpio_clear(GE, 0x10u);
+        if (word &amp; (1u &lt;&lt; i)) gpio_set(GE, 8u); else gpio_clear(GE, 8u);
+        board_wait_us(1);
+        gpio_set(GE, 0x10u); board_wait_us(1);
+        gpio_clear(GE, 0x10u); board_wait_us(1);
+    }
+    gpio_clear(GE, 0x18u); /* pull-down avant restitution du mode entree */
+    gpio_mode(GE, 3, 8); gpio_mode(GE, 4, 8);
+}
+
+/* Propriete exclusive de PA5/PB3/PB4 requise ; sorties deja configurees.
+   Aucun registre non identifie ne doit etre ecrit au hasard. */
+static bool lighting_word(uint8_t address, uint8_t value) {
+    if (address &gt; 15u) return false;
+    uint16_t word = ((uint16_t)address &lt;&lt; 8) | value;
+    gpio_clear(GA, 0x20u); board_wait_us(1);
+    for (int bit = 11; bit &gt;= 0; --bit) {
+        gpio_clear(GB, 8u);
+        if (word &amp; (1u &lt;&lt; bit)) gpio_set(GB, 16u); else gpio_clear(GB, 16u);
+        board_wait_us(1);
+        gpio_set(GB, 8u); board_wait_us(1);
+    }
+    gpio_clear(GB, 8u); board_wait_us(1);
+    gpio_set(GA, 0x20u); board_wait_us(1);
+    return true;
+}
+</code></pre>
+<p>Pour lire les commandes analogiques : acquérir canal 8, canal 9, canal 12 et
+canal 15, puis décoder/filtrer chaque valeur. En cas de timeout ADC, ne pas
+transformer une valeur périmée en nouvelle touche ou nouveau volume.</p>
+<p>Initialiser les structures Debounce à zéro. Pour Power et Dial, appliquer le
+même principe de stabilité sur leurs valeurs booléennes. Pour un codeur complet,
+compter les mouvements de phase et rejeter une transition double en réinitialisant
+l’accumulateur de cran ; ne pas seulement sommer indéfiniment les retours nuls.
+Déterminer le nombre de phases par cran et le signe après observation mécanique.</p>
+<p>Les broches, horloges et ADC sont volontairement des préconditions explicites.
+L’initialisation ADC doit notamment sélectionner la source logicielle, attendre
+la stabilisation, remettre la calibration à zéro, calibrer et attendre sa fin.
+En scan DMA, remplacer la routine de conversion unique par une lecture cohérente
+d’un tampon <strong>déclaré par le nouveau programme</strong> et traiter les débordements.</p>
+<p>Les accès CTL sont des lectures-modifications-écritures : les protéger contre
+un autre pilote modifiant le même registre. Les accès BOP/BC évitent de changer
+les autres sorties mais ne remplacent pas un verrou de transaction du bus.</p>
+<h2 id="12-synthese-des-timings">12. Synthèse des timings</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément</th>
+  <th>Constat OEM / banc</th>
+  <th>Choix initial proposé, non certifié matériel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Touches analogiques</td>
+  <td>Seuils et compteur de stabilité retrouvés</td>
+  <td>Lecture 5 ms, stabilité 20 ms</td>
+</tr>
+<tr>
+  <td>Power / Dial</td>
+  <td>Actif bas ; double lecture Dial avec boucle</td>
+  <td>Stabilité 20 ms ; appui long séparé</td>
+</tr>
+<tr>
+  <td>Codeur</td>
+  <td>EXTI8 descendant et lecture PC9</td>
+  <td>Scrutation 0,5..1 ms ou IRQ courte</td>
+</tr>
+<tr>
+  <td>Volumes</td>
+  <td>Moyenne de quatre lectures espacées de 1 ms au démarrage</td>
+  <td>Mise à jour 10..20 ms, filtre et hystérésis</td>
+</tr>
+<tr>
+  <td>ADC du banc</td>
+  <td>64 instructions/conversion, timing synthétique</td>
+  <td>Calculer d’après horloge ADC et impédance</td>
+</tr>
+<tr>
+  <td>Voyant PE3/PE4</td>
+  <td>Boucles de valeur 2</td>
+  <td>Setup et phases de 1 µs pour premier essai</td>
+</tr>
+<tr>
+  <td>Bus éclairage</td>
+  <td>Boucles de valeur 10</td>
+  <td>Phases de 1 µs pour premier essai</td>
+</tr>
+</tbody>
+</table>
+<p>Les valeurs proposées ne sont pas des limites extraites d’une fiche du circuit
+récepteur : il n’est pas encore identifié. Capturer les fronts OEM puis ajuster.
+Le quartz 12 MHz, le PLL et les diviseurs doivent être traités par l’initialisation
+horloge du nouveau programme. Ne pas convertir tous les tours de boucle en µs.</p>
+<h2 id="13-independance-du-firmware-et-limites-du-banc">13. Indépendance du firmware et limites du banc</h2>
+<p>Les constantes utiles au nouveau firmware sont les ports, canaux ADC, polarités,
+formats de mots et seuils physiques à calibrer. Les variables de touches,
+volumes ou voyants du constructeur n’en font pas partie.</p>
+<p>Les contrôles actuels du banc modifient des niveaux GPIO ou des échantillons
+ADC, et non des événements de touches écrits dans la RAM OEM. Cela rend les
+stimuli réutilisables avec une autre application, sous réserve que les modes
+ADC/GPIO demandés soient implémentés.</p>
+<p>Des parties de l’observation restent toutefois liées au profil OEM. Le bus
+d’éclairage est historiquement armé à un appel connu ; les entrées GPIO du
+banc comportent aussi des chemins conditionnés par le masque de lecture du
+pilote OEM. Un firmware lisant tout ISTAT peut donc révéler une lacune du modèle.
+Il faudra rendre ces entrées et l’armement entièrement dépendants de l’état
+matériel pour qualifier « n’importe quel firmware ». Le code C de cette note
+ne doit pas être adapté artificiellement à ces particularités du simulateur.</p>
+<p>Les durées d’appui automatique de l’interface du banc sont des durées de
+stimulus, pas les temps de rebond des vrais boutons. Les volumes du profil
+synthétique à 1800 ne sont pas des mesures du poste.</p>
+<h2 id="14-verifications-a-terminer-sur-la-carte">14. Vérifications à terminer sur la carte</h2>
+<table>
+<thead>
+<tr>
+  <th>Travail</th>
+  <th>Pourquoi il manque encore</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Continuité PB0/PB1 vers résistances et contacts</td>
+  <td>Confirmer l’ordre et les combinaisons de touches</td>
+</tr>
+<tr>
+  <td>Mesure ADC de chaque touche, au repos et en combinaison</td>
+  <td>Fixer marges, hystérésis et détection de défaut</td>
+</tr>
+<tr>
+  <td>Continuité PC2/PC5 et butées des deux potentiomètres</td>
+  <td>Confirmer ordre A/B, sens et dynamique</td>
+</tr>
+<tr>
+  <td>Capture codeur dans les deux sens</td>
+  <td>Déterminer transitions par cran et rebonds</td>
+</tr>
+<tr>
+  <td>Identifier les récepteurs PE3/PE4 et PA5/PB3/PB4</td>
+  <td>Comprendre mots, latch, sorties et timing minimal</td>
+</tr>
+<tr>
+  <td>Associer canaux d’éclairage aux LED physiques</td>
+  <td>Compléter la cartographie des touches éclairées</td>
+</tr>
+<tr>
+  <td>Vérifier maintien alimentation et réveil</td>
+  <td>Distinguer contact Power et commande d’alimentation</td>
+</tr>
+</tbody>
+</table>
+<p>La lecture des entrées est suffisamment décrite pour construire un pilote de
+mise au point. La cartographie des éclairages de touches ne permet pas encore
+de déclarer une façade entièrement qualifiée. Cette limite doit rester visible
+dans le firmware et dans les résultats d’auto-test.</p>
+<h2 id="15-sources-et-tracabilite">15. Sources et traçabilité</h2>
+<p>Application analysée : <code>D578UV_GD_V1.21_20240619.CDD</code>, SHA-256
+<code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>.</p>
+<p>Sources du dépôt : <code>bench/lab_inputs.py</code>, <code>bench/emulate_front_v121.py</code>,
+<code>bench/verify_front_oem.py</code>, <code>bench/adc_dma.py</code>, <code>bench/lighting.py</code>,
+<code>bench/status_led.py</code> et <code>bench/profiles/front_panel.json</code>.
+Dépôt : <a href="https://github.com/Telectroboy/OpenD578">https://github.com/Telectroboy/OpenD578</a>.</p>
+<p>Pour retrouver les preuves dans V1.21, uniquement comme index d’analyse :
+lecteurs analogiques <code>0x0800F048</code> et <code>0x0800F08A</code>, filtre <code>0x0800F0CC</code>,
+lecture Dial <code>0x0800F11C</code>, configuration codeur <code>0x0808C9EC</code>, gestionnaire
+<code>0x0808CC0A</code>, bus voyant <code>0x0808A3D6</code>, bus éclairage <code>0x0808A7C0</code>.
+Ces adresses ne sont utilisées par aucune routine C proposée ci-dessus.</p>
+<p>Référence des périphériques : GigaDevice, GD32F30x User Manual, chapitres GPIO,
+AFIO/EXTI, ADC, DMA et RCU. Une copie Rev2.9 a été consultée pour cette note :
+<a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf">https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf</a>.
+La fiche exacte du GD32F303VKT6 et le schéma de la carte doivent compléter
+les vérifications électriques. Les constats de câblage fonctionnel viennent
+du code et des traces, pas d’un brochage de carte déduit du manuel MCU seul.</p>
+<p>Cette note documente le développement ; elle ne modifie pas le banc V11.8,
+ne publie pas de nouveau firmware et n’annonce aucun essai physique effectué ici.</p>
+<p>Vérification de cette note : 43 tests Python réussis pour l’ADC/DMA, les
+périphériques de façade, les entrées et le voyant. Le bloc C compile sur hôte
+avec les contrôles de syntaxe et d’avertissements. Un test C séparé vérifie les
+4096 valeurs de chaque groupe de touches, une valeur invalide, la stabilité,
+le relâchement après entrée invalide, le débordement du compteur temporel et
+les transitions du codeur dans les deux sens. Les accès matériels ne sont pas
+exécutés par ce test ; ce n’est pas une compilation ARM liée ni un essai radio.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

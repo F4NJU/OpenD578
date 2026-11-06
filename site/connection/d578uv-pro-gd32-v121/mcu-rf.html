@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Configuration radio - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-rf</div>
+<h1>Configuration radio</h1>
+<p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/rf.html">RF, synthèse et FI</a></p>
+<dl class="facts"><dt>Bus</dt><dd>GPIO / registres RF</dd><dt>Niveau de preuve</dt><dd>emulator</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>Des routines OEM ont été corrélées au modèle 24 bits RF (voir connexion MCU → bus RF). Le mapping sélection→QA physique reste inconnu.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td colspan="3">Broches non qualifiees : ne pas attribuer de GPIO par deduction.</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.html">RAM, routines analysées, UI, RF, brochage</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md">source</a></small></li><li><a href="../../doc/docs/hardware/COMPOSANTS.html">Inventaire materiel et nomenclature de travail</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/COMPOSANTS.md">source</a></small></li><li><a href="../../doc/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">source</a></small></li></ul></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -15,9 +15,11 @@ qdmr supports the OEM D578, but that alone does not establish compatibility with
 a new OpenD578 firmware or its memory format:
 https://github.com/hmatuschek/qdmr
 
-USB host traffic and the complete programming protocol remain to be implemented
-and exercised in the bench. The current USB model represents an absent host;
-there is no claim that PC programming already works with the new firmware.
+V11.5 adds CDC host enumeration and a local COM/PTY bridge through PMA/IRQ20
+in both board and OEM analysis modes. The original firmware answers identification
+and memory reads; write finalization and persistence require explicit checks.
+The original Windows CPS and its virtual COM driver have not been executed here.
+See [USB_CPS_V11_5.md](USB_CPS_V11_5.md) for tested scope and limitations.
 
 ## Three different kinds of settings
 
@@ -57,3 +59,8 @@ https://radio.carstenbauer.net/578techmods.htm
 Individual calibration records and captured execution state remain local inputs.
 The public repository should contain formats, extraction/observation tools,
 hash-based comparisons and anonymized test results.
+
+The 5 November follow-up identifies the captured permissions as disabled and
+distinguishes application reset from the physical Power-off/on sequence:
+[TEST_MODE_OPTIONS.md](TEST_MODE_OPTIONS.md). The virtual-unlock probe reaches
+the service entry routine but has not reached a confirmed service screen.

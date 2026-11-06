@@ -1,11 +1,28 @@
 # OpenD578
 
+**Documentation GitHub Pages :** https://telectroboy.github.io/OpenD578/ (active après publication).
+
+**[Centre de preuves (RTC, GPS, brochage 100 broches, monographies)](docs/evidence/INDEX.md)** : composants documentes, provenance, hypotheses de liaisons et mesures restantes. **[Changelog des nouvelles preuves](docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md)**.
+
+**[Programmation PC, USB et CPS](docs/cps/README.md)** : protocole OEM V1.21, codeplug, simulation CDC/COM, outils de lecture passive et tests.
+
+**[Installation d’un dépôt GitHub neuf](docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md)** et **[changelog de consolidation](docs/CHANGELOG_DEPOT_COMPLET_CPS_20261105.md)**.
+
+Base logicielle publique : banc **V11.7**, accompagné des notices matériel/microphone/LCD **V11.8**. Les sources exécutables V11.8 complètes n’ont pas été récupérées pour ce paquet.
+
+
 Experimental firmware research, a digital board emulator, and hardware
 documentation for the **AnyTone AT-D578UV PRO with GD32 MCU**.
 
 **Current status: research and emulator development. There is no installable
 OpenD578 radio firmware release yet.** The original contract probe exercises
 the emulator; it is not a replacement firmware or a file to flash to a radio.
+
+The V11.7 bench adds an open qualification catalog (117 requirements), a firmware
+clue scanner and JSON/JUnit reports. The 4 bounded regressions (including GPIO status-light outputs) are distinct
+from full hardware qualification. Windows CPS reading was confirmed by the user;
+channel-name persistence was checked with the integrated partial CPS. See
+[qualification scope](docs/QUALIFICATION_ANALOGIQUE.md).
 
 The project starts with the D578. Other radios, including D878 variants, may
 be investigated later; shared components do not establish compatibility.
@@ -86,7 +103,7 @@ the user's authenticated capture.
 - The legacy accelerated engine has a known eight-instruction IRQ55 difference
   on one GPS scenario. Hardware mode currently uses the instruction observer.
 
-See [the emulator design](docs/EMULATOR.md), [the roadmap](docs/ROADMAP.md),
+See [the emulator design](docs/EMULATOR.md), [V11.2 performance](docs/EMULATOR_PERFORMANCE.md), [the roadmap](docs/ROADMAP.md),
 [programming and calibration](docs/PROGRAMMING_AND_CALIBRATION.md),
 [the research index](docs/RESEARCH_INDEX.md), and [the French introduction](README_FR.md).
 

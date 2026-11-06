@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Références externes, URL complètes et portée de chacune - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Références externes, URL complètes et portée de chacune</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/08_LIENS_COMPLETS_ANNOTES.md">Modifier sur GitHub</a><a download href="../../raw/docs/08_LIENS_COMPLETS_ANNOTES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/08_LIENS_COMPLETS_ANNOTES.md</code></p>
+<article class="markdown-body"><h1 id="references-externes-url-completes-et-portee-de-chacune">Références externes, URL complètes et portée de chacune</h1>
+<p>Ce document enregistre les liens explicitement utilisés ou fournis dans les travaux du projet. <code>01_INDEX_MACHINE/urls_by_source.jsonl</code> conserve également les occurrences et lignes des liens présents dans les textes exportés. <strong>Un lien historisé n'est pas un fichier joint; sa disponibilité peut changer.</strong></p>
+<h2 id="photographies-et-documents-fcc">Photographies et documents FCC</h2>
+<ul>
+<li><code>https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250</code> : lien donné par l'utilisateur pour les photos internes du D578UV. Peut aider à reconnaître les circuits et connexions; aucune preuve de correspondance de PCB avec la révision précise GD32 V1.21 sans examen visuel et continuité.</li>
+<li><code>https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513168</code> : autre document d'images internes référencé par la FCC (soumission 2019). N'est pas un schéma d'ingénierie du D578UV PRO GD32 V1.21.</li>
+<li><code>https://fccid.io/T4K-D578UVIII/</code> : variante FCC D578UVIII demandée par l'utilisateur; prudence sur version, révision, options de la carte et nomenclature.</li>
+<li><code>https://fccid.io/T4K-D578UV</code> : page FCC de l'appareil original, avec photos et autres pièces. Certaines entrées « Schematics » apparaissent comme métadonnées non nécessairement accessibles; ne pas affirmer l'obtention d'un schematic complet du PRO GD32.</li>
+</ul>
+<h2 id="constructeurs-silicium-memoire-adc-et-instructions-arm">Constructeurs, silicium, mémoire, ADC et instructions ARM</h2>
+<ul>
+<li><code>https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32f303vkt6</code> : fabricant du MCU, Cortex-M4, 3072 K Flash, 96 K SRAM, LQFP100. Sert à valider les capacités de silicium, pas les allocations OEM.</li>
+<li><code>https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev3.0.pdf</code> : manuel de la famille GD32F30x exploité pour RCU, PLL, GPIO, ADC, DMA, EXTI et Power. La révision du manuel peut changer.</li>
+<li><code>https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/305/KIOXIA_TC58CVG1S3HRAIG_Rev2.0_E191001.pdf</code> : commandes ECC/READ/DUAL READ et géométrie NAND. Comparer la révision et les registres A0/B0 aux bits observés.</li>
+<li><code>https://www.ti.com/product/TLV320AIC3204</code> : TLV320AIC3204 codec audio (ADC et DAC de son, I2C/SPI et I2S), distinct de l'ADC0 GD32 rencontré dans le simulateur.</li>
+<li><code>https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf</code> : datasheet du codec audio TI.</li>
+<li><code>https://developer.arm.com/documentation/dui0553/latest/</code> : Cortex-M4 Generic User Guide, SysTick, exception, bit-band.</li>
+<li><code>https://support.arm.com/documentation/dui0589/a/Cihhdahf</code> : convention de démarrage <code>__user_initial_stackheap</code> / usage de pile et tas.</li>
+<li><code>https://github.com/unicorn-engine/unicorn/blob/master/docs/FAQ.md</code> : Unicorn, moteur d'émulation CPU utilisé par les simulations V1-V3.</li>
+</ul>
+<h2 id="opengd77-outils-de-codeplug-mises-a-jour">OpenGD77, outils de codeplug, mises à jour</h2>
+<ul>
+<li><code>https://github.com/hmatuschek/qdmr</code> : documentation et parseur de codeplug AnyTone; position <code>+0x23</code> du nom dans le record 64 octets. <strong>Ne prouve pas le layout RAM OEM.</strong></li>
+<li><code>https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/AT-D578UV%20Plus/Change%20Log%20-%20D578UVII%20FW_CPS.pdf</code> : changelog D578UVII PLUS évoquant la priorité d'affichage APRS. Cette branche n'est pas la cible GD PRO V1.21.</li>
+<li><code>https://github.com/rogerclarkmelbourne/OpenGD77</code> : dépôt amont historique OpenGD77; vérifier sa licence et la variante exacte des sources réutilisées dans les ZIP du projet.</li>
+</ul>
+<h2 id="modifications-communautaires-pistes-et-avertissements-de-compatibilite">Modifications communautaires, pistes et avertissements de compatibilité</h2>
+<ul>
+<li><code>https://drive.google.com/file/d/1AWclJteohBylg1gUwj2iR3yqC0S3iUQ2/view?usp=sharing</code> : mod D578UV <strong>non PLUS</strong> V1.16n (VK7ZJA), <strong>pas</strong> une image compatible V1.21 sans preuve.</li>
+<li><code>https://sabercathost.com/ef8d/D578UV_V1.16n_mod_FW.zip</code> : miroir V1.16n, disponibilité non garantie.</li>
+<li><code>https://drive.google.com/file/d/1k9OuyAKKwtTWT8agvGmVLQ6Xs0IW8UTu/view?usp=sharing</code> : mod D578UV-II PLUS V2.03n, <strong>autre branche</strong>.</li>
+<li><code>https://sabercathost.com/ef8e/D578UVII_V2.03n_mod_FW.zip</code> : miroir du mod V2.03n.</li>
+<li><code>https://my.hidrive.com/share/pct1kt-nc2</code> : pack alternatif DL6EK, contenu/compatibilité non confirmés ici.</li>
+<li><code>https://hamradiosouthernrepeaters.co.uk/images/578Mods/578techmods.html</code> : documentation communautaire VK7ZJA, source d'indices et non preuve de récupération V1.21.</li>
+</ul>
+<h2 id="methode-de-comparaison-de-ces-liens">Méthode de comparaison de ces liens</h2>
+<p>Pour toute nouvelle image récupérée, relever taille, SHA-256, modèle de radio, famille MCU, version exacte, base de chargement, enveloppe <code>.spi/.CDI/.CDD</code>; ne comparer les patches qu'à l'image stock du <strong>même modèle et même release</strong>. Une modification de tables (par exemple 386 octets sur une ancienne comparaison d'image V1.21) ne démontre pas comment injecter le moteur satellite, ni comment acquérir l'écran ou déclencher un setter radio.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

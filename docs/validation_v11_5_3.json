@@ -1,0 +1,48 @@
+{
+  "version": "V11.5.3",
+  "packaged_tests_passed": 203,
+  "long_read_test": {
+    "passed": true,
+    "blocks": 3000,
+    "total_payload_bytes": 48000,
+    "payload_SHA256": "b83c37701a3dfec0d3fe9ee3c7aeb3122c4905cb818237589209dae1ebb288b4",
+    "seconds": 228.8783940250005,
+    "max_block_seconds": 0.3164333849999821,
+    "status_source": "worker_pipe_memory",
+    "received_total": 72019,
+    "received_base": 6483,
+    "live_status_file_is_directory": true,
+    "original_CPS_executed": false,
+    "Windows_driver_executed": false,
+    "memory_writes_requested": false,
+    "bridge_errors": []
+  },
+  "packaged_smoke": {
+    "server_url": "http://127.0.0.1:34077",
+    "used_fixed_8765": false,
+    "returncode": 0,
+    "status_source": "worker_pipe_memory",
+    "live_USB_file_used": false,
+    "passed": true,
+    "probe": {
+      "passed": true,
+      "server_url": "http://127.0.0.1:34077",
+      "server_application": "D578 local bench V11.5.3",
+      "model": "D578UV",
+      "identity_hex": "49443537385556000e56313131000006",
+      "read_address": "0x02FA0000",
+      "read_bytes": 16,
+      "read_SHA256": "8208b74207d2956a56751cd8a70ec35a99bc43b1c84fbf9607b970c09a969957",
+      "enumeration_seconds": 0.8067075449998811,
+      "program_and_identity_seconds": 2.380661876999511,
+      "memory_read_seconds": 0.16137370800061035,
+      "responses_source": "executed firmware PMA",
+      "memory_writes_requested": false,
+      "programming_mode_left_active": true,
+      "original_CPS_executed": false
+    },
+    "explicit_url_argument_used": false,
+    "original_CPS_executed": false,
+    "Windows_cmd_executed": false
+  }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Bluetooth : variantes D578 PRO/PLUS et piste de compatibilite D878 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Bluetooth : variantes D578 PRO/PLUS et piste de compatibilite D878</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md</code></p>
+<article class="markdown-body"><h1 id="bluetooth-variantes-d578-proplus-et-piste-de-compatibilite-d878">Bluetooth : variantes D578 PRO/PLUS et piste de compatibilite D878</h1>
+<table>
+<thead>
+<tr>
+  <th>Point</th>
+  <th>D578 PRO GD32</th>
+  <th>D578 PLUS GD32</th>
+  <th>D878 / D878UVII</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MCU principal</td>
+  <td>GD32F303VKT6 observe</td>
+  <td><strong>GD32F303 observe sur le poste utilisateur</strong> (suffixe exact du boitier a inscrire sur photo)</td>
+  <td>Autre revision GD32F303, ressources et firmware distincts</td>
+</tr>
+<tr>
+  <td>Bluetooth radio</td>
+  <td>Present selon manuel et observation</td>
+  <td>Present selon manuel ; support physique exact a attribuer</td>
+  <td>Modules historiques a base BK3260 sur certains D878 ; carte BT/APRS remaniee sur UVII</td>
+</tr>
+<tr>
+  <td>Marquage <code>D868BT-SP</code></td>
+  <td>Releve sur carte Bluetooth du poste sans attribution ferme de variante</td>
+  <td>Meme remarque ; <strong>ne pas supposer le meme PCB des deux D578</strong></td>
+  <td>Similarite de nom : piste, sans nomenclature pin-to-pin publiee</td>
+</tr>
+<tr>
+  <td>Module sous blindage</td>
+  <td>Petit PCB soude sur carte support ; SoC illisible</td>
+  <td>A confirmer pour cette carte par photo</td>
+  <td>L'identite du SoC du D578 <strong>ne se deduit pas</strong> du D878</td>
+</tr>
+<tr>
+  <td>Firmware de module</td>
+  <td>Famille ET12, version connue V10043, commandes AT partielles du banc PRO</td>
+  <td>Famille ET12 documentee par AnyTone, version locale a relever</td>
+  <td>Variantes selon generation et module</td>
+</tr>
+<tr>
+  <td>Microphone BT01</td>
+  <td>Compatible, appairage et mode distant</td>
+  <td>Compatible, appairage et mode distant</td>
+  <td>Non equivalent au micro controleur du D878</td>
+</tr>
+<tr>
+  <td>PTT BP-02</td>
+  <td>Compatible via poste</td>
+  <td>Compatible via poste</td>
+  <td>Similarite de fonction, trames non prouvees identiques</td>
+</tr>
+<tr>
+  <td>Carte APRS supplementaire</td>
+  <td>Non demontree sur PRO</td>
+  <td>Carte BT/APRS possible selon revision PLUS, <em>differente</em> de la carte RF AM</td>
+  <td>D878UVII : carte BT/APRS selon documentation de reverse engineering</td>
+</tr>
+<tr>
+  <td>Carte RF airband KT09?5R</td>
+  <td>Connecteur absent selon observation</td>
+  <td>Carte RF AM supplementaire ; independante du BT</td>
+  <td>Sans correspondance presumee</td>
+</tr>
+<tr>
+  <td>Firmware GD32 principal</td>
+  <td>Image propre au PRO V1.21</td>
+  <td><strong>Firmware PLUS propre a sa variante</strong>, ne pas reutiliser la V1.21 PRO sans analyse</td>
+  <td>Binaire D878 different</td>
+</tr>
+</tbody>
+</table>
+<p>L'association du support <strong>D868BT-SP</strong> a la famille D878 est <em>plausible</em> mais necessite la comparaison des references PCB, padout, connecteur, antenne, pistes et materiels sous blindage. Elle <strong>ne prouve aucune compatibilite de firmware Bluetooth</strong> et ne justifie aucune mise a jour croisee.</p>
+<h3 id="actions-de-confirmation-rapides">Actions de confirmation rapides</h3>
+<ol>
+<li>Photo macro nette des deux faces D868BT-SP dans chaque variante et de son raccordement a la carte afficheur.</li>
+<li>Photo du PCB Bluetooth soude sous blindage : taille, nombre de pads et antenne. Une ouverture du shield n'est pas requise pour documenter les connexions externes.</li>
+<li>Capturer les versions exactes <code>Device Info</code> / BT / BT01 / APRS sans appliquer de mise a jour.</li>
+<li>Relever si la carte <code>D868BT-SP</code> comporte aussi le circuit de reception APRS, en distinguant les traces et le connecteur de la carte AM aeronautique.</li>
+</ol>
+<h3 id="references">References</h3>
+<ul>
+<li>AnyTone, guide BT01 : <a href="https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf">https://support.bridgecomsystems.com/hubfs/Tech%20%28AnyTone%29/BT01_user_manual_221121.pdf</a></li>
+<li>RadioFoundry, architecture famille AnyTone : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a></li>
+<li>VK7ZJA, comparaison D868/D878 : <a href="https://radio.carstenbauer.net/878techmods.htm">https://radio.carstenbauer.net/878techmods.htm</a></li>
+<li>VK7ZJA, D578 cartes internes : <a href="https://radio.carstenbauer.net/578techmods.htm">https://radio.carstenbauer.net/578techmods.htm</a></li>
+<li>FCC D578 : <a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513168">https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513168</a></li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

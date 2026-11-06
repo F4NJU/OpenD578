@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Conditions de validation et de publication firmware - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>Conditions de validation et de publication firmware</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/VALIDATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/firmware/VALIDATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/firmware/VALIDATION.md</code></p>
+<article class="markdown-body"><h1 id="conditions-de-validation-et-de-publication-firmware">Conditions de validation et de publication firmware</h1>
+<p>La publication de sources et de tests ne constitue jamais une autorisation d'ecrire la Flash du poste.</p>
+<h2 id="blocages-avant-installation-sur-poste">Blocages avant installation sur poste</h2>
+<ol>
+<li>Carte cible et empreinte exactes du firmware verifiees; bootloader et restauration qualifies.</li>
+<li>Cablage GPIO du pilote autonome et niveaux electriques mesures ou revus; aucune sortie inconnue forcee.</li>
+<li>Moteur LCD, interruptions, timings et arbitre des ressources stables; pas d'utilisation d'adresses de fonctions RAM constructeur comme API.</li>
+<li>NAND : lecture seule dans le banc, regions de calibration sauvegardees et processus de restauration prouve avant toute ecriture.</li>
+<li>Frequences RX/TX, PTT, busy, puissance, temperature, protec. antenne et sortie RF verifies sur equipements de mesure.</li>
+<li>Simulation reproductible, tests de non-regression puis essais controle sur materiel; journaliser la revision carte et l'empreinte SHA-256.</li>
+</ol>
+<p>Le depot n'inclut pas les images constructeur, dumps de Flash/NAND, parametres prives ni codeplug. Les notes de reverse engineering peuvent referencer leurs hashes pour garantir la reproductibilite.</p>
+<p>Voir <a href="../02_CPU_FLASH_BOOT_USB_SWD.html">boot et flash</a>, <a href="../03_NAND_LECTURES_ECC_CARTE.html">NAND</a>, <a href="../PROGRAMMING_AND_CALIBRATION.html">calibration</a>, <a href="../07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.html">limites</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

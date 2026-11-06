@@ -1,0 +1,40 @@
+OpenD578 - depot complet initial, CPS, hardware, documentation et banc public V11.7
+Date: 5 novembre 2026
+Depot cible: https://github.com/Telectroboy/OpenD578
+
+ARCHIVE UNIQUE: OpenD578_COMPLET_CPS_ET_HARDWARE_20261105.zip
+
+1. Extraire l'archive, qui contient un dossier OpenD578/.
+2. Copier le CONTENU de ce dossier a la RACINE du depot GitHub.
+   Il ne faut pas obtenir un chemin OpenD578/OpenD578/docs/.
+3. En ligne de commande, pour un depot neuf:
+      cd OpenD578
+      git init -b main
+      git add .
+      git commit -m "OpenD578: public documentation, CPS and emulator"
+      git remote add origin https://github.com/Telectroboy/OpenD578.git
+      git push -u origin main
+   Si le depot a deja un commit, cloner d'abord et copier les fichiers dans le clone.
+   Ne pas utiliser git push --force.
+4. Dans Github > Settings > Pages > Build and deployment : Source = GitHub Actions.
+5. Ouvrir Actions et verifier le job Deploy OpenD578 documentation.
+6. Consulter https://telectroboy.github.io/OpenD578/ une fois le deploiement termine.
+
+Le site est construit sur chaque push dans main. Pour mettre a jour une fiche,
+modifier son fichier Markdown; la page HTML correspondante est regeneree.
+
+Pour un test local:
+   python3 -m pip install -r site-requirements.txt
+   python3 tools/validate_hardware_model.py
+   python3 tools/build_site.py
+   python3 tools/test_site.py
+   python3 -m http.server --directory site 8000
+Puis ouvrir http://localhost:8000/.
+
+IMPORTANT:
+- Banc executable public = V11.7. Les notes V11.8 sont presentes, pas tout le code V11.8.
+- Images firmwares OEM, captures NAND, codeplugs personnels et CPS Windows absents.
+- Les schemas distinguent les broches confirmees, emulation et hypotheses.
+- Aucune image OpenD578 installable sur le poste n'est livree.
+
+Voir docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md et docs/cps/README.md.

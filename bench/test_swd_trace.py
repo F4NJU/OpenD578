@@ -1,6 +1,8 @@
 import unittest,sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
+tools=Path(__file__).resolve().parents[1]/'tools'
+if not (tools/'swd_trace.py').is_file():tools=Path(__file__).resolve().parent/'tools'
+sys.path.insert(0,str(tools))
 from swd_trace import inspect
 
 class DebugWriteEvidenceTests(unittest.TestCase):

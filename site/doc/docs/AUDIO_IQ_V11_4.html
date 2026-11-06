@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Boucle audio et I/Q V11.4 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Boucle audio et I/Q V11.4</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/AUDIO_IQ_V11_4.md">Modifier sur GitHub</a><a download href="../../raw/docs/AUDIO_IQ_V11_4.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/AUDIO_IQ_V11_4.md</code></p>
+<article class="markdown-body"><h1 id="boucle-audio-et-iq-v114">Boucle audio et I/Q V11.4</h1>
+<p>Ouvrir le banc avec OUVRIR_BANC_WEB, puis l’onglet « Micro &amp; I/Q ».
+Le moteur MCU peut rester arrêté pour ce premier modèle de signal autonome.
+Cliquer sur Enregistrer, autoriser le micro dans le navigateur, parler, puis
+Terminer et simuler. La capture est limitée à 12 secondes. Le navigateur demande
+la désactivation du contrôle automatique de gain, de la réduction de bruit et de
+l’annulation d’écho ; leur disponibilité effective dépend du navigateur et du micro.
+Un WAV PCM16 mono/stéréo peut aussi être chargé. Le fichier reçu se lit après
+le délai choisi ; si la lecture automatique est bloquée, utiliser Lecture.</p>
+<h2 id="ce-qui-est-realise">Ce qui est réalisé</h2>
+<p>Audio micro → gain → filtrage vocal approximatif 300–3 000 Hz → préaccentuation
+optionnelle 75 µs → limiteur → modulation FM → fichier TX I/Q → relecture →
+canal (perte, décalage, bruit) → fichier RX I/Q → relecture → filtrage de canal →
+discriminateur FM → désaccentuation → gain sortie → received.wav.
+L’audio original n’est jamais utilisé comme raccourci pour produire le son reçu.
+Les gains restent visibles : aucune normalisation automatique ne masque la saturation.
+Le niveau numérique est normalisé et ne représente aucune puissance RF mesurée.
+La préaccentuation et les filtres ne sont pas identifiés comme ceux du D578.
+Le SNR est référencé à une amplitude TX unité avant les pertes du canal.</p>
+<p>Les fichiers SigMF sont à 192 000 échantillons complexes/s, cf32_le : alternance
+I float32 little endian, Q float32 little endian (8 octets/échantillon).
+Le JSON contient paramètres, empreintes et limites. Les sessions sont conservées
+localement sous results/web/audio ; supprimer les dossiers de session pour effacer
+les enregistrements. Une capture de 12 s représente environ 37 Mo pour les deux I/Q.
+Le délai d’écoute relève de l’interface ; ce modèle traite le clip hors temps réel.</p>
+<h2 id="aprs">APRS</h2>
+<p>Le bouton APRS génère une trame AX.25 UI de diagnostic, NRZI, bit stuffing,
+CRC-16/X25, AFSK Bell 202 à 1 200 bauds, 1 200/2 200 Hz. Elle traverse la même
+modulation FM et les deux fichiers I/Q. Le récepteur recherche la phase symbole
+sur l’audio démodulé et accepte uniquement les trames avec CRC valide.
+Ce modem minimal n’est pas un TNC complet (pas de CSMA, digipeater, APRS-IS,
+réémission ni interprétation complète des messages APRS).</p>
+<h2 id="limites-et-suite">Limites et suite</h2>
+<p>Le micro PC ne traverse pas encore les commandes du firmware GD32, les registres
+du codec ou le programme SCT3258. Aucune synchronisation avec le PTT ou l’état
+RX/TX du MCU n’est revendiquée. Le DMA APRS OEM reste à modéliser séparément.
+Les gains réglables simulent des étages idéalisés, sans mesure du schéma physique.
+Le CTCSS est générable via l’API Python ; aucun décodeur CTCSS/squelch n’est
+encore raccordé à cette boucle audio. Il ne faut pas confondre cette boucle avec
+les entrées logiques RF de l’onglet Signaux ni le son de test OEM existant.</p>
+<p>La fiche SCT3258 v2.0 décrit une chaîne FM numérique via un codec externe et
+le DSP (sections 8 et 9). Le GD32 peut donc piloter le chemin sans transporter
+les échantillons. Il reste à vérifier le routage du D578 concerné et ses bypass.
+Source constructeur : <a href="https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf">https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf</a></p>
+<p>La phonie DMR n’est pas implémentée : il faudra le vocodeur AMBE compatible,
+les trames, la synchronisation TDMA et le codage de canal, puis la modulation
+4FSK et sa réception. Une simple modulation 4FSK ne validerait pas la phonie DMR.</p>
+<p>Validation : tests numériques de porteuse connue, corrélation audio FM, inversion
+du résultat en conjuguant les I/Q, gains, fichiers/empreintes, CRC connu et CRC
+corrompu, APRS depuis les I/Q enregistrés et accès HTTP. La capture réelle d’un
+micro et l’écoute dans un navigateur restent à éprouver sur le PC utilisateur.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>UART3 modele vers ET12 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-bluetooth</div>
+<h1>UART3 modele vers ET12</h1>
+<p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/bluetooth.html">Support BT D868BT-SP ?</a></p>
+<dl class="facts"><dt>Bus</dt><dd>UART3, logique modele (broches reelles inconnues)</dd><dt>Niveau de preuve</dt><dd>emulator</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>Source bench/uart_serial.py: UART3 et commandes AT+VER?/AT+AGHF. Aucun GPIO TX/RX, baud, RESET, EN ni contact du D868BT-SP n est prouve par un releve de continuite.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>UART3 du GD32 (nom du peripherique, pas pin)</code></td><td>RX/TX du module non identifies</td><td>emulator</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/BLUETOOTH_D868BT_SP_ET12.html">Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">source</a></small></li><li><a href="../../doc/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.html">Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md">source</a></small></li></ul></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

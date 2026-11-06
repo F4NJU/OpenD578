@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "warning": "Fichier construit a partir des equations AT1846S, ne constitue pas une capture OEM ou RF du D578.",
+  "frames": [
+    {"step": 100, "bank": 0, "page": 0, "register": 41, "direction": "write", "value": 44},
+    {"step": 101, "bank": 0, "page": 0, "register": 42, "direction": "write", "value": 61216},
+    {"step": 102, "bank": 2, "page": 0, "register": 41, "direction": "write", "value": 9},
+    {"step": 103, "bank": 2, "page": 0, "register": 42, "direction": "write", "value": 26976}
+  ]
+}

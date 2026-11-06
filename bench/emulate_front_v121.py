@@ -6,6 +6,7 @@ from backup_rtc import BackupRtc
 from unicorn.arm_const import UC_ARM_REG_PRIMASK,UC_ARM_REG_FAULTMASK,UC_ARM_REG_BASEPRI,UC_ARM_REG_R0,UC_ARM_REG_R1,UC_ARM_REG_PC
 import json
 from lighting import LightingBus
+from status_led import StatusLedBus
 from datetime import datetime,timezone
 from flash_cache import FlashCache
 from rf_spi import RfSpi
@@ -28,6 +29,7 @@ class FrontRunner(CortexExceptions,LcdRunner):
         self.timers = {}
         self.backup = None
         self.lighting=LightingBus()
+        self.status_led=StatusLedBus()
         self.panel_inputs = {0x40010800:0x403,0x40011000:0x300,0x40011400:1}
         self.panel_events = []
         self.input_poll = 0
@@ -41,6 +43,8 @@ class FrontRunner(CortexExceptions,LcdRunner):
         self.fm_i2c=FmI2c()
         self.sct_hpi=SctHpi()
         self.usbd=UsbdIdle()
+        from watchdog import FreeWatchdog
+        self.fwdgt=FreeWatchdog()
         super().__init__(*args,**kwargs)
         self.flash_cache=FlashCache(self.cpu.mem_read,self.cpu.mem_write)
         self.cpu.mem_protect(FlashCache.START,FlashCache.END-FlashCache.START,UC_PROT_ALL)
@@ -72,6 +76,9 @@ class FrontRunner(CortexExceptions,LcdRunner):
             lambda uc,off,size,value,data:self.rtc_write(off-0xC00,size,value,True) if off>=0xC00 else self.usbd_write(off,size,value,True),None)
         self.cpu.mmio_map(0x420D8000,4096,self.bkp_alias_read,None,self.bkp_alias_write,None)
         self.cpu.mmio_map(0x420E0000,4096,self.pmu_alias_read,None,self.pmu_alias_write,None)
+        self.cpu.mmio_map(0x40003000,4096,
+            lambda uc,off,size,data:self.checked_read(lambda:self.fwdgt.read(off,size),0x40003000+off,size,'FWDGT'),None,
+            lambda uc,off,size,value,data:self.checked_write(lambda:self.fwdgt.write(off,size,value,self.virtual_units),0x40003000+off,size,value,'FWDGT'),None)
 
     def fmc_read(self,uc,off,size,data):
         if off==0:return super().fmc_read(uc,off,size,data)
@@ -94,6 +101,8 @@ class FrontRunner(CortexExceptions,LcdRunner):
         except StopModel as error:self.halt(str(error),address)
 
     def gpio_get(self,off,size):
+        if getattr(self,'interactive_mode',False) and off==0x180C and size==4:
+            return self.gpio[0x40011800][12]
         address=0x40010000+off
         if address & 0x3FF == 8 and size==4:
             base=address & ~0x3FF
@@ -119,6 +128,7 @@ class FrontRunner(CortexExceptions,LcdRunner):
 
     def gpio_set(self,off,size,value):
         address=0x40010000+off
+        before_status=self.gpio[0x40011800][12] if address&~0x3FF==0x40011800 else None
         watched=(0x40010C00,0x40011000,0x40011800)
         base=address&~0x3FF
         word=off&0x3FF
@@ -138,6 +148,8 @@ class FrontRunner(CortexExceptions,LcdRunner):
         if before_b is not None:
             self.fm_i2c.gpio(before_b,self.gpio[0x40010C00][12],old_mode,
                 (self.gpio[0x40010C00][0]>>24)&15,self.steps)
+        if before_status is not None:
+            self.status_led.gpio(before_status,self.gpio[0x40011800][12],self.gpio[0x40011800][0],self.steps)
         if before_d is not None:
             self.sct_hpi.gpio(before_d,self.gpio[0x40011400][12],self.gpio[0x40011400][4])
 
@@ -193,7 +205,18 @@ class FrontRunner(CortexExceptions,LcdRunner):
             raise ValueError('Unknown front control '+kind)
 
     def poll_inputs(self):
-        if self.live_directory:
+        inbox=getattr(self,'control_inbox',None)
+        if inbox:
+            for command in inbox.drain():
+                request_id=command.pop('_request_id',None)
+                if command.get('control')=='STOP':
+                    self.halt('stopped by simulator user')
+                else:
+                    try:self.input_command(command)
+                    except (OSError,ValueError,KeyError) as error:
+                        self.panel_events.append(dict(step=self.steps,error=str(error)))
+                self.last_control_id=request_id
+        if self.live_directory and not inbox:
             for path in sorted(self.live_directory.glob('input_*.json')):
                 try:
                     self.input_command(json.loads(path.read_text(encoding='utf-8')))
@@ -295,6 +318,19 @@ class FrontRunner(CortexExceptions,LcdRunner):
     def on_code(self,uc,address,size,data):
         super().on_code(uc,address,size,data)
         self.virtual_units += self.last_instruction_units
+        # An interrupt may stop Unicorn before this instruction executes.
+        # Its PC is visited again after exception return. Do not enqueue an
+        # OEM call twice (one expectation would remain ahead of the next frame).
+        if self.stop is not None:return
+        if getattr(self,'cdc',None):
+            from usb_cdc_runtime import poll as cdc_poll
+            cdc_poll(self)
+            if self.usbd.irq and self.irq_eligible(20):
+                self.halt('front peripheral interrupt delivery required',irq=20)
+                return
+        if self.fwdgt.advance(self.virtual_units):
+            self.halt('watchdog reset requested',source='FWDGT',automatic_reboot=False)
+            return
         if address==0x0808A7C0:
             self.lighting.armed=True
             self.lighting.expected.append((uc.reg_read(UC_ARM_REG_R0)&15,uc.reg_read(UC_ARM_REG_R1)&255))
@@ -328,6 +364,9 @@ class FrontRunner(CortexExceptions,LcdRunner):
                         self.halt('front peripheral interrupt delivery required',irq=irq)
                         return
             self.backup.advance(self.virtual_units)
+            if getattr(self,'interactive_mode',False):
+                from interactive_runtime import peripheral_interval
+                self.peripheral_deadline = self.virtual_units+peripheral_interval(self)
             if self.backup.irq and self.irq_eligible(3):
                 self.halt('front peripheral interrupt delivery required',irq=3)
         except StopModel as error:

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>RDA5802N : radio FM de radiodiffusion, interface GD32 et pilote autonome - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>RDA5802N : radio FM de radiodiffusion, interface GD32 et pilote autonome</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/RDA5802N_RECEPTION_FM.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/RDA5802N_RECEPTION_FM.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/RDA5802N_RECEPTION_FM.md</code></p>
+<article class="markdown-body"><h1 id="rda5802n-radio-fm-de-radiodiffusion-interface-gd32-et-pilote-autonome">RDA5802N : radio FM de radiodiffusion, interface GD32 et pilote autonome</h1>
+<p><strong>Cible :</strong> D578UV PRO GD32 V1.21. <strong>Identification :</strong> composant marqué RDA5802N observé sur la carte, compatible avec la nomenclature indépendante de VK7ZJA. <strong>Liaison exacte :</strong> identifiée uniquement au niveau du modèle logiciel, pas par continuité électrique.</p>
+<h2 id="1-fonction-et-variantes-de-boitier">1. Fonction et variantes de boîtier</h2>
+<p>Le RDA5802N est un tuner FM de radiodiffusion (et non le récepteur VHF/UHF principal des communications radioamateur). Il contient la synthèse, une réception numérique basse FI, la stéréo, l'AGC, le RDS/RBDS, la détection de niveau, la recherche de stations et un traitement audio. La documentation RDA distingue <code>RDA5802N</code> QFN 24 contacts 4×4 mm, <code>RDA5802NS</code> QFN 20 contacts 3×3 mm et <code>RDA5802NM</code> QFN 12 contacts 2×2 mm. <strong>Ne pas prendre le brochage de NS ou NM pour celui de N.</strong> La fiche RDA mentionne la plage possible 50–115 MHz selon configuration de la famille, sans garantir les limites ou l'antenne réellement utilisées dans le D578.</p>
+<p>La référence externe et la sortie audio peuvent être analogiques, et la famille annonce une interface audio numérique I²S. <strong>Le trajet choisi sur la carte D578 est encore inconnu</strong> : il faut suivre les pistes, résistances, condensateurs et sélecteurs jusqu'au codec et aux amplificateurs.</p>
+<h2 id="2-ce-que-contient-reellement-le-code-public-opend578">2. Ce que contient réellement le code public OpenD578</h2>
+<p>Source : <code>bench/fm_i2c.py</code>, classe <code>FmI2c</code>. Ce décodeur est <strong>un modèle de protocole RDA5807 compatible</strong>, pas un pilote RDA5802N certifié. Il reconstruit les transitions GPIO suivantes :</p>
+<table>
+<thead>
+<tr>
+  <th>Signaux surveillés par le banc</th>
+  <th>Origine</th>
+  <th>Niveau de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>PB6 = SDA</td>
+  <td>Ports GPIO décodés par le banc</td>
+  <td>Simulation/firmware, continuité vers RDA non mesurée</td>
+</tr>
+<tr>
+  <td>PB7 = SCL</td>
+  <td>Ports GPIO décodés par le banc</td>
+  <td>Simulation/firmware, continuité non mesurée</td>
+</tr>
+<tr>
+  <td>Adresse I²C 7 bits <code>0x10</code> (octet écriture <code>0x20</code>)</td>
+  <td>Modèle RDA5807 compatible</td>
+  <td>Réponse ACK <strong>émulée</strong>, et non réponse matérielle</td>
+</tr>
+<tr>
+  <td>Écritures séquentielles à partir du registre <code>0x02</code></td>
+  <td>Classe <code>FmI2c</code></td>
+  <td>Décodage du modèle uniquement</td>
+</tr>
+<tr>
+  <td>Statut / lecture RSSI / RDS</td>
+  <td>Non implémentés</td>
+  <td><strong>Aucune lecture matérielle qualifiée</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Le système doit enregistrer les octets réellement émis pendant l'activation de la fonction FM, la recherche de station, le réglage du volume et la désactivation. Le seul fait que le simulateur reconnaisse <code>0x10</code> ne prouve pas que le RDA5802N du poste est raccordé aux broches PB6 et PB7.</p>
+<h2 id="3-sequence-de-reconstruction-du-pilote">3. Séquence de reconstruction du pilote</h2>
+<ol>
+<li>Identifier le <strong>boîtier</strong> et le sens de la broche 1 sur photo, puis contrôler alimentation, découplage, quartz/référence et sorties audio hors tension.</li>
+<li>Sur le poste allumé, mesurer passivement la fréquence et l'amplitude de SCL et SDA au plus près du tuner, sans déconnecter les résistances de tirage.</li>
+<li>Comparer la capture logique aux transitions PB6/PB7 et consigner <strong>adresse 7 bits / sens R-W / octets / ACK réels</strong>.</li>
+<li>Relever, sans écriture hors procédure, une activation, un changement de fréquence, la fonction seek, une modification du volume et la mise en veille.</li>
+<li>Chercher dans le binaire V1.21 les appels et constantes associés à chaque paquet ; enregistrer l'adresse de routine, les arguments, l'ordre des écritures et le comportement d'erreur.</li>
+<li>Reconstituer les registres avec <strong>la révision précise de la datasheet RDA5802N</strong>. Les tables RDA5807 ou RDA5802E ne sont pas une preuve de stricte compatibilité.</li>
+<li>Implémenter <code>init</code>, <code>tune</code>, <code>seek</code>, <code>mute</code>, <code>volume</code>, <code>read_status</code>, <code>standby</code> et <code>reset</code> dans une HAL indépendante des adresses RAM OEM, puis tester la ligne de retour et les temporisations.</li>
+</ol>
+<p><strong>Piège :</strong> <code>ACK</code> du modèle logiciel ≠ <code>ACK</code> capturé sur circuit. Ne pas donner à un firmware alternatif des bits de commande copiés d'un autre tuner avant de vérifier leur effet.</p>
+<h2 id="4-structure-minimale-pour-un-futur-pilote">4. Structure minimale pour un futur pilote</h2>
+<pre><code class="language-c">struct rda5802_bus {
+    int (*start)(void *ctx);
+    int (*write)(void *ctx, unsigned char byte);
+    int (*read)(void *ctx, unsigned char *byte, int ack);
+    int (*stop)(void *ctx);
+    void *ctx;
+};
+
+/* La couche basse doit être validée avant d'ajouter les tables de registres. */
+int rda5802_probe_passive(struct rda5802_bus *bus);
+int rda5802_write_verified(struct rda5802_bus *bus,
+                           unsigned char addr7,
+                           const unsigned char *data, unsigned count);
+</code></pre>
+<p>Ces prototypes sont des <strong>interfaces à implémenter</strong>, pas des fonctions testées sur le poste. Les en-têtes ne prescrivent aucune écriture initiale dans des registres inconnus.</p>
+<h2 id="5-inconnues-prioritaires">5. Inconnues prioritaires</h2>
+<ul>
+<li>Brochage exact QFN du composant monté et masse de référence des sondes.</li>
+<li>Rail 3,3 V ou autre tension réellement mesurée ; quartz et couplage RF antenne.</li>
+<li>Confirmation électrique PB6/PB7, présence d'autres circuits sur le bus, pull-ups.</li>
+<li>Rôle de la sortie audio dans la chaîne U2429 / TLV320 / amplificateurs.</li>
+<li>Emplacement de la configuration FM et de ses paramètres dans NAND ou Flash, si elle est persistante.</li>
+<li>Registres réellement employés et éventuelle réception RDS par le firmware V1.21.</li>
+</ul>
+<h2 id="references">Références</h2>
+<ul>
+<li>Documentation technique RDA Microelectronics, gamme RDA5802N (archives) : <a href="https://static6.arrow.com/aropdfconversion/a8f661f9a3450ae778e55dd846bcc2cdbcb43c52/pgurl_detail_186.aspx.pdf">https://static6.arrow.com/aropdfconversion/a8f661f9a3450ae778e55dd846bcc2cdbcb43c52/pgurl_detail_186.aspx.pdf</a></li>
+<li>Inventaire D578, VK7ZJA : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a></li>
+<li>Code à vérifier : <code>bench/fm_i2c.py</code>, <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

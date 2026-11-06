@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 : câblage, protocole et pilotage du LCD - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>OpenD578 : câblage, protocole et pilotage du LCD</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md">Modifier sur GitHub</a><a download href="../../raw/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md</code></p>
+<article class="markdown-body"><h1 id="opend578-cablage-protocole-et-pilotage-du-lcd">OpenD578 : câblage, protocole et pilotage du LCD</h1>
+<p>État des connaissances au 5 novembre 2026, base du banc V11.8.
+Cible : AnyTone D578UV PRO, GD32F303VKT6, application OEM GD32 V1.21.</p>
+<p>Ce document sert de base à un pilote d’affichage autonome ou à une extension
+injectée dans le firmware existant. Il rassemble les broches déduites, les mots
+échangés, l’initialisation, les délais et les contraintes de partage du moteur
+LCD. Il ne livre pas une image flashable ni un placement RAM/Flash approuvé.</p>
+<h2 id="1-ce-que-nous-savons-et-ce-qui-reste-a-mesurer">1. Ce que nous savons et ce qui reste à mesurer</h2>
+<table>
+<thead>
+<tr>
+  <th>Sujet</th>
+  <th>Résultat</th>
+  <th>Niveau de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Module</td>
+  <td>Marquage HOLITECH FPC-HIB018A011-A1 SLH1920</td>
+  <td>Relevé matériel communiqué précédemment</td>
+</tr>
+<tr>
+  <td>Bus de commande et pixels</td>
+  <td>Parallèle 8 bits, de type 8080, piloté par GPIO</td>
+  <td>Instructions OEM et transactions exécutées</td>
+</tr>
+<tr>
+  <td>Données</td>
+  <td>PE7 à PE14, poids faibles vers poids forts</td>
+  <td>Instructions et décodage des sorties</td>
+</tr>
+<tr>
+  <td>Contrôle</td>
+  <td>PB10 WR#, PB11 D/C, PB13 CS#</td>
+  <td>Instructions et transactions exécutées</td>
+</tr>
+<tr>
+  <td>Reset</td>
+  <td>PB12, impulsion basse dans l’initialisation</td>
+  <td>Séquence OEM revérifiée</td>
+</tr>
+<tr>
+  <td>Pixels usuels</td>
+  <td>Fenêtre 128 colonnes × 160 lignes, RGB565</td>
+  <td>Transactions et images reconstruites</td>
+</tr>
+<tr>
+  <td>Orientation de présentation</td>
+  <td>Transposition pour le rendu paysage du banc</td>
+  <td>Comparaison des images OEM</td>
+</tr>
+<tr>
+  <td>Rétroéclairage</td>
+  <td>Autre bus, canal 8</td>
+  <td>Appels OEM et trames GPIO décodées</td>
+</tr>
+<tr>
+  <td>Contrôleur LCD exact</td>
+  <td>Non identifié avec certitude</td>
+  <td>Protocole compatible avec la famille ST7735, sans lecture d’identifiant</td>
+</tr>
+<tr>
+  <td>Numéros des contacts FPC</td>
+  <td>Non établis dans ce travail</td>
+  <td>Continuité à relever</td>
+</tr>
+<tr>
+  <td>Tensions et fronts électriques</td>
+  <td>Non mesurés ici</td>
+  <td>Mesures sur carte nécessaires</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Le câblage ci-dessous est une cartographie côté MCU issue du firmware.</strong> Ce
+n’est pas un relevé de continuité entre chaque patte du GD32 et chaque contact
+de la nappe. Le marquage du module ne suffit pas à identifier le silicium LCD.</p>
+<h2 id="2-bus-lcd-cote-gd32">2. Bus LCD côté GD32</h2>
+<table>
+<thead>
+<tr>
+  <th>Signal LCD</th>
+  <th>GPIO MCU</th>
+  <th>Masque</th>
+  <th>Comportement dans le firmware</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>D0</td>
+  <td>PE7</td>
+  <td>0x0080</td>
+  <td>Bit 0 de l’octet</td>
+</tr>
+<tr>
+  <td>D1</td>
+  <td>PE8</td>
+  <td>0x0100</td>
+  <td>Bit 1</td>
+</tr>
+<tr>
+  <td>D2</td>
+  <td>PE9</td>
+  <td>0x0200</td>
+  <td>Bit 2</td>
+</tr>
+<tr>
+  <td>D3</td>
+  <td>PE10</td>
+  <td>0x0400</td>
+  <td>Bit 3</td>
+</tr>
+<tr>
+  <td>D4</td>
+  <td>PE11</td>
+  <td>0x0800</td>
+  <td>Bit 4</td>
+</tr>
+<tr>
+  <td>D5</td>
+  <td>PE12</td>
+  <td>0x1000</td>
+  <td>Bit 5</td>
+</tr>
+<tr>
+  <td>D6</td>
+  <td>PE13</td>
+  <td>0x2000</td>
+  <td>Bit 6</td>
+</tr>
+<tr>
+  <td>D7</td>
+  <td>PE14</td>
+  <td>0x4000</td>
+  <td>Bit 7</td>
+</tr>
+<tr>
+  <td>WR#</td>
+  <td>PB10</td>
+  <td>0x0400</td>
+  <td>Impulsion basse ; octet retenu au front montant</td>
+</tr>
+<tr>
+  <td>D/C</td>
+  <td>PB11</td>
+  <td>0x0800</td>
+  <td>0 : commande ; 1 : paramètre ou pixel</td>
+</tr>
+<tr>
+  <td>RESET# candidat</td>
+  <td>PB12</td>
+  <td>0x1000</td>
+  <td>Haut, bas, puis haut au démarrage</td>
+</tr>
+<tr>
+  <td>CS#</td>
+  <td>PB13</td>
+  <td>0x2000</td>
+  <td>Bas pendant les écritures</td>
+</tr>
+<tr>
+  <td>RD#</td>
+  <td>Non retrouvé</td>
+  <td>Non attribué</td>
+  <td>Pas de lecture LCD démontrée dans le chemin étudié</td>
+</tr>
+</tbody>
+</table>
+<p>Le bus n’est pas traité ici comme une mémoire EXMC/FSMC. Les routines observées
+écrivent les registres GPIO. La présence de broches partageant des fonctions
+alternatives ne signifie pas que ces fonctions sont utilisées.</p>
+<h3 id="registres-exploites">Registres exploités</h3>
+<table>
+<thead>
+<tr>
+  <th>Registre</th>
+  <th>GPIOB</th>
+  <th>GPIOE</th>
+  <th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>CTL0</td>
+  <td>0x40010C00</td>
+  <td>0x40011800</td>
+  <td>Configuration broches 0 à 7</td>
+</tr>
+<tr>
+  <td>CTL1</td>
+  <td>0x40010C04</td>
+  <td>0x40011804</td>
+  <td>Configuration broches 8 à 15</td>
+</tr>
+<tr>
+  <td>OCTL</td>
+  <td>0x40010C0C</td>
+  <td>0x4001180C</td>
+  <td>Verrou de sortie</td>
+</tr>
+<tr>
+  <td>BOP</td>
+  <td>0x40010C10</td>
+  <td>0x40011810</td>
+  <td>Mise à un, et remise à zéro par la moitié haute</td>
+</tr>
+<tr>
+  <td>BC</td>
+  <td>0x40010C14</td>
+  <td>0x40011814</td>
+  <td>Remise à zéro</td>
+</tr>
+</tbody>
+</table>
+<p>La routine <code>0x0808B624</code> configure le masque <code>0x7F80</code> sur GPIOE et <code>0x3C00</code>
+sur GPIOB. La structure passée au configurateur utilise vitesse <code>3</code> et mode
+<code>0x10</code>, qui produisent le nibble GPIO <code>0x3</code> : sortie générale push-pull avec
+sélection de vitesse maximale de cette interface GPIO. Cette sélection n’est
+pas une fréquence de bus LCD de 50 MHz.</p>
+<p>Les bits des autres broches doivent être conservés. En particulier, PE3/PE4
+servent à un autre bus de voyants et PB8/PB14/PB15 sont impliqués dans la NAND.
+Ne pas remplacer les registres complets de GPIOB/GPIOE par des constantes LCD.</p>
+<h2 id="3-ecrire-un-octet">3. Écrire un octet</h2>
+<h3 id="commande-routine-oem-0x0808b672">Commande, routine OEM 0x0808B672</h3>
+<ol>
+<li>D/C bas, puis CS# bas.</li>
+<li>Présenter l’octet sur PE7..PE14.</li>
+<li>WR# bas puis haut.</li>
+<li>CS# haut.</li>
+</ol>
+<h3 id="parametre-ou-donnee-routine-oem-0x0808b6f6">Paramètre ou donnée, routine OEM 0x0808B6F6</h3>
+<p>Même principe avec D/C haut. <code>0x0808B6B0</code> enchaîne une commande en R0 et
+un paramètre en R1. <code>0x0808B654</code> place seulement un octet sur le port E.</p>
+<p>L’écrivain de données conserve les bits hors masque <code>0x7F80</code>. L’OEM effectue
+cependant deux écritures OCTL : effacement des huit bits, puis insertion de
+l’octet décalé de 7. Aucun front montant WR# n’intervient entre ces écritures.
+Un nouveau pilote peut employer les opérations atomiques BOP/BC pour éviter
+une lecture-modification-écriture sur tout le port, en conservant le protocole.</p>
+<p>Pour les pixels, certaines boucles maintiennent CS# bas sur plusieurs octets.
+Il faut garantir l’exclusion sur <strong>toute la transaction</strong>, pas seulement sur
+l’impulsion WR# ou sur un appel de fonction.</p>
+<h2 id="4-commandes-retrouvees">4. Commandes retrouvées</h2>
+<table>
+<thead>
+<tr>
+  <th>Commande</th>
+  <th>Paramètres</th>
+  <th>Fonction utile pour le pilote</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0x10</td>
+  <td>Aucun</td>
+  <td>Entrée en sommeil</td>
+</tr>
+<tr>
+  <td>0x11</td>
+  <td>Aucun</td>
+  <td>Sortie du sommeil</td>
+</tr>
+<tr>
+  <td>0x28</td>
+  <td>Aucun</td>
+  <td>Affichage désactivé</td>
+</tr>
+<tr>
+  <td>0x29</td>
+  <td>Aucun</td>
+  <td>Affichage activé</td>
+</tr>
+<tr>
+  <td>0x2A</td>
+  <td>Début et fin, chacun sur 16 bits</td>
+  <td>Fenêtre des colonnes</td>
+</tr>
+<tr>
+  <td>0x2B</td>
+  <td>Début et fin, chacun sur 16 bits</td>
+  <td>Fenêtre des lignes</td>
+</tr>
+<tr>
+  <td>0x2C</td>
+  <td>Flux de pixels après la commande</td>
+  <td>Écriture dans la mémoire graphique</td>
+</tr>
+<tr>
+  <td>0x36</td>
+  <td>0x48 dans cette image</td>
+  <td>Contrôle d’accès/orientation</td>
+</tr>
+<tr>
+  <td>0x3A</td>
+  <td>0x55 dans cette image</td>
+  <td>Format de pixels RGB565</td>
+</tr>
+<tr>
+  <td>0xB1..0xB4</td>
+  <td>Voir initialisation</td>
+  <td>Réglages du fonctionnement de la dalle</td>
+</tr>
+<tr>
+  <td>0xC0..0xC5</td>
+  <td>Voir initialisation</td>
+  <td>Réglages analogiques du contrôleur</td>
+</tr>
+<tr>
+  <td>0xE0, 0xE1</td>
+  <td>16 octets chacun</td>
+  <td>Tables de réglage gamma</td>
+</tr>
+</tbody>
+</table>
+<p>Les noms détaillés des commandes de dalle correspondent à une famille de
+contrôleurs compatible. Les <strong>valeurs OEM observées</strong> restent la référence
+pour cette variante. Ne pas substituer une initialisation générique Arduino
+simplement parce qu’elle utilise les mêmes opcodes.</p>
+<p>Le simulateur accepte également <code>0x01</code> comme reset logiciel. Cela décrit son
+modèle ; la séquence OEM ci-dessous utilise le reset GPIO et ne transmet pas
+<code>0x01</code>. Ne pas confondre une capacité du décodeur avec une commande constatée.</p>
+<h2 id="5-initialisation-exacte-retrouvee-dans-v121">5. Initialisation exacte retrouvée dans V1.21</h2>
+<p>Point d’entrée analysé : <code>0x080384E8</code>. Les valeurs ci-dessous ont été relues
+dans le binaire et recoupées avec les premières commandes enregistrées dans
+la trace d’exécution du banc.</p>
+<h3 id="reset-et-attentes">Reset et attentes</h3>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Étape</th>
+  <th>Action</th>
+  <th style="text-align:right">Argument de délai OEM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>WR# haut, CS# haut, PB12 haut</td>
+  <td style="text-align:right">100</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>PB12 bas</td>
+  <td style="text-align:right">100</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>PB12 haut</td>
+  <td style="text-align:right">500</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>Commande 0x11</td>
+  <td style="text-align:right">120</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>Programmation des registres ci-dessous</td>
+  <td style="text-align:right">Aucun délai explicite entre ces écritures</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>Après la fenêtre initiale 0x2A/0x2B</td>
+  <td style="text-align:right">200</td>
+</tr>
+</tbody>
+</table>
+<p>Les appels de délai visent <code>0x08009F30</code>, avec un argument exprimé en
+millisecondes selon la chaîne de calibration observée. Cette fonction utilise
+le RTOS quand disponible, puis un reliquat temporisé par SysTick. Elle
+multiplie le reliquat par 1000 avant d’appeler <code>0x08009EEA</code>.</p>
+<p>Cette dernière multiplie par l’octet de calibration <code>0x2000002F</code>, qui vaut
+15 dans la capture étudiée. Cela concorde avec SysTick à HCLK/8 pour HCLK à
+120 MHz, soit 15 coups par microseconde. Le quartz de 12 MHz ne donne donc
+pas directement la durée de chaque instruction ni celle d’une impulsion LCD.</p>
+<h3 id="tableau-dinitialisation">Tableau d’initialisation</h3>
+<p>Chaque ligne indique une commande, puis ses paramètres en hexadécimal.</p>
+<pre><code class="language-text">11
+attendre 120 ms
+B1  01 01 01
+B2  01 01 01
+B3  01 01 01 01 01 01
+B4  03
+C0  28 08 84
+C1  C0
+C2  0C 00
+C3  8C 2A
+C4  8A EE
+C5  0C
+36  48
+E0  05 1A 0C 0E 3A 34 2D 2F 2D 2A 2F 3C 00 01 02 10
+E1  04 1B 0D 0E 2D 29 24 29 28 26 31 3B 00 00 03 12
+3A  55
+2C
+2A  00 00 00 80
+2B  00 00 00 A0
+attendre 200 ms
+</code></pre>
+<p>Le <code>2C</code> avant la première fenêtre est réellement présent. Il n’est suivi
+d’aucun pixel à cet endroit ; le décodeur ne lui invente pas de remplissage.</p>
+<p>L’initialisation appelle ensuite <code>0x08022B78</code>, puis <code>0x080384DE</code>, qui envoie
+<code>0x28</code>. L’allumage <code>0x29</code> est assuré dans le déroulement de démarrage par un
+chemin distinct ; son enveloppe directe est à <code>0x08038808</code>. Un pilote autonome
+doit donc décider explicitement quand afficher son premier dessin.</p>
+<p>Cette distinction explique qu’un LCD correctement initialisé puisse rester
+noir : mémoire graphique, sommeil, Display On et rétroéclairage sont des états
+différents.</p>
+<h2 id="6-fenetres-dimensions-et-orientation">6. Fenêtres, dimensions et orientation</h2>
+<h3 id="adresses-inclusives">Adresses inclusives</h3>
+<p>Les fenêtres prennent deux bornes inclusives, transmises octet fort d’abord :</p>
+<pre><code class="language-text">2A  x0_hi x0_lo x1_hi x1_lo
+2B  y0_hi y0_lo y1_hi y1_lo
+2C  pixel0_hi pixel0_lo pixel1_hi pixel1_lo ...
+</code></pre>
+<p>Pour la surface usuelle, les transactions de dessin utilisent :</p>
+<pre><code class="language-text">2A  00 00 00 7F   # colonnes 0..127
+2B  00 00 00 9F   # lignes   0..159
+</code></pre>
+<p>Soit 20 480 pixels et 40 960 octets pour un remplissage RGB565 complet.
+La fenêtre d’initialisation va à <code>0x80</code> et <code>0xA0</code>, soit une étendue inclusive
+129 × 161. <strong>Elle ne prouve pas une surface visible de 129 × 161 pixels.</strong>
+Dans la trace analysée, les dessins couvrent 20 480 positions distinctes.</p>
+<p>Le décodeur conserve la plus grande adresse vue. Ses dimensions rapportées
+peuvent donc rester à 129 × 161 après cette initialisation. Son tampon interne
+512 × 512 est une limite d’implémentation, pas la résolution du module.</p>
+<h3 id="permutation-des-coordonnees-oem">Permutation des coordonnées OEM</h3>
+<p>La routine <code>0x08021222</code> reçoit quatre coordonnées dans R0..R3 et envoie :</p>
+<pre><code class="language-text">2A : 00, R1 bas, 00, R3 bas
+2B : 00, R0 bas, 00, R2 bas
+</code></pre>
+<p>Dans ce chemin, les coordonnées logiques OEM sont donc transposées par rapport
+aux axes colonnes/lignes du bus. Une fonction générique <code>window(x0,y0,x1,y1)</code>
+ne doit pas appeler cette routine en supposant une correspondance directe.
+La routine ne transmet ici que huit bits utiles par coordonnée.</p>
+<p>Pour les images du banc, la transposition de la GRAM restitue le paysage
+160 × 128. Ce n’est pas une simple rotation de 90 degrés, qui introduirait
+un miroir. La valeur <code>MADCTL=0x48</code> est conservée ; le décodeur ne simule pas
+intégralement tous les modes MADCTL et ne valide pas les rotations arbitraires.</p>
+<h2 id="7-format-des-pixels-et-couleurs">7. Format des pixels et couleurs</h2>
+<p>Un pixel RGB565 est composé de 5 bits rouges, 6 verts et 5 bleus :</p>
+<pre><code class="language-c">uint16_t rgb565(uint8_t r, uint8_t g, uint8_t b) {
+    return (uint16_t)(((r &amp; 0xF8u) &lt;&lt; 8) |
+                      ((g &amp; 0xFCu) &lt;&lt; 3) | (b &gt;&gt; 3));
+}
+</code></pre>
+<p>L’octet fort est envoyé en premier sur le bus, même si le Cortex-M4 stocke les
+entiers en mémoire dans l’ordre little-endian. Ne pas envoyer directement les
+deux octets d’un tableau <code>uint16_t</code> sans traiter cet ordre.</p>
+<table>
+<thead>
+<tr>
+  <th>Valeur</th>
+  <th>Octets à transmettre</th>
+  <th>Couleur nominale RGB565</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0x0000</td>
+  <td>00 00</td>
+  <td>Noir</td>
+</tr>
+<tr>
+  <td>0xFFFF</td>
+  <td>FF FF</td>
+  <td>Blanc</td>
+</tr>
+<tr>
+  <td>0xF800</td>
+  <td>F8 00</td>
+  <td>Rouge</td>
+</tr>
+<tr>
+  <td>0x07E0</td>
+  <td>07 E0</td>
+  <td>Vert</td>
+</tr>
+<tr>
+  <td>0x001F</td>
+  <td>00 1F</td>
+  <td>Bleu</td>
+</tr>
+</tbody>
+</table>
+<p>La permutation RGB/BGR physique est à contrôler avec ces aplats sur le poste.
+Le décodeur reconstruit du RGB565 et offre une option BGR ; il ne transforme
+pas cette option en preuve de l’ordre des sous-pixels du module.</p>
+<p>En coordonnées GRAM du modèle, la progression est colonne d’abord, puis ligne,
+avec retour au début de la fenêtre. Ce comportement reconstruit les dessins
+OEM observés. D’autres valeurs de MADCTL restent hors de cette qualification.</p>
+<h2 id="8-timings-distinguer-trois-choses">8. Timings : distinguer trois choses</h2>
+<h3 id="attentes-longues-du-firmware">Attentes longues du firmware</h3>
+<p>Pour un premier pilote autonome, reprendre les attentes OEM : 100 ms avant
+l’impulsion de reset, 100 ms reset bas, 500 ms après sa libération, 120 ms après
+Sleep Out et 200 ms à la fin de la programmation initiale. Leur observation
+n’en fait pas des minima électriques universels.</p>
+<h3 id="impulsions-de-bus">Impulsions de bus</h3>
+<p>Le code OEM n’insère pas une attente longue pour chaque octet. Les appels GPIO,
+les accès périphériques et les instructions constituent l’intervalle de bus.
+Les compteurs d’instructions du banc ne sont pas des mesures à l’oscilloscope :
+Unicorn et le temps virtuel ne constituent pas un modèle exact des cycles ARM,
+des attentes Flash, du pont APB et des fronts de sortie.</p>
+<p>Pour une première version indépendante, utiliser une primitive d’attente
+calibrée et, par exemple, <strong>1 µs</strong> pour chaque phase de setup, WR# bas et hold.
+C’est un choix de mise au point volontairement lent, pas un timing mesuré ni
+une garantie sur un contrôleur non identifié. Optimiser après capture logique.</p>
+<h3 id="reference-conditionnelle-de-famille">Référence conditionnelle de famille</h3>
+<p>La fiche Sitronix ST7735S V1.3, section 8.1, donne notamment les valeurs
+suivantes pour son interface 8080. Elles servent de comparaison et ne sont
+pas déclarées spécifications garanties du module D578 :</p>
+<table>
+<thead>
+<tr>
+  <th>Paramètre ST7735S</th>
+  <th style="text-align:right">Minimum documentaire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Cycle d’écriture TWC</td>
+  <td style="text-align:right">66 ns</td>
+</tr>
+<tr>
+  <td>WR# haut TWRH</td>
+  <td style="text-align:right">15 ns</td>
+</tr>
+<tr>
+  <td>WR# bas TWRL</td>
+  <td style="text-align:right">15 ns</td>
+</tr>
+<tr>
+  <td>Setup CS# TCS</td>
+  <td style="text-align:right">15 ns</td>
+</tr>
+<tr>
+  <td>Hold CS# TCSH</td>
+  <td style="text-align:right">10 ns</td>
+</tr>
+</tbody>
+</table>
+<p>Source : fiche constructeur Sitronix hébergée chez TI,
+<a href="https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/908/ST7735S_5F00_v1.3.pdf">https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/908/ST7735S_5F00_v1.3.pdf</a>.
+Cette référence ne remplace pas l’identification du contrôleur et une capture
+sur notre carte. Les timings de lecture ne sont pas utilisables sans RD#,
+sans direction du bus qualifiée et sans protocole de lecture vérifié.</p>
+<h2 id="9-retroeclairage-bus-distinct">9. Rétroéclairage : bus distinct</h2>
+<p>Le modèle <code>bench/lighting.py</code> décode les sorties suivantes :</p>
+<table>
+<thead>
+<tr>
+  <th>Signal</th>
+  <th>GPIO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Latch/validation de trame</td>
+  <td>PA5</td>
+</tr>
+<tr>
+  <td>Horloge</td>
+  <td>PB3</td>
+</tr>
+<tr>
+  <td>Données</td>
+  <td>PB4</td>
+</tr>
+</tbody>
+</table>
+<p>Une trame comprend 12 bits, MSB d’abord : <strong>4 bits d’adresse</strong>, puis <strong>8 bits
+de valeur</strong>. PA5 passe bas pour commencer ; le récepteur prend les données
+aux fronts montants PB3 ; PA5 repasse haut pour valider. L’entrée OEM analysée
+est <code>0x0808A7C0</code>, adresse en R0, donnée en R1.</p>
+<p>Le canal 8 correspond à la luminosité LCD dans les chemins de réglage et de
+veille/réveil étudiés. Des écritures <code>8,0</code> et <code>8,255</code> figurent dans les traces.
+La loi photométrique, les niveaux intermédiaires et le circuit récepteur exact
+restent à qualifier. Ne pas présenter la valeur brute comme un pourcentage
+mesuré, ni confondre ce bus avec une broche PWM LCD directement identifiée.</p>
+<p>PB3/PB4 peuvent aussi concerner le débogage JTAG selon la configuration MCU.
+Pour un nouveau programme autonome, examiner la configuration AFIO/debug avant
+de reprendre ces broches. Ne pas désactiver SWD par une configuration globale
+copiée sans analyse.</p>
+<h2 id="10-deux-facons-dintegrer-un-nouveau-programme">10. Deux façons d’intégrer un nouveau programme</h2>
+<h3 id="programme-autonome-ou-diagnostic-prenant-la-main">Programme autonome ou diagnostic prenant la main</h3>
+<p>Il doit posséder sa propre initialisation CPU, sa pile, ses horloges et ses
+délais. Il configure seulement les broches nécessaires, reprend le reset et
+l’initialisation ci-dessus, dessine un motif, puis active l’affichage et le
+rétroéclairage. Le trajet radio n’est pas nécessaire au dessin du motif.</p>
+<p>Un essai qui utilise une dalle déjà initialisée par l’OEM valide seulement une
+reprise à chaud. Il ne qualifie pas le démarrage à froid du nouveau pilote.
+L’adresse d’injection, la méthode de lancement et la récupération du poste
+restent des sujets séparés de ce protocole LCD.</p>
+<h3 id="extension-conservant-lapplication-oem">Extension conservant l’application OEM</h3>
+<p>Elle doit s’intégrer au gestionnaire d’interface et obtenir la propriété du
+bus pendant une transaction complète. Les appels bas niveau seuls ne protègent
+pas de la tâche UI, des fenêtres déjà ouvertes et des autres chemins de dessin.</p>
+<table>
+<thead>
+<tr>
+  <th>Élément V1.21</th>
+  <th>Adresse</th>
+  <th>Portée connue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Handle du sémaphore LCD</td>
+  <td>0x20000128</td>
+  <td>Objet RTOS retrouvé</td>
+</tr>
+<tr>
+  <td>Création du sémaphore</td>
+  <td>0x0803848C → 0x080AEC5A</td>
+  <td>Chemin d’initialisation</td>
+</tr>
+<tr>
+  <td>Acquisition / restitution</td>
+  <td>0x080AED66 / 0x080AEEC4</td>
+  <td>API et retours à qualifier avant réutilisation</td>
+</tr>
+<tr>
+  <td>Garde de phase RTOS</td>
+  <td>0x20001542</td>
+  <td>État observé, pas un verrou à forcer</td>
+</tr>
+<tr>
+  <td>Worker UI</td>
+  <td>0x08038466</td>
+  <td>Tâche OEM identifiée</td>
+</tr>
+<tr>
+  <td>Dispatch/rendu</td>
+  <td>0x08037BE8</td>
+  <td>Gestionnaire de vues</td>
+</tr>
+<tr>
+  <td>Sleep In / Sleep Out</td>
+  <td>0x080387AC / 0x080387DA</td>
+  <td>Enveloppes de 0x10 / 0x11</td>
+</tr>
+</tbody>
+</table>
+<p>L’audit antérieur compte 37 sites d’acquisition et 38 de restitution, avec
+37 paires adjacentes et un saut particulier. Ces nombres ne prouvent ni un
+bug du constructeur ni une API de réservation LCD prête pour notre extension.
+<code>0x080393C6</code> traite des notifications/temporisations et ne doit pas être appelé
+comme un mutex LCD.</p>
+<p>Une injection doit prévoir un point d’entrée dans l’UI, un état de retour et
+un redessin OEM propre. Masquer durablement les interruptions pour dessiner
+serait susceptible de perturber l’audio, l’USB et les temporisations.
+Un reset de la dalle au milieu du fonctionnement OEM invalide également ses
+hypothèses d’état. Il ne remplace pas un accord de propriété du moteur LCD.</p>
+<h2 id="11-squelette-c-pour-un-pilote-independant">11. Squelette C pour un pilote indépendant</h2>
+<p>Cet exemple exprime le protocole, pas un binaire prêt à injecter. Il suppose
+les GPIO déjà configurés en sorties, les horloges actives, le LCD initialisé,
+le bus exclusif, et <code>lcd_wait_us()</code> correctement calibrée. Les coordonnées
+sont celles de la GRAM, sans transposition implicite. Il n’appelle pas l’OEM.</p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define REG32(a) (*(volatile uint32_t *)(uintptr_t)(a))
+#define PB_BOP REG32(0x40010C10u)
+#define PB_BC  REG32(0x40010C14u)
+#define PE_BOP REG32(0x40011810u)
+#define PE_BC  REG32(0x40011814u)
+#define LCD_WR (1u &lt;&lt; 10)
+#define LCD_DC (1u &lt;&lt; 11)
+#define LCD_CS (1u &lt;&lt; 13)
+#define LCD_DATA_MASK 0x7F80u
+
+extern void lcd_wait_us(uint32_t us);
+
+static void lcd_byte(uint8_t value, bool data) {
+    /* WR haut avant de modifier D/C ou les donnees. */
+    PB_BOP = LCD_WR;
+    if (data) PB_BOP = LCD_DC; else PB_BC = LCD_DC;
+    PB_BC = LCD_CS;
+    PE_BC = LCD_DATA_MASK;
+    PE_BOP = ((uint32_t)value &lt;&lt; 7);
+    lcd_wait_us(1);             /* setup de mise au point */
+    PB_BC = LCD_WR;
+    lcd_wait_us(1);             /* WR bas */
+    PB_BOP = LCD_WR;
+    lcd_wait_us(1);             /* hold apres front montant */
+    PB_BOP = LCD_CS;
+    lcd_wait_us(1);             /* intervalle entre transactions */
+}
+
+static void lcd_cmd(uint8_t value) { lcd_byte(value, false); }
+static void lcd_data(uint8_t value) { lcd_byte(value, true); }
+
+static void lcd_u16(uint16_t value) {
+    lcd_data((uint8_t)(value &gt;&gt; 8));
+    lcd_data((uint8_t)value);
+}
+
+static bool lcd_window(uint16_t x0, uint16_t y0,
+                       uint16_t x1, uint16_t y1) {
+    if (x0 &gt; x1 || y0 &gt; y1 || x1 &gt;= 128u || y1 &gt;= 160u)
+        return false;
+    lcd_cmd(0x2A); lcd_u16(x0); lcd_u16(x1);
+    lcd_cmd(0x2B); lcd_u16(y0); lcd_u16(y1);
+    lcd_cmd(0x2C);
+    return true;
+}
+
+static void lcd_fill(uint16_t colour) {
+    if (!lcd_window(0, 0, 127, 159)) return;
+    for (uint32_t i = 0; i &lt; 128u * 160u; ++i)
+        lcd_u16(colour);
+}
+</code></pre>
+<p>La durée minimale introduite par cet exemple est de 4 µs par octet, soit au
+moins 163,84 ms pour les seuls 40 960 octets de pixels d’un écran complet.
+C’est une base de diagnostic, pas une proposition d’interface finale fluide.
+Une fois le matériel vérifié, grouper les pixels sous CS# et redessiner les
+zones modifiées diminuera le coût. Un framebuffer complet de 40 960 octets
+n’est pas requis pour des aplats, glyphes ou petits rectangles.</p>
+<p>L’exemple emploie des accès atomiques de bits mais ne fournit pas de verrou
+logiciel. Cela préserve les autres broches, sans résoudre les conflits entre
+deux utilisateurs simultanés du LCD.</p>
+<h2 id="12-qualification-avant-une-injection-utilisable">12. Qualification avant une injection utilisable</h2>
+<ol>
+<li>Vérifier la continuité des signaux et relever l’orientation de la nappe.</li>
+<li>Capturer un démarrage OEM : reset, première commande 0x11, bus et lumière.</li>
+<li>Contrôler les tensions, la largeur WR#, le setup et le hold des données.</li>
+<li>Tester à froid le pilote autonome avec les paramètres OEM et délais longs.</li>
+<li>Dessiner noir, blanc, rouge, vert, bleu, puis quatre coins distincts et un
+rectangle non carré pour confirmer orientation et limites.</li>
+<li>Tester plusieurs petites fenêtres et le retour au début d’une fenêtre.</li>
+<li>Vérifier séparément 0x28/0x29, 0x10/0x11 et le canal de rétroéclairage.</li>
+<li>Pour une extension OEM, qualifier la prise/restitution de l’UI et son redessin
+pendant RX, PTT, USB, changement de menu et veille.</li>
+</ol>
+<p>Un test dans le banc peut confirmer les octets, l’ordre et l’image reconstruite.
+Il ne mesure pas les fronts électriques et ne certifie pas les modes du
+contrôleur que le modèle n’implémente pas.</p>
+<h2 id="13-preuves-de-simulation-et-limites-du-modele">13. Preuves de simulation et limites du modèle</h2>
+<p>Dans la trace de travail <code>speaker_probe_v118</code>, qui inclut démarrage et menus :</p>
+<table>
+<thead>
+<tr>
+  <th>Mesure</th>
+  <th style="text-align:right">Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Pixels écrits, répétitions comprises</td>
+  <td style="text-align:right">737 926</td>
+</tr>
+<tr>
+  <td>Positions distinctes écrites</td>
+  <td style="text-align:right">20 480</td>
+</tr>
+<tr>
+  <td>Appels de commande recoupés</td>
+  <td style="text-align:right">8 509</td>
+</tr>
+<tr>
+  <td>Divergences commande OEM / bus décodé</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>Format reçu</td>
+  <td style="text-align:right">0x55</td>
+</tr>
+<tr>
+  <td>MADCTL reçu</td>
+  <td style="text-align:right">0x48</td>
+</tr>
+</tbody>
+</table>
+<p>Ces résultats prouvent une reconstruction cohérente des chemins exécutés.
+Ils ne constituent pas une couverture exhaustive du moteur graphique.</p>
+<p>Le modèle interprète les fenêtres et le sous-ensemble RGB565, observe les
+commandes d’affichage et conserve les autres paramètres. Il ne reproduit pas
+la physique de la dalle, ses alimentations analogiques, tous les effets des
+gammas, tous les modes MADCTL, ni les minima temporels du circuit réel.</p>
+<p>Des lignes vides OEM peuvent produire une borne de fin égale au début moins un,
+sans pixels ensuite. Le banc les journalise et rejette un flux de pixels dans
+une telle fenêtre. Un nouveau pilote doit les éviter plutôt que copier ce cas.</p>
+<p>Le mécanisme historique d’armement du décodeur au premier appel connu
+<code>0x0808B672</code> est spécifique au profil OEM : pour un programme entièrement
+expérimental, il faut aussi armer l’observation par une configuration explicite
+ou les conditions matérielles. Sans cette adaptation, un autre point d’entrée
+LCD peut ne produire aucune image dans le banc malgré des GPIO corrects.
+C’est une limite du banc à lever, pas une contrainte imposée au futur firmware.</p>
+<h2 id="14-references-et-historique-de-cette-note">14. Références et historique de cette note</h2>
+<p>Analyse binaire : <code>D578UV_GD_V1.21_20240619.CDD</code>, chargé à <code>0x08006000</code>.
+SHA-256 : <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>.
+Les adresses changent entre versions et ne sont pas des symboles d’API stables.
+Pour appeler une routine Thumb depuis C, son adresse de fonction doit respecter
+le bit Thumb et son ABI complète doit être vérifiée ; une adresse seule ne suffit pas.</p>
+<p>Sources publiques du projet :</p>
+<ul>
+<li><code>bench/lcd_bus.py</code> : décodeur des fronts et mémoire de pixels.</li>
+<li><code>bench/emulate_lcd_v121.py</code> : observation GPIO, armement et recoupement OEM.</li>
+<li><code>bench/lcd_bridge.py</code> : accélération de la capture des fronts, sans remplacer
+le dessin ni les instructions ARM.</li>
+<li><code>bench/lighting.py</code> : décodage du bus de rétroéclairage.</li>
+<li><code>bench/test_lcd_bus.py</code> et <code>bench/test_lcd_bridge.py</code> : tests du modèle.</li>
+<li><code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code> : anciennes analyses UI/RTOS.</li>
+<li>Dépôt : <a href="https://github.com/Telectroboy/OpenD578">https://github.com/Telectroboy/OpenD578</a>.</li>
+</ul>
+<p>Référence documentaire externe : fiche Sitronix ST7735S V1.3 citée en section 8,
+utilisée comme comparaison conditionnelle, pas comme identification du module.</p>
+<p>Cette note ajoute la relecture détaillée de l’initialisation, la distinction
+entre surface dessinée et fenêtre initiale, la permutation des coordonnées,
+le chemin de reset, le protocole du rétroéclairage et un squelette C de bus.
+Elle ne modifie pas le banc V11.8 et n’annonce aucun essai sur le poste physique.</p>
+<p>Contrôles effectués pour ce document : les 18 commandes de la table
+d’initialisation et tous leurs paramètres correspondent au début de la trace
+exécutée ; les 20 tests de <code>test_lcd_bus.py</code> et <code>test_lcd_bridge.py</code> réussissent.
+Les deux exemples C passent <code>gcc -std=c11 -Wall -Wextra -Werror -fsyntax-only</code>.
+Ce contrôle de syntaxe ne constitue pas une compilation ARM liée ni un essai
+du squelette sur la radio.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

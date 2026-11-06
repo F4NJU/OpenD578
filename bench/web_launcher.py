@@ -8,6 +8,7 @@ import urllib.request
 import webbrowser
 from pathlib import Path
 from bench_version import build_id, server_matches
+from web_endpoint import read_endpoint
 
 ROOT = Path(__file__).resolve().parent
 
@@ -22,7 +23,11 @@ def reusable_server(url, root_id, expected_build):
 
 
 def main():
-    root_id = hashlib.sha256(str(ROOT).encode()).hexdigest()[:16]
+    root_id = hashlib.sha256(str(ROOT.resolve()).encode()).hexdigest()[:16]
+    try:remembered=read_endpoint(ROOT)
+    except ValueError:remembered=None
+    if remembered and reusable_server(remembered,root_id,build_id(ROOT)):
+        webbrowser.open(remembered);return
     url = 'http://127.0.0.1:8765'
     if reusable_server(url, root_id, build_id(ROOT)):
         webbrowser.open(url)

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Arrêt RF SPI et interruptions — V11.4.1 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Arrêt RF SPI et interruptions — V11.4.1</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/RF_SPI_INTERRUPT_FIX.md">Modifier sur GitHub</a><a download href="../../raw/docs/RF_SPI_INTERRUPT_FIX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/RF_SPI_INTERRUPT_FIX.md</code></p>
+<article class="markdown-body"><h1 id="arret-rf-spi-et-interruptions-v1141">Arrêt RF SPI et interruptions — V11.4.1</h1>
+<p>L’erreur « RF SPI GPIO frame differs from OEM call arguments » est un contrôle
+croisé : la transaction réellement décodée sur GPIO est comparée aux arguments
+observés à l’entrée des routines OEM V1.21.</p>
+<p>Un défaut de l’observateur a été reproduit : un arrêt avant exécution pour livrer
+une interruption laissait quand même FrontRunner enregistrer une attente SPI.
+La reprise sur la même instruction enregistrait une deuxième attente. Après la
+première transaction, l’attente en trop décalait les comparaisons suivantes.
+Le contrôle était ainsi capable de rejeter une transaction GPIO correcte.</p>
+<p>Correction : les observateurs n’enregistrent plus ces appels lorsque la couche
+parente a déjà arrêté l’exécution avant l’instruction. Protection également dans
+les observateurs LCD et les couches de télémétrie Lab/Bench. Les contrôles de
+bits, de nombre d’horloges et de cohérence SPI ne sont pas désactivés.</p>
+<p>Le test test_interrupted_observers reproduit une interruption à l’entrée RF,
+puis la reprise et deux écritures différentes. Il échoue sur le code antérieur
+(commit 2c4426a) et passe avec la correction. Un deuxième test injecte un véritable
+écart et vérifie que le banc s’arrête encore, avec le détail attendu/reçu.</p>
+<p>L’erreur conserve désormais les champs attendus et reçus dans RF_control_spi /
+last_mismatch du diagnostic JSON, ainsi que les huit dernières trames et le
+nombre d’appels en attente. Ce détail est conservé avant consommation de la file.</p>
+<p>Limite de reproduction : deux essais OEM avec GPS activé (30 millions d’instructions
+supplémentaires à 1 Hz, puis 100 millions à 4 Hz) n’ont pas reproduit l’incident
+signalé. Ils ont effectué respectivement 3 816 et 12 181 contrôles SPI, sans
+passage observé dans l’ordonnanceur APRS. Le déclenchement APRS automatique du
+poste utilisateur n’est donc pas couvert par ces deux essais. Le défaut trouvé
+peut expliquer le message mais l’attribution définitive de cet incident demande
+le diagnostic de la session concernée, s’il persiste.</p>
+<p>Pour un nouvel arrêt : Démarrage &amp; mesures → Exporter le dernier diagnostic.
+Ne pas retirer les contrôles SPI pour poursuivre un essai qui n’est pas compris.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

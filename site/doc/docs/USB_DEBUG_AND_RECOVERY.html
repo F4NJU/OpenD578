@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>USB programming, diagnostics and physical recovery - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>USB programming, diagnostics and physical recovery</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/USB_DEBUG_AND_RECOVERY.md">Modifier sur GitHub</a><a download href="../../raw/docs/USB_DEBUG_AND_RECOVERY.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/USB_DEBUG_AND_RECOVERY.md</code></p>
+<article class="markdown-body"><h1 id="usb-programming-diagnostics-and-physical-recovery">USB programming, diagnostics and physical recovery</h1>
+<h2 id="cps-direction">CPS direction</h2>
+<p>For an OEM satellite extension, retain the manufacturer's programming protocol
+and calibration format initially. For an autonomous OpenD578 application, target
+a documented programming protocol and a dedicated model profile, keeping the
+radio's native calibration storage independent of channel uploads.</p>
+<p>The grid.radio OpenGD77 CPS is an attractive interoperability target: it already
+edits channels, tones, APRS and satellite data. Its published guide currently lists
+MK22/STM32 radios via WebUSB and DM32/UV008 via Web Serial, not D578 support.
+A D578 transport/model adapter and format agreement are still needed.
+<a href="https://grid.radio/opengd77/">https://grid.radio/opengd77/</a></p>
+<p>The inspected page provides copyright notices for incorporated OpenGD77 code,
+including a non-commercial condition. A public repository for the complete web
+CPS source was not identified in this inspection. Browser accessibility does not
+by itself establish permission to redistribute a fork. No such code is imported
+in the initial OpenD578 tree.</p>
+<p>qdmr is a source-available reference for the existing AnyTone wire protocol and
+D578 memory layout. Its interface identifies GD32 USB VID/PID 28E9:018A and a
+serial programming session with PROGRAM, identity, read and write transactions.
+These describe the OEM path; they do not establish a new firmware's compatibility.
+<a href="https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_interface.cc">https://github.com/hmatuschek/qdmr/blob/master/lib/anytone_interface.cc</a></p>
+<h2 id="small-usb-diagnostic-service">Small USB diagnostic service</h2>
+<p>Provide firmware version, model identity, counters, bounded read-only diagnostics,
+and a crash record. Keep protocol framing distinct from programming transactions;
+unframed printf output must not corrupt a CPS session. An additional USB interface
+is an option only after endpoint resources and browser/driver behavior are tested.</p>
+<p>An OpenD578 linker reservation can hold the faulting PC/LR/SP and fault-status
+registers. A maintenance path reached early at startup can expose the record after
+a controlled restart, before bringing up RF. RAM records need validation and do
+not survive arbitrary power loss. This service is a design target, not a working
+replacement for a physical debugger.</p>
+<p>The USB host/peripheral exchange must also be added to the emulator. A test that
+uses only an in-process API does not qualify USB enumeration or endpoint transfers.</p>
+<h2 id="observed-swd-disable">Observed SWD disable</h2>
+<p>The V1.21 cold-boot trace contains writes to AFIO_PCF0 at 0x40010004:</p>
+<table>
+<thead>
+<tr>
+  <th>Executed-instruction step</th>
+  <th>Written value</th>
+  <th>SWJ_CFG[2:0]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>70322</td>
+  <td>0x00000000</td>
+  <td>000</td>
+</tr>
+<tr>
+  <td>70333</td>
+  <td>0x02000000</td>
+  <td>010: JTAG disabled, SWD enabled</td>
+</tr>
+<tr>
+  <td>70359</td>
+  <td>0x00000000</td>
+  <td>000</td>
+</tr>
+<tr>
+  <td>70370</td>
+  <td>0x04000000</td>
+  <td>100: JTAG and SWD disabled</td>
+</tr>
+</tbody>
+</table>
+<p>The manufacturer's manual defines SWJ_CFG as write-only, with undefined readback.
+The evidence is therefore the executed write sequence, not a readable hardware
+state register. The emulator does not prove which physical board net uses the
+released pins.</p>
+<p>After reset the documented default enables SWJ. Connecting while reset is held,
+then halting before the application disables debug, is a recovery method to verify
+on the actual board. SEGGER documents connect-under-reset for GD32 devices.</p>
+<p>The project's successful FT232H connection had no NRST wire. The radio Power
+button is a GPIO input and does not replace control of NRST. The exact reset route,
+electrical access and recovery procedure remain unverified on the board.</p>
+<p>Flash/NAND backups provide data to restore. They do not themselves establish an
+accessible debug port, a working erase/program path or recoverability of every
+protection state. Keep option-byte/protection changes outside ordinary firmware
+and channel programming. Preserve the OEM bootloader while recovery is being
+qualified.</p>
+<p>Sources:</p>
+<ul>
+<li>GigaDevice GD32F30x User Manual, AFIO_PCF0 / SWJ_CFG:
+<a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf">https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf</a></li>
+<li>SEGGER GD32, connect under reset:
+<a href="https://kb.segger.com/GigaDevice_GD32">https://kb.segger.com/GigaDevice_GD32</a></li>
+<li>Authenticated V1.21 execution report from the project's V11 cold-boot run.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

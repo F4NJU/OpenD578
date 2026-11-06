@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>MC34119G et SGM8272 : petits étages analogiques - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>MC34119G et SGM8272 : petits étages analogiques</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/AUDIO_MC34119_SGM8272.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/AUDIO_MC34119_SGM8272.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/AUDIO_MC34119_SGM8272.md</code></p>
+<article class="markdown-body"><h1 id="mc34119g-et-sgm8272-petits-etages-analogiques">MC34119G et SGM8272 : petits étages analogiques</h1>
+<h2 id="mc34119g-amplificateur-audio-de-faible-puissance">MC34119G : amplificateur audio de faible puissance</h2>
+<p>Le MC34119 est une famille de circuits conçue pour piloter un petit haut-parleur <strong>en pont / différentiel</strong>, sans mettre nécessairement une borne du haut-parleur à la masse. L'inscription <code>MC34119G</code> permet de travailler sur le pinout de cette famille, mais la lettre finale et le fabricant de la pièce montée doivent être contrôlés sur photo.</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Broche, SOIC8</th>
+  <th>Signal usuel MC34119</th>
+  <th>Conséquence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>CD</td>
+  <td>Désactivation / chip disable : état logique à relever</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>FC2</td>
+  <td>Compensation / filtre, réseau RC externe</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>FC1</td>
+  <td>Compensation / filtre, réseau RC externe</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>VIN</td>
+  <td>Entrée audio</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>VO1</td>
+  <td>Sortie amplifiée 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>VCC</td>
+  <td>Alimentation</td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>GND</td>
+  <td>Masse</td>
+</tr>
+<tr>
+  <td style="text-align:right">8</td>
+  <td>VO2</td>
+  <td>Sortie amplifiée 2</td>
+</tr>
+</tbody>
+</table>
+<p>Selon le fabricant et la révision, la dénomination des entrées de compensation peut varier ; vérifier le dessin correspondant au marquage physique. Il n'existe <strong>pas de bus de registres numérique</strong> pour ce composant. Son contrôle repose sur l'alimentation, la broche CD et la chaîne analogique.</p>
+<p>La <strong>prise microphone du D578</strong> comporte une paire distincte <code>SP+</code> / <code>SP−</code> (contacts 4 et 7 selon manuel). Cette paire ne doit pas être reliée à GND par hypothèse. La possibilité que MC34119G commande un haut-parleur particulier est à <strong>vérifier par suivi des pistes</strong>, pas admise comme un fait.</p>
+<h2 id="sgm8272-double-amplificateur-operationnel-haute-tension">SGM8272 : double amplificateur opérationnel haute tension</h2>
+<p>Le fabricant SGMICRO spécifie une alimentation <strong>4,5 à 36 V</strong> en monotension, sortie rail-to-rail, et une pente maximale typique de <strong>7 V/µs</strong>. Il n'a <strong>aucun registre ni bus série</strong>. Les utilisations possibles comprennent gain audio, filtrage, boucle PLL, tampon de tension DAC et commande analogique de polarisation. <strong>Aucune de ces utilisations n'est attribuée au D578 sans continuité.</strong></p>
+<p>Brochage standard du <strong>SGM8272 SOIC8 / MSOP8</strong>, à contrôler sur la référence complète :</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Broche</th>
+  <th>Signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>OUTA</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>−INA</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>+INA</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>−VS</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>+INB</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>−INB</td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>OUTB</td>
+</tr>
+<tr>
+  <td style="text-align:right">8</td>
+  <td>+VS</td>
+</tr>
+</tbody>
+</table>
+<p>Il faudra relever la résistance de contre-réaction, les condensateurs de boucle, les sources d'entrée, la tension d'alimentation et la destination des deux sorties. Si les sorties rejoignent des varicaps ou un étage PA, documenter les références de tension et les courbes usine, sans substituer une valeur générique.</p>
+<h2 id="acces-depuis-le-firmware-alternatif">Accès depuis le firmware alternatif</h2>
+<ul>
+<li><strong>MC34119 :</strong> actionner au besoin un GPIO de disable seulement <strong>après</strong> avoir identifié la broche MCU et la polarité ; séquencer la veille pour éviter les claquements audio.</li>
+<li><strong>SGM8272 :</strong> aucun pilote numérique direct. Agir sur le CNA ou GPIO qui alimente ses entrées, si l'on démontre cette liaison.</li>
+<li><strong>Réglage audio général :</strong> ne pas confondre les valeurs de volume lues sur <code>PC2/PC5</code>, l'atténuateur UTC U2429 et les commandes de mute <code>PA7</code> / RF registre <code>0x25</code> observées par le banc.</li>
+</ul>
+<h2 id="verifications-manquantes">Vérifications manquantes</h2>
+<ol>
+<li>Position réelle des deux boîtiers ; mesure de VCC et polarité des commandes.</li>
+<li>Connexions MC34119G aux haut-parleurs (sorties 5/8) et à la ligne CD (broche 1).</li>
+<li>Circuit de compensation et fonctions des sorties SGM8272, notamment leurs plages de tension.</li>
+<li>Correspondance entre réglages firmware et niveaux mesurés ; présence de filtrage de mute au démarrage.</li>
+</ol>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>SGMICRO : <a href="https://www.sg-micro.com/product/SGM8272">https://www.sg-micro.com/product/SGM8272</a></li>
+<li>Fiche SGM8272 : <a href="https://www.sg-micro.com/rect/assets/c3746436-ddc0-4ac5-8b5c-a2f7cbbbfc90/SGM8271_SGM8272_SGM8274.pdf">https://www.sg-micro.com/rect/assets/c3746436-ddc0-4ac5-8b5c-a2f7cbbbfc90/SGM8271_SGM8272_SGM8274.pdf</a></li>
+<li>MC34119, familles Motorola/ON/UTC à recouper avec le fabricant physique : <a href="https://www.alldatasheet.com/view.jsp?Searchword=MC34119">https://www.alldatasheet.com/view.jsp?Searchword=MC34119</a></li>
+<li>Notice microphone du D578 : <a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">liaison audio et voie de commande</a>.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

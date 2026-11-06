@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Sources externes et limites de leur application au D578 GD32 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Sources externes et limites de leur application au D578 GD32</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.md">Modifier sur GitHub</a><a download href="../../raw/docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/SOURCES_EXTERNES_ET_RECOUPEMENTS_20261105.md</code></p>
+<article class="markdown-body"><h1 id="sources-externes-et-limites-de-leur-application-au-d578-gd32">Sources externes et limites de leur application au D578 GD32</h1>
+<p>Dernière vérification de cette fiche : <strong>5 novembre 2026</strong>. Ces références sont des points de comparaison de la famille AnyTone, pas des preuves directes de continuité électrique sur notre révision de carte.</p>
+<h2 id="firmware-cps-usb-et-memoires">Firmware, CPS, USB et mémoires</h2>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Faits pertinents</th>
+  <th>Limite à conserver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://anytoneusa.com/Downloads/">AnyTone USA - téléchargements</a></td>
+  <td>PRO 1.21 et PLUS 2.07 référencés au 19/06/2024 ; CPS et images de ces branches</td>
+  <td>Les annonces de versions ne prouvent pas la compatibilité de format ni la version réellement installée</td>
+</tr>
+<tr>
+  <td><a href="https://www.anytone.net/download">AnyTone fabricant</a></td>
+  <td>Paquets CPS/FW PRO et PLUS officiels</td>
+  <td>Redistribution des exécutables OEM non incluse</td>
+</tr>
+<tr>
+  <td><a href="https://support.bridgecomsystems.com/anytone-578-v2-model-cps-firmware-downloads">BridgeCom - téléchargements D578</a></td>
+  <td>Compatibilité CPS/FW, avertissement de sauvegarde et reset</td>
+  <td>Branches 2.x, ne pas l'appliquer directement à un PRO V1.21</td>
+</tr>
+<tr>
+  <td><a href="https://github.com/hmatuschek/qdmr">qdmr</a></td>
+  <td>Code source de l'interface AnyTone et structures de codeplug D578UV/D578UV II</td>
+  <td>Logiciel GPL, protocole à vérifier par version</td>
+</tr>
+<tr>
+  <td><a href="https://github.com/dmr-tools/codeplugs/tree/master/d578uv">dmr-tools/codeplugs</a></td>
+  <td>Cartographie XML versionnée ; observation des changements de schéma</td>
+  <td>Les layouts sont issus d'un reverse engineering tiers, pas de notre image</td>
+</tr>
+<tr>
+  <td><a href="https://github.com/hardenedpenguin/AnyTone_CPS">AnyTone_CPS</a></td>
+  <td>Logiciel Linux et profil <code>d578uv_v1.21</code></td>
+  <td>Compatibilité à exercer avec ce modèle précis</td>
+</tr>
+<tr>
+  <td><a href="https://cps.aes.app/manual/en/about">AesApp WebCPS - version supportées</a></td>
+  <td>Sépare D578 PRO 1.xx et PLUS 2.xx pour son propre support</td>
+  <td>Un refus d'outil n'indique pas une incompatibilité physique générale</td>
+</tr>
+<tr>
+  <td><a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry - matériel AnyTone</a></td>
+  <td>USB CDC, paquets de firmware, boot, baseband, description QA4818N</td>
+  <td>Distinguer les faits de leur analyse et leurs objectifs de portage</td>
+</tr>
+<tr>
+  <td><a href="https://radiofoundry.org/docs/spec/open-firmware-cps">RadioFoundry - protocole open firmware</a></td>
+  <td>Protocole OpenGD77 (différent du protocole AnyTone OEM)</td>
+  <td>Ne jamais mélanger <code>R/W/X/C</code> et <code>PROGRAM/R/W/END</code> sans adaptateur</td>
+</tr>
+<tr>
+  <td><a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">VK7ZJA / 578mods</a></td>
+  <td>NAND 256 Mio, carte de zones, RF, alignement et circuits synthèse/FI</td>
+  <td>Relevés sur révisions antérieures, vérifier par lecture du dump du GD32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="photos-manuels-et-circuits-radio">Photos, manuels et circuits radio</h2>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Usage retenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">Photos FCC T4K-D578UV</a></td>
+  <td>Implantation et composants de la variante homologuée ; pas un schéma garanti pour la nôtre</td>
+</tr>
+<tr>
+  <td><a href="https://fccid.io/T4K-D578UVIII/">FCC T4K-D578UVIII</a></td>
+  <td>Comparaison des révisions RF et façade</td>
+</tr>
+<tr>
+  <td><a href="https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf">Manuel D578 CSI</a></td>
+  <td>Fonctions générales, prise microphone et attribution des connecteurs</td>
+</tr>
+<tr>
+  <td><a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf">GD32F30x User Manual Rev2.9</a></td>
+  <td>Registres GPIO, SPI, USB, AFIO, DMA, NVIC ; manuel MCU, pas le schéma AnyTone</td>
+</tr>
+<tr>
+  <td><a href="https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/305/KIOXIA_TC58CVG1S3HRAIG_Rev2.0_E191001.pdf">KIOXIA TC58CVG1S3HRAIG</a></td>
+  <td>Géométrie 2048+64, ECC, commandes et registres de statut</td>
+</tr>
+<tr>
+  <td><a href="https://www.rohm.com/products/data-converter/da-converters/bh2226fv-product">ROHM BH2226FV</a></td>
+  <td>CNA 8 canaux 8 bits en SSOP-B16, marquage H2226 ; assignation des huit sorties inconnue</td>
+</tr>
+<tr>
+  <td><a href="https://radiofoundry.org/docs/spec/hardware-anytone">SCT3258 référence</a></td>
+  <td>Baseband DMR, lien HPI, mise à jour distincte du GD32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="integration-des-decouvertes-du-projet">Intégration des découvertes du projet</h2>
+<p>Les schémas du site distinguent <strong>datasheet</strong>, <strong>trace OEM</strong>, <strong>simulateur</strong>, <strong>observation physique</strong>, <strong>hypothèse</strong>. Les références RDA5802N, BH2226FV, U2429G, MC34119G, SGM8272, AFT05MP075N, PA1517G/YD1517P, KT0905R/KT09S5R, quatre QA4818N probables et la carte BT D868BT-SP sont suivies individuellement dans <code>docs/hardware/</code> et <code>hardware/models/</code>.</p>
+<p>Les schémas et contenus externes ne sont <strong>pas copiés</strong> dans l'archive publique sans preuve de licence. Le site lie les références originales et les relevés reconstruits, et conserve les inconnues explicitement.</p>
+<h2 id="relecture-du-5-novembre-preuves-rtcgps-et-clients-cps">Relecture du 5 novembre : preuves RTC/GPS et clients CPS</h2>
+<p>La reference <code>XH414HG IV01E</code> est donnee par VK7ZJA pour les deux sauvegardes de la carte CPU ; la fiche Seiko la classe comme <strong>condensateur XH-HG de 0,08 F</strong>. La reference <strong>MS412</strong> vient d'une edition anterieure et ne doit pas etre declaree equivalent. Voir <a href="hardware/SAUVEGARDE_RTC_GPS_XH414HG.html">fiche source</a>.</p>
+<p>Le depot <a href="https://github.com/hardenedpenguin/AnyTone_CPS">AnyTone_CPS</a> est <strong>archive</strong> ; le developpement passe par <a href="https://github.com/hardenedpenguin/CodeplugStudio">CodeplugStudio</a>. Ces projets et <a href="https://cps.aes.app/manual/en/about">AesApp</a> sont des sources de comparaison <strong>avec compatibilite explicitement liee aux branches PRO/PLUS</strong>. Voir <a href="evidence/SOURCES_EXTERNES_RECROISEES_20261105.html">relecture detaillee</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

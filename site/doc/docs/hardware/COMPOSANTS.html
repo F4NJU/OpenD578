@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Inventaire materiel et nomenclature de travail - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Inventaire materiel et nomenclature de travail</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/COMPOSANTS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/COMPOSANTS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/COMPOSANTS.md</code></p>
+<article class="markdown-body"><h1 id="inventaire-materiel-et-nomenclature-de-travail">Inventaire materiel et nomenclature de travail</h1>
+<p><strong>Variante de reference :</strong> AnyTone D578UV PRO, MCU GD32F303VKT6, firmware constructeur GD32 V1.21.</p>
+<p>Ce document accompagne la <a href="../../README_SITE.html">vue eclatee interactive</a>. Pour chaque composant, le modele source versionne est dans <code>hardware/models/d578uv-pro-gd32-v121.json</code>. Le site genere automatiquement une fiche par composant et une fiche pour chacune de ses liaisons. La fiche donne les informations, les connexions, les affectations de broches et les renvois vers les documents complets.</p>
+<table>
+<thead>
+<tr>
+  <th>Element</th>
+  <th>Identification</th>
+  <th>Niveau de detail actuel</th>
+  <th>Documentation principale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>CPU</td>
+  <td>GD32F303VKT6</td>
+  <td>Flash, SRAM, SWD, boot et GPIO analyses</td>
+  <td><a href="../02_CPU_FLASH_BOOT_USB_SWD.html">CPU et boot</a></td>
+</tr>
+<tr>
+  <td>NAND serie</td>
+  <td>TC58CVG1S3HRAIG</td>
+  <td>Lecture, ECC, captures, zones critiques et bus GPIO candidates</td>
+  <td><a href="../03_NAND_LECTURES_ECC_CARTE.html">NAND</a></td>
+</tr>
+<tr>
+  <td>Afficheur</td>
+  <td>HOLITECH FPC-HIB018A011-A1 SLH1920</td>
+  <td>Bus 8080, initialisation, timings et commandes; controleur exact a confirmer</td>
+  <td><a href="../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">LCD</a></td>
+</tr>
+<tr>
+  <td>Façade</td>
+  <td>10 touches, codeur, deux potentiometres</td>
+  <td>Entrees ADC/GPIO et pilotes autonomes proposes</td>
+  <td><a href="../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Facade</a></td>
+</tr>
+<tr>
+  <td>Microphone</td>
+  <td>Prise 8 contacts, LED A/B</td>
+  <td>UART 8/16 octets, audio, commandes, routines</td>
+  <td><a href="../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Microphone</a></td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td>ATGM336H</td>
+  <td>Identification module, controles UART a poursuivre</td>
+  <td><a href="GPS.html">GPS</a></td>
+</tr>
+<tr>
+  <td>DMR</td>
+  <td>SCT3258 (famille a confirmer sur la carte cible)</td>
+  <td>Peripherique HPI modele, firmware et protocoles incomplets</td>
+  <td><a href="DMR.html">Baseband DMR</a></td>
+</tr>
+<tr>
+  <td>Audio externe</td>
+  <td>TLV320AIC3204 (identification a confirmer)</td>
+  <td>Hypothese codec, aucun brochage de carte qualifie</td>
+  <td><a href="AUDIO.html">Audio</a></td>
+</tr>
+<tr>
+  <td>RF</td>
+  <td>Etages RX/TX VHF/UHF</td>
+  <td>Routines RF candidates, implantation et liaisons incompletes</td>
+  <td><a href="RF.html">RF</a></td>
+</tr>
+<tr>
+  <td>Alimentation</td>
+  <td>Rails et protections a relever</td>
+  <td>Power est une entree vers MCU; ne pas confondre avec coupure MCU</td>
+  <td><a href="../02_CPU_FLASH_BOOT_USB_SWD.html">CPU</a></td>
+</tr>
+<tr>
+  <td>Bluetooth interne</td>
+  <td>Support D868BT-SP, module RF soude sous blindage, firmware de famille ET12</td>
+  <td>UART3 et quatre commandes AT du banc ; SoC, GPIO, audio et connecteur non etablis</td>
+  <td><a href="BLUETOOTH_D868BT_SP_ET12.html">Carte et ET12</a></td>
+</tr>
+</tbody>
+</table>
+<p>Une liaison affichee dans l'explorateur ne signifie <strong>pas</strong> toujours qu'elle a ete mesuree sur PCB. Les preuves sont etiquetees individuellement : mesure materielle, code OEM, execution du simulateur, hypothese, ou inconnue.</p>
+<p>La liste deviendra exhaustive au rythme des identifications reelles : ne pas ajouter un circuit sans photo lisible, mesure, identification de composant ou preuve logicielle attribuable a cette revision.</p>
+<h2 id="inventaire-complementaire-pro-gd32-novembre-2026">Inventaire complémentaire PRO GD32 (novembre 2026)</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément nouveau</th>
+  <th>État de preuve</th>
+  <th>Fiche détaillée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>RDA5802N</td>
+  <td>Référence observée; bus PB6/PB7 connu du <strong>banc</strong> uniquement</td>
+  <td><a href="RDA5802N_RECEPTION_FM.html">FM radiodiffusion</a></td>
+</tr>
+<tr>
+  <td>QA4818N ×4, grattés</td>
+  <td>Identification de famille par VK7ZJA, chacun à attribuer sur la carte</td>
+  <td><a href="QA4818N_QUATRE_CIRCUITS_26MHZ.html">Quatre circuits et horloge 26 MHz</a></td>
+</tr>
+<tr>
+  <td>H2226 / ROHM BH2226FV-E2</td>
+  <td>Identification type confirme par marquage H2226 et boitier SSOP-B16 ; sorties et broches GD32 inconnues</td>
+  <td><a href="BH2226_H2226_DAC_RF.html">DAC huit sorties</a></td>
+</tr>
+<tr>
+  <td>UTC U2429G</td>
+  <td>Atténuateur 2 voies identifié; GPIO non identifiés</td>
+  <td><a href="VOLUME_U2429G.html">Volume analogique série</a></td>
+</tr>
+<tr>
+  <td>MC34119G + SGM8272</td>
+  <td>Amplificateur local et double AOP, fonctions sur la carte non prouvées</td>
+  <td><a href="AUDIO_MC34119_SGM8272.html">Étages analogiques</a></td>
+</tr>
+<tr>
+  <td>YD1517P PRO / UTC PA1517G PLUS</td>
+  <td>Ampli audio 2×6W, mute et chemins audio à mesurer</td>
+  <td><a href="AUDIO_PA1517_YD1517_VARIANTES.html">Comparaison des amplificateurs</a></td>
+</tr>
+<tr>
+  <td>2× AFT05MP075N</td>
+  <td>Transistors LDMOS RF, VHF et UHF dans la famille D578</td>
+  <td><a href="PA_RF_AFT05MP075N.html">Étages de puissance RF</a></td>
+</tr>
+<tr>
+  <td>L7805CV TO-220</td>
+  <td>Régulateur 5 V; aucune cartographie des charges</td>
+  <td><a href="ALIMENTATION_L7805CV.html">Distribution de puissance</a></td>
+</tr>
+<tr>
+  <td>PLUS KT09?5R / carte fille</td>
+  <td>Récepteur AM plausible ; référence inconnue, connecteur absent PRO</td>
+  <td><a href="CARTE_PLUS_AM_KT_NON_IDENTIFIE.html">Module supplémentaire PLUS</a></td>
+</tr>
+</tbody>
+</table>
+<p>| BT01 | Microphone sans fil avec afficheur et firmware propre ; mode radio distant | <a href="BT01_MICROPHONE_BLUETOOTH.html">Microphone BT01</a> |
+| BP-02 | Bouton PTT Bluetooth independant du BT01 ; protocole radio non releve | <a href="BP02_PTT_BLUETOOTH.html">PTT BP-02</a> |
+| Variantes Bluetooth | PRO et PLUS avec GD32F303 ; comparaison D878 sans identite de carte prouvee | <a href="BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">PRO / PLUS / D878</a> |</p>
+<p>Pour le détail <strong>fonction par fonction</strong> de ce qui manque et de ce que l'on peut établir seul : <a href="AUDIT_FONCTIONS_PARTIELLES.html">audit des fonctions incomplètes</a>. Les étapes de mesure et d'attribution sont dans le <a href="PLAN_INVESTIGATION_BROCHAGES.html">plan d'investigation</a>.</p>
+<ul>
+<li><a href="QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Analyse RF QA4818N détaillée</a> : formule théorique, quatre banques, test C et comparaison aux données OEM.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

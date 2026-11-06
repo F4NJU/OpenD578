@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>RAM, routines analysées, UI, RF, brochage - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>RAM, routines analysées, UI, RF, brochage</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md">Modifier sur GitHub</a><a download href="../../raw/docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md</code></p>
+<article class="markdown-body"><h1 id="ram-routines-analysees-ui-rf-brochage">RAM, routines analysées, UI, RF, brochage</h1>
+<p>Les adresses sont celles de l'application constructeur <strong>GD32 V1.21</strong>, sauf indication explicite V1.20. Les symboles proposés sont des étiquettes analytiques et non des noms de fonction officiels décompilés. Pour chaque adresse, chercher les occurrences contextualisées dans <code>01_INDEX_MACHINE/addresses_with_context.jsonl</code>.</p>
+<h2 id="sram-gd32-v121-parcours-execute-en-emulation-le-0411">SRAM GD32 V1.21, parcours exécuté en émulation le 04/11</h2>
+<table>
+<thead>
+<tr>
+  <th>Plage inclusive</th>
+  <th style="text-align:right">Octets</th>
+  <th>Preuve / signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x20000000..0x20001AD7</code></td>
+  <td style="text-align:right">6 872</td>
+  <td>Données initialisées par décompression, source Flash <code>0x080FE7A8</code> vers RAM, routine <code>0x0800616C</code>.</td>
+</tr>
+<tr>
+  <td><code>0x20001AD8..0x20016ADF</code></td>
+  <td style="text-align:right">86 024</td>
+  <td>ZI hors réserves initiales, buffers/pools/tâches non entièrement reconstruits.</td>
+</tr>
+<tr>
+  <td><code>0x20016AE0..0x20016CDF</code></td>
+  <td style="text-align:right">512</td>
+  <td>Réserve initiale heap C.</td>
+</tr>
+<tr>
+  <td><code>0x20016CE0..0x200170DF</code></td>
+  <td style="text-align:right">1 024</td>
+  <td>Réserve initiale pile.</td>
+</tr>
+<tr>
+  <td><code>0x200170E0..0x20017FFF</code></td>
+  <td style="text-align:right">3 872</td>
+  <td>Hors table init; pas écrit sur les scénarios, <strong>PAS qualifié libre</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p>Table scatter <code>0x080FE678..0x080FE697</code>; source init <code>0x080FE7A8</code>, source ZI champ <code>0x080FF18C</code> non lu dans zéro; zéro à <code>0x080061C8</code>. Démarrage C <code>0x08006130</code>, transition application <code>0x0800620C</code>, arrivée main <code>0x08006654</code>. Routine <code>0x08006D54</code> renvoie des bornes r0=0x20016AE0, r1=0x200170E0, r2=r3=0x20016CE0. <strong>94 432 octets initialisés / 98 304, ce n'est pas la consommation dynamique maximale.</strong></p>
+<p>La conclusion précédente rejetant le haut RAM sur la base des mots <code>0x20017801</code>, <code>0x20017904</code>, <code>0x20017F21</code> était erronée : ce sont des concaténations de demi-mots Thumb <code>LDRB/MOVS</code>, pas des références mémoire. L'analyse a été corrigée en V1.</p>
+<p>La Phase60 propose 608 octets d'état persistant satellite, non placés, et utilise intentionnellement BSS sentinelle <strong>invalide</strong> <code>0x30000000</code> dans l'ELF, pour bloquer toute interprétation de son placement comme utilisable. Ne pas placer les 608 octets dans le haut SRAM sur cette seule comparaison numérique.</p>
+<h2 id="index-routines-v121">Index routines V1.21</h2>
+<table>
+<thead>
+<tr>
+  <th>Adresse(s)</th>
+  <th>Rôle déduit</th>
+  <th>Etat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x08038488</code> / <code>0x08038466</code></td>
+  <td>Constructeur worker UI; worker boucle de <code>0x0803846A</code> à <code>0x08038486</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x08038472</code> / <code>0x080AE3AE</code></td>
+  <td>Attente/obtention événement worker UI, objet <code>0x20000124</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x08038482</code> -&gt; <code>0x08037BE8</code></td>
+  <td>Dispatcher/rendu OEM; Phase60 identifie 42 cas via TBB <code>0x08037D2A</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x080AF0F0</code></td>
+  <td>Enregistrement du worker, par <code>0x080384A8</code>; pointeur Thumb <code>0x08038467</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x200000E5</code></td>
+  <td>Sélecteur de vue OEM phase60.</td>
+  <td>[STATIQUE], ne pas écrire.</td>
+</tr>
+<tr>
+  <td><code>0x2000071C</code></td>
+  <td>Pointeur de canal actif OEM V1.21 phase60.</td>
+  <td>[STATIQUE], structure exacte inconnue.</td>
+</tr>
+<tr>
+  <td><code>0x080AED66</code> / <code>0x080AEEC4</code></td>
+  <td>Prise/restitution sémaphore RTOS OEM.</td>
+  <td>[STATIQUE], statut et acquisition à qualifier.</td>
+</tr>
+<tr>
+  <td><code>0x20000128</code></td>
+  <td>Handle sémaphore LCD OEM; crée via <code>0x0803848C -&gt; 0x080AEC5A</code>.</td>
+  <td>[STATIQUE], pas API satellite approuvée.</td>
+</tr>
+<tr>
+  <td><code>0x20001542</code></td>
+  <td>Garde de phase RTOS utilisé par séquences sémaphore.</td>
+  <td>[STATIQUE], pas un verrou que l'on peut écrire.</td>
+</tr>
+<tr>
+  <td><code>0x080387AC</code></td>
+  <td>Commande LCD <code>0x10</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x080387DA</code></td>
+  <td>Commande LCD <code>0x11</code> (correction Phase43), <strong>pas données LCD brutes</strong>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x08039096</code> / <code>0x0802126E</code></td>
+  <td>Traitement graphique OEM partagé.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0808B672</code>, <code>0x0808B6F6</code></td>
+  <td>Commandes LCD bas niveau; GPIO <code>0x40011800</code>, <code>0x40010C00</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x080393C6</code> -&gt; <code>0x200001C8</code>, <code>0x200001EC</code>, <code>0x200001F8</code></td>
+  <td>Notifications/temporisation, <strong>pas mutex LCD</strong>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0805A094</code></td>
+  <td>Décodage BCD candidat fréquence.</td>
+  <td>[STATIQUE], ABI non certifiée.</td>
+</tr>
+<tr>
+  <td><code>0x0805A178</code>, <code>0x0805A1D6</code></td>
+  <td>Validation plage/contexte fréquence, limites vers <code>0x20004214</code>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0805A234</code>, <code>0x0805A316</code></td>
+  <td>Calculs/choix de fréquence à partir d'un canal.</td>
+  <td>[STATIQUE], pas setters RF.</td>
+</tr>
+<tr>
+  <td><code>0x200006F0</code></td>
+  <td>Champ RAM fréquence OEM (10 sites d'écriture trouvés Phase46).</td>
+  <td>[STATIQUE], ne jamais forcer par <code>poke</code>.</td>
+</tr>
+<tr>
+  <td><code>0x08033840</code>, <code>0x08033C7A</code> -&gt; <code>0x0805A9F8</code></td>
+  <td>Lecture et conversion décimale de la fréquence.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0805D50A</code></td>
+  <td>Autre écrivain du champ <code>0x200006F0</code>.</td>
+  <td>[STATIQUE], condition à préciser.</td>
+</tr>
+<tr>
+  <td><code>0x0804EAC6</code></td>
+  <td>Copie RAM VFO/enregistrement canal, <strong>pas</strong> commande synthétiseur.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x080857AE</code> / <code>0x080857CA</code></td>
+  <td>Accès mémoire externe paginée/enregistrements 64 o, <strong>pas setter radio</strong>.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0808AB18</code></td>
+  <td>Envoi de commande série / registre 16 bits vers circuit; séquence 0x29/0x2A.</td>
+  <td>[STATIQUE], transaction RF complète inconnue.</td>
+</tr>
+<tr>
+  <td><code>0x0806E100</code>, <code>0x080709D2</code></td>
+  <td>Ancrages RF et choix bande candidats selon audit Phase53.</td>
+  <td>[STATIQUE], pas ABI qualifiée.</td>
+</tr>
+<tr>
+  <td><code>0x08008796</code>, <code>0x080087A8</code></td>
+  <td>Lecteurs GPIO entrée bit / port 16 bits.</td>
+  <td>[STATIQUE], <strong>PTT non identifié</strong>.</td>
+</tr>
+<tr>
+  <td><code>0x080087B0</code></td>
+  <td>Lecture GPIO sortie OCTL, pas getter entrée.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0808CE72</code></td>
+  <td>Copie OEM NAND vers Flash haute.</td>
+  <td>[STATIQUE], zone protégée.</td>
+</tr>
+<tr>
+  <td><code>0x0808CC28</code>, <code>0x0808CC1C</code>, <code>0x0808CC0B</code></td>
+  <td>Encodeur PC8/PC9, chemin EXTI candidat.</td>
+  <td>[STATIQUE]</td>
+</tr>
+<tr>
+  <td><code>0x0808D70C</code>, <code>0x0808E310</code></td>
+  <td>USART0 microphone PA9/PA10, initialisation et RX candidat.</td>
+  <td>[STATIQUE]</td>
+</tr>
+</tbody>
+</table>
+<p>UI: 37 sites d'acquisition et 38 de restitution du même handle LCD, avec 37 paires adjacentes et un saut spécial vers <code>0x080752DC</code>. Cela n'implique pas une restitution surnuméraire sans analyse de flot. Les états de retour <code>0,1,2,10,13,14</code> sont rapportés; aucun chemin sûr d'acquisition d'un « LCD lease satellite » n'est encore qualifié.</p>
+<h2 id="brochage-en-cours">Brochage en cours</h2>
+<p>Le tableau <code>TABLE_100_BROCHES_GD32F303VKT6.csv</code> et le schéma KiCad V0.3 existent dans Library mais leur original n'a pas été exporté. Le travail couvrait USB, GPIO, PA0 Power, GPS, encodeur, touches P1-P6, MENU/EXIT, micro/USART, OLED/LCD, NAND série, LED et RF. Hypothèses matérielles robustes pour la NAND, appuyées par la simulation du pilote : <strong>PB8 = CS, PB15 = SCK, PB14 = MOSI/SO0, PA15 = MISO/SO1</strong>. La simulation bit-série observe les niveaux effectivement commandés par l'OEM; cela ne remplace pas un contrôle de continuité sur la carte.</p>
+<p>Compte rendu LED GPIO V1.2/V1.3 : en lecture seule, plusieurs centaines d'échantillons par port et zéro transition ISTAT/OCTL identifiée. Ne <strong>PAS</strong> piloter une broche GPIO pour allumer la LED sur cette seule preuve; le bouton Power ne coupe pas l'alimentation processeur. Aucun driver LED prouvé.</p>
+<p><strong>Circuit TLV320AIC3204</strong> : codec audio stéréo ADC/DAC interne, I2C/SPI pour les contrôles, interface audio série DSP/I2S/TDM; ce n'est pas l'ADC0 du GD32 qui déclenche le DMA à <code>0x4001244C</code>. La présence et le raccordement exacts de ce codec sur la variante de la carte doivent être vérifiés physiquement. Fiche TI : <a href="https://www.ti.com/product/TLV320AIC3204">https://www.ti.com/product/TLV320AIC3204</a> .</p>
+<h2 id="v120-uniquement-ne-pas-transplanter-les-offsets-en-v121">V1.20 uniquement : ne pas transplanter les offsets en V1.21</h2>
+<p>Tables menus analogiques/numériques <code>0x080C8808</code>, <code>0x080C8900</code>, <code>0x080C89F8</code>, sélecteur <code>0x0803B966</code>, descripteurs <code>0x080C887C</code>, <code>0x080C8974</code>, <code>0x080C8A6C</code>, noms/menu <code>0x0803B9AC</code>, <code>0x0803EB08</code>. Les offsets prouvent des relations dans cette image V1.20, pas les API OEM V1.21.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

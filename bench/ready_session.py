@@ -19,12 +19,12 @@ REGISTERS=[UC_ARM_REG_MSP,UC_ARM_REG_PSP,UC_ARM_REG_CONTROL,
 def components(r):
     return dict(clock=r.clock,nand=r.nand,lcd=r.lcd,adc_dma=r.adc_dma,
         uart3=r.uart3,usart0=r.usart0,usart1=r.usart1,backup=r.backup,
-        lighting=r.lighting,flash_cache=r.flash_cache,rf_spi=r.rf_spi,
-        fm_i2c=r.fm_i2c,sct_hpi=r.sct_hpi,usbd=r.usbd,
+        lighting=r.lighting,status_led=r.status_led,flash_cache=r.flash_cache,rf_spi=r.rf_spi,
+        fm_i2c=r.fm_i2c,sct_hpi=r.sct_hpi,usbd=r.usbd,fwdgt=r.fwdgt,
         **{'timer'+hex(key):value[0] for key,value in r.timers.items()})
 
 def export_ready(r,path):
-    excluded=set(components(r))|{'cpu','image','oem_reference','serial_devices','timers','dma_regs','native_gate','code_hook','memory_watch'}
+    excluded=set(components(r))|{'cpu','image','oem_reference','serial_devices','timers','dma_regs','native_gate','code_hook','memory_watch','control_inbox','cdc','cdc_sink'}
     parts={name:{key:value for key,value in vars(obj).items()
         if not callable(value) and key not in ('handles','images')}
         for name,obj in components(r).items()}
@@ -60,7 +60,8 @@ def load_ready(r):
         raise ValueError('Bundled ready session does not match firmware')
     directory=r.live_directory
     vars(r).update(state['top'])
-    for name,obj in components(r).items():vars(obj).update(state['parts'][name])
+    for name,obj in components(r).items():
+        if name in state['parts']:vars(obj).update(state['parts'][name])
     r.dma_regs=r.adc_dma.dma
     r.cpu.mem_write(RAM,state['ram'])
     r.cpu.mem_write(0x082F5000,state['flash'])

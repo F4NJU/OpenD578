@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Changelog OpenD578 V11.7 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Changelog OpenD578 V11.7</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/CHANGELOG_V11_7.md">Modifier sur GitHub</a><a download href="../../raw/docs/CHANGELOG_V11_7.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/CHANGELOG_V11_7.md</code></p>
+<article class="markdown-body"><h1 id="changelog-opend578-v117">Changelog OpenD578 V11.7</h1>
+<p>Date de publication : <strong>5 novembre 2026</strong>
+Version précédente : <strong>V11.6</strong>
+Commit de la release : <code>9124d7e</code>
+Cible étudiée : <strong>AnyTone AT-D578UV PRO, GD32, application constructeur V1.21</strong>.</p>
+<p>Cette release ajoute le décodage du voyant de statut, un inventaire des fonctions
+à qualifier et des rapports d’auto-test ouverts. Le voyant suit les commandes
+GPIO réellement émises par le firmware. L’inventaire et les rapports distinguent
+les fonctions documentées, les modèles partiels et les essais exécutés.</p>
+<p>Il s’agit d’une release du <strong>banc de simulation et de ses outils</strong>. Elle ne fournit
+pas encore un firmware OpenD578 installable sur le poste.</p>
+<h2 id="ajoute">Ajouté</h2>
+<h3 id="decodage-du-voyant-rougevert-du-poste">Décodage du voyant rouge/vert du poste</h3>
+<ul>
+<li>Nouveau modèle <code>bench/status_led.py</code>.</li>
+<li>Lecture du bus série : <strong>PE3 = données</strong>, <strong>PE4 = horloge</strong>.</li>
+<li>Échantillonnage des données sur les fronts montants de l’horloge.</li>
+<li>Assemblage de mots de <strong>8 bits, bit de poids faible en premier</strong>.</li>
+<li>Décodage du vert depuis le masque <code>0x08</code>, et du rouge depuis <code>0x10</code>.</li>
+<li>Affichage du voyant dans le banc à partir de la commande décodée.</li>
+<li>Exposition de l’octet brut, des bits encore incomplets et d’un historique borné.</li>
+<li>Réutilisation du décodeur dans le mode matériel, sans dépendance à une adresse
+de routine ou à une variable RAM de l’OEM.</li>
+</ul>
+<p>Avant la réception d’un mot complet, le voyant reste <strong>inconnu</strong>. La reprise
+rapide depuis l’ancienne capture RAM ne fabrique pas une commande qui n’a pas
+été enregistrée. Les autres bits du mot de commande restent sans fonction
+lumineuse attribuée.</p>
+<h3 id="inventaire-ouvert-des-fonctions-et-exigences">Inventaire ouvert des fonctions et exigences</h3>
+<p>Le catalogue contient <strong>117 entrées</strong>, réparties ainsi :</p>
+<table>
+<thead>
+<tr>
+  <th>Domaine</th>
+  <th style="text-align:right">Entrées</th>
+  <th>Périmètre suivi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>IHM</td>
+  <td style="text-align:right">22</td>
+  <td>Façade, encodeur, microphone, voyants, écran, verrouillages et démarrage</td>
+</tr>
+<tr>
+  <td>FM et signalisation analogique</td>
+  <td style="text-align:right">35</td>
+  <td>Accord, relais, squelch, tonalités, signalisations, balayage et fonctions optionnelles</td>
+</tr>
+<tr>
+  <td>Audio</td>
+  <td style="text-align:right">11</td>
+  <td>Microphone, volumes, haut-parleurs, prises externes et codec</td>
+</tr>
+<tr>
+  <td>Sécurités et mesures</td>
+  <td style="text-align:right">13</td>
+  <td>Durée TX, canal occupé, température, ventilation, alimentation et défauts</td>
+</tr>
+<tr>
+  <td>USB et mémoires</td>
+  <td style="text-align:right">5</td>
+  <td>Lecture, écriture, édition, alignements et récupération</td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td style="text-align:right">7</td>
+  <td>Présence, acquisition, coordonnées, heure et robustesse du dialogue</td>
+</tr>
+<tr>
+  <td>APRS</td>
+  <td style="text-align:right">11</td>
+  <td>Configuration, déclenchement, position, modulation, arbitrage et réception ultérieure</td>
+</tr>
+<tr>
+  <td>Satellite</td>
+  <td style="text-align:right">5</td>
+  <td>Orbites, Doppler, canaux, émission et IHM</td>
+</tr>
+<tr>
+  <td>Bluetooth</td>
+  <td style="text-align:right">8</td>
+  <td>Identification, appairage, reconnexion, PTT, audio et firmware du module</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>117</strong></td>
+  <td><strong>Inventaire ouvert, sans garantie d’exhaustivité</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ces entrées ne correspondent pas à 117 fonctions OEM confirmées sur cette
+variante. Elles comprennent des fonctions documentées pour la famille D578,
+des fonctions conditionnelles, des exigences de test et les extensions du projet.
+Le satellite est identifié comme une extension OpenD578. La réception APRS reste
+une étape ultérieure.</p>
+<p>Chaque entrée possède un identifiant, des sources et leur niveau de preuve, un
+état du modèle, un critère d’acceptation et les blocages connus. Le catalogue
+livré classe <strong>17 modèles comme partiels et 100 comme non implémentés</strong> ; ces
+états ne sont pas des verdicts de conformité du firmware.</p>
+<p>Formats fournis :</p>
+<ul>
+<li><code>bench/qualification_data/catalog.json</code> : catalogue de référence.</li>
+<li><code>bench/qualification_data/catalog.schema.json</code> : schéma JSON Schema 2020-12.</li>
+<li><code>docs/FUNCTION_MATRIX.csv</code> : vue tabulaire du catalogue.</li>
+</ul>
+<p>Les fonctions OEM précédemment jugées supprimables restent recensées, afin de
+conserver la connaissance de leur existence. Leur présence dans l’inventaire
+ne les rend pas obligatoires pour la première version du firmware ouvert.</p>
+<h3 id="onglet-qualification">Onglet Qualification</h3>
+<ul>
+<li>Nouvelle vue du catalogue dans le navigateur.</li>
+<li>Recherche par identifiant, intitulé ou critère d’acceptation.</li>
+<li>Affichage des modèles partiels et des éléments manquants.</li>
+<li>Téléchargement du catalogue depuis <code>/api/qualification/catalog</code>.</li>
+<li>Indication explicite du caractère incomplet de la qualification matérielle.</li>
+</ul>
+<p>Cet onglet présente les exigences et leur couverture. Son ouverture ne lance
+pas une campagne de tests.</p>
+<h3 id="exploration-reproductible-du-firmware">Exploration reproductible du firmware</h3>
+<p>Le nouvel outil <code>bench/oem_discovery.py</code> relève :</p>
+<ul>
+<li>l’empreinte et l’adresse de chargement de l’image ;</li>
+<li>des candidats d’entrées de code ;</li>
+<li>des constantes candidates de périphériques ;</li>
+<li>des textes candidats associés aux mots-clés du catalogue ;</li>
+<li>des pointeurs alignés possibles vers ces textes ;</li>
+<li>les limites de l’analyse et les catégories encore non résolues.</li>
+</ul>
+<p>Sur l’application PRO GD32 V1.21 étudiée, l’analyse relève <strong>3 042 candidats
+d’entrées</strong> et des textes candidats associés à <strong>110 entrées du catalogue</strong>.
+Ces nombres ne constituent ni un décompte fiable des fonctions, ni un taux de
+couverture fonctionnelle. Les motifs peuvent aussi rencontrer des données,
+des ressources partagées et des références sans lien avec la fonction cherchée.</p>
+<p>Le rapport public <code>docs/firmware_discovery_v121.json</code> conserve les adresses et
+remplace les textes candidats par leurs empreintes et leurs longueurs. L’image
+constructeur n’est pas incluse dans les sources publiables.</p>
+<h3 id="auto-test-et-rapports-jsonjunit">Auto-test et rapports JSON/JUnit</h3>
+<ul>
+<li>Nouveaux lanceurs <code>TESTER_BASES.cmd</code> et <code>TESTER_BASES.sh</code>.</li>
+<li>Nouveau gestionnaire <code>bench/run_base_tests.py</code>.</li>
+<li>Nouveau générateur de couverture <code>bench/selftest_report.py</code>.</li>
+<li>Ajout de <code>--case</code> à <code>bench/run_bench.py</code> pour choisir un scénario.</li>
+<li>Nouveau scénario <code>bench/scenarios/LED_RX_TX.json</code>.</li>
+<li>Nouveau critère de verdict <code>bench/indicator_qualification.py</code> pour les voyants.</li>
+<li>Rapports <code>qualification.json</code>, <code>selftest.json</code> et <code>junit.xml</code>.</li>
+<li>Sous-dossier distinct pour chaque campagne lancée par <code>TESTER_BASES</code>.</li>
+</ul>
+<p>Les exigences non qualifiées restent <code>incomplete</code> dans le JSON et <code>skipped</code>
+dans le JUnit. Un essai absent ou un périphérique non modélisé ne devient pas
+un succès. Un échec constaté reste un échec dans les rapports.</p>
+<p>Le critère <code>LED_bus</code> compare les stimuli externes et les réponses du bus GPIO.
+Il n’utilise aucune variable OEM de réception ou d’émission. Il peut aussi
+examiner une trace compatible produite par le mode matériel. Les trois critères
+historiques FM/GPS/PTT utilisent encore des observations spécifiques à V1.21.</p>
+<h3 id="observations-materielles-explicites">Observations matérielles explicites</h3>
+<p>Le nouveau module <code>bench/board_observations.py</code> expose les sorties observées :</p>
+<ul>
+<li>registres bruts GPIO et éclairage ;</li>
+<li>commande du voyant de statut ;</li>
+<li>trames radio vers microphone ;</li>
+<li>état connu ou inconnu des indicateurs du microphone ;</li>
+<li>état non qualifié des routes audio ;</li>
+<li>périmètre réel du modèle Bluetooth.</li>
+</ul>
+<p>Les sorties audio non qualifiées restent à <code>selected: null</code>. L’état logiciel
+TX de l’OEM ne suffit pas à déclarer une LED allumée ou un haut-parleur actif.</p>
+<h2 id="modifie-et-corrige">Modifié et corrigé</h2>
+<ul>
+<li>Le voyant de statut, auparavant neutre faute de décodeur, suit maintenant
+la liaison PE3/PE4.</li>
+<li>La restauration d’une session conserve la séparation des composants du
+simulateur ; le nouveau décodeur n’invente pas son historique absent d’une
+ancienne capture.</li>
+<li>La page présente les trames sortantes du microphone sans attribuer de sens
+non vérifié à leurs champs.</li>
+<li>La ligne USB du tableau matériel indique la présence de l’hôte simulé et
+l’état CDC observé, au lieu d’afficher systématiquement un hôte absent.</li>
+<li>Le message de fermeture renvoie au lanceur V11.7.</li>
+<li>Les empreintes de version prennent en compte les nouveaux composants et
+ressources concernés, pour éviter la réutilisation d’un serveur périmé.</li>
+<li>Les README décrivent la qualification V11.7 et séparent les essais bornés
+de la validation matérielle complète.</li>
+</ul>
+<h2 id="nouvelles-informations-apprises">Nouvelles informations apprises</h2>
+<h3 id="commandes-du-voyant-et-recoupement-bootloaderapplication">Commandes du voyant et recoupement bootloader/application</h3>
+<p>Le bootloader du dump complet contient une routine à <strong><code>0x080042BA</code></strong> qui
+transmet huit bits sur PE3/PE4. La boucle de mise à jour l’appelle alternativement
+avec <strong><code>0x00</code> et <code>0x10</code></strong>. Ce comportement est cohérent avec le clignotement rouge
+observé sur le poste en mode de mise à jour.</p>
+<p>Dans l’application V1.21, le chemin correspondant se trouve autour de
+<strong><code>0x0808A400</code></strong>. Les retours d’appels GPIO relevés comprennent
+<code>0x0808A416</code>, <code>0x0808A424</code>, <code>0x0808A42E</code>, <code>0x0808A43C</code> et <code>0x0808A454</code>.
+Ces adresses servent à documenter l’analyse ; le nouveau décodeur n’en dépend pas.</p>
+<p>L’exécution du scénario donne :</p>
+<table>
+<thead>
+<tr>
+  <th>Situation du scénario</th>
+  <th>Commande</th>
+  <th style="text-align:right">Bit vert <code>0x08</code></th>
+  <th style="text-align:right">Bit rouge <code>0x10</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Réception avec squelch ouvert</td>
+  <td><code>0x4E</code></td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>Repos après retrait de la porteuse</td>
+  <td><code>0x46</code></td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>Émission après PTT</td>
+  <td><code>0x56</code></td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>Repos après relâchement</td>
+  <td><code>0x46</code></td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Niveau de preuve :</strong> les commandes et les fronts GPIO ont été observés dans
+le firmware exécuté. La correspondance des couleurs est déduite de ces traces,
+du bootloader et des observations utilisateur. La continuité électrique et la
+référence du circuit pilote n’ont pas été mesurées.</p>
+<p>Le scénario ne détermine pas le comportement du voyant avec un CTCSS incorrect,
+pendant tous les modes de balayage ou pour les autres couleurs éventuelles.
+Le squelch porteuse et la porte audio n’évoluent pas exactement au même instant.</p>
+<h3 id="dialogue-radio-vers-microphone">Dialogue radio vers microphone</h3>
+<p>Des trames sortantes de <strong>16 octets</strong>, commençant par <strong><code>0x53</code></strong> et se terminant
+par <strong><code>0x06</code></strong>, ont été enregistrées sur USART0. Leur structure est désormais
+exposée dans le banc. La signification des champs concernant les LED et le
+routage audio reste à déterminer.</p>
+<p>Le modèle OEM emploie aussi une activité microphone synthétique, avec un
+<code>0x06</code> périodique. Cela ne démontre pas que le microcontrôleur du microphone
+est émulé ou qu’il a exécuté les commandes reçues.</p>
+<h3 id="haut-parleur-du-microphone-et-routes-audio">Haut-parleur du microphone et routes audio</h3>
+<p>Le haut-parleur sélectionnable du microphone est ajouté au périmètre. Il faut
+qualifier séparément :</p>
+<ul>
+<li>le haut-parleur interne du poste ;</li>
+<li>celui du microphone, avec sélection de la voie A ou B ;</li>
+<li>les sorties externes A et B ;</li>
+<li>les chemins audio Bluetooth.</li>
+</ul>
+<p>Les choix microphone/poste/les deux et les effets des contacts des prises
+externes doivent être vérifiés. La boucle audio du navigateur ne suffit pas
+à prouver le routage du matériel simulé.</p>
+<h3 id="texte-present-dans-le-firmware-et-capacite-reelle">Texte présent dans le firmware et capacité réelle</h3>
+<p>L’image PRO V1.21 contient le texte <strong><code>APRS Receive</code></strong>. Cette présence ne prouve
+pas que le poste capturé sait recevoir l’APRS. Une ressource peut être partagée
+entre variantes ou appartenir à une branche désactivée. Le nouvel outil maintient
+ces occurrences au niveau de pistes, sans en déduire une fonction opérationnelle.</p>
+<h3 id="bluetooth">Bluetooth</h3>
+<p>L’option Bluetooth fait partie du catalogue. Une référence <strong>ET12/B707</strong> est
+connue dans les travaux du projet et le modèle existant couvre quelques
+commandes AT de version et d’AGHF.</p>
+<p>La disponibilité d’un firmware ne suffit pas à permettre son exécution :
+processeur, jeu d’instructions, mémoire et interfaces doivent être établis.
+Le module n’exécute pas encore son firmware dans le simulateur. L’appairage,
+la reconnexion, le PTT et les échantillons audio Bluetooth restent à modéliser.</p>
+<h3 id="anciennes-informations-de-brochage-et-photographies">Anciennes informations de brochage et photographies</h3>
+<p>La table des 100 broches a été relue. Certaines mentions anciennes
+<code>NON CONNECTE</code> étaient des emplacements non renseignés ; elles ne démontrent
+pas une absence de connexion. Les hypothèses issues d’autres cartes restent
+à distinguer des connexions mesurées sur le D578 étudié.</p>
+<p>Les liens FCC ont été conservés, mais les photographies n’ont pas été
+réinspectées dans cette release après l’échec de leur récupération. Les entrées
+FCC de schémas visibles uniquement comme métadonnées ne sont pas considérées
+comme des schémas effectivement obtenus.</p>
+<h2 id="validation-de-la-release">Validation de la release</h2>
+<h3 id="tests-logiciels">Tests logiciels</h3>
+<ul>
+<li><strong>216 tests Python réussis</strong>, contre 203 dans V11.6.</li>
+<li><strong>13 tests ajoutés</strong> pour le catalogue, les rapports, les observations
+matérielles, le décodeur du voyant et son critère de verdict.</li>
+<li>Contrôles Node du CPS intégré conservés et réussis.</li>
+<li>Vérification de syntaxe JavaScript des ressources modifiées.</li>
+<li>Contrôle de publication : <strong>187 fichiers suivis, aucune violation détectée</strong>
+par le vérificateur du projet. Ce contrôle vise les fichiers binaires/captures
+exclus et les motifs de secrets ; il ne constitue pas un audit juridique.</li>
+</ul>
+<h3 id="scenarios-executes-contre-loem-v121">Scénarios exécutés contre l’OEM V1.21</h3>
+<p>Les quatre scénarios partent de la reprise OEM authentifiée :</p>
+<table>
+<thead>
+<tr>
+  <th>Scénario</th>
+  <th>Vérification bornée</th>
+  <th style="text-align:right">Instructions supplémentaires</th>
+  <th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>FM</code></td>
+  <td>Porteuse appliquée, porte audio ouverte, porteuse retirée, porte audio fermée</td>
+  <td style="text-align:right">9 000 000</td>
+  <td>Réussi</td>
+</tr>
+<tr>
+  <td><code>GPS</code></td>
+  <td>Position acquise puis perdue après changement des stimuli</td>
+  <td style="text-align:right">13 000 000</td>
+  <td>Réussi</td>
+</tr>
+<tr>
+  <td><code>PTT</code></td>
+  <td>Activation TX, ventilateur et DAC, puis retour au repos après relâchement</td>
+  <td style="text-align:right">4 000 000</td>
+  <td>Réussi</td>
+</tr>
+<tr>
+  <td><code>LED_bus</code></td>
+  <td>Vert, repos, rouge, repos depuis les commandes GPIO</td>
+  <td style="text-align:right">13 000 000</td>
+  <td>Réussi</td>
+</tr>
+</tbody>
+</table>
+<p>Ces nombres décrivent l’exécution de l’émulateur. Ils ne mesurent pas des cycles
+matériels ni une durée réelle équivalente. Ces essais n’ont pas rejoué un
+amorçage à froid complet pour chaque scénario.</p>
+<h3 id="rapport-global-de-couverture">Rapport global de couverture</h3>
+<p>Le JUnit livré contient <strong>121 cas</strong> : quatre essais bornés réussis et
+117 exigences complètes marquées <code>skipped</code>. Il ne comporte aucun échec observé
+sur ces quatre essais. Le verdict global de qualification reste <strong>incomplet</strong>.</p>
+<h3 id="controle-usb-du-paquet-livre">Contrôle USB du paquet livré</h3>
+<p>Le test du paquet V11.7 a vérifié :</p>
+<ul>
+<li>le démarrage du serveur sur un port disponible et sa détection automatique ;</li>
+<li>l’accès au catalogue et aux nouvelles ressources JavaScript ;</li>
+<li>l’énumération USB CDC ;</li>
+<li>l’identification D578UV depuis le firmware exécuté ;</li>
+<li>une lecture de 16 octets à l’adresse logique <code>0x02FA0000</code> ;</li>
+<li>le transport des états par canal processus/mémoire, sans fichier USB de suivi actif.</li>
+</ul>
+<p>Empreinte SHA-256 des données relues :</p>
+<pre><code class="language-text">8208b74207d2956a56751cd8a70ec35a99bc43b1c84fbf9607b970c09a969957
+</code></pre>
+<p>Ce contrôle a été exécuté avec le client de test, sans lancer le CPS constructeur.
+La lecture complète du CPS Windows avait été confirmée par l’utilisateur avant
+cette release. L’interface graphique navigateur et les lanceurs Windows n’ont
+pas été exécutés automatiquement pendant cette qualification.</p>
+<h2 id="fonctions-conservees-des-versions-precedentes">Fonctions conservées des versions précédentes</h2>
+<ul>
+<li>CPS intégré partiel V11.6 : lecture des 128 premiers emplacements,
+modification des noms existants et export JSON.</li>
+<li>Pont local USB CDC vers COM/PTY pour CPS externe.</li>
+<li>Persistance optionnelle de la NAND virtuelle après arrêt normal.</li>
+<li>Boucle numérique FM/APRS autonome avec fichiers I/Q.</li>
+</ul>
+<p>Ces fonctions ne sont pas présentées comme des nouveautés V11.7. L’écriture et
+la récupération d’un nom de canal après redémarrage complet avaient été validées
+pour V11.6 ; la V11.7 n’étend pas l’édition CPS aux autres champs.</p>
+<h2 id="limites-connues">Limites connues</h2>
+<table>
+<thead>
+<tr>
+  <th>Domaine</th>
+  <th>État après V11.7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Chaîne FM complète</td>
+  <td>Le couplage firmware, codec, SCT, échantillons et RF/IQ reste incomplet</td>
+</tr>
+<tr>
+  <td>Audio navigateur</td>
+  <td>Le son de test et la boucle I/Q autonome ne valident pas le routage matériel</td>
+</tr>
+<tr>
+  <td>LED microphone</td>
+  <td>Champs de commande non décodés ; états lumineux inconnus</td>
+</tr>
+<tr>
+  <td>Voyant poste</td>
+  <td>Rouge/vert décodés par corrélation ; circuit physique, autres bits et transitoires non qualifiés</td>
+</tr>
+<tr>
+  <td>Haut-parleurs</td>
+  <td>Toutes les routes et leurs gains restent à qualifier</td>
+</tr>
+<tr>
+  <td>CTCSS/DCS</td>
+  <td>Pas de qualification complète de la chaîne de génération/détection pilotée par le firmware</td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td>Scénario OEM borné réussi ; critère matériel générique et robustesse complète encore manquants</td>
+</tr>
+<tr>
+  <td>APRS TX OEM</td>
+  <td>DMA et chemin de modulation du firmware à terminer</td>
+</tr>
+<tr>
+  <td>APRS RX</td>
+  <td>Étape ultérieure, disponibilité conditionnelle selon variante et matériel</td>
+</tr>
+<tr>
+  <td>Satellite</td>
+  <td>Intégration firmware et qualification non terminées</td>
+</tr>
+<tr>
+  <td>Bluetooth</td>
+  <td>Sous-ensemble AT ; firmware interne, appairage, PTT et audio non exécutés</td>
+</tr>
+<tr>
+  <td>Température</td>
+  <td>Échelle physique et protections complètes à établir</td>
+</tr>
+<tr>
+  <td>Réinitialisation</td>
+  <td>Certaines demandes sont détectées sans redémarrage automatique complet</td>
+</tr>
+<tr>
+  <td>Couverture firmware</td>
+  <td>Inventaire statique non exhaustif ; appels indirects et composants opaques non résolus</td>
+</tr>
+<tr>
+  <td>Matériel réel</td>
+  <td>Puissance, sensibilité, déviation, courants et comportement thermique non certifiés par ces essais</td>
+</tr>
+<tr>
+  <td>DMR</td>
+  <td>Hors de cette campagne de qualification</td>
+</tr>
+</tbody>
+</table>
+<h2 id="utilisation-et-compatibilite">Utilisation et compatibilité</h2>
+<p>Extraire la V11.7 dans un nouveau dossier puis lancer
+<code>OUVRIR_BANC_WEB_V11_7.cmd</code> sous Windows, ou le lanceur correspondant au système.</p>
+<p>Le voyant peut rester inconnu après une reprise rapide jusqu’à l’émission de
+sa première commande complète. Les autres nouvelles observations apparaissent
+dans l’IHM et dans les données du moteur.</p>
+<p>Pour les essais de base, arrêter le moteur web puis lancer :</p>
+<pre><code class="language-bat">TESTER_BASES.cmd --source-dir &quot;C:\D578\captures&quot;
+</code></pre>
+<p>Dans les sources du dépôt :</p>
+<pre><code class="language-sh">python bench/run_bench.py --source-dir /chemin/captures --engine native
+python bench/run_bench.py --source-dir /chemin/captures --engine native --case LED_bus
+python bench/selftest_report.py --regressions bench/results/bench/qualification.json
+</code></pre>
+<p><code>run_bench.py</code> conserve son code de sortie pour les scénarios sélectionnés.
+<code>selftest_report.py</code> renvoie <strong>2 pour une qualification incomplète</strong> et <strong>1 en
+cas d’échec</strong>. Un code 2 ne signifie donc pas que le poste est en panne.
+Le lanceur <code>TESTER_BASES</code> place chaque campagne dans un sous-dossier de
+<code>results/bench</code> et termine sur le verdict de couverture.</p>
+<p>Pour un firmware entièrement différent, utiliser le mode matériel
+<code>run_hardware.py</code>. Le décodeur du voyant y est réutilisable ; les autres critères
+spécifiques aux adresses et structures V1.21 doivent être remplacés par des
+observations matérielles indépendantes. Aucun verdict global automatique pour
+un firmware arbitraire n’est annoncé dans cette release.</p>
+<h2 id="formats-ouverts-et-publication">Formats ouverts et publication</h2>
+<ul>
+<li>Sources du projet en Python et C, sous GPL-3.0-or-later.</li>
+<li>Catalogue JSON avec schéma JSON Schema 2020-12.</li>
+<li>Matrice CSV.</li>
+<li>Résultats JSON et JUnit XML.</li>
+<li>Audio WAV PCM16 et I/Q SigMF cf32_le déjà utilisés par le banc.</li>
+<li>TLE ou OMM prévus comme formats d’entrée pour les travaux satellite.</li>
+</ul>
+<p><strong>Paquet complet privé :</strong> <code>OpenD578_Banc_V11_7.zip</code>. Il contient des références
+OEM nécessaires au banc privé et ne doit pas être publié intégralement comme
+source OpenD578.</p>
+<p><strong>Sources destinées à GitHub :</strong>
+<code>SOURCES_PUBLIQUES/OpenD578_source_V11_7.zip</code>, inclus dans le paquet complet.
+Les firmwares constructeur et les captures privées restent séparés.</p>
+<p>Empreinte SHA-256 du paquet complet publié :</p>
+<pre><code class="language-text">0ef2e25b902650f9ff5748eae8c975bf4167254caaf2eb7215f971eee5941794
+</code></pre>
+<p>Ce changelog documente la release après sa publication. Son ajout au dépôt ne
+modifie pas rétroactivement le ZIP V11.7 identifié par cette empreinte.</p>
+<h2 id="fichiers-de-reference-de-la-release">Fichiers de référence de la release</h2>
+<table>
+<thead>
+<tr>
+  <th>Fichiers</th>
+  <th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>bench/status_led.py</code>, <code>bench/indicator_qualification.py</code></td>
+  <td>Décodage et critère du voyant</td>
+</tr>
+<tr>
+  <td><code>bench/board_observations.py</code></td>
+  <td>Sorties observées et inconnues explicites</td>
+</tr>
+<tr>
+  <td><code>bench/oem_discovery.py</code></td>
+  <td>Recherche statique reproductible</td>
+</tr>
+<tr>
+  <td><code>bench/qualification_data/catalog.json</code>, <code>catalog.schema.json</code></td>
+  <td>Inventaire de référence et schéma</td>
+</tr>
+<tr>
+  <td><code>bench/run_base_tests.py</code>, <code>bench/selftest_report.py</code></td>
+  <td>Campagnes et rapports de couverture</td>
+</tr>
+<tr>
+  <td><code>bench/scenarios/LED_RX_TX.json</code></td>
+  <td>Stimuli du nouveau scénario</td>
+</tr>
+<tr>
+  <td><code>bench/TESTER_BASES.cmd</code>, <code>bench/TESTER_BASES.sh</code></td>
+  <td>Lanceurs</td>
+</tr>
+<tr>
+  <td><code>bench/web/qualification.js</code></td>
+  <td>Nouvelle vue navigateur</td>
+</tr>
+<tr>
+  <td><code>docs/FUNCTION_MATRIX.csv</code></td>
+  <td>Matrice lisible dans un tableur</td>
+</tr>
+<tr>
+  <td><code>docs/LED_STATUS_BUS.md</code></td>
+  <td>Preuves et limites de la découverte LED</td>
+</tr>
+<tr>
+  <td><code>docs/QUALIFICATION_ANALOGIQUE.md</code></td>
+  <td>Méthode et périmètre convenus</td>
+</tr>
+<tr>
+  <td><code>docs/firmware_discovery_v121.json</code></td>
+  <td>Résultats statiques publiables</td>
+</tr>
+<tr>
+  <td><code>docs/validation_v11_7.json</code></td>
+  <td>Mesures et portée des essais</td>
+</tr>
+<tr>
+  <td><code>docs/selftest_v11_7.json</code>, <code>docs/selftest_v11_7.junit.xml</code></td>
+  <td>Couverture globale incomplète</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sources-techniques-recoupees">Sources techniques recoupées</h2>
+<ul>
+<li>Manuel fabricant A3.200730 :
+<a href="https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf">https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf</a>.</li>
+<li>Manuel GD32F30x :
+<a href="https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf">https://www.gd32mcu.com/data/documents/userManual/GD32F30x_User_Manual_Rev2.9.pdf</a>.</li>
+<li>Datasheet TLV320AIC3204 :
+<a href="https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf">https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf</a>.</li>
+<li>Datasheet SCT3258 :
+<a href="https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf">https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf</a>.</li>
+<li>Protocole microphone capturé :
+<a href="https://github.com/jrobertfisher/AT-D578UV-software-mic/wiki">https://github.com/jrobertfisher/AT-D578UV-software-mic/wiki</a>.</li>
+<li>Référence historique des photos internes FCC :
+<a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250</a>.</li>
+<li>Dépôt du projet : <a href="https://github.com/Telectroboy/OpenD578">https://github.com/Telectroboy/OpenD578</a>.</li>
+</ul>
+<p>Image applicative analysée, chargée à <code>0x08006000</code> :</p>
+<pre><code class="language-text">SHA-256 : 02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a
+</code></pre>
+<h2 id="suite-du-travail-convenue">Suite du travail convenue</h2>
+<ol>
+<li>Poursuivre l’inventaire et l’identification matérielle, notamment les LED et
+commandes du microphone.</li>
+<li>Fermer la chaîne FM/audio, avec des générateurs et récepteurs de mesure
+indépendants des résultats attendus du firmware.</li>
+<li>Relier les branches du firmware aux exigences et vérifier les fonctions
+encore absentes de l’inventaire ou des scénarios.</li>
+<li>Qualifier le GPS et ses défauts sans forcer les variables RAM du firmware.</li>
+<li>Terminer l’APRS TX OEM puis vérifier les trames décodées depuis l’I/Q.</li>
+<li>Intégrer et qualifier la fonction satellite.</li>
+</ol>
+<p>L’option Bluetooth est suivie avec le routage audio. Le DMR reste de côté pour
+cette campagne ; la réception APRS conserve sa place dans une étape ultérieure.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

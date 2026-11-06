@@ -1,5 +1,17 @@
 # OpenD578
 
+Dossier technique : [centre de preuves](docs/evidence/INDEX.md), [sauvegardes RTC/GPS](docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md), [cinq monographies reconstruites](docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.md), [originaux absents](docs/archives/ORIGINAUX_A_RECUPERER.md).
+
+Guide du site : [README_SITE.md](README_SITE.md). Publication GitHub : [instructions](docs/PUBLICATION_GITHUB_DEPOT_COMPLET.md). Dossier programmation : [CPS/USB/codeplug](docs/cps/README.md).
+
+La source publique du banc est **V11.7** ; les notices LCD/microphone V11.8 sont de la documentation complémentaire et ne remplacent pas leur code source manquant.
+
+
+Le [banc V11.3](docs/HARDWARE_COVERAGE.md) propose maintenant le mode matériel
+indépendant dans l'interface web : chargement d'un binaire expérimental, moteur
+natif, entrées USB/UART simulées et inventaire des appels/blocs candidats. Les
+limites DSP/DMR, audio, programmation CPS et reset automatique restent explicites.
+
 Recherche, banc logiciel et futur firmware pour l'AnyTone D578UV PRO GD32.
 
 Le dépôt rassemble le code du banc, les relevés documentés et les étapes de
@@ -38,3 +50,15 @@ distinctions entre preuves, hypothèses et anciens blocages.
 Les fichiers constructeur et les captures du poste restent des entrées locales.
 Le programme de test généré par `contract_firmware.py` est original ; il teste
 des contrats numériques et n'est pas une image à flasher sur un poste.
+
+## Qualification V11.7
+
+Le voyant de statut suit les commandes PE3/PE4. Le catalogue ouvert contient
+117 exigences FM, IHM, audio, GPS, APRS, satellite et Bluetooth. Quatre essais
+bornés réussissent ; la qualification matérielle complète reste incomplète.
+Voir [la méthode et les limites](docs/QUALIFICATION_ANALOGIQUE.md) et
+[le bus du voyant](docs/LED_STATUS_BUS.md).
+
+### Reconstruction du pilote RF QA4818N
+
+[Monographie détaillée](docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md), [outil de traces](tools/qa4818n_trace.py), [calculateur C](firmware/rf/qa4818n_frequency.c) et [tests](tools/test_qa4818n_trace.py). Aucun TX ni câblage électrique n'est piloté ; les valeurs calculées selon AT1846S restent à confirmer sur QA4818N.

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Journal des erreurs, corrections, résultats négatifs et frontières de preuve - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Journal des erreurs, corrections, résultats négatifs et frontières de preuve</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md">Modifier sur GitHub</a><a download href="../../raw/docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/07_ERREURS_CORRECTIONS_HYPOTHESES_ET_NO_GO.md</code></p>
+<article class="markdown-body"><h1 id="journal-des-erreurs-corrections-resultats-negatifs-et-frontieres-de-preuve">Journal des erreurs, corrections, résultats négatifs et frontières de preuve</h1>
+<p>Ce journal doit être lu AVANT de reprendre un patch. Il évite la répétition des fausses pistes déjà écartées et distingue les preuves des noms donnés aux routines.</p>
+<table>
+<thead>
+<tr>
+  <th>Incident / hypothèse d'origine</th>
+  <th>Correction ou résultat actuel</th>
+  <th>Conséquence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>« 96 % de la RAM est occupée ».</td>
+  <td>Les 94 432 octets sont <strong>initialisés ou remis à zéro à l'entrée</strong>, réserves tas/pile incluses. Une RAM toute à zéro peut être entièrement réservée.</td>
+  <td>Aucune mesure RAM maximale réelle en FM, TX, DMR, APRS ni multitâche.</td>
+</tr>
+<tr>
+  <td>« Le haut RAM est occupé car les mots 0x20017801, 0x20017904, 0x20017F21 apparaissent ».</td>
+  <td>L'analyse Thumb montre des instructions LDRB/MOVS à ces positions. Ce sont de <strong>faux positifs</strong> de recherche de pointeurs.</td>
+  <td>3 872 octets du haut de SRAM restent candidats, <strong>non certifiés libres</strong>.</td>
+</tr>
+<tr>
+  <td>Écart Unicorn avec <code>UC_HOOK_MEM_WRITE</code>.</td>
+  <td>Divergence observée dans un décodage Thumb conditionnel. Variante écartée; comparaison indépendante A5/5A et décodeur Python.</td>
+  <td>Ne pas déclarer un dépassement RAM sans preuve indépendante.</td>
+</tr>
+<tr>
+  <td>Révéler le boot sans horloge, puis forcer un passage de fonction.</td>
+  <td>V1 bloque normalement sur RCU_CTL; V2 modélise IRC8M/HXTAL/PLL et traverse SystemInit sans patch ni saut.</td>
+  <td>N'utiliser que le modèle d'horloge documenté, pas un forced return.</td>
+</tr>
+<tr>
+  <td>Trancher arbitrairement la valeur PA15 à l'arrêt V2.</td>
+  <td>PA15 participe au bus NAND. V3 fournit les bits commandés par la NAND à partir du dump réel, au rythme des GPIO OEM.</td>
+  <td>Les 58 buffers sont vérifiés après lecture, sans injection directe en SRAM.</td>
+</tr>
+<tr>
+  <td>Sans Power, le poste semble « bloqué » avant l'application.</td>
+  <td>V3 atteint <code>WFI 0x080089AA</code>, SLEEPDEEP activé. [UTILISATEUR] Power est un bouton relié au MCU, pas un interrupteur d'alimentation.</td>
+  <td>Simuler PA0 EXTI0 front descendant/IRQ6; ne pas bypasser le sommeil.</td>
+</tr>
+<tr>
+  <td>Port série NAND traité comme simple SPI 1 fil.</td>
+  <td>Le firmware utilise réellement <code>0x3B</code> de cache read <strong>dual output</strong> SO1/SO0; les lignes sont PB14/PA15.</td>
+  <td>Émuler les deux bits et les fronts, pas uniquement un MISO 1 fil.</td>
+</tr>
+<tr>
+  <td>Une valeur ECC 0x20 serait une page lisible/intègre.</td>
+  <td>437 pages signalées non corrigées, dont 10 non triviales, 192 tout zéro.</td>
+  <td>Sauvegarde NAND non garantie restaurable.</td>
+</tr>
+<tr>
+  <td>Rapport antérieur : 238 pages marqueurs ECC20.</td>
+  <td>Reclassement: 225+10=<strong>235</strong> marqueurs, 192 pages tout zéro et 10 pages non triviales, total 437.</td>
+  <td>Garder le résultat corrigé et l'erreur documentée.</td>
+</tr>
+<tr>
+  <td>Blocs NAND entièrement FF = stockage TLE libre.</td>
+  <td>L'image contient codeplug, annuaire, ressources et configuration; usure et allocation OEM inconnues.</td>
+  <td>Zéro allocation NAND satellite décidée.</td>
+</tr>
+<tr>
+  <td><code>0x0804EAC6</code> ou <code>0x080857AE</code> serait un setter radio.</td>
+  <td>Le premier copie des structures VFO/canal en RAM; le second manipule des enregistrements mémoire externe paginée.</td>
+  <td>Ne pas les utiliser pour Doppler.</td>
+</tr>
+<tr>
+  <td><code>0x0808AB18</code> suffit pour régler une fréquence.</td>
+  <td>Pilote de commande série de registre 16 bits, pas transaction RX/TX complète, pas validation RF.</td>
+  <td>Setter OEM encore inconnu.</td>
+</tr>
+<tr>
+  <td>Déduire PTT de la chaîne texte « PTT », d'un GPIO ou de flags simulés.</td>
+  <td>Chaînes Bluetooth et lecteurs GPIO présents; aucun câblage/signal d'état PTT/TX/busy qualifié.</td>
+  <td>Etat inconnu = refus de commande RF.</td>
+</tr>
+<tr>
+  <td>Cache <code>radio_safe</code> suffit avant QSY.</td>
+  <td>Phase32 a introduit relecture de busy/PTT à l'instant exact de proposition RF.</td>
+  <td>Vérification live obligatoire, y compris avant restauration RF.</td>
+</tr>
+<tr>
+  <td><code>0x080387DA</code> serait écriture LCD brute.</td>
+  <td>Phase43 : cette fonction émet la <strong>commande LCD 0x11</strong>, pas des octets données.</td>
+  <td>Ne pas s'y brancher comme framebuffer.</td>
+</tr>
+<tr>
+  <td><code>0x200001C8 / 0x200001EC / 0x200001F8</code> seraient un verrou.</td>
+  <td>Variables de notification/tempo. Le sémaphore LCD réel repéré est <code>0x20000128</code>, avec règles RTOS à qualifier.</td>
+  <td>Pas de mutex inventé; une seule propriété OEM.</td>
+</tr>
+<tr>
+  <td>37 acquisitions LCD contre 38 releases = release surnuméraire.</td>
+  <td>Analyse de Phase44: 37 paires adjacentes et un suffixe atteint par saut, pas une anomalie prouvée.</td>
+  <td>Tracer les chemins et codes de retour avant tout hook.</td>
+</tr>
+<tr>
+  <td><code>SAT:</code> dans nom codeplug signifie nom à même offset dans l'objet RAM.</td>
+  <td><code>+0x23</code> est un offset connu de l'enregistrement codeplug 64 o selon qdmr; mapping de la <strong>structure active RAM</strong> non prouvé.</td>
+  <td>Aucune lecture native RAM du nom dans Phase60.</td>
+</tr>
+<tr>
+  <td>La Phase60 ELF ET_EXEC est un firmware à flasher.</td>
+  <td>ELF purement construit, BSS volontairement dans 0x30000000 invalide, pas d'API OEM câblée et ROM stage 14 680 o.</td>
+  <td><code>NO_GO</code>, aucun <code>.spi/.CDI/.CDD</code> modifié.</td>
+</tr>
+<tr>
+  <td>Les 4 pages proches de 0x080F0000 sont libres parce que peu de modifications.</td>
+  <td>Elles contiennent une table CJK et une page d'effacement peut toucher du code/ressource.</td>
+  <td>Placement Flash non autorisé.</td>
+</tr>
+<tr>
+  <td>Flash 3 Mio et boot lus = récupération garantie.</td>
+  <td>Aucune écriture/restore d'application invalide n'a été essayée et qualifiée.</td>
+  <td>Avant toute modification, valider recovery indépendant.</td>
+</tr>
+<tr>
+  <td>USB normal et MCU UPDATE ont des descripteurs différents.</td>
+  <td>Même VID/PID <code>28e9:018a</code> observé selon les modes. Une étiquette d'archive Phase32 désignait à tort mode MCU alors qu'il s'agissait de mode normal.</td>
+  <td>Ne pas attribuer un mode à un simple ID USB.</td>
+</tr>
+<tr>
+  <td>Mod de firmware V1.16n/V2.03n réutilisable sur V1.21 GD.</td>
+  <td>Les mods externes n'apportent pas de preuve d'ABI compatible; versions/radios différentes.</td>
+  <td>Comparer uniquement stock/mod de même modèle/release.</td>
+</tr>
+<tr>
+  <td>ADC rencontré lors du boot = AIC3204 audio.</td>
+  <td>Accès <code>ADC0</code> interne GD32 à <code>0x4001244C</code> + DMA0 vers SRAM; le TLV320AIC3204 est un codec audio séparé.</td>
+  <td>Étudier les sept voies/trigger DMA GD32 en premier.</td>
+</tr>
+<tr>
+  <td>Relever GPIO ISTAT/OCTL doit révéler LED.</td>
+  <td>Capture V1.2/V1.3 sans transition sur bits échantillonnés malgré essais de Power; le MCU reste alimenté.</td>
+  <td>Ne pas piloter les GPIO au hasard; continuer traçage électrique logique.</td>
+</tr>
+<tr>
+  <td>Le modèle V3 montre le LCD.</td>
+  <td>Il traverse le code et les opérations de bus LCD; il <strong>ne restitue pas de framebuffer ou une fenêtre cliquable</strong>.</td>
+  <td>Émulateur PC avec boutons, GPS, audio, DMR à développer.</td>
+</tr>
+<tr>
+  <td>Les lignes de test V3 représentent du temps réel.</td>
+  <td>Le compteur est virtuel, <code>idle-clock-scale 64</code> accélère seulement les boucles de veille du modèle.</td>
+  <td>N'inférer aucun WCET ni fluidité embarquée.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="erreurs-de-provenance-et-problemes-darchives">Erreurs de provenance et problèmes d'archives</h2>
+<p>Une partie des ZIP anciens de passation et des gros dumps ont été repérés dans la bibliothèque, mais leur export binaire a été refusé. Les fichiers textuels récupérés n'ont pas nécessairement l'intégralité du fichier original, même s'ils sont lisibles. Exemple mesuré : passation phase47 déclarée 255 491 octets, export de texte 85 101 octets, terminant après les premières annexes. Il ne faut pas remettre cet export comme « 255 Ko intégral ».</p>
+<p>L'archive produite le 04/11 conserve les originaux qu'il a été possible de matérialiser, avec SHA. Pour les autres, elle consigne <strong>nom et absence</strong> plutôt que forger des fichiers ZIP vides ou des .bin avec des zéros. Un successeur doit demander ou retrouver les octets exacts dans Library pour toute modification concrète du firmware.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Espace de developpement des firmwares alternatifs - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>Espace de developpement des firmwares alternatifs</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/ARCHITECTURE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/firmware/ARCHITECTURE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/firmware/ARCHITECTURE.md</code></p>
+<article class="markdown-body"><h1 id="espace-de-developpement-des-firmwares-alternatifs">Espace de developpement des firmwares alternatifs</h1>
+<p>La nouvelle arborescence <code>firmware/</code> est reservee au developpement autonome. <strong>Aucun binaire installable ou flashable n'est livre</strong> par le site initial.</p>
+<h2 id="proposition-minimale">Proposition minimale</h2>
+<ul>
+<li><code>firmware/hal/</code> : GPIO/ADC, LCD, NAND en lecture, UART microphone/GPS, audio et RF, pilotes bases sur les registres, pas sur la RAM constructeur.</li>
+<li><code>firmware/app/</code> : demarrage, VFO, memoires, interface LCD, FM et CTCSS, GPS et APRS TX, gestion des erreurs.</li>
+<li><code>firmware/tests/</code> : tests du banc hors ligne, traces de simulation, assertions sur les tailles et les registres, validation sans TX physique.</li>
+</ul>
+<p><strong>Premier objectif fonctionnel :</strong> interface VFO et canaux FM, RX/TX analogique et CTCSS, sauvegarde des memoires avec protection des etalonnages et APRS TX. <strong>Ensuite :</strong> APRS RX et DMR. Le mode satellite utilisant les canaux <code>SAT:</code> peut etre conserve comme extension additive si les ressources RF/UI sont qualifiees.</p>
+<p>Les peripheriques externes <strong>Bluetooth ET12, BT01 et BP-02</strong> sont traites dans <a href="BLUETOOTH_PILOTES_BT01_PTT.html">le plan de pilotes Bluetooth</a>. Une couche UART et un automate PTT fail-safe sont proposes ; aucun transport BT complet ni cartographie de GPIO physique n'est affirme.</p>
+<p>Le banc <code>bench/run_hardware.py</code> permet deja de tester une application ARM distincte sans hook vers le firmware OEM. Les limites de simulation ne valent pas validation sur poste. Consulter <a href="../../README.html">README</a>, <a href="../ROADMAP.html">roadmap</a>, <a href="../EMULATOR.html">emulateur</a>, <a href="../02_CPU_FLASH_BOOT_USB_SWD.html">zones memoire</a> et <a href="../05_SATELLITE_CODE_INTEGRATION_EXP06.html">strategie satellite</a>.</p>
+<h2 id="sous-systeme-rf-experimental-qa4818n">Sous-système RF expérimental QA4818N</h2>
+<p>Le code <code>firmware/rf/qa4818n_frequency.[ch]</code> construit une paire <code>0x29/0x2A</code> selon le format candidat AT1846S. <code>qa4818n_transport.[ch]</code> transmet seulement à un backend de test injecté, par défaut désactivé. Le décodage des transactions OEM est dans <code>tools/qa4818n_trace.py</code>. Rien n'est prêt pour piloter les quatre boîtiers physiques, ni pour émettre.</p>
+<p><a href="../hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Monographie RF et protocole</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../index.html">Vue eclatee</a>
+<a class="active" href="../docs.html">Documents</a>
+<a href="../cps.html">CPS / USB</a>
+<a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="../firmware.html">Firmware</a>
+<a href="../photos.html">Photos</a>
+<a href="../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/README_FR.md">Modifier sur GitHub</a><a download href="../raw/README_FR.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>README_FR.md</code></p>
+<article class="markdown-body"><h1 id="opend578">OpenD578</h1>
+<p>Dossier technique : <a href="docs/evidence/INDEX.html">centre de preuves</a>, <a href="docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.html">sauvegardes RTC/GPS</a>, <a href="docs/peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">cinq monographies reconstruites</a>, <a href="docs/archives/ORIGINAUX_A_RECUPERER.html">originaux absents</a>.</p>
+<p>Guide du site : <a href="README_SITE.html">README_SITE.md</a>. Publication GitHub : <a href="docs/PUBLICATION_GITHUB_DEPOT_COMPLET.html">instructions</a>. Dossier programmation : <a href="docs/cps/README.html">CPS/USB/codeplug</a>.</p>
+<p>La source publique du banc est <strong>V11.7</strong> ; les notices LCD/microphone V11.8 sont de la documentation complémentaire et ne remplacent pas leur code source manquant.</p>
+<p>Le <a href="docs/HARDWARE_COVERAGE.html">banc V11.3</a> propose maintenant le mode matériel
+indépendant dans l'interface web : chargement d'un binaire expérimental, moteur
+natif, entrées USB/UART simulées et inventaire des appels/blocs candidats. Les
+limites DSP/DMR, audio, programmation CPS et reset automatique restent explicites.</p>
+<p>Recherche, banc logiciel et futur firmware pour l'AnyTone D578UV PRO GD32.</p>
+<p>Le dépôt rassemble le code du banc, les relevés documentés et les étapes de
+développement. Il ne contient pas encore de firmware radio OpenD578 utilisable.</p>
+<h2 id="perimetre-retenu">Périmètre retenu</h2>
+<ul>
+<li>Première version utilisable : <strong>VFO simple, FM RX/TX, CTCSS RX/TX, APRS TX</strong>.</li>
+<li>Lecture et écriture des mémoires analogiques depuis un PC, avec conservation
+des calibrations propres au poste, requises pour cette première version.</li>
+<li>Seconde étape : <strong>APRS RX</strong>, ainsi que le DMR nécessaire à l'usage avec un hotspot.</li>
+<li>Cohérence recherchée avec l'utilisation d'un TYT UV390 GPS sous OpenGD77.</li>
+<li>M17 hors périmètre. Les autres modèles AnyTone restent des cibles possibles,
+sans compatibilité annoncée aujourd'hui.</li>
+</ul>
+<h2 id="le-changement-du-banc">Le changement du banc</h2>
+<p><code>bench/run_hardware.py</code> exécute un programme indépendant sans utiliser les
+adresses des fonctions ni les structures RAM du firmware constructeur V1.21.
+Il accepte une autre implantation du code et de la pile dans les limites du
+matériel. Les fronts GPIO alimentent directement les modèles LCD et radio.</p>
+<p>Un accès à un périphérique non encore reproduit est signalé comme une limite
+du modèle. L'absence d'une signature V1.21 n'est plus un motif d'arrêt dans ce mode.
+Les limites physiques du GD32 et les comportements de bus restent contrôlés.</p>
+<p>Le banc d'analyse OEM V1.21 est conservé séparément pour les comparaisons et
+la poursuite du module satellite. Le cœur satellite doit rester raccordable
+au binaire constructeur puis au futur programme autonome.</p>
+<p>Les commandes d'installation et de test sont dans <a href="README.html">README.md</a>.
+Les notes techniques françaises issues des travaux antérieurs sont indexées
+dans <a href="docs/RESEARCH_INDEX.html">docs/RESEARCH_INDEX.md</a>. Elles conservent leurs
+distinctions entre preuves, hypothèses et anciens blocages.</p>
+<p>Les fichiers constructeur et les captures du poste restent des entrées locales.
+Le programme de test généré par <code>contract_firmware.py</code> est original ; il teste
+des contrats numériques et n'est pas une image à flasher sur un poste.</p>
+<h2 id="qualification-v117">Qualification V11.7</h2>
+<p>Le voyant de statut suit les commandes PE3/PE4. Le catalogue ouvert contient
+117 exigences FM, IHM, audio, GPS, APRS, satellite et Bluetooth. Quatre essais
+bornés réussissent ; la qualification matérielle complète reste incomplète.
+Voir <a href="docs/QUALIFICATION_ANALOGIQUE.html">la méthode et les limites</a> et
+<a href="docs/LED_STATUS_BUS.html">le bus du voyant</a>.</p>
+<h3 id="reconstruction-du-pilote-rf-qa4818n">Reconstruction du pilote RF QA4818N</h3>
+<p><a href="docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Monographie détaillée</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/tools/qa4818n_trace.py">outil de traces</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/firmware/rf/qa4818n_frequency.c">calculateur C</a> et <a href="https://github.com/Telectroboy/OpenD578/blob/main/tools/test_qa4818n_trace.py">tests</a>. Aucun TX ni câblage électrique n'est piloté ; les valeurs calculées selon AT1846S restent à confirmer sur QA4818N.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>
+</body></html>

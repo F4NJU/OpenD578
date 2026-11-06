@@ -1,0 +1,169 @@
+{
+  "version": "V11.3",
+  "date": "2026-11-05",
+  "tested_source_commit": "4582a1a",
+  "bench_tests": {
+    "passed": 164,
+    "failed": 0
+  },
+  "hardware_benchmark": {
+    "timings": [
+      {
+        "engine": "python",
+        "instructions": 100000,
+        "seconds": 0.9242126600001939
+      },
+      {
+        "engine": "native",
+        "instructions": 100000,
+        "seconds": 0.016531465999833017
+      }
+    ],
+    "checks": {
+      "CPU_PC": true,
+      "lcd": true,
+      "radio": true,
+      "nand": true,
+      "adc_dma": true,
+      "serial": true,
+      "SCT": true,
+      "lighting": true,
+      "interrupts": true,
+      "MMIO_counts": true,
+      "virtual_core_units": true,
+      "RAM": true
+    },
+    "speed_ratio": 55.90627352767923,
+    "scope": "Original board-contract fixture, 100000 instruction hooks, no coverage and no UI publication; not a full OEM boot benchmark"
+  },
+  "OEM_500000_instruction_engine_comparison": {
+    "status": "identical_for_executed_scenario",
+    "checks": {
+      "firmware_sha256": true,
+      "steps": true,
+      "stop": true,
+      "ram_sha256": true,
+      "cpu_registers": true,
+      "systick": true,
+      "systick_wraps": true,
+      "hardware_configuration": true,
+      "virtual_core_units": true,
+      "remaining_scenario_events": true,
+      "application_running": true,
+      "delivered_exceptions": true,
+      "timers": true,
+      "rtc": true,
+      "RF_control_spi": true,
+      "SCT3258_HPI": true,
+      "usart0": true,
+      "usart1": true,
+      "uart3": true,
+      "flash_cache": true,
+      "LCD.raw_rgb_sha256": true,
+      "LCD.display_on": true,
+      "LCD.sleeping": true,
+      "LCD.command_crosscheck_mismatches": true,
+      "LCD.total_pixel_writes": true,
+      "LCD.write_edges": true,
+      "LCD.commands": true,
+      "hardware.NAND": true,
+      "hardware.Flash": true,
+      "hardware.gps_OEM": true,
+      "hardware.RX": true,
+      "hardware.FAN": true,
+      "hardware.power_observation": true
+    },
+    "differences": [],
+    "missing_fields": [],
+    "first_IRQ_differences": [],
+    "physical_radio_certified": false,
+    "cycle_accuracy_established": false
+  },
+  "V112_to_V113_OEM_state_regression": {
+    "steps": true,
+    "cpu_registers": true,
+    "ram_sha256": true,
+    "systick": true,
+    "systick_wraps": true,
+    "virtual_core_units": true,
+    "delivered_exceptions": true,
+    "timers": true,
+    "rtc": true,
+    "RF_control_spi": true,
+    "usart0": true,
+    "usart1": true,
+    "uart3": true,
+    "flash_cache": true
+  },
+  "web_worker": {
+    "executed": true,
+    "manufacturer_inputs_required": false,
+    "start_pixels_coverage_and_stop_checked": true
+  },
+  "browser_visual_test": {
+    "executed": false,
+    "reason": "No Chromium executable available; JS syntax and HTML IDs checked"
+  },
+  "Power_off": {
+    "stop": {
+      "kind": "watchdog reset requested",
+      "pc": "0x0808A150",
+      "step": 68396285,
+      "source": "FWDGT",
+      "automatic_reboot": false
+    },
+    "watchdog": {
+      "automatic_reboot": false
+    },
+    "SCT_empty_strobes": 1,
+    "complete_service_mode_cycle_validated": false
+  },
+  "routine_inventory": {
+    "full_flash_V121": {
+      "candidate_entries": 3343,
+      "MMIO_literal_counts": {
+        "peripheral_bitband": 5363,
+        "RCU": 8,
+        "FMC": 10,
+        "Cortex/NVIC": 71,
+        "GPIO/AFIO/EXTI": 114,
+        "ADC": 8,
+        "USART0/SPI0": 10,
+        "watchdogs": 2,
+        "USB/BKP": 27,
+        "UART/SPI/I2C": 31,
+        "timers": 54,
+        "PMU/DAC": 2,
+        "DMA": 6,
+        "RTC": 2
+      },
+      "proven_functions": false,
+      "all_routines_understood": false
+    },
+    "application_V208": {
+      "candidate_entries": 3042,
+      "MMIO_literal_counts": {
+        "peripheral_bitband": 1465,
+        "RCU": 4,
+        "FMC": 5,
+        "Cortex/NVIC": 58,
+        "GPIO/AFIO/EXTI": 98,
+        "timers": 53,
+        "USART0/SPI0": 8,
+        "UART/SPI/I2C": 26,
+        "ADC": 5,
+        "USB/BKP": 14,
+        "PMU/DAC": 2,
+        "DMA": 6,
+        "watchdogs": 1,
+        "RTC": 2
+      },
+      "proven_functions": false,
+      "all_routines_understood": false
+    }
+  },
+  "Linux_x86_64_executed": true,
+  "Windows_DLLs_included": true,
+  "Windows_executed": false,
+  "radio_accessed": false
+}

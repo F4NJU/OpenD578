@@ -9,6 +9,9 @@ class BenchRunner(LabRunner):
         self.trace_enabled=True
         super().__init__(*args,**kwargs)
     def input_command(self,command):
+        if command['control'].startswith('USB_CDC_'):
+            from usb_cdc_runtime import command as cdc_command
+            if cdc_command(self,command):return
         if command['control']=='RF_RX':
             bank=int(command.get('bank',0));carrier=bool(command.get('carrier',False))
             tone=command.get('ctcss','absent')
@@ -41,6 +44,7 @@ class BenchRunner(LabRunner):
                       incompatible_anchors=len(profile['mismatches']))
             return
         super().on_code(uc,address,size,data)
+        if self.stop is not None:return
         if address==0x08090B62:
             entry=dict(step=self.steps,channel_mask=uc.reg_read(UC_ARM_REG_R0),argument1=uc.reg_read(UC_ARM_REG_R1))
             self.audio_commands.append(entry);self.event('OEM_audio_path_request',**{k:v for k,v in entry.items() if k!='step'})
@@ -60,7 +64,12 @@ class BenchRunner(LabRunner):
                     evidence='V1.21 observed native state; read only')
     def hardware_state(self):
         h=super().hardware_state()
+        from board_observations import describe
+        h['board_outputs']=describe(self)
         h['observation_profile']=getattr(self,'observation_profile',None)
+        from board_clock import describe_clock,calibration_observation
+        h['clocks']=describe_clock(self.clock.regs,self.systick)
+        h['calibration']=calibration_observation(self.cpu,h['OEM_state_interpretation_qualified'] and bytes(self.cpu.mem_read(0x20001542,1))==b'\x01')
         h['RX']=dict(external_inputs=self.rx_inputs,OEM=self.rx_state(),
                      signal_level_model='RF discriminator/status contract; no RF waveform demodulation',DMR_supported=False)
         h['power_observation']=dict(DAC_commands=self.power_commands[-40:],calibrated_watts=None,

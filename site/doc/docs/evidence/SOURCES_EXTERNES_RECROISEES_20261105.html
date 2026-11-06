@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Nouvelles preuves externes recroisees, 5 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Preuves et tracabilite</div>
+<div class="doc-heading"><h1>Nouvelles preuves externes recroisees, 5 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md">Modifier sur GitHub</a><a download href="../../../raw/docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/evidence/SOURCES_EXTERNES_RECROISEES_20261105.md</code></p>
+<article class="markdown-body"><h1 id="nouvelles-preuves-externes-recroisees-5-novembre-2026">Nouvelles preuves externes recroisees, 5 novembre 2026</h1>
+<p>Cette fiche etablit <strong>ce que les documents publics ajoutent</strong> aux releves sur nos D578. Une preuve de fonctionnement sur un poste d'une autre revision ne doit jamais etre consideree comme une connexion GPIO verifiee sur le PRO GD32 V1.21.</p>
+<h2 id="sauvegarde-rtc-et-gps">Sauvegarde RTC et GPS</h2>
+<ul>
+<li>Le dossier photographie de VK7ZJA / IK8JHL localise <strong>deux composants de sauvegarde sur le PCB ecran/CPU</strong>, face arriere pres de la nappe pour <strong>RTC</strong>, face avant entre les potentiometres pour <strong>GNSS hot start</strong>. Il indique <strong>XH414HG IV01E</strong>. L'utilisateur avait deja signale les elements de sauvegarde sur son PCB.</li>
+<li>Le constructeur de la reference <strong>XH414HG</strong> la classe parmi les <strong>condensateurs de sauvegarde XH-HG</strong>, <strong>0,08 F / 3,3 V maxi</strong>. Le terme « lithium rechargeable » du guide de maintenance ne suffit pas a changer sa categorie technologique.</li>
+<li>Une version ancienne du guide mentionne <strong>MS412</strong>. Ce n'est pas une equivalence prouvee. Il faut releve de marquage, dimensions, schema de charge et revision PCB.</li>
+<li>Le MCU <strong>GD32F303VKT6 LQFP100</strong> dispose d'une alimentation secours <strong>VBAT sur broche physique 6</strong>. La piste vers le composant RTC n'a pas ete mesuree. La version/sous-famille exacte du GPS doit etre determinee avant de figer le numero de sa broche de sauvegarde.</li>
+</ul>
+<p>Sources : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA/IK8JHL D578</a> ; <a href="https://www.radiomanual.info/schemi/Vari/Alinco_DR-MD500_DR-MD520_AnyTone_AT-D578UV_mods_and_information_VK7ZJA_2023.pdf">dossier PDF historique</a> ; <a href="https://www.infinite-electronics.kr/datasheet/3c-XH414HG-IV01E.pdf">datasheet Seiko XH414HG</a> ; <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">datasheet GD32</a>.</p>
+<h2 id="quatre-circuits-rf-varicaps-et-fi-reservee">Quatre circuits RF, varicaps et FI reservee</h2>
+<ul>
+<li>VK7ZJA decrit <strong>quatre QA4818N</strong> de reference 26 MHz, deux comme LO/VFO, deux comme recepteurs apres FI de <strong>38,550 / 38,850 MHz</strong>. Les quatre LQFP32 grattes observes sur le poste sont compatibles avec cette architecture, mais ne sont pas identifies individuellement par piste ou marquage.</li>
+<li>La documentation externe decrit <strong>quatre filtres varicaps par voie de bande</strong>, un <strong>relais et une diode d'alimentation</strong> et des <strong>empreintes FI supplementaires non peuplees</strong>. Il reste a comparer les photos RF PRO/PLUS aux vues FCC et a tracer les sorties du BH2226FV avant de lier celles-ci aux varicaps.</li>
+</ul>
+<p>Sources : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA</a> ; <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry</a> ; <a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">FCC D578UV</a>.</p>
+<h2 id="cps-distinctions-des-versions-et-references-utilisables">CPS : distinctions des versions et references utilisables</h2>
+<ul>
+<li>Le manuel <strong>qdmr</strong>, chapitre 8, donne une capture publique du protocole OEM AnyTone D578 <code>PROGRAM -&gt; QX 06</code>, identification et lecture <code>R</code>/reponse <code>W</code>. Il valide la <em>forme du protocole</em>, pas l'ensemble des offsets sur notre V1.21.</li>
+<li><strong>AnyTone_CPS</strong> est maintenant archive par son auteur ; le developpement a migre vers <strong>CodeplugStudio</strong>. L'ancienne version utilisait le profil <code>d578uv_v1.21</code>, mais les plans de memoire doivent etre verifiés avant ecriture.</li>
+<li><strong>AesApp WebCPS</strong> declare distinguer les D578 <strong>1.xx PRO</strong> et <strong>2.xx PLUS</strong> et identifie le PLUS sur USB comme <code>D578UV2</code> dans son champ de compatibilite. Sa documentation ne revendique pas le support complet des codeplugs 1.xx. Ce sont des proprietes de cet outil, pas une affirmation de compatibilite ou d'incompatibilite electrique des processeurs.</li>
+<li>Un codeplug public documente comme <strong>PLUS CPS 1.21 / FW 2.08</strong> est une <strong>preuve de version externe</strong>, et non le codeplug d'origine de notre PLUS ; aucun binaire n'a ete importe.</li>
+</ul>
+<p>Sources : <a href="https://static.dm3mat.de/qdmr/manual/ch08.html">qdmr chap. 8</a> ; <a href="https://github.com/hardenedpenguin/AnyTone_CPS">AnyTone_CPS (archive) -&gt; CodeplugStudio</a> ; <a href="https://github.com/hardenedpenguin/CodeplugStudio">CodeplugStudio</a> ; <a href="https://cps.aes.app/manual/en/about">AesApp WebCPS</a> ; <a href="https://codeplug.pi4utr.nl/Codeplug%20for%20AT-578%20models/20251013%20AT-D578UVIII%20PLUS%20CPS%20v1.21%20FW%20v2.08%20as%20made%20by%20PC7MM%20-%20Explanation.pdf">exemple de codeplug PLUS 2.08</a>.</p>
+<h2 id="niveaux-de-validation-maintenus">Niveaux de validation maintenus</h2>
+<table>
+<thead>
+<tr>
+  <th>Observation</th>
+  <th>Nature</th>
+  <th>Suffit pour compiler un driver ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Datasheet reference exactement identifiee</td>
+  <td>Fonctions et limites du circuit</td>
+  <td>Oui pour l'interface abstraite, pas pour les GPIO de la carte</td>
+</tr>
+<tr>
+  <td>Decode statique d'une routine V1.21</td>
+  <td>Registres/timing candidats, attaches au hash OEM</td>
+  <td>Non sans validation passive sur le poste</td>
+</tr>
+<tr>
+  <td>Transaction observee dans le banc OEM</td>
+  <td>Comportement du modele et de l'OEM dans cette simulation</td>
+  <td>Non sans confirmation des signaux physiques</td>
+</tr>
+<tr>
+  <td>Photo du D578 historique</td>
+  <td>Implantation d'une autre revision</td>
+  <td>Non, sauf confirmation de la meme carte et du meme routage</td>
+</tr>
+<tr>
+  <td>Test de continuite / analyseur logique de la carte cible</td>
+  <td>Liaison et forme d'onde mesurees</td>
+  <td>Oui dans les limites de tension, frequence et conditions du test</td>
+</tr>
+</tbody>
+</table>
+<p>Voir <a href="INDEX.html">inventaire des observations et types</a>, <a href="MESURES_RTC_GPS_A_CONSIGNER.html">actions de mesure RTC/GPS</a> et <a href="../archives/ORIGINAUX_A_RECUPERER.html">originaux manquants</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

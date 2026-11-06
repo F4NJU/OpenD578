@@ -65,8 +65,10 @@ class ExternalBusTests(unittest.TestCase):
             sct.gpio(8,0x18,0x88888888)
         self.assertEqual(bytes(actual),bytes.fromhex('84 a9 61 00 02 20 17 01'))
         self.assertEqual(sct.status(),0x20)
-        with self.assertRaisesRegex(StopModel,'empty output FIFO'):
-            sct.gpio(0x18,8,0x88888888)
+        sct.gpio(0x18,8,0x88888888)
+        self.assertEqual(sct.empty_read_strobes,1)
+        with self.assertRaisesRegex(StopModel,'outside read strobe'):
+            sct.input_data(8)
 
     def test_sct_corrupt_boot_stops(self):
         sct=SctHpi();sct.start_boot(b'\x12\x34')

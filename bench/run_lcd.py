@@ -3,6 +3,7 @@
 import argparse
 import contextlib
 import json
+import sys
 from pathlib import Path
 from adc_dma import validate_profile
 from bench_runner import BenchRunner as LcdRunner
@@ -28,9 +29,14 @@ def main():
     parser.add_argument('--instructions', type=int, default=200_000_000)
     parser.add_argument('--idle-clock-scale',type=int,choices=(1,64,4096,65536),default=4096)
     parser.add_argument('--audit',action='store_true')
+    parser.add_argument('--interactive',action='store_true')
+    parser.add_argument('--control-stdin',action='store_true')
+    parser.add_argument('--cdc-stdio',action='store_true',help='Send CDC status through stdout instead of a live JSON file')
+    parser.add_argument('--no-native-lcd',action='store_true')
     parser.add_argument('--engine',choices=('native','python'),default='native')
     parser.add_argument('--trace',choices=('full','minimal'),default='minimal')
     parser.add_argument('--nand-read-only',action='store_true')
+    parser.add_argument('--nand-state',type=Path,help='Persist virtual NAND pages separately from original captures')
     parser.add_argument('--without-power', action='store_true')
     parser.add_argument('--rtc-mode',choices=('retained','empty'),default='retained')
     parser.add_argument('--rtc-date',default='2026-11-04T12:00:00')
@@ -55,6 +61,8 @@ def main():
     if args.instructions < 1:
         parser.error('--instructions must be positive')
     if args.resume_ready and args.rtc_mode=='empty':parser.error('Ready session requires retained RTC mode')
+    if args.nand_state and args.nand_read_only:parser.error('NAND persistence requires an overlay')
+    if args.nand_state and args.nand_state.exists() and args.resume_ready:parser.error('A persisted NAND requires application reset, not an old RAM recording')
     if args.resume_ready and (args.firmware or args.entry!='application'):parser.error('La reprise OEM ne peut pas valider un firmware sélectionné ni un reset bootloader')
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir/'hardware_events.jsonl').write_text('',encoding='utf-8')
@@ -87,6 +95,19 @@ def main():
                 raise ValueError('Invalid simulated backup registers')
             registers.update(values)
     if args.resume_ready:load_ready(runner)
+    if args.cdc_stdio:
+        from cdc_channel import Publisher
+        runner.cdc_sink=Publisher(sys.__stdout__)
+    if args.nand_state and args.nand_state.exists():
+        from nand_state import load
+        runner.nand_checkpoint=load(runner.nand,args.nand_state)
+    runner.interactive_mode=args.interactive and not args.audit
+    if runner.interactive_mode:runner.enable_serial_time()
+    runner.disable_native_lcd=args.no_native_lcd
+    runner.last_control_id=None
+    if args.control_stdin:
+        from interactive_runtime import ControlInbox
+        runner.control_inbox=ControlInbox(sys.stdin)
     runner.fast_mode=not args.audit
     runner.idle_clock_scale=args.idle_clock_scale
     runner.arm_lab()
@@ -106,7 +127,11 @@ def main():
     with (args.out_dir/'execution.log').open('w', encoding='utf-8') as log:
         with contextlib.redirect_stdout(log):
             result, state = runner.run_chunks(runner.steps+args.instructions)
-    result['simulator_version']='V11.1'
+    from bench_version import VERSION
+    from usb_cdc_runtime import final_snapshot
+    final_snapshot(runner)
+    result['simulator_version']=VERSION
+    result['interactive_mode']=runner.interactive_mode
     result['observation_profile']=runner.observation_profile
     result['remaining_scenario_events']=len(runner.scenario)
     result['application_running']=bytes(runner.cpu.mem_read(0x20001542,1))==b'\x01'
@@ -119,7 +144,10 @@ def main():
         physical_radio_certified=False,trace_mode=args.trace,
         missing_models=['RF waveforms and calibrated PA power','DSP/AMBE and DMR reception','APRS modulation DMA'])
     if getattr(runner,'native_gate',None):result['execution_engine']=runner.native_gate.describe()
-    (args.out_dir/'resultat.json').write_text(json.dumps(result, indent=2, ensure_ascii=False),encoding='utf-8')
+    if args.nand_state:
+        from nand_state import save
+        result['NAND_persistence']=save(runner.nand,args.nand_state)
+    (args.out_dir/'resultat.json').write_text(json.dumps(result, indent=None if runner.interactive_mode else 2, ensure_ascii=False),encoding='utf-8')
     (args.out_dir/'resultat.sram.bin').write_bytes(state)
     battery_file.write_text(json.dumps(dict(kind='synthetic_backup_domain',
         rtc=runner.backup.regs,backup=runner.backup.backup),indent=2),encoding='utf-8')

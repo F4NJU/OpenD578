@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Project milestones - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Project milestones</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/ROADMAP.md">Modifier sur GitHub</a><a download href="../../raw/docs/ROADMAP.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/ROADMAP.md</code></p>
+<article class="markdown-body"><h1 id="project-milestones">Project milestones</h1>
+<p>This is a development plan, not a list of currently implemented features.</p>
+<table>
+<thead>
+<tr>
+  <th>Milestone</th>
+  <th>Acceptance criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Public research base</td>
+  <td>Board findings, model limitations, hashes, references and reproducible source-only tests are available.</td>
+</tr>
+<tr>
+  <td>Firmware-independent bench</td>
+  <td>A program with no OEM code can use GPIO, LCD, ADC/DMA, serial and physical SRAM without V1.21-specific address checks. Peripherals not modeled produce explicit incomplete results.</td>
+</tr>
+<tr>
+  <td>Satellite integration</td>
+  <td>Identify current RF state and frequency setters; qualify UI ownership, runtime memory and restoration. Keep the calculation module separable from the OEM adapter.</td>
+</tr>
+<tr>
+  <td>First usable OpenD578</td>
+  <td>A simple VFO and PC-programmable analog memories; FM RX and TX; independent RX/TX CTCSS; APRS <strong>TX</strong>; retained radio-specific calibration, power/fan control and reliable return to receive. Tested on the board after emulator qualification.</td>
+</tr>
+<tr>
+  <td>Second stage</td>
+  <td>APRS <strong>RX</strong> with a qualified digital audio path; DMR receive/transmit suitable for a local hotspot, using the SCT3258 appropriately.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="first-version-interface">First-version interface</h2>
+<p>Prefer an OpenGD77-like operating logic, with one visible VFO and configurable
+RX/TX frequency and tone settings. Basic channel storage and PC programming are
+required; elaborate on-radio zone management is not required for the first version.
+Do not add another thread or a UI framework merely to reproduce
+the arrangement of another radio's pixels.</p>
+<h2 id="what-remains-before-fmaprs-tx-is-usable">What remains before FM/APRS TX is usable</h2>
+<p>The present contract probe validates neither a synthesizer's physical frequency
+nor an on-air transmission. Identify and verify frequency register conversions,
+filter/PA selection, power calibration, audio routing, TX CTCSS and modulation.
+Complete the relevant timer/DMA path for APRS TX. Receiver status injection alone
+does not establish those functions.</p>
+<p>The PC link must be exercised in the emulator: identify, read memories, write
+memories, read back, restart and recover the same values. Keep programming writes
+separate from board calibration; a channel upload must not overwrite alignment.
+See <a href="PROGRAMMING_AND_CALIBRATION.html">PROGRAMMING_AND_CALIBRATION.md</a>.</p>
+<p>DMR remains a required goal, even though the first usable version starts with
+analog functions. APRS reception is explicitly scheduled after that first version.
+M17 is not planned. D878 support would require its own board profile and evidence.</p>
+<h2 id="community-work-that-can-proceed-independently">Community work that can proceed independently</h2>
+<ul>
+<li>Extend peripheral behavior with captured transactions and failure cases.</li>
+<li>Identify the exact silicon and electrical routes behind the radio GPIO banks.</li>
+<li>Document the SCT3258 bootstrap, packet protocol, codec commands and DMR events.</li>
+<li>Add frequency-aware synthetic inputs once the hardware frequency contract is known.</li>
+<li>Verify the legacy/native interrupt timing difference and exception edge cases.</li>
+<li>Extract reusable satellite calculations under compatible upstream licensing.</li>
+</ul>
+<p>New functionality should have a bounded test and a documented hardware contract.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

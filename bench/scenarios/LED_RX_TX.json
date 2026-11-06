@@ -1,0 +1,42 @@
+[
+  {
+    "after_instructions": 0,
+    "command": {
+      "control": "RF_RX",
+      "bank": 0,
+      "carrier": false
+    }
+  },
+  {
+    "after_instructions": 2000000,
+    "command": {
+      "control": "RF_RX",
+      "bank": 0,
+      "carrier": true
+    }
+  },
+  {
+    "after_instructions": 5000000,
+    "command": {
+      "control": "RF_RX",
+      "bank": 0,
+      "carrier": false
+    }
+  },
+  {
+    "after_instructions": 7000000,
+    "command": {
+      "control": "MIC_KEYS",
+      "keys": [
+        "PTT"
+      ]
+    }
+  },
+  {
+    "after_instructions": 9500000,
+    "command": {
+      "control": "MIC_KEYS",
+      "keys": []
+    }
+  }
+]

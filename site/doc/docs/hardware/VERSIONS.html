@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Versions de cartes - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Versions de cartes</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VERSIONS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/VERSIONS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/VERSIONS.md</code></p>
+<article class="markdown-body"><h1 id="versions-de-cartes">Versions de cartes</h1>
+<p>La documentation de reference des routines couvre le <strong>D578UV PRO - GD32 V1.21</strong>. Le modele PLUS integre les observations materielles du <strong>GD32F303</strong> sans transposer les adresses et routines de la V1.21 PRO. La presence de composants identiques sur les variantes UV, UV PLUS, UVIII ou les versions a MCU non-GD32 n'autorise pas a fusionner les registres, memoires ni brochages.</p>
+<p>Chaque nouvelle variante doit posseder un fichier independant dans <code>hardware/models/</code>, avec un <code>id</code> unique, sa reference de carte, un <code>updated</code> et les fiches/connexions qui lui sont propres. Le script de publication decouvre automatiquement ces fichiers JSON et ajoute la variante au selecteur.</p>
+<p>Les pages des documents indiquent leur portee; les valeurs OEM V1.20 ne sont pas interchangeables avec V1.21. Les fichiers de constructeur ne sont pas redistribues pour cela.</p>
+<h2 id="ecarts-pro-plus-releves">Écarts PRO / PLUS relevés</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément</th>
+  <th>D578UV PRO GD32 V1.21</th>
+  <th>D578UV PLUS observé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Ampli audio principal</td>
+  <td>YD1517P</td>
+  <td>UTC PA1517G</td>
+</tr>
+<tr>
+  <td>Module RF additionnel de réception AM</td>
+  <td>Connecteurs non implantés selon observation utilisateur</td>
+  <td>Carte fille avec entrée RF, quartz, CI KT09?5R non identifié</td>
+</tr>
+<tr>
+  <td>Quatre CI LQFP32 grattés</td>
+  <td>Quatre observés, famille QA4818N probable</td>
+  <td>À confirmer pour cette révision</td>
+</tr>
+<tr>
+  <td>RDA5802N</td>
+  <td>Observé</td>
+  <td>Voisinage de la carte fille rapporté</td>
+</tr>
+<tr>
+  <td>MCU / firmware</td>
+  <td>GD32F303VKT6, V1.21 etudiee</td>
+  <td>GD32F303 identifie sur le PLUS ; suffixe/firmware exacts encore a consigner</td>
+</tr>
+</tbody>
+</table>
+<p>Voir <a href="CARTE_PLUS_AM_KT_NON_IDENTIFIE.html">carte PLUS</a>, <a href="BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">comparaison Bluetooth</a> et selectionner le modele PLUS dans l'explorateur. Aucun brochage PRO n'est transpose par defaut.</p>
+<p>Le support Bluetooth <strong>D868BT-SP</strong> et son module blinde ne sont pas automatiquement identifies comme la carte RF AM du PLUS. Les firmwares Bluetooth ET12, BT01, GD32 et DMR constituent des domaines de mise a jour distincts.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

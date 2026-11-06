@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Architecture RF D578 : protections, filtres varicaps et emplacement FI non equipe - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Architecture RF D578 : protections, filtres varicaps et emplacement FI non equipe</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/ETAGES_RF_PROTECTION_FI.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/ETAGES_RF_PROTECTION_FI.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/ETAGES_RF_PROTECTION_FI.md</code></p>
+<article class="markdown-body"><h1 id="architecture-rf-d578-protections-filtres-varicaps-et-emplacement-fi-non-equipe">Architecture RF D578 : protections, filtres varicaps et emplacement FI non equipe</h1>
+<h2 id="architecture-documentee-sur-d578-historique">Architecture documentee sur D578 historique</h2>
+<p>Les relevages de VK7ZJA decrivent une entree d'alimentation protegee par <strong>relais et diode</strong> contre l'inversion de polarite, deux chaines RX independantes VHF/UHF avec <strong>quatre etages de filtrage accordes par varicaps</strong>, une premiere conversion heterodyne et deux filtres FI <strong>38,550 et 38,850 MHz</strong> suivis de recepteurs a conversion directe. Les quatre circuits QA4818N constituent les candidats etablis par la documentation familiale ; leur correspondance physique avec les boitiers grattes du poste est encore a tracer.</p>
+<p>Les cartes de certaines revisions comportent les empreintes d'un <strong>troisieme chemin FI non peuple</strong> et de filtres supplementaires montables en cascade. Une empreinte non equipee ne prouve pas qu'une fonction est utilisable par simple ajout de pieces. Les editions anciennes etaient anterieures a certaines fonctions AM du PLUS.</p>
+<h2 id="correspondances-possibles-et-pistes-de-recherche">Correspondances possibles et pistes de recherche</h2>
+<table>
+<thead>
+<tr>
+  <th>Zone</th>
+  <th>Evidence externe</th>
+  <th>Notre releve</th>
+  <th>Action avant toute conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Relais / diode entree 13,8 V</td>
+  <td>VK7ZJA : protection polarite</td>
+  <td>L7805CV identifie par l'utilisateur</td>
+  <td>Identifier VIN, masse, commande relais, rails 5V et 3V3 par traces/releves</td>
+</tr>
+<tr>
+  <td>Varicaps RX</td>
+  <td>VK7ZJA : quatre filtres accordes par bande</td>
+  <td>BH2226FV H2226 et SGM8272 sur carte</td>
+  <td>Etablir la liaison analogique entre sorties CNA, amplis et commandes de syntonisation</td>
+</tr>
+<tr>
+  <td>Premiere FI</td>
+  <td>38,550 / 38,850 MHz</td>
+  <td>Deux paires de LQFP32 grattes, 26.00 a proximite</td>
+  <td>Suivre chaque cristal, mixer, CS et sortie IF sans emission</td>
+</tr>
+<tr>
+  <td>FI supplementaire</td>
+  <td>Empreintes non peuplees sur revisions historiques</td>
+  <td>Non relevees sur nos PCB</td>
+  <td>Photos des deux faces sous blindage et comparaison avec FCC</td>
+</tr>
+<tr>
+  <td>Reception AM airband PLUS</td>
+  <td>Carte KT0905R/KT09S5R decrite par l'utilisateur</td>
+  <td>Connecteur absent sur PRO, present sur PLUS</td>
+  <td>Relever entree RF, oscillateur, numerotation contacteur et signaux sans hypothese de protocole</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ne pas confondre</strong> presence de transistor PA / varicap et preuve de commande du GD32. Un firmware alternatif doit conserver la radio non emissive tant que les commandes, polarisation, limites RF et retours d'etat ne sont pas qualifies.</p>
+<p>Sources : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a> ; <a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250</a> ; <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a> ; <code>docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md</code>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

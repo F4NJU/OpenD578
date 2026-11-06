@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 V11.8 : installation, changelog et microphone - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>OpenD578 V11.8 : installation, changelog et microphone</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md">Modifier sur GitHub</a><a download href="../../raw/docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code></p>
+<article class="markdown-body"><h1 id="opend578-v118-installation-changelog-et-microphone">OpenD578 V11.8 : installation, changelog et microphone</h1>
+<p>Date : 5 novembre 2026. Cible analysée : D578UV PRO, application GD32 V1.21.</p>
+<p>Ce document rassemble les instructions de la mise à jour V11.8 et les résultats
+sur le microphone. Il ajoute la nouvelle observation des deux voyants blancs.
+Il complète la release déjà distribuée ; il ne constitue pas une nouvelle
+version du banc et ne modifie pas rétroactivement son archive.</p>
+<h2 id="1-installer-la-mise-a-jour">1. Installer la mise à jour</h2>
+<p>L’archive <code>OpenD578_MAJ_V11_8.zip</code> est une mise à jour publique à appliquer à
+un banc V11.7 fonctionnel. Elle ne contient pas les images constructeur,
+captures de reprise et bibliothèques natives nécessaires à un banc OEM autonome.</p>
+<ol>
+<li>Fermer le banc et son serveur local, ainsi que le pont USB s’il est actif.</li>
+<li>Garder une copie du dossier V11.7 fonctionnel.</li>
+<li>Décompresser la mise à jour dans un dossier temporaire.</li>
+<li>Copier <strong>le contenu</strong> de <code>OpenD578_MAJ_V11_8/</code> dans le dossier du banc V11.7.
+Accepter le remplacement des fichiers de code. Conserver les références
+privées et bibliothèques natives déjà installées.</li>
+<li>Sous Windows, lancer <code>OUVRIR_BANC_WEB_V11_8.cmd</code>.
+Sous Linux, lancer <code>bash OUVRIR_BANC_WEB_V11_8.sh</code>.</li>
+<li>Vérifier que le serveur annonce V11.8, puis démarrer le poste simulé.</li>
+</ol>
+<p>Pour contrôler les commandes du microphone, connecter le microphone simulé,
+puis observer les messages reçus après émission effective des octets UART.
+Un état inconnu avant réception d’une trame complète est normal.</p>
+<p>Pour le CPS Windows, conserver la paire de ports COM virtuels et le pont local
+déjà validés : le pont et le CPS ouvrent chacun une extrémité différente.
+Ne pas lancer simultanément un autre client qui programme le même poste simulé.
+La validation USB de cette release porte sur l’identification et une lecture
+mémoire ; elle ne qualifie pas toutes les écritures du CPS.</p>
+<p>L’archive contient également <code>SOURCES_PUBLIQUES/OpenD578_source_V11_8.zip</code>,
+qui conserve l’arborescence du dépôt pour publication des sources.
+Dépôt : <a href="https://github.com/Telectroboy/OpenD578">https://github.com/Telectroboy/OpenD578</a>.</p>
+<h2 id="2-changelog-v118">2. Changelog V11.8</h2>
+<h3 id="dialogue-avec-le-microphone">Dialogue avec le microphone</h3>
+<ul>
+<li>Ajout d’un décodeur incrémental des messages radio vers microphone.</li>
+<li>Acquisition des octets à la fin effective de leur transmission USART0 simulée.</li>
+<li>Décodage partiel de la réception, des portes audio, de l’émission et de la
+sélection du canal principal dans les messages de 16 octets commençant par <code>53</code>.</li>
+<li>Affichage séparé des commandes RX/TX reçues pour les deux voies du microphone.</li>
+<li>Conservation des champs inconnus, de l’historique borné et des compteurs.</li>
+<li>Détection des trames incomplètes, mal terminées ou hors profil.</li>
+<li>Aucune réponse inventée par ce décodeur ; les octets <code>AA</code> isolés sont comptés.</li>
+</ul>
+<h3 id="audio-analogique-et-selection-des-haut-parleurs">Audio analogique et sélection des haut-parleurs</h3>
+<ul>
+<li>Parcours du menu constructeur par les touches et l’encodeur simulés.</li>
+<li>Comparaison de <code>Mic Spk</code>, <code>Radio Spk</code> et <code>Both</code> en réception active.</li>
+<li>Observation de PA7 et du registre RF banque 1/page 0/adresse <code>0x25</code>.</li>
+<li>Identification de deux commandes candidates de mute indépendantes.</li>
+<li>Exposition des registres bruts de gain <code>0x44</code>, sans conversion arbitraire en dB.</li>
+<li>Ajout des rapports et de la documentation de validation.</li>
+</ul>
+<h3 id="ce-qui-reste-partiel">Ce qui reste partiel</h3>
+<p>Le banc observe les commandes matérielles. Il ne route pas encore les
+échantillons audio à travers une chaîne complète d’amplificateurs et de circuits
+FM. Le microcontrôleur réel du microphone n’est pas exécuté. La présence
+synthétique périodique <code>06</code> du modèle OEM demeure un mécanisme séparé et annoncé.
+Le décodeur UART n’en est pas la source.</p>
+<h2 id="3-inventaire-physique-corrige">3. Inventaire physique corrigé</h2>
+<table>
+<thead>
+<tr>
+  <th>Emplacement</th>
+  <th>Voyants</th>
+  <th>Fonction connue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Poste</td>
+  <td>Un voyant rouge/vert</td>
+  <td>Réception et émission</td>
+</tr>
+<tr>
+  <td>Microphone</td>
+  <td>Deux voyants rouge/vert, A et B</td>
+  <td>Statut R/T des voies A et B</td>
+</tr>
+<tr>
+  <td>Microphone</td>
+  <td>Deux voyants blancs, A et B</td>
+  <td>VFO actuellement sélectionné, observation utilisateur</td>
+</tr>
+</tbody>
+</table>
+<p>Le manuel distingue bien les indicateurs <code>A/B Channel TX/RX Indicator</code> et
+<code>Main Channel Indicator</code>. Les deux voyants blancs ne doivent donc pas être
+confondus avec les deux voyants rouge/vert.</p>
+<p>La V11.8 affiche le canal principal décodé. Ce complément documentaire ne
+rajoute pas à lui seul une animation des deux LED blanches à l’interface.</p>
+<h2 id="4-cablage-de-la-prise-microphone">4. Câblage de la prise microphone</h2>
+<p>Brochage publié dans le manuel D578UV, <strong>vue de face de la prise selon son dessin</strong>.
+Les couleurs sont celles du document ; elles ne remplacent pas une vérification
+sur le câble concerné. L’orientation d’une fiche vue côté contacts peut inverser
+la lecture si l’on ne reprend pas le même point de vue.</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Broche</th>
+  <th>Couleur publiée</th>
+  <th>Désignation</th>
+  <th>Fonction distinguée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>Rouge</td>
+  <td>URX</td>
+  <td>Liaison série</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>Marron</td>
+  <td>5 V</td>
+  <td>Alimentation du microphone</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>Jaune</td>
+  <td>UTX</td>
+  <td>Liaison série</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>Vert</td>
+  <td>SP+</td>
+  <td>Audio du haut-parleur microphone</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>Noir</td>
+  <td>MIC GND</td>
+  <td>Référence microphone audio</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>Blanc</td>
+  <td>MIC</td>
+  <td>Signal microphone audio</td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>Bleu</td>
+  <td>SP−</td>
+  <td>Autre conducteur du haut-parleur</td>
+</tr>
+<tr>
+  <td style="text-align:right">8</td>
+  <td>Gris</td>
+  <td>GND</td>
+  <td>Masse logique</td>
+</tr>
+</tbody>
+</table>
+<p>Les noms URX/UTX sont reproduits tels quels : le sens côté radio ou côté
+microphone doit être vérifié avant de raccorder un analyseur ou un adaptateur.
+Le firmware radio utilise USART0 ; PA9/PA10 sont les broches TX/RX candidates
+issues de sa configuration. Leur continuité jusqu’au connecteur reste à mesurer.</p>
+<p><strong>MIC GND et GND ne sont pas supposés être une même piste. SP− ne doit pas être
+assimilé à une masse.</strong> Le connecteur fournit une paire dédiée au haut-parleur.
+La topologie exacte de l’amplificateur et son éventuel fonctionnement en pont
+restent à vérifier sur la carte.</p>
+<p>La séparation des broches confirme l’existence d’un trajet audio distinct de
+la liaison de commandes série. Les trames d’état décodées ne transportent pas
+de voix PCM. Cela ne prouve pas que tout le trajet FM interne est analogique :
+un codec ou le circuit de traitement radio peut intervenir avant les sorties.</p>
+<h2 id="5-commandes-du-clavier-vers-le-poste">5. Commandes du clavier vers le poste</h2>
+<p>Le modèle utilise une trame de huit octets :</p>
+<pre><code class="language-text">41 ptt touche_active appui_long code 00 00 06
+</code></pre>
+<p>Exemples :</p>
+<pre><code class="language-text">PTT appuyé : 41 01 00 00 00 00 00 06
+PTT relâché: 41 00 00 00 00 00 00 06
+</code></pre>
+<table>
+<thead>
+<tr>
+  <th>Touche</th>
+  <th style="text-align:right">Code observé/modélisé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0 à 9</td>
+  <td style="text-align:right">Chiffre + 1</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td style="text-align:right">11</td>
+</tr>
+<tr>
+  <td>#</td>
+  <td style="text-align:right">12</td>
+</tr>
+<tr>
+  <td>SUB A/B</td>
+  <td style="text-align:right">13</td>
+</tr>
+<tr>
+  <td>Haut</td>
+  <td style="text-align:right">16</td>
+</tr>
+<tr>
+  <td>Bas</td>
+  <td style="text-align:right">17</td>
+</tr>
+<tr>
+  <td>A, B, C, D</td>
+  <td style="text-align:right">26, 27, 28, 29</td>
+</tr>
+</tbody>
+</table>
+<p>Le parseur constructeur se situe dans la zone <code>0x0808D97C..0x0808DC62</code>.
+Un envoi <code>AA</code> apparaît dans le traitement d’une trame de touche. Son rôle
+général dans l’ensemble du protocole reste partiel ; aucune réponse universelle
+n’est déduite de cet octet seul.</p>
+<h2 id="6-commandes-du-poste-vers-le-microphone">6. Commandes du poste vers le microphone</h2>
+<p>Le constructeur de trame V1.21 est à <code>0x0808DC62</code>. Il remplit le tampon
+<code>0x2000E454</code>, puis appelle l’envoi <code>0x0808D840</code> depuis <code>0x0808DD8C</code>.
+Les offsets ci-dessous commencent à zéro.</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Offset</th>
+  <th>Interprétation établie ou partielle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">0</td>
+  <td>Début <code>0x53</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>Activité de réception, voie 0</td>
+</tr>
+<tr>
+  <td style="text-align:right">2</td>
+  <td>Porte audio, voie 0</td>
+</tr>
+<tr>
+  <td style="text-align:right">3</td>
+  <td>Émission, voie 0</td>
+</tr>
+<tr>
+  <td style="text-align:right">4</td>
+  <td>Activité de réception, voie 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">5</td>
+  <td>Porte audio, voie 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">6</td>
+  <td>Émission, voie 1</td>
+</tr>
+<tr>
+  <td style="text-align:right">7</td>
+  <td>Canal principal : <code>0=A</code>, <code>1=B</code></td>
+</tr>
+<tr>
+  <td style="text-align:right">8, 10 à 14</td>
+  <td>Signification non qualifiée, valeurs conservées</td>
+</tr>
+<tr>
+  <td style="text-align:right">9</td>
+  <td><code>0x10</code> dans le profil observé</td>
+</tr>
+<tr>
+  <td style="text-align:right">15</td>
+  <td>Fin <code>0x06</code></td>
+</tr>
+</tbody>
+</table>
+<p>Les portes audio sont permutées selon le canal principal dans le code OEM.
+Il faut distinguer voie de traitement principale/secondaire et affichage A/B.
+Le bit RX ou TX reçu est une commande, pas une mesure de courant dans une LED.</p>
+<h3 id="les-deux-led-blanches-champ-retrouve">Les deux LED blanches : champ retrouvé</h3>
+<p>Le champ le plus directement associé à leur fonction est <strong>l’octet 7</strong>.
+Le code copie le sélecteur natif <code>0x20004237</code> dans cet octet :</p>
+<pre><code class="language-text">0x0808DD6E : chargement de la base 0x20004214
+0x0808DD70 : lecture d’un octet à base + 0x23
+0x0808DD74 : écriture dans tampon + 7
+0x0808DD8C : appel d’envoi de la trame de 16 octets
+</code></pre>
+<p>Le désassemblage a été revérifié pour ce document. La trace d’exécution
+préexistante montre les deux états suivants, avec passage à B après SUB A/B :</p>
+<pre><code class="language-text">Principal A : 53 00 00 00 00 00 00 00 00 10 00 00 00 00 00 06
+Principal B : 53 00 00 00 00 00 00 01 00 10 00 00 00 00 00 06
+</code></pre>
+<p>Le changement figure au pas d’instruction 77 255 217 dans cette trace.
+La sélection reste B pendant l’émission, dont le champ TX est distinct :</p>
+<pre><code class="language-text">TX sur B    : 53 00 00 00 00 00 01 01 00 10 00 00 00 00 00 06
+</code></pre>
+<p>Trois éléments convergent : le champ du firmware, le manuel <code>MAIN A/B</code>, et ton
+observation des deux LED blanches. <strong>L’association octet 7 → sélection des LED
+blanches est donc fortement étayée.</strong> Le modèle de commande proposé est :</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:right">Octet 7 reçu</th>
+  <th>LED blanche A commandée</th>
+  <th>LED blanche B commandée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:right">0</td>
+  <td>Allumée</td>
+  <td>Éteinte</td>
+</tr>
+<tr>
+  <td style="text-align:right">1</td>
+  <td>Éteinte</td>
+  <td>Allumée</td>
+</tr>
+<tr>
+  <td style="text-align:right">Autre valeur ou trame invalide/incomplète</td>
+  <td>Indéterminée</td>
+  <td>Indéterminée</td>
+</tr>
+</tbody>
+</table>
+<p>Ce tableau exprime l’interprétation à implémenter, pas une mesure électrique.
+Le numéro de GPIO interne au microphone, la polarité de ses sorties et son
+éventuel circuit de commande des LED restent inconnus. L’analyse présentée
+porte sur le firmware du poste, pas sur un firmware extrait du microphone.</p>
+<p>Pour une validation définitive, une capture passive URX/UTX sur le matériel
+pourrait comparer A, B, TX et RX avec les LED visibles. Elle permettrait aussi
+de vérifier les délais et les autres champs sans modifier le poste.</p>
+<h3 id="voyants-rougevert">Voyants rouge/vert</h3>
+<p>Les champs réception et émission fournissent les commandes candidates vertes
+et rouges des deux voies. L’interface les expose séparément de l’état physique,
+qui reste non qualifié. Si RX et TX sont présents simultanément, le décodeur
+ne fabrique pas une priorité de couleur non démontrée.</p>
+<p>L’octet 12 vient d’un autre réglage natif. Il n’est pas attribué aux LED
+blanches, à un gain ou au choix du haut-parleur sans preuve supplémentaire.</p>
+<h2 id="7-selection-du-haut-parleur-resultats">7. Sélection du haut-parleur : résultats</h2>
+<p>Menu : <code>Settings → Radio Set → Voice Func → Speaker Mode</code>.
+Les choix sont <code>Mic Spk</code>, <code>Radio Spk</code> et <code>Both</code>. <code>Mic Spk Set</code> est un réglage
+distinct de source, dont le routage complet reste à qualifier.</p>
+<p>La table vocale <code>0x080C550C..0x080C5540</code> contient 14 entrées, dont Speaker Mode,
+Mic Spk Set, Max Vol Level, DigiMic Level et AnaMic Level.</p>
+<p>Le sélecteur Speaker Mode est <code>0x2000431B</code>, distinct du sélecteur principal
+<code>0x20004237</code>. Le chemin <code>0x08090A86</code> commande PA7. Les routines <code>0x08072514</code>
+et <code>0x08072544</code> passent par <code>0x08070A8C</code> et modifient des bits du registre RF
+banque 1/page 0/adresse <code>0x25</code>.</p>
+<p>Comparaison obtenue par les menus, en réception active :</p>
+<table>
+<thead>
+<tr>
+  <th>Choix</th>
+  <th style="text-align:right">Sélecteur</th>
+  <th>PA7</th>
+  <th>Registre RF</th>
+  <th style="text-align:right">Bit 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Mic Spk</td>
+  <td style="text-align:right">0</td>
+  <td>Haut</td>
+  <td>0xE6</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>Radio Spk</td>
+  <td style="text-align:right">1</td>
+  <td>Bas</td>
+  <td>0xF6</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>Both</td>
+  <td style="text-align:right">2</td>
+  <td>Bas</td>
+  <td>0xE6</td>
+  <td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Au repos, avec Both, PA7 est haut et le registre vaut <code>0xF0</code>.
+Cela étaye deux commandes de coupure actives à un : PA7 pour le haut-parleur
+du poste, et le bit 4 pour celui du microphone. Leur continuité vers les
+amplificateurs reste à mesurer. Le bit 2 du même registre reste non attribué.</p>
+<p>Le compteur de configuration codec est resté à 24 pendant cette comparaison.
+Ce résultat oriente vers des commandes de mute distinctes ; il n’exclut pas
+l’intervention du codec dans d’autres fonctions ou dans le trajet audio.</p>
+<h2 id="8-fidelite-du-modele-et-validation">8. Fidélité du modèle et validation</h2>
+<p>Les adresses OEM de ce document sont des preuves d’analyse propres à V1.21.
+Le modèle matériel ne doit pas les utiliser pour décider de ses sorties.</p>
+<ul>
+<li>Le décodeur microphone suit uniquement les octets UART effectivement transmis.</li>
+<li>L’observateur audio suit les sorties GPIO et les transactions RF décodées.</li>
+<li>Aucune écriture de RAM OEM n’a été utilisée pour forcer les choix de menu
+dans la comparaison des haut-parleurs.</li>
+<li>Une broche en entrée ou en fonction alternative n’est pas présentée comme
+une sortie GPIO pilotée.</li>
+<li>Les gains restent des valeurs brutes tant que leur loi n’est pas établie.</li>
+</ul>
+<p>Validation réalisée pour V11.8 : <strong>230 tests Python réussis</strong>, contrôles Node
+du CPS existant, puis application de la mise à jour sur une copie de V11.7.
+Le contrôle de cette copie a confirmé une commande microphone reçue, PA7,
+l’identification USB et une lecture de 16 octets à <code>0x02FA0000</code>.</p>
+<p>Une séquence de 27 millions d’instructions supplémentaires a livré 12 trames
+complètes au décodeur connecté, sans erreur de format, sans message hors profil
+et sans débordement USART0. La transition A/B citée plus haut provient d’une
+autre séquence ; elle n’est pas attribuée à tort à ces 12 messages.</p>
+<p>Le CPS Windows original et les lanceurs Windows n’ont pas été exécutés ici.
+Les menus ont été examinés sur les images LCD produites par le moteur.
+Il n’y a pas eu de test automatisé de l’interface navigateur ni d’accès au
+poste physique pour cette validation. Tous les anciens scénarios n’ont pas
+été rejoués dans cette release.</p>
+<h2 id="9-suite-du-travail">9. Suite du travail</h2>
+<ol>
+<li>Ajouter aux observations de commande les deux LED blanches à partir de
+l’octet 7 reçu, avec état inconnu avant trame valide.</li>
+<li>Confirmer le protocole et l’effet physique par capture passive sur le micro.</li>
+<li>Identifier les amplificateurs, le câblage audio et les commutateurs de source.</li>
+<li>Relier les commandes de mute et de gain aux échantillons réellement traités.</li>
+<li>Qualifier ensuite la boucle FM, le CTCSS, le GPS, l’APRS TX et le satellite.</li>
+</ol>
+<p>Le Bluetooth audio reste à développer. Le DMR reste hors de la campagne
+analogique actuelle. Une réussite de décodage UART ne valide pas à elle seule
+une chaîne FM ou APRS complète.</p>
+<h2 id="10-references-et-tracabilite">10. Références et traçabilité</h2>
+<ul>
+<li>Application analysée : <code>D578UV_GD_V1.21_20240619.CDD</code>, base <code>0x08006000</code>.</li>
+<li>SHA-256 : <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>.</li>
+<li>Manuel D578UV, brochage et schéma du microphone, pages imprimées 7 et 8 :
+<a href="https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf">https://www.csi-radios.com/content/support/AnyTone/AT-D578UV/User%20manual.pdf</a>.</li>
+<li>Sources du banc : <code>bench/microphone_control.py</code>, <code>bench/lab_inputs.py</code>,
+<code>bench/board_observations.py</code>, <code>bench/analog_audio_control.py</code>.</li>
+<li>Détails de release : <code>docs/CHANGELOG_V11_8.md</code>,
+<code>docs/MICROPHONE_UART_V11_8.md</code>, <code>docs/ANALOG_AUDIO_ROUTING_V11_8.md</code>,
+<code>docs/validation_v11_8.json</code>.</li>
+<li>Les nouvelles informations physiques sur les LED blanches proviennent de
+l’observation utilisateur du 5 novembre 2026.</li>
+</ul>
+<p>Les images constructeur et les captures privées ne sont pas incorporées à ce
+document. Les résultats de code et de simulation sont distingués des mesures
+de continuité et des essais matériels qui restent à réaliser.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

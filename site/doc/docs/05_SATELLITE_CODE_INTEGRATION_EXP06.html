@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Moteur satellite OpenGD77, code compilé et stratégie d&#x27;intégration - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Moteur satellite OpenGD77, code compilé et stratégie d&#x27;intégration</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md">Modifier sur GitHub</a><a download href="../../raw/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md</code></p>
+<article class="markdown-body"><h1 id="moteur-satellite-opengd77-code-compile-et-strategie-dintegration">Moteur satellite OpenGD77, code compilé et stratégie d'intégration</h1>
+<h2 id="architecture-satellite-recherchee">Architecture satellite recherchée</h2>
+<p>Le portage est une <strong>fonction additionnelle</strong>, pas un remplacement du firmware AnyTone par OpenGD77. Le moteur orbital OpenGD77/PLAN13 et les routines de passes sont isolés en composants C. Les TLE sont sélectionnés à la demande, mis en cache pour <strong>un satellite actif</strong>, avec au plus 25 entrées TLE potentielles dans l'adaptateur. Le constructeur conserve l'interface, les timers, les fréquences et la sécurité RF; le module satellite propose des résultats, sans écrire directement dans le transceiver.</p>
+<p>Décision de charge : <strong>8 itérations PLAN13 au plus par tranche</strong>, <strong>100 ms entre tranches</strong> de recherche, aucun thread nouveau. Budget d'affichage de la page Selected <code>D578_UI_MAX_OPS=8</code>, au lieu de 16 initialement. Le contrat RF invalide toute proposition si UI indisponible, génération changée, RTC/GPS/TLE non fiables, PTT ou busy. Phase32 a corrigé une erreur de validation : demander l'état busy/PTT vivant juste <strong>avant</strong> toute proposition RF, et ne jamais utiliser seul un booléen <code>radio_safe</code> mis en cache.</p>
+<h2 id="versions-et-metriques-sans-confusion">Versions et métriques sans confusion</h2>
+<table>
+<thead>
+<tr>
+  <th>Date / phase</th>
+  <th>Code / tests</th>
+  <th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Phase9</td>
+  <td>Moteur PLAN13: 30/30 résultats AOS/LOS alignés avec OpenGD77 sur jeu de vecteurs.</td>
+  <td>Validation hôte relative à l'upstream, non à une orbite réelle moderne.</td>
+</tr>
+<tr>
+  <td>Phase26</td>
+  <td>18 modules compilés Cortex-M4 <code>-Os</code>, 16 503 o code/const non liés, 288 BSS, 133 tests Python; audit 43 TBB/TBH.</td>
+  <td><code>ET_REL</code> non flashable.</td>
+</tr>
+<tr>
+  <td>Phase38-47</td>
+  <td>21 modules, 19 129 o code/const non liés après réduction Phase40, BSS 288, 28 symboles externes non résolus.</td>
+  <td><code>ET_REL</code>, ne pas utiliser comme firmware.</td>
+</tr>
+<tr>
+  <td>Phase52</td>
+  <td>22 modules, 20 039 o texte/const non liés, BSS 288, 28 références externes, tests Doppler/restore simulés.</td>
+  <td>Préparation intégration, non flashable.</td>
+</tr>
+<tr>
+  <td>Phase53</td>
+  <td>Outil <code>audit_v121.py</code> et 12 tests unitaires, réellement présents dans ce dossier et rejoués avec succès.</td>
+  <td>Aucun patch radio.</td>
+</tr>
+<tr>
+  <td>Phase54/56/57/58/59</td>
+  <td>Archives EXP02 à EXP05, softfloat, ROM stage et préintégration, existantes dans Library.</td>
+  <td>Octets non récupérés ici, éviter conclusions supplémentaires.</td>
+</tr>
+<tr>
+  <td>Phase60 EXP06</td>
+  <td>30 sources liées pour Cortex-M4 Thumb <code>-Oz</code>, softfloat, ELF <code>ET_EXEC</code> texte/const <strong>14 680 o</strong>, BSS <strong>288 o</strong>, sans externe non résolu ni instruction FPU; aperçu ROM à <code>0x080F0000</code>.</td>
+  <td><strong>Pass-through inactif; aucun .CDD/.CDI/.spi modifié.</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase60-conception-satidentifiant-documentee-par-le-readme-original-recupere">Phase60, conception <code>SAT:IDENTIFIANT</code> documentée par le README original récupéré</h2>
+<ul>
+<li><code>phase60/src/d578_sat_channel_trigger.{h,c}</code> : nom sur <strong>16 caractères</strong>, préfixe <code>SAT:</code> et identifiant comme <code>ISS</code> ou <code>SO50</code>, lecture <strong>sans écriture</strong> d'un record codeplug de <strong>64 octets</strong>, extraction BCD RX/TX et refus de canal numérique ou de valeurs manifestement fausses. La position du nom <code>+0x23</code> est documentée par qdmr <strong>dans le record codeplug</strong> uniquement. Elle <strong>n'est pas vérifiée dans la structure RAM OEM de la mémoire courante</strong>. Le CTCSS reste à la charge de l'OEM.</li>
+<li><code>phase60/src/d578_sat_tle_select.{h,c}</code> : recherche de TLE au maximum dans <strong>25 slots</strong>, jamais création de TLE arbitraire ni mise en marche si éphéméride périmée ou absente.</li>
+<li><code>phase60/src/d578_sat_popup_model.{h,c}</code> : composition des lignes textuelles <code>SAT:SO50</code>, <code>RX 436.79500</code>, <code>TX 145.85000</code>, <strong>sans appel LCD</strong>.</li>
+<li><code>phase60/audit_oem_ui_v121.py</code> : contrôle des ancrages UI et du sémaphore dans les octets de l'image constructeur.</li>
+<li><code>phase60/build_exp06.py</code> : liaison des 30 sources, aperçu à <code>0x080F0000</code> et point d'entrée UI <code>0x080F3244</code>, simple relais constructeur <strong>inactif</strong>.</li>
+<li>26 tests de détection, 6 cas d'affichage, 5 recherches TLE sous tests normaux/UBSan, plus 100 000 cas adversariaux sous chacun des deux modes, trois mutations OEM invalides rejetées. Tout cela est <strong>rapporté par le README Phase60</strong>, non rejoué ici car le ZIP de cette phase n'a pas été récupéré.</li>
+<li>Budget Flash: <strong>4 pages candidates 16 384 o</strong>, <strong>14 680 o</strong> à loger, marge théorique <strong>1 704 o</strong>, mais les quatre pages contiennent une table CJK; <strong>ce n'est pas une zone vierge</strong> et le risque de propriété/effacement demeure. Emplacement non autorisé.</li>
+<li>RAM: <strong>608 o état persistant satellite non alloué</strong>, pile additionnelle non bornée. L'ELF utilise une adresse BSS sentinelle <code>0x30000000</code> <strong>invalide volontairement</strong>. Aucune exécution matérielle possible depuis ce build.</li>
+</ul>
+<p><strong>Important :</strong> cette livraison contient le README original exporté en texte, mais <strong>PAS</strong> les <code>.c/.h</code> exacts de la Phase60, le <code>.elf</code>, ni le <code>satellite_rom_ONLY_STAGE60.bin</code>. Un petit parser de référence a été réécrit dans <code>08_OUTILS_REPRISE/</code> pour illustrer le contrat et tester le principe; <strong>ce code de référence n'est pas le code historique Phase60 et ne doit pas être assimilé à celui-ci</strong>.</p>
+<h2 id="pourquoi-lintegration-ne-peut-toujours-pas-etre-activee">Pourquoi l'intégration ne peut toujours pas être activée</h2>
+<ol>
+<li>Struct active channel OEM RAM: pointeur <code>0x2000071C</code> et mode à <code>+0x08</code> observés, mais ABI du champ nom RAM non confirmée, même si le nom codeplug est à <code>+0x23</code>.</li>
+<li>Aucune interface OEM validée pour obtenir un bail LCD exclusif, identifier avec certitude la page APRS, saisir/restituer proprement l'état de l'UI, et gérer les concurrentes natives.</li>
+<li>Les vrais getters PTT/busy RX/DMR, le setter atomique RX+TX, les limites RF et les conditions de fin de transmission sont <strong>non prouvés</strong>. Les routines BCD et GPIO documentées ne suffisent pas.</li>
+<li>Aucun fournisseur TLE OEM, horloge UTC étalonnée ni observateur GPS sûr n'est relié dans l'application. Un TLE arbitraire ne doit pas être accepté pour faire tourner le moteur.</li>
+<li>Aucune adresse Flash libre, RAM sûre ou stratégie de rollback indépendante n'est certifiée. Les blobs de prévisualisation ne doivent jamais être injectés.</li>
+</ol>
+<h2 id="traitement-doppler-exige">Traitement Doppler exigé</h2>
+<p>Lire l'horloge et la position, propager le TLE, calculer la vitesse radiale, construire <strong>une proposition</strong> RX/TX dans l'unité et l'arrondi attendus de l'OEM, vérifier en contexte les limites et l'état RF, puis demander une transaction OEM qualifiée quand RX/TX sont autorisés. Sur désélection, panne de TLE, perte GPS, interruption d'UI ou sortie du mode, restaurer <strong>tous</strong> les champs radio sauvegardés; une restauration pendant TX est aussi interdite. Aucune fréquence Doppler n'est écrite dans codeplug, Flash haute ou NAND.</p>
+<p>La compatibilité avec APRS et la reprise de l'affichage de trame reçue restent une <strong>piste</strong>, pas une API documentée. Un simple préfixe <code>SAT:</code> dans une mémoire est une bonne entrée ergonomique mais ne remplace pas la qualification des invariants hardware.</p>
+<h2 id="sources-a-retrouver">Sources à retrouver</h2>
+<p><code>D578_SAT_V121_EXP06_PHASE60_SAT_CHANNEL_NONFLASHABLE_2026-11-03.zip</code> (375 046 o selon la bibliothèque), <code>D578_SAT_V121_EXP05_PHASE59_INTEGRATION_NONFLASHABLE_2026-11-03.zip</code>, <code>D578_SATELLITE_V121_PHASE52_INTEGRATION_LOGICIELLE_2026-11-03.zip</code>, l'archive cumulative contenant Phase47 et la CDD V1.21 authentifiée. Vérifier le hash avant toute compilation. Ne jamais utiliser le <code>.spi</code> d'une autre branche radio comme base d'un patch V1.21.</p>
+<h3 id="liaison-eventuelle-avec-suivi-doppler">Liaison éventuelle avec suivi Doppler</h3>
+<p>Le calculateur de mot QA4818N dans <code>firmware/rf</code> donne une résolution théorique de 62,5 Hz <strong>dans le codage AT1846S</strong>. Le pas effectif QA4818N, les délais PLL, les changements en émission et la correspondance banque RF / VFO / filtre restent non qualifiés. La fonction satellite ne doit pas piloter le RF sur cette seule base. Voir <a href="hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">monographie QA4818N</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

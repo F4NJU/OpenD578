@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Consolidation des preuves, 5 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Consolidation des preuves, 5 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md">Modifier sur GitHub</a><a download href="../../raw/docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/CHANGELOG_PREUVES_RTC_GPS_20261105.md</code></p>
+<article class="markdown-body"><h1 id="consolidation-des-preuves-5-novembre-2026">Consolidation des preuves, 5 novembre 2026</h1>
+<p>Ce lot actualise <strong>l'archive complete</strong> OpenD578 destinee a un depot GitHub vide. Il contient les sources publiques V11.7, les notices V11.8 disponibles et les travaux documentaires nouveaux.</p>
+<h2 id="ajouts-verifiables">Ajouts verifiables</h2>
+<ul>
+<li>Deux sauvegardes sur PCB CPU documentees separement : RTC et GNSS hot start, avec localisations de VK7ZJA, fiche Seiko XH414HG <code>0,08 F / 3,3 V max</code>, branche historique MS412 non equivalente prouvee, mesures necessaires.</li>
+<li>Cinq monographies NAND, GPS, ADC/DAC, DMR et bootloader <strong>reconstruites</strong> depuis les analyses disponibles. Elles ne sont <strong>pas</strong> les octets des cinq fichiers historiques perdus.</li>
+<li>CSV GD32F303VKT6 LQFP100, 100 broches, positions physiques + roles proposes ; bibliotheque et feuille KiCad <strong>reconstituees et non cablees</strong>, non validees dans l'interface KiCad.</li>
+<li>Vue materielle PRO/PLUS : noeuds de sauvegarde RTC, GPS, protection alimentation, varicaps et FI reservee avec statut non confirme et documents lies.</li>
+<li>Registre <code>docs/evidence/CLAIMS.json</code>, typologie des preuves, capture CPS qdmr recoupee, retours de sources externes et grille de mesures.</li>
+<li>CI GitHub Pages : verification du catalogue et du brochage, en plus des tests CPS, Bluetooth, banc et des liens de documentation.</li>
+</ul>
+<h2 id="ce-qui-reste-introuvable-ou-hors-depot-public">Ce qui reste introuvable ou hors depot public</h2>
+<ul>
+<li>Binaires physiques boot, NAND, flash OEM, etalonnages et codeplugs personnels : <strong>non publies</strong>.</li>
+<li>Sources compilables exactes de la Phase 60 EXP06 : <strong>absentes</strong> ; les rapports ne remplacent pas les sources.</li>
+<li>Ensemble executable du banc V11.8 : <strong>absent</strong>, les sources publiques V11.7 sont disponibles et les documents V11.8 recuperes.</li>
+<li>Ancien projet KiCad V0.3 et ancienne archive des cinq monographies : <strong>non retrouves</strong> ; les nouvelles reconstructions sont etiquetees.</li>
+<li>Continuites et formes d'ondes RTC, GPS, QA4818N, DAC, HPI et Bluetooth de <strong>nos</strong> deux cartes : mesures reelles encore a faire.</li>
+</ul>
+<p>Consulter <a href="evidence/INDEX.html">les preuves</a>, <a href="archives/ORIGINAUX_A_RECUPERER.html">les originaux a recuperer</a>, <a href="hardware/SAUVEGARDE_RTC_GPS_XH414HG.html">la fiche RTC/GPS</a>, <a href="../hardware/kicad/README.html">le tableau 100 broches</a> et <a href="evidence/SOURCES_EXTERNES_RECROISEES_20261105.html">la matrice des sources</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>
