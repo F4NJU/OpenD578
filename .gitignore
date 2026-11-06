@@ -1,33 +1,21 @@
+# Local caches and temporary build directories. These are not bans on formats:
+# use `git add -f <path>` to publish an ignored file intentionally.
 .venv/
 __pycache__/
 *.pyc
 work/
 results/
-*.bin
-*.CDD
-*.cdd
-*.CDI
-*.cdi
-*.spi
-*.hex
-*.pkl
-*.pkl.gz
-*.dll
-*.so
-*.dylib
-*.elf
-*.o
-*.zip
+
+# Generated local build metadata
 native_gate*.build.json
 *.so.build.json
 *.dll.build.json
 *.dylib.build.json
 *.pdb
 *.lib
-*.sigmf-data
-*.sigmf-meta
-*.wav
-# Sauvegardes locales de contenus tiers, jamais suivies par Git
+
+# Local source archives kept out of automatic `git add -A`.
+# An archive can still be published explicitly with `git add -f <path>`.
 archives_privees/
 private-archives/
 captures_web_privees/
