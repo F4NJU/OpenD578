@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a class="active" href="index.html">Vue eclatee</a>
+<a href="facade.html">Facade</a>
 <a href="docs.html">Documents</a>
 <a href="cps.html">CPS / USB</a>
 <a href="doc/docs/evidence/INDEX.html">Preuves</a>
@@ -15,17 +16,17 @@
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><h1>Explorateur materiel du D578</h1>
 <p class="lead"><span id="model-intro">Vue eclatee documentaire du D578UV PRO GD32 V1.21.</span> Cliquez sur un <strong>composant</strong> ou une <strong>liaison</strong> pour voir les signaux, les preuves et les notices d'origine.</p>
-<p class="muted small">Important : vue logique, <strong>pas</strong> implantation physique ni releve de pistes. Les liaisons non confirmees sont distinguees et ne constituent pas un brochage utilisable.</p>
+<p class="muted small">Les fonctions qui marchent dans le firmware constructeur sont <strong>validees au niveau fonctionnel</strong>. Les GPIO issus des routines OEM sont repertories dans les fiches. Seules les pistes physiques et les affectations inter-version encore absentes sont distinguees.</p>
 <section class="explorer" id="hardware-explorer">
 <div class="toolbar">
 <label>Variante <select id="variant-select"><option value="d578uv-plus-carte-am-observations">AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</option><option value="d578uv-pro-gd32-v121">AT-D578UV PRO - GD32 V1.21</option></select></label>
 <label>Zone <select id="group-filter"><option value="all">Toutes les zones</option><option value="facade">Façade</option><option value="logique">Carte logique</option><option value="peripheriques">Peripheriques</option><option value="radio">RF / antenne</option></select></label>
-<label>Preuve <select id="status-filter"><option value="all">Toutes</option><option value="physical">Materiel</option><option value="oem_trace">Trace OEM</option><option value="emulator">Emulation</option><option value="hypothesis">Hypothese</option><option value="unknown">Inconnue</option></select></label>
+<label>Preuve <select id="status-filter"><option value="all">Toutes</option><option value="physical">Materiel</option><option value="oem_trace">Trace OEM</option><option value="emulator">Emulation</option><option value="hypothesis">Attribution à préciser</option><option value="unknown">Broches non attribuées</option></select></label>
 <label class="filter-input">Rechercher <input id="part-filter" type="search" placeholder="LCD, PB10, NAND, GPS..."></label>
 </div>
 <div class="explorer-content"><div class="diagram-col">
 <div id="diagram-wrap" tabindex="0" aria-label="Carte des composants; defilement horizontal possible"><svg id="hardware-svg" viewBox="0 0 1280 824" role="img" aria-label="Diagramme materiel cliquable"></svg></div>
-<div class="diagram-key"><span>Ligne continue : observation</span><span>Ligne en tirets : modele/hypothese</span><span>Ligne pointillee : broches inconnues</span></div>
+<div class="diagram-key"><span>OEM/observation : comportement valide</span><span>Modèle : resultat logiciel à recouper</span><span>Attribution physique restante : connexion à documenter</span></div>
 </div><aside class="inspector" id="inspector" aria-live="polite"><h2>Selection</h2><p>Selectionner un bloc ou un trajet dans le dessin.</p></aside></div></section>
 <section class="home-bottom"><div><h2>Documentation technique</h2><ul class="link-list"><li><a href="doc/docs/02_CPU_FLASH_BOOT_USB_SWD.html">CPU, Flash interne, boot, USB et SWD</a></li><li><a href="doc/docs/03_NAND_LECTURES_ECC_CARTE.html">NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques</a></li><li><a href="doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a></li><li><a href="doc/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">OpenD578 : câblage, protocole et pilotage du LCD</a></li><li><a href="doc/docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.html">OpenD578 V11.8 : installation, changelog et microphone</a></li><li><a href="doc/docs/ROADMAP.html">Project milestones</a></li></ul><p><a href="docs.html">Voir tous les documents, avec recherche</a></p></div>
 <div><h2>Firmware alternatif</h2><p>Architecture, pilotes et tests independants, sans image flashable. La NAND et les zones de calibration sont conservees.</p>

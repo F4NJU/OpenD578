@@ -1,5 +1,7 @@
 # État des fonctions : ce que l'analyse seule permet et ce qui exige des mesures
 
+> **Actualisation du 6 novembre 2026** : la qualification « partiel » de cet audit ancien signifie souvent « brochage physique encore à attribuer », et non « fonction non validée ». Les fonctions OEM observées sur le poste sont considérées opérationnelles. Consulter [VALIDATION_FONCTIONS_OEM.md](VALIDATION_FONCTIONS_OEM.md) et la [vue façade](https://telectroboy.github.io/OpenD578/facade.html).
+
 **Révision de travail : D578UV PRO GD32, application V1.21, 5 novembre 2026.**
 
 La colonne « Analyse seule » représente ce que l'on peut étudier avec le code public, les documents, les dumps déjà disponibles et les fiches constructeur, **pas une promesse de certitude**. La colonne « Mesure requise » décrit ce qui ne peut être prouvé sans photographie suffisamment lisible, mesure passive ou continuité sur une carte représentative.

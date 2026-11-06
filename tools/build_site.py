@@ -138,7 +138,7 @@ def category(rel:str):
 
 
 def nav(dest:Path,active:str=''):
-    links=[('index.html','Vue eclatee'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('firmware.html','Firmware'),('photos.html','Photos'),('sources.html','Code source')]
+    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('firmware.html','Firmware'),('photos.html','Photos'),('sources.html','Code source')]
     out=['<nav class="nav" aria-label="Navigation">']
     for name,label in links:
         clazz=' class="active"' if name==active else ''
@@ -229,7 +229,7 @@ def hardware_pages(models):
             dst=id_to_node[e['target']]
             rows=''.join('<tr><td><code>'+x(p['from_pin'])+'</code></td><td>'+x(p['to_pin'])+'</td><td>'+x(p.get('status',''))+'</td></tr>' for p in e['pins'])
             if not rows:
-                rows='<tr><td colspan="3">Broches non qualifiees : ne pas attribuer de GPIO par deduction.</td></tr>'
+                rows='<tr><td colspan="3">Aucune broche supplémentaire identifiée pour cette liaison; consulter les fonctions, trames et références OEM.</td></tr>'
             body=f'''<div class="breadcrumb"><a href="{x(relative(target,SITE/'index.html'))}">Vue eclatee</a> / Liaison {x(e['id'])}</div>
 <h1>{x(e['label'])}</h1>
 <p><a href="{x(relative(target,SITE/'component'/vid/(src['id']+'.html')))}">{x(src['label'])}</a> &rarr; <a href="{x(relative(target,SITE/'component'/vid/(dst['id']+'.html')))}">{x(dst['label'])}</a></p>
@@ -248,22 +248,66 @@ def index_page(models,docs):
     links=''.join(f'<li><a href="{x(doc_link(dest,d["path"]))}">{x(d["title"])}</a></li>' for d in featured)
     body=f'''<h1>Explorateur materiel du D578</h1>
 <p class="lead"><span id="model-intro">Vue eclatee documentaire du D578UV PRO GD32 V1.21.</span> Cliquez sur un <strong>composant</strong> ou une <strong>liaison</strong> pour voir les signaux, les preuves et les notices d'origine.</p>
-<p class="muted small">Important : vue logique, <strong>pas</strong> implantation physique ni releve de pistes. Les liaisons non confirmees sont distinguees et ne constituent pas un brochage utilisable.</p>
+<p class="muted small">Les fonctions qui marchent dans le firmware constructeur sont <strong>validees au niveau fonctionnel</strong>. Les GPIO issus des routines OEM sont repertories dans les fiches. Seules les pistes physiques et les affectations inter-version encore absentes sont distinguees.</p>
 <section class="explorer" id="hardware-explorer">
 <div class="toolbar">
 <label>Variante <select id="variant-select">{modopts}</select></label>
 <label>Zone <select id="group-filter"><option value="all">Toutes les zones</option><option value="facade">Façade</option><option value="logique">Carte logique</option><option value="peripheriques">Peripheriques</option><option value="radio">RF / antenne</option></select></label>
-<label>Preuve <select id="status-filter"><option value="all">Toutes</option><option value="physical">Materiel</option><option value="oem_trace">Trace OEM</option><option value="emulator">Emulation</option><option value="hypothesis">Hypothese</option><option value="unknown">Inconnue</option></select></label>
+<label>Preuve <select id="status-filter"><option value="all">Toutes</option><option value="physical">Materiel</option><option value="oem_trace">Trace OEM</option><option value="emulator">Emulation</option><option value="hypothesis">Attribution à préciser</option><option value="unknown">Broches non attribuées</option></select></label>
 <label class="filter-input">Rechercher <input id="part-filter" type="search" placeholder="LCD, PB10, NAND, GPS..."></label>
 </div>
 <div class="explorer-content"><div class="diagram-col">
 <div id="diagram-wrap" tabindex="0" aria-label="Carte des composants; defilement horizontal possible"><svg id="hardware-svg" viewBox="0 0 1280 824" role="img" aria-label="Diagramme materiel cliquable"></svg></div>
-<div class="diagram-key"><span>Ligne continue : observation</span><span>Ligne en tirets : modele/hypothese</span><span>Ligne pointillee : broches inconnues</span></div>
+<div class="diagram-key"><span>OEM/observation : comportement valide</span><span>Modèle : resultat logiciel à recouper</span><span>Attribution physique restante : connexion à documenter</span></div>
 </div><aside class="inspector" id="inspector" aria-live="polite"><h2>Selection</h2><p>Selectionner un bloc ou un trajet dans le dessin.</p></aside></div></section>
 <section class="home-bottom"><div><h2>Documentation technique</h2><ul class="link-list">{links}</ul><p><a href="docs.html">Voir tous les documents, avec recherche</a></p></div>
 <div><h2>Firmware alternatif</h2><p>Architecture, pilotes et tests independants, sans image flashable. La NAND et les zones de calibration sont conservees.</p>
 <p><a href="firmware.html">Ouvrir l'espace firmware</a></p><h2>Communication CPS</h2><p>USB CDC, commandes de programmation, codeplug et tests.</p><p><a href="cps.html">Ouvrir le dossier CPS</a></p><h2>Photographies</h2><p>References FCC et images de cartes propres a la revision des qu'elles sont annotees.</p><p><a href="photos.html">Acceder aux photos</a></p></div></section>'''
     write(dest,shell('Explorateur materiel',dest,body,'index.html'))
+
+
+def facade_page(models):
+    # Independent detailed front panel map.
+    target=SITE/'facade.html'
+    pro=next(m for m in models if m['id']=='d578uv-pro-gd32-v121')
+    vid=pro['id']
+    path=lambda node: x(relative(target,SITE/'component'/vid/(node+'.html')))
+    edge=lambda eid: x(relative(target,SITE/'connection'/vid/(eid+'.html')))
+    buttons=[('P1','PB0 / ADC8'),('P2','PB0 / ADC8'),('P3','PB0 / ADC8'),('MENU','PB0 / ADC8'),('P4','PB1 / ADC9'),('P5','PB1 / ADC9'),('P6','PB1 / ADC9'),('EXIT','PB1 / ADC9')]
+    btn=''.join(f'<a class="facade-key" href="{path("keys")}"><strong>{x(name)}</strong><small>{x(sig)}</small></a>' for name,sig in buttons)
+    rows=[
+      ('LCD : pixels', 'D0..D7 PE7..PE14','lcd','mcu-lcd'),
+      ('LCD : commande', 'WR PB10, D/C PB11, RESET PB12, CS PB13','lcd','mcu-lcd'),
+      ('Eclairage LCD', 'bus 12 bits PA5/PB3/PB4, canal 8','lights','mcu-lights'),
+      ('Touche Power', 'PA0, actif bas','keys','mcu-keys'),
+      ('P1/P2/P3/MENU', 'PB0 ADC0 canal 8','keys','mcu-keys'),
+      ('P4/P5/P6/EXIT', 'PB1 ADC0 canal 9','keys','mcu-keys'),
+      ('Appui codeur', 'PA1, actif bas','encoder','mcu-encoder'),
+      ('Codeur rotation', 'PC8 EXTI8 descendant; PC9 direction','encoder','mcu-encoder'),
+      ('Volume 1 et volume 2', 'PC2 ADC12 et PC5 ADC15','volumes','mcu-volumes'),
+      ('Voyant R/V poste', 'PE3 donnees / PE4 horloge, 8 bits','lights','mcu-lights'),
+      ('Eclairages de touches', 'PA5 latch / PB3 clk / PB4 data, 12 bits','lights','mcu-lights'),
+      ('Microphone filaire', 'USART0 PA9/PA10; trames 0x41 et 0x53','microphone','mcu-micro')
+    ]
+    tr=''.join(f'<tr><td>{x(name)}</td><td><code>{x(sig)}</code></td><td><a href="{path(node)}">Composant</a> · <a href="{edge(eid)}">Liaison</a></td></tr>' for name,sig,node,eid in rows)
+    body=f'''<h1>Façade D578UV PRO GD32 V1.21</h1>
+<p>Les commandes de la façade sont <strong>validées par fonctionnement OEM</strong>. Le tableau affiche les GPIO, canaux ADC, protocoles et routines connus sans imposer une mesure de continuité comme condition de reconnaissance fonctionnelle.</p>
+<div class="front-sketch">
+  <div class="front-left"><a href="{path('volumes')}">Volume A<br><code>PC2 ADC12</code></a><a href="{path('volumes')}">Volume B<br><code>PC5 ADC15</code></a></div>
+  <div class="front-main"><a class="front-display" href="{path('lcd')}"><strong>LCD 128 × 160</strong><span>PE7..PE14, PB10..PB13</span></a>
+  <div class="front-led"><a href="{path('lights')}">LED R/V : PE3/PE4</a><a href="{path('lights')}">Eclairages : PA5/PB3/PB4</a></div>
+  <div class="front-keys">{btn}</div></div>
+  <div class="front-right"><a href="{path('encoder')}">Encodeur<br><code>PC8/PC9</code></a><a href="{path('encoder')}">Appui<br><code>PA1</code></a><a href="{path('keys')}">Power<br><code>PA0</code></a></div>
+</div>
+<p class="muted small">Disposition graphique fonctionnelle, pas une reproduction métrique de la façade. Les touches d'un même réseau résistif ont des seuils ADC distincts, décrits dans la notice.</p>
+<h2>Correspondances connues</h2><div class="table-scroll"><table><thead><tr><th>Commande</th><th>GPIO / bus</th><th>Détails</th></tr></thead><tbody>{tr}</tbody></table></div>
+<h2>Trames et temporisations</h2><p>Les plages ADC, l'anti-rebond, la séquence d'acquisition <code>[6,8,9,10,11,12,15]</code>, le décodage du codeur et les mots d'éclairage sont documentés dans les notices source, avec les routines de pilotage indépendantes de la RAM OEM.</p>
+<ul><li><a href="{x(doc_link(target,'docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md'))}">Notice complète des GPIO de façade</a></li>
+<li><a href="{x(doc_link(target,'docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md'))}">Initialisation et bus LCD</a></li>
+<li><a href="{x(doc_link(target,'docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md'))}">Microphone et liaison USART0</a></li>
+<li><a href="{x(doc_link(target,'docs/hardware/VALIDATION_FONCTIONS_OEM.md'))}">Règles de validation des preuves OEM</a></li></ul>
+<h2>Façade PLUS</h2><p>Le PLUS comporte aussi un GD32F303 et une façade opérationnelle. La <a href="index.html">vue PLUS</a> comporte désormais ses blocs LCD, touches, codeur, volumes et éclairages. La correspondance des broches PRO et PLUS n'est pas automatiquement assimilée.</p>'''
+    write(target,shell('Façade et GPIO',target,body,'facade.html'))
 
 
 def docs_page(docs):
@@ -373,6 +417,7 @@ def main():
     models=[json.loads(f.read_text(encoding='utf-8')) for f in sorted((ROOT/'hardware/models').glob('*.json'))]
     hardware_pages(models)
     index_page(models,docs)
+    facade_page(models)
     docs_page(docs)
     cps_page(docs)
     firmware_page(docs)

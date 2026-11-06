@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>D578 : statut des fonctions et cartographie issue du firmware OEM - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>D578 : statut des fonctions et cartographie issue du firmware OEM</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/VALIDATION_FONCTIONS_OEM.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/VALIDATION_FONCTIONS_OEM.md</code></p>
+<article class="markdown-body"><h1 id="d578-statut-des-fonctions-et-cartographie-issue-du-firmware-oem">D578 : statut des fonctions et cartographie issue du firmware OEM</h1>
+<p>Date : 6 novembre 2026. Ce document remplace la lecture trop prudente des statuts visuels précédents.</p>
+<h2 id="regle-de-validation">Règle de validation</h2>
+<ul>
+<li><strong>Fonction OEM opérationnelle</strong> : considérée comme <strong>validée</strong>, sur le poste de l’utilisateur. Les fonctions radio, GPS, DMR, LCD, touches et Bluetooth ne doivent pas être qualifiées de non fonctionnelles simplement parce qu'un schéma de piste manque.</li>
+<li><strong>Broche/routine OEM documentée</strong> : lorsqu’une routine constructeur exécutée utilise explicitement GPIO/ADC/UART, l'affectation du périphérique logiciel est <strong>validée par firmware OEM</strong> ; elle peut être réutilisée comme résultat de reverse engineering avec la provenance indiquée.</li>
+<li><strong>Modèle uniquement</strong> : une liaison ajoutée par le simulateur, sans vérification de l'écriture GPIO OEM associée, reste « observée dans le modèle » ; pas « identifiée physiquement ».</li>
+<li><strong>Attribution des pistes/boîtiers</strong> : la relation exacte entre un GPIO connu et une broche d'un CI gratté peut rester à établir sans déclasser la fonction opérationnelle.</li>
+<li><strong>PLUS</strong> : MCU GD32F303 confirmé, panneau et fonctions opérationnels. Ne pas supposer que toutes les affectations GPIO du firmware PRO V1.21 sont identiques sur la branche PLUS.</li>
+</ul>
+<h2 id="fonctions-de-facade-pro-v121-correspondances-documentees">Fonctions de façade PRO V1.21 : correspondances documentées</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>GPIO / périphérique GD32</th>
+  <th>Information utile pour le pilote</th>
+  <th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>LCD D0..D7</td>
+  <td>PE7..PE14</td>
+  <td>Bus 8080 8 bits, RGB565 128×160</td>
+  <td><code>docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md</code></td>
+</tr>
+<tr>
+  <td>LCD WR, D/C, RESET, CS</td>
+  <td>PB10, PB11, PB12, PB13</td>
+  <td>Initialisation et commandes observées</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Power</td>
+  <td>PA0</td>
+  <td>Actif à l'état bas; réveil et logique Power</td>
+  <td><code>docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code></td>
+</tr>
+<tr>
+  <td>Appui codeur</td>
+  <td>PA1</td>
+  <td>Actif à l'état bas</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>P1/P2/P3/MENU</td>
+  <td>PB0 / ADC0 canal 8</td>
+  <td>4 plages de tension de réseau résistif</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>P4/P5/P6/EXIT</td>
+  <td>PB1 / ADC0 canal 9</td>
+  <td>4 plages de tension de réseau résistif</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Codeur A/B</td>
+  <td>PC8, PC9</td>
+  <td>EXTI8 descendant, lecture PC9 pour la direction</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Volume A/B (modèle)</td>
+  <td>PC2 / ADC12; PC5 / ADC15</td>
+  <td>Acquisition ADC0; sens et ordre physiques à constater</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Voyant rouge/vert poste</td>
+  <td>PE3 données; PE4 horloge</td>
+  <td>Mot 8 bits, LSB d'abord</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Éclairages boutons et LCD</td>
+  <td>PA5 validation; PB3 horloge; PB4 données</td>
+  <td>4 bits adresse + 8 bits valeur, MSB d'abord; canal 8 : luminosité LCD</td>
+  <td>idem</td>
+</tr>
+<tr>
+  <td>Microphone filaire</td>
+  <td>USART0, PA9/PA10 selon configuration OEM</td>
+  <td>Trames 0x41 sur 8 octets, 0x53 sur 16 octets</td>
+  <td><code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code></td>
+</tr>
+<tr>
+  <td>Sélection haut-parleur</td>
+  <td>PA7; bus RF banque1/page0/0x25 bit 4</td>
+  <td>Speaker Mode Mic/Radio/Both exécuté dans OEM</td>
+  <td>idem</td>
+</tr>
+</tbody>
+</table>
+<h2 id="autres-interfaces-et-protocoles-connus">Autres interfaces et protocoles connus</h2>
+<table>
+<thead>
+<tr>
+  <th>Élément</th>
+  <th>Interface connue</th>
+  <th>Distinction nécessaire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>SWD</td>
+  <td>PA13 (SWDIO), PA14 (SWCLK) et pads relevés physiquement</td>
+  <td>Accessible dans MCU UPDATE ; Power est un bouton logique</td>
+</tr>
+<tr>
+  <td>NAND TC58CVG1S3H</td>
+  <td>GPIO série, modèle PB8 CS, PB15 CLK, PB14 MOSI, PA15 MISO; ID 98 CB</td>
+  <td>Commandes et dumps cohérents; conserver le statut « modèle » si numéro de broche externe non confirmé</td>
+</tr>
+<tr>
+  <td>QA4818N / RF</td>
+  <td>Bus 24 bits, PB3 CLK, PB4 SDIO, CS PB5/PB2/PC13/PE1</td>
+  <td>Transactions OEM et banque logique connues; attribuer chaque CS au boîtier physique séparément</td>
+</tr>
+<tr>
+  <td>SCT3258 DMR</td>
+  <td>HPI données PD8..PD15; PD2 CS, PD3 WR, PD4 RD, PD5 handshake</td>
+  <td>Pilote et paquets HPI observés; DMR opérationnel en OEM</td>
+</tr>
+<tr>
+  <td>RDA5802N</td>
+  <td>PB6 SDA, PB7 SCL, adresse 0x10 dans modèle FM compatible RDA5807</td>
+  <td>Valider la fonction OEM, ne pas transformer l'ACK synthétique du modèle en mesure sur RDA physique</td>
+</tr>
+<tr>
+  <td>GPS ATGM336H</td>
+  <td>UART GNSS, données NMEA</td>
+  <td>Fonction OEM validée; instance USART et broches non fixées par le dossier public</td>
+</tr>
+<tr>
+  <td>Bluetooth ET12</td>
+  <td>UART3, commandes AT+VER / AGHF modélisées</td>
+  <td>Télécommande et audio OEM opérationnels; pins carte D868BT-SP à préciser</td>
+</tr>
+<tr>
+  <td>CPS</td>
+  <td>USB CDC, commandes PROGRAM, R, W, END</td>
+  <td>Lecture/écriture de canaux et persistance exécutées dans banc OEM</td>
+</tr>
+<tr>
+  <td>Audio</td>
+  <td>Codec TLV320AIC3204, SCT3258; PA7 et registre RF 0x25</td>
+  <td>Séparation des commandes de mute et chemin analogique</td>
+</tr>
+</tbody>
+</table>
+<h2 id="attention-aux-peripheriques-partageant-les-broches">Attention aux périphériques partageant les broches</h2>
+<p>PB3/PB4 apparaissent dans le bus de rétroéclairage et dans le décodeur RF série. Ce partage dans nos modèles doit être expliqué par la configuration GPIO, l'alternance temporelle ou une éventuelle confusion de profil avant qu'un firmware indépendant ne l'exécute simultanément. Les fonctions OEM demeurent opérationnelles. <strong>Ne pas activer deux pilotes concurrents sur PB3/PB4.</strong></p>
+<h2 id="frontiere-des-conclusions">Frontière des conclusions</h2>
+<p>Une fonction testée sur le poste vaut validation fonctionnelle. Une adresse OEM tirée d'une exécution vaut preuve logicielle. Une photographie et un relevé de continuité valent preuve de câblage. Ces niveaux se complètent ; l'absence du dernier ne doit pas effacer les deux premiers.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

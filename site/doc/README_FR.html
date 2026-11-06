@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../index.html">Vue eclatee</a>
+<a href="../facade.html">Facade</a>
 <a class="active" href="../docs.html">Documents</a>
 <a href="../cps.html">CPS / USB</a>
 <a href="docs/evidence/INDEX.html">Preuves</a>
@@ -63,6 +64,14 @@ Voir <a href="docs/QUALIFICATION_ANALOGIQUE.html">la méthode et les limites</a>
 <a href="docs/LED_STATUS_BUS.html">le bus du voyant</a>.</p>
 <h3 id="reconstruction-du-pilote-rf-qa4818n">Reconstruction du pilote RF QA4818N</h3>
 <p><a href="docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Monographie détaillée</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/tools/qa4818n_trace.py">outil de traces</a>, <a href="https://github.com/Telectroboy/OpenD578/blob/main/firmware/rf/qa4818n_frequency.c">calculateur C</a> et <a href="https://github.com/Telectroboy/OpenD578/blob/main/tools/test_qa4818n_trace.py">tests</a>. Aucun TX ni câblage électrique n'est piloté ; les valeurs calculées selon AT1846S restent à confirmer sur QA4818N.</p>
+<h2 id="mise-a-jour-de-la-cartographie-du-6-novembre-2026">Mise à jour de la cartographie du 6 novembre 2026</h2>
+<ul>
+<li>Le GD32F303 est au centre du schéma PRO et PLUS.</li>
+<li>Nouvelle <a href="https://telectroboy.github.io/OpenD578/facade.html">vue détaillée de façade</a> avec boutons, codeur, deux volumes, écran LCD et LED.</li>
+<li>L'Airband du PLUS figure dans la zone RF, et non dans la façade.</li>
+<li>Les GPIO et bus identifiés en exécutant le firmware OEM sont affichés comme résultats de reverse engineering valides. Les mesures de continuité physique restantes sont documentées séparément.</li>
+<li><a href="docs/hardware/VALIDATION_FONCTIONS_OEM.html">Correspondances et règles de validation</a>.</li>
+</ul>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>

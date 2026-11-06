@@ -7,10 +7,10 @@
   const proof = {
     physical:'Materiel observe',
     oem_trace:'Trace du firmware constructeur',
-    emulator:'Bus observe en emulation',
+    emulator:'Observation du modèle OEM (GPIO à recouper si non tracé)',
     datasheet:'Documentation constructeur',
-    hypothesis:'Hypothese non validee',
-    unknown:'Liaison ou broches inconnues'
+    hypothesis:'Affectation physique ou inter-version à confirmer',
+    unknown:'Broches du segment non encore attribuées'
   };
   const $ = (id) => document.getElementById(id);
   const text = (tag, value, cls) => {
@@ -132,12 +132,13 @@
       const nodeMap=Object.fromEntries(m.nodes.map(n=>[n.id,n]));
       svg.replaceChildren();
       const diagramHeight=Math.max(824,...m.nodes.map(n=>n.y+n.h+70));
-      svg.setAttribute('viewBox', '0 0 1280 '+diagramHeight);
+      const diagramWidth=m.layout_width||1280;
+      svg.setAttribute('viewBox','0 0 '+diagramWidth+' '+diagramHeight);
       const bg=svgEl('g'); svg.append(bg);
-      for (let i=0;i<m.groups.length;i++) {
-        const g=m.groups[i], left=16+i*320;
-        bg.append(svgEl('rect',{x:left,y:20,width:298,height:diagramHeight-39,rx:4,class:'svg-group-bg'}));
-        const t=svgEl('text',{x:left+12,y:46,class:'svg-group-label'});
+      const groups=m.layout_groups||m.groups.map((g,i)=>({...g,x:16+i*320,w:298}));
+      for (const g of groups) {
+        bg.append(svgEl('rect',{x:g.x,y:20,width:g.w,height:diagramHeight-39,rx:4,class:'svg-group-bg'+(g.id==='central'?' svg-center-bg':'')}));
+        const t=svgEl('text',{x:g.x+12,y:46,class:'svg-group-label'});
         t.textContent=g.label;bg.append(t);
       }
       const selectedGroup=gsel.value,selectedStatus=ssel.value;
@@ -157,7 +158,7 @@
       const nodesLayer=svgEl('g'); svg.append(nodesLayer);
       m.nodes.forEach(n=>{
         const dim=(selectedGroup!=='all'&&n.group!==selectedGroup)||!nodeMatch(n);
-        const g=svgEl('g',{class:'node '+n.confidence+(selected('node',n.id)?' selected':'')+(dim?' dimmed':''),role:'button',tabindex:0,'aria-label':'Composant '+n.label});
+        const g=svgEl('g',{class:'node '+n.confidence+((n.id==='mcu'||n.id==='mcu_plus')?' central-mcu':'')+(selected('node',n.id)?' selected':'')+(dim?' dimmed':''),role:'button',tabindex:0,'aria-label':'Composant '+n.label});
         const ntitle=svgEl('title'); ntitle.textContent=n.description; g.append(ntitle);
         g.append(svgEl('rect',{x:n.x,y:n.y,width:n.w,height:n.h,rx:3}));
         const label=svgEl('text',{x:n.x+12,y:n.y+25,class:'node-label'}); label.textContent=n.label; g.append(label);
@@ -166,10 +167,10 @@
         sub.textContent=s.length>37?s.slice(0,34)+'...':s;
         g.append(sub);
         const stat=svgEl('text',{x:n.x+n.w-10,y:n.y+n.h-9,'text-anchor':'end',class:'node-status'});
-        stat.textContent={identified:'identifie',partial:'partiel',candidate:'candidat'}[n.confidence]; g.append(stat);
+        stat.textContent={identified:'fonction ou composant établi',partial:'liaisons à préciser',candidate:'référence candidate'}[n.confidence]; g.append(stat);
         attachKey(g,()=>open('node',n.id)); nodesLayer.append(g);
       });
-      const note=svgEl('text',{x:20,y:diagramHeight-15,fill:'#666','font-size':12}); note.textContent=m.diagram_note;svg.append(note);
+      const note=svgEl('text',{x:20,y:diagramHeight-15,fill:'#666','font-size':12}); note.textContent='Fonction OEM validée ≠ piste du PCB mesurée. Cliquer sur un trajet pour les broches et traces.'; svg.append(note);
     }
     function references(dest,items) {
       const ul=document.createElement('ul');
@@ -191,7 +192,7 @@
       if (!currentSelection) {
         inspector.append(text('h2','Selection'));
         inspector.append(text('p','Cliquez sur un composant ou une liaison du diagramme.'));
-        inspector.append(text('p','Un trait pointille ou en tirets ne vaut pas validation electrique.','muted small'));
+        inspector.append(text('p','Les fonctions OEM du poste sont opérationnelles; les traits distinguent les traces de programmation et les pistes physiques relevées.','muted small'));
         return;
       }
       const n=m.nodes.find(n=>currentSelection.type==='node'&&n.id===currentSelection.id);
@@ -224,7 +225,7 @@
         const hd=document.createElement('tr'); ['Source','Destination'].forEach(k=>hd.append(text('th',k)));t.append(hd);
         e.pins.forEach(p=>{const tr=document.createElement('tr');tr.append(text('td',p.from_pin));tr.append(text('td',p.to_pin));t.append(tr);});
         inspector.append(t);
-      } else inspector.append(text('p','Non cartographie : aucune correspondance de broche validee.'));
+      } else inspector.append(text('p','Protocole ou fonction documenté; aucun numéro de broche supplémentaire n’est publié pour ce segment. Voir la notice et les preuves associées.')); 
       inspector.append(text('h3','Documents justificatifs')); references(inspector,e.docs);
       const back=document.createElement('div');back.className='edge-list';
       [a,b].forEach(node=>{const btn=text('button','Composant : '+node.label);btn.onclick=()=>open('node',node.id);back.append(btn);});

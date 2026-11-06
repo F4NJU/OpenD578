@@ -5,7 +5,7 @@
   "status": "research",
   "mcu": "GD32F303VKT6",
   "updated": "2026-11-06",
-  "diagram_note": "Vue fonctionnelle, pas netlist physique. Sauvegardes RTC/GPS et FI historique distinguent datasheet, photo tierce et continuites manquantes. MCU PRO V1.21. Les mots 0x29/0x2A AT1846S sont des candidats calcules, non des mesures QA.",
+  "diagram_note": "Centre : GD32F303. Traits et statuts distinguent traces OEM et identification de composants, sans rabaisser les fonctions qui marchent dans le firmware constructeur.",
   "groups": [
     {
       "id": "facade",
@@ -29,108 +29,114 @@
       "id": "lcd",
       "label": "LCD Holitech",
       "group": "facade",
-      "x": 25,
-      "y": 90,
-      "w": 260,
-      "h": 74,
-      "subtitle": "FPC-HIB018A011-A1 SLH1920",
-      "description": "Afficheur 128x160 RGB565, bus 8080 GPIO 8 bits; controleur exact non identifie.",
+      "x": 26,
+      "y": 80,
+      "w": 266,
+      "h": 72,
+      "subtitle": "GPIO PE7..PE14, PB10..PB13",
+      "description": "LCD 128x160 RGB565, bus 8080 8 bits. PE7..PE14 D0..D7; PB10 WR, PB11 D/C, PB12 reset, PB13 CS. Transactions d'initialisation et pixels reconstituees sur execution OEM.",
       "confidence": "identified",
       "docs": [
         "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "keys",
       "label": "Touches facade",
       "group": "facade",
-      "x": 25,
-      "y": 202,
-      "w": 260,
-      "h": 74,
-      "subtitle": "10 poussoirs",
-      "description": "P1-P6/MENU/EXIT via deux reseaux resistifs PB0/PB1; Power et appui codeur distincts.",
+      "x": 26,
+      "y": 180,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PB0 ADC8 / PB1 ADC9; PA0 Power",
+      "description": "10 boutons : P1/P2/P3/MENU lus par PB0 (ADC8), P4/P5/P6/EXIT par PB1 (ADC9), Power par PA0 actif bas, appui codeur par PA1. Seuils et traitement verifies dans l'execution OEM.",
       "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "encoder",
       "label": "Codeur rotatif",
       "group": "facade",
-      "x": 25,
-      "y": 314,
-      "w": 260,
-      "h": 74,
+      "x": 26,
+      "y": 280,
+      "w": 266,
+      "h": 72,
       "subtitle": "PC8 / PC9 / PA1",
-      "description": "Phases PC8/PC9, appui PA1. Cablage deduit du code et valide dans le banc, sans releve de continuite.",
+      "description": "Encodeur : PC8 front EXTI8 descendant (IRQ EXTI5_9), PC9 phase direction, PA1 appui actif bas. Pilote OEM et modele du banc confrontes.",
       "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "volumes",
       "label": "Volumes A/B",
       "group": "facade",
-      "x": 25,
-      "y": 426,
-      "w": 260,
-      "h": 74,
-      "subtitle": "ADC0 canaux 12 et 15",
-      "description": "Deux potentiometres sur PC2 ADC12 et PC5 ADC15; affectation physique A/B a verifier.",
-      "confidence": "partial",
+      "x": 26,
+      "y": 380,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PC2 ADC12 / PC5 ADC15",
+      "description": "Deux potentiometres analogiques sur PC2/ADC12 et PC5/ADC15. Acquisition ADC0 OEM observee avec sequence [6,8,9,10,11,12,15]. Noms A/B utilises par le modele.",
+      "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "lights",
       "label": "LED / eclairages",
       "group": "facade",
-      "x": 25,
-      "y": 538,
-      "w": 260,
-      "h": 74,
-      "subtitle": "PE3, PE4; PA5, PB3, PB4",
-      "description": "Voyant bicolore poste et eclairages touches/LCD via bus GPIO; mapping de toutes les LED non etabli.",
-      "confidence": "partial",
+      "x": 26,
+      "y": 480,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PE3/PE4 voyants; PA5/PB3/PB4 eclairage",
+      "description": "LED poste rouge/vert : PE3 donnees, PE4 horloge, mot 8 bits LSB d'abord. Eclairage touches/LCD : PA5 latch, PB3 clock, PB4 data, mot 12 bits; canal 8 = retroeclairage LCD. Deux bus executes et verifies.",
+      "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
         "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "microphone",
       "label": "Microphone deporte",
       "group": "facade",
-      "x": 25,
-      "y": 650,
-      "w": 260,
-      "h": 74,
-      "subtitle": "USART0, prise 8 contacts",
-      "description": "UART de commandes 8/16 octets et chemins analogiques MIC / SP distincts. LEDs A/B commandees par le microphone.",
+      "x": 26,
+      "y": 580,
+      "w": 266,
+      "h": 72,
+      "subtitle": "USART0 PA9/PA10; 0x41/0x53",
+      "description": "Microphone filaire : USART0 (PA9/PA10 issus de configuration OEM), protocole clavier 0x41 (8 octets), etat radio 0x53 (16 octets), prise 8 contacts; voies audio analogiques separees.",
       "confidence": "identified",
       "docs": [
         "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "swd",
       "label": "USB / SWD",
       "group": "logique",
-      "x": 345,
-      "y": 90,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 80,
+      "w": 266,
+      "h": 72,
       "subtitle": "PA13 / PA14; USB CDC",
       "description": "Acces debug SWD et USB CDC de la variante GD32; alimentation et reset necessitent des precautions.",
       "confidence": "identified",
@@ -143,10 +149,10 @@
       "id": "mcu",
       "label": "GD32F303VKT6",
       "group": "logique",
-      "x": 345,
-      "y": 290,
-      "w": 260,
-      "h": 96,
+      "x": 652,
+      "y": 510,
+      "w": 290,
+      "h": 120,
       "subtitle": "CPU / GPIO / ADC / bus",
       "description": "MCU principal Cortex-M4, Flash 3 Mio, SRAM 96 Kio; application V1.21 a 0x08006000.",
       "confidence": "identified",
@@ -160,45 +166,47 @@
       "id": "adc0",
       "label": "ADC0 interne",
       "group": "logique",
-      "x": 345,
-      "y": 464,
-      "w": 260,
-      "h": 74,
-      "subtitle": "0x40012400 ; DMA0",
-      "description": "Convertisseur analogique embarque GD32 utilise pour touches et volumes; distinct du TLV320AIC3204.",
+      "x": 340,
+      "y": 180,
+      "w": 266,
+      "h": 72,
+      "subtitle": "ADC0 ch. 8/9/12/15, DMA0",
+      "description": "ADC0 interne du GD32 pilote les reseaux de touches et les deux volumes; registres, echantillonnage et DMA executes dans le banc OEM.",
       "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "power",
       "label": "Alimentations",
       "group": "logique",
-      "x": 345,
-      "y": 650,
-      "w": 260,
-      "h": 74,
-      "subtitle": "rails a relever",
-      "description": "Cartographie des rails et protections encore incompletement reconstituee; bouton Power est une entree MCU.",
-      "confidence": "partial",
+      "x": 340,
+      "y": 280,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Power PA0; L7805 +5 V; RTC VBAT",
+      "description": "Machine de mise sous tension avec Power PA0, MCU alimente par USB sur banc, plus regulateur L7805CV +5 V, sauvegardes RTC et GPS separees. Distribution des rails a completer.",
+      "confidence": "identified",
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
         "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/ALIMENTATION_L7805CV.md"
+        "docs/hardware/ALIMENTATION_L7805CV.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "nand",
       "label": "NAND KIOXIA / Toshiba",
       "group": "peripheriques",
-      "x": 665,
-      "y": 90,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 80,
+      "w": 266,
+      "h": 72,
       "subtitle": "ID 98 CB ; bus serie",
       "description": "TC58CVG1S3HRAIG, 256 Mio main; commandes lues par GPIO bit-banging, ECC integre.",
       "confidence": "identified",
@@ -212,48 +220,50 @@
       "id": "gps",
       "label": "GPS ATGM336H",
       "group": "peripheriques",
-      "x": 665,
-      "y": 202,
-      "w": 260,
-      "h": 74,
-      "subtitle": "UART probable; broches inconnues",
-      "description": "Module GNSS identifie; lignes MCU et configuration serie exactes encore a qualifier pour cette carte.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 180,
+      "w": 266,
+      "h": 72,
+      "subtitle": "ATGM336H; UART NMEA",
+      "description": "Module GNSS ATGM336H present et fonctionnel. Interface serie NMEA et injection GPS fonctionnelles dans le banc; ports GPIO exacts non etablis dans les traces actuellement archivees.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/COMPOSANTS.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md"
+        "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "dmr",
       "label": "Baseband DMR",
       "group": "peripheriques",
-      "x": 665,
-      "y": 314,
-      "w": 260,
-      "h": 74,
-      "subtitle": "SCT3258 / firmware DSP",
-      "description": "Circuit SCT3258, interface HPI et chargement interne a documenter; simulateur modelise seulement un sous-ensemble.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 280,
+      "w": 266,
+      "h": 72,
+      "subtitle": "SCT3258; HPI PD2..PD5, PD8..15",
+      "description": "Baseband SCT3258 : HPI 8 bits sur PD8..PD15; PD2 HCSN, PD3 HWRN, PD4 HRDN, PD5 HOBIB d'apres les transactions du banc; boot 2048 octets et paquets 84 A9 61 documentes. DMR fonctionne sur le poste OEM.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/COMPOSANTS.md",
         "docs/ROADMAP.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md"
+        "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "codec",
       "label": "Codec audio",
       "group": "peripheriques",
-      "x": 665,
-      "y": 426,
-      "w": 260,
-      "h": 74,
-      "subtitle": "ADC/DAC audio externe",
-      "description": "TLV320AIC3204 est une piste d identification du codec audio. Presence et bus effectifs non verifies par continuite.",
-      "confidence": "candidate",
+      "x": 984,
+      "y": 380,
+      "w": 266,
+      "h": 72,
+      "subtitle": "TLV320AIC3204; bus audio/SCT",
+      "description": "Codec TLV320AIC3204 integre a la chaine audio et interface SCT3258. Commandes de configuration codec et bypass decodees via HPI; ports de controle exacts a attribuer en detail.",
+      "confidence": "identified",
       "docs": [
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
         "docs/hardware/COMPOSANTS.md",
@@ -264,70 +274,73 @@
       "id": "audio",
       "label": "Selection audio",
       "group": "peripheriques",
-      "x": 665,
-      "y": 538,
-      "w": 260,
-      "h": 74,
-      "subtitle": "PA7 / registre RF 0x25, mute HP",
-      "description": "Gestion du haut-parleur poste/micro via PA7 et registre RF 1:0:0x25 bit4; trace OEM, amplification physique a relever.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 480,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PA7 / RF 1:0:0x25 bit4",
+      "description": "Speaker Mode Mic/Radio/Both fonctionne : PA7 commande la coupure HP poste; bit 4 registre RF banque1/page0/0x25 commande HP micro, etats executes par menus OEM.",
+      "confidence": "identified",
       "docs": [
         "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
         "docs/hardware/COMPOSANTS.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
         "docs/hardware/VOLUME_U2429G.md",
         "docs/hardware/AUDIO_MC34119_SGM8272.md",
-        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md"
+        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "bluetooth",
       "label": "Support BT D868BT-SP ?",
       "group": "peripheriques",
-      "x": 665,
-      "y": 650,
-      "w": 260,
-      "h": 74,
-      "subtitle": "PCB rapporte; variante a localiser",
-      "description": "Support Bluetooth marque D868BT-SP releve sur un D578 ; le module radio est un autre PCB soude sous shield. Attribution formelle a la variante PRO et connexions a mesurer.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 580,
+      "w": 266,
+      "h": 72,
+      "subtitle": "D868BT-SP, firmware ET12, UART3",
+      "description": "Carte D868BT-SP et module ET12. Interface UART3 et commandes AT+VER? / AGHF observees dans le modele; telecommandes Bluetooth BT01 et PTT prises en charge par le poste.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
         "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "rf",
       "label": "RF, synthèse et FI",
       "group": "radio",
-      "x": 985,
-      "y": 202,
-      "w": 260,
-      "h": 74,
-      "subtitle": "4 x QA4818N probables, 26 MHz",
-      "description": "Famille D578 : 2 LO A/B et 2 récepteurs FI après filtres 38,550/38,850 MHz. Attribution boîtier/banque inconnue sur PRO.",
-      "confidence": "partial",
+      "x": 1298,
+      "y": 80,
+      "w": 266,
+      "h": 72,
+      "subtitle": "4 QA4818N; 4 CS, PLL 26 MHz",
+      "description": "Quatre banques RF sur bus serie 24 bits; selections PB5/PB2/PC13/PE1, CLK PB3, SDIO PB4 dans le modele OEM. Architecture 2 LO + 2 recepteurs FI documentee; association CS-vers-boitier a identifier.",
+      "confidence": "identified",
       "docs": [
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
         "docs/hardware/COMPOSANTS.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
         "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
-        "docs/hardware/PA_RF_AFT05MP075N.md"
+        "docs/hardware/PA_RF_AFT05MP075N.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "pa",
       "label": "Chaînes TX VHF/UHF",
       "group": "radio",
-      "x": 985,
-      "y": 314,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 180,
+      "w": 266,
+      "h": 72,
       "subtitle": "2 x AFT05MP075N, protections inconnues",
-      "description": "Etages amplificateurs VHF/UHF et commutation RF: implantation et controles a verifier sur PCB.",
-      "confidence": "partial",
+      "description": "Deux amplificateurs de puissance AFT05MP075N, chaines TX VHF/UHF operationnelles en OEM; pilotage des rails, polarisation et protections a reconstituer par analyse des routines.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/COMPOSANTS.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
@@ -338,10 +351,10 @@
       "id": "antenna",
       "label": "Antenne RF",
       "group": "radio",
-      "x": 985,
-      "y": 426,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 280,
+      "w": 266,
+      "h": 72,
       "subtitle": "connecteur antenne",
       "description": "Connexion antenne de l emetteur-recepteur; representation fonctionnelle uniquement.",
       "confidence": "identified",
@@ -354,10 +367,10 @@
       "id": "l7805",
       "label": "L7805CV, régulateur +5V",
       "group": "logique",
-      "x": 345,
-      "y": 770,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 380,
+      "w": 266,
+      "h": 72,
       "subtitle": "TO220, IN/GND/OUT",
       "description": "Régulateur +5 V observé ; ligne amont/aval et commutation non cartographiées. Pas de bus numérique.",
       "confidence": "identified",
@@ -369,27 +382,28 @@
       "id": "rda5802n",
       "label": "RDA5802N - FM broadcast",
       "group": "peripheriques",
-      "x": 665,
-      "y": 770,
-      "w": 260,
-      "h": 74,
-      "subtitle": "I²C supposé PB6/PB7, 0x10",
-      "description": "Tuner FM avec RDS. Le banc décode un protocole RDA5807-compatible, non une communication matérielle confirmée au RDA5802N.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 680,
+      "w": 266,
+      "h": 72,
+      "subtitle": "FM broadcast, protocole PB6/PB7",
+      "description": "Tuner RDA5802N observe. Le modele du firmware decode SDA PB6, SCL PB7 et transactions compatibles RDA5807 a adresse 7 bits 0x10. Ne pas confondre ce modele avec une reponse materielle ACK mesuree.",
+      "confidence": "identified",
       "docs": [
-        "docs/hardware/RDA5802N_RECEPTION_FM.md"
+        "docs/hardware/RDA5802N_RECEPTION_FM.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "u2429",
       "label": "UTC U2429G - volume audio",
       "group": "peripheriques",
-      "x": 665,
-      "y": 875,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 780,
+      "w": 266,
+      "h": 72,
       "subtitle": "11 bits, DATA/CLOCK, VCC 5 V",
-      "description": "Atténuateur 2 canaux 0 à -83 dB plus mute, non I²C. GPIO et voies audio du PRO à retrouver.",
+      "description": "UTC U2429G, controleur volume stereo 0 a -83 dB; CLOCK/DATA 11 bits. Commande physique OEM par GPIO a retrouver, composant identifie.",
       "confidence": "identified",
       "docs": [
         "docs/hardware/VOLUME_U2429G.md"
@@ -399,10 +413,10 @@
       "id": "mc34119",
       "label": "MC34119G - ampli local",
       "group": "peripheriques",
-      "x": 665,
-      "y": 980,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 880,
+      "w": 266,
+      "h": 72,
       "subtitle": "SOIC8; disable CD pin 1",
       "description": "Petit amplificateur audio différentiel. Attribution au haut-parleur poste/micro inconnue.",
       "confidence": "partial",
@@ -414,10 +428,10 @@
       "id": "yd1517",
       "label": "YD1517P - ampli PRO",
       "group": "peripheriques",
-      "x": 665,
-      "y": 1085,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 980,
+      "w": 266,
+      "h": 72,
       "subtitle": "2 x 6 W class B; pin 8 mute",
       "description": "Amplificateur audio PRO; signal M/SS et paire de sorties à tracer. Le PLUS utilise UTC PA1517G.",
       "confidence": "identified",
@@ -429,28 +443,29 @@
       "id": "rf_spi",
       "label": "Bus RF 4 sélections",
       "group": "radio",
-      "x": 985,
-      "y": 540,
-      "w": 260,
-      "h": 74,
-      "subtitle": "PB3 CLK, PB4 SDIO",
-      "description": "Banc : CS 0 PB5, 1 PB2, 2 PC13, 3 PE1 ; attribution physique aux quatre circuits QA inconnue.",
-      "confidence": "partial",
+      "x": 1298,
+      "y": 380,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PB3 CLK, PB4 SDIO; 4 CS",
+      "description": "Bus RF 24 bits pilote par GPIO : PB3 horloge, PB4 donnees, selections actives bas PB5/PB2/PC13/PE1. Les trames et leur ordre ont ete analyses sur l'execution OEM.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
-        "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md"
+        "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
       "id": "bh2226",
       "label": "ROHM BH2226FV-E2",
       "group": "radio",
-      "x": 985,
-      "y": 645,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 480,
+      "w": 266,
+      "h": 72,
       "subtitle": "H2226, SSOP-B16, 8 x DAC 8 bits",
-      "description": "Reference confirmee par marquage H2226 et boitier SSOP-B16. Huit sorties DAC non tracees, GPIO CS/CLK/DI et usages RF a mesurer.",
+      "description": "ROHM BH2226FV-E2, marquage H2226 et SSOP-B16 confirms par observation du boitier. CNA huit sorties; bus serie 3 fils defini par datasheet, affectation analogique sur PCB a attribuer.",
       "confidence": "identified",
       "docs": [
         "docs/hardware/BH2226_H2226_DAC_RF.md"
@@ -460,10 +475,10 @@
       "id": "sgm8272",
       "label": "SGM8272 - double AOP",
       "group": "radio",
-      "x": 985,
-      "y": 750,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 580,
+      "w": 266,
+      "h": 72,
       "subtitle": "SOIC8, analogique, 4,5-36 V",
       "description": "Deux AOP haute tension. Possible boucle PLL, tampon DAC ou audio : destination inconnue.",
       "confidence": "identified",
@@ -475,10 +490,10 @@
       "id": "qa_lo_a",
       "label": "QA4818N candidat LO A",
       "group": "radio",
-      "x": 985,
-      "y": 855,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 680,
+      "w": 266,
+      "h": 72,
       "subtitle": "LQFP32 gratté 1/4",
       "description": "Rôle LO A déduit de l’architecture de la famille D578 ; impossible d’attribuer un boîtier sans pistes/CS.",
       "confidence": "candidate",
@@ -491,10 +506,10 @@
       "id": "qa_lo_b",
       "label": "QA4818N candidat LO B",
       "group": "radio",
-      "x": 985,
-      "y": 960,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 780,
+      "w": 266,
+      "h": 72,
       "subtitle": "LQFP32 gratté 2/4",
       "description": "Rôle LO B déduit de la famille D578 ; emplacement physique non établi.",
       "confidence": "candidate",
@@ -507,10 +522,10 @@
       "id": "qa_if_a",
       "label": "QA4818N candidat FI 1",
       "group": "radio",
-      "x": 985,
-      "y": 1065,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 880,
+      "w": 266,
+      "h": 72,
       "subtitle": "LQFP32 gratté 3/4",
       "description": "Conversion directe après première FI. Filtre 38,550/38,850 à associer sans présumer A/B.",
       "confidence": "candidate",
@@ -523,10 +538,10 @@
       "id": "qa_if_b",
       "label": "QA4818N candidat FI 2",
       "group": "radio",
-      "x": 985,
-      "y": 1170,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 980,
+      "w": 266,
+      "h": 72,
       "subtitle": "LQFP32 gratté 4/4",
       "description": "Conversion directe après première FI. Boîtier voisin d’un 26.00 MHz à localiser par photo.",
       "confidence": "candidate",
@@ -539,10 +554,10 @@
       "id": "ref26",
       "label": "Référence 26.00 MHz",
       "group": "radio",
-      "x": 985,
-      "y": 1275,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 1080,
+      "w": 266,
+      "h": 72,
       "subtitle": "Oscillateur ou quartz, non mesuré",
       "description": "Marquage 26.00 vu sous blindage ; carte D578 décrite avec références 26 MHz. Circuits alimentés inconnus.",
       "confidence": "partial",
@@ -554,13 +569,13 @@
       "id": "aft_vhf",
       "label": "AFT05MP075N - PA VHF",
       "group": "radio",
-      "x": 985,
-      "y": 1380,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 1180,
+      "w": 266,
+      "h": 72,
       "subtitle": "LDMOS NXP, un des 2 étages",
-      "description": "Transistor de puissance TX identifié. Étude externe associe un PA à VHF, emplacement sur carte à qualifier.",
-      "confidence": "partial",
+      "description": "AFT05MP075N observe sur circuit RF. Etage PA utilise en TX VHF par le poste OEM. Attribution des lignes de polarisation et capteurs non encore individualisee.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/PA_RF_AFT05MP075N.md"
       ]
@@ -569,13 +584,13 @@
       "id": "aft_uhf",
       "label": "AFT05MP075N - PA UHF",
       "group": "radio",
-      "x": 985,
-      "y": 1485,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 1280,
+      "w": 266,
+      "h": 72,
       "subtitle": "LDMOS NXP, second étage",
-      "description": "Deuxième transistor de puissance TX. Biais et protection inconnus.",
-      "confidence": "partial",
+      "description": "AFT05MP075N observe sur circuit RF. Etage PA utilise en TX UHF par le poste OEM. Attribution des lignes de polarisation et capteurs non encore individualisee.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/PA_RF_AFT05MP075N.md"
       ]
@@ -584,13 +599,13 @@
       "id": "bt_et12",
       "label": "Module Bluetooth ET12 ?",
       "group": "peripheriques",
-      "x": 665,
-      "y": 1190,
-      "w": 260,
-      "h": 74,
-      "subtitle": "PCB soude blinde, SoC non lu",
-      "description": "Module Bluetooth radio sous capot soudé sur le support. Nom firmware ET12 verifie par manuel, identification du silicium derriere capot inconnue.",
-      "confidence": "partial",
+      "x": 984,
+      "y": 1080,
+      "w": 266,
+      "h": 72,
+      "subtitle": "UART3 ET12 / AGHF / VER",
+      "description": "Sous-module Bluetooth blinde avec version ET12 identifiee par l'environnement OEM. Reponses de commandes AT+VER et AGHF modelisees; broches physiques de support non relevees.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
@@ -601,10 +616,10 @@
       "id": "bt_shield",
       "label": "Blindage module BT",
       "group": "peripheriques",
-      "x": 665,
-      "y": 1295,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 1180,
+      "w": 266,
+      "h": 72,
       "subtitle": "Shield du 2e PCB",
       "description": "Blindage metallique observe sur le petit PCB Bluetooth, protege le composant dont le marquage est inaccessible.",
       "confidence": "identified",
@@ -617,10 +632,10 @@
       "id": "bt_antenna",
       "label": "Antenne BT 2,4 GHz",
       "group": "peripheriques",
-      "x": 665,
-      "y": 1400,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 1280,
+      "w": 266,
+      "h": 72,
       "subtitle": "trajet RF a relever",
       "description": "L antenne et son chemin doivent etre localises sur la carte; les photos D878 n etablissent pas les pistes D578.",
       "confidence": "partial",
@@ -633,10 +648,10 @@
       "id": "bt01",
       "label": "Microphone distant BT01",
       "group": "facade",
-      "x": 25,
-      "y": 770,
-      "w": 260,
-      "h": 74,
+      "x": 26,
+      "y": 680,
+      "w": 266,
+      "h": 72,
       "subtitle": "ecran / audio / clavier / PTT",
       "description": "Microphone avec firmware propre; Bluetooth ou cable. Mode distant avec synchro des menus et verrouillage local.",
       "confidence": "identified",
@@ -649,10 +664,10 @@
       "id": "bp02",
       "label": "Bouton PTT BT BP-02",
       "group": "facade",
-      "x": 25,
-      "y": 875,
-      "w": 260,
-      "h": 74,
+      "x": 26,
+      "y": 780,
+      "w": 266,
+      "h": 72,
       "subtitle": "momentane ou verrouille",
       "description": "PTT sans fil independant du BT01; appairage par poste, veille et niveau de batterie.",
       "confidence": "identified",
@@ -665,10 +680,10 @@
       "id": "bt_audio",
       "label": "Audio Bluetooth",
       "group": "logique",
-      "x": 345,
-      "y": 880,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 480,
+      "w": 266,
+      "h": 72,
       "subtitle": "RX/TX et mute a tracer",
       "description": "Chemin et commutation audio vers codec, amplificateurs et radio inconnus. AGHF ne suffit pas a attribuer les signaux.",
       "confidence": "partial",
@@ -682,12 +697,12 @@
     {
       "id": "pc_cps",
       "label": "PC / CPS OEM et libre",
-      "group": "facade",
-      "x": 25,
-      "y": 980,
-      "w": 260,
-      "h": 74,
-      "subtitle": "Client externe, pas un composant du poste",
+      "group": "logique",
+      "x": 340,
+      "y": 580,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PC externe, USB CDC / codeplug",
       "description": "AnyTone CPS, qdmr et outils de test : flux USB CDC PROGRAM/R/W/END. Les versions doivent correspondre au poste.",
       "confidence": "identified",
       "docs": [
@@ -699,10 +714,10 @@
       "id": "usb_cdc",
       "label": "USB CDC et protocole CPS",
       "group": "logique",
-      "x": 345,
-      "y": 1015,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 680,
+      "w": 266,
+      "h": 72,
       "subtitle": "Interface logique de communication",
       "description": "Descripteurs GD32 28E9:018A, endpoints 03 OUT/81 IN/82 notification et trames OEM. Ce bloc est logiciel.",
       "confidence": "identified",
@@ -715,13 +730,13 @@
       "id": "backup_rtc",
       "label": "Sauvegarde RTC / XH414HG ?",
       "group": "logique",
-      "x": 345,
-      "y": 1130,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 780,
+      "w": 266,
+      "h": 72,
       "subtitle": "Face arriere PCB CPU, cote nappe",
-      "description": "Etude D578 historique: maintien RTC par condensateur de sauvegarde XH414HG 0,08 F/3,3 V max. Observation utilisateur de composants de sauvegarde sur PCB CPU, ref exacte et liaison VBAT non mesurees.",
-      "confidence": "partial",
+      "description": "Dispositif de sauvegarde RTC constate sur PCB CPU; reference XH414HG documentee sur la famille. Chemin VBAT broche 6 du GD32 propose par datasheet sans continuite PCB.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
         "docs/evidence/INDEX.md"
@@ -731,13 +746,13 @@
       "id": "backup_gps",
       "label": "Sauvegarde GPS hot start ?",
       "group": "peripheriques",
-      "x": 665,
-      "y": 1550,
-      "w": 260,
-      "h": 74,
+      "x": 984,
+      "y": 1380,
+      "w": 266,
+      "h": 72,
       "subtitle": "Face avant PCB CPU, entre volumes",
-      "description": "Deuxieme sauvegarde externe historique affectee au GNSS. Presence precise, type de la piece et continute VBAT GPS PRO restent a verifier.",
-      "confidence": "partial",
+      "description": "Sauvegarde GPS presente sur PCB CPU (entre volumes). Domaine VBAT GNSS distinct du RTC. Reference du composant sur cette revision a inspecter.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
         "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md"
@@ -747,10 +762,10 @@
       "id": "protection_supply",
       "label": "Protection alimentation",
       "group": "logique",
-      "x": 345,
-      "y": 1250,
-      "w": 260,
-      "h": 74,
+      "x": 340,
+      "y": 880,
+      "w": 266,
+      "h": 72,
       "subtitle": "Relais et diode, d apres VK7ZJA",
       "description": "La documentation historique D578 decrit relais et diode de protection contre inversion; leur implantation sur la revision GD32 et le rail regulateur restent inconnus.",
       "confidence": "candidate",
@@ -763,10 +778,10 @@
       "id": "varicaps_rx",
       "label": "Filtres RX varicaps",
       "group": "radio",
-      "x": 985,
-      "y": 1590,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 1380,
+      "w": 266,
+      "h": 72,
       "subtitle": "VHF / UHF, filtres accordables",
       "description": "Quatre etages accordables par varicaps decrits dans les D578 historiques. Affectations DAC et commutations de ce PCB non etablies.",
       "confidence": "candidate",
@@ -779,10 +794,10 @@
       "id": "fi_spare",
       "label": "FI supplementaire non peuplee ?",
       "group": "radio",
-      "x": 985,
-      "y": 1700,
-      "w": 260,
-      "h": 74,
+      "x": 1298,
+      "y": 1480,
+      "w": 266,
+      "h": 72,
       "subtitle": "Empreintes sur anciens D578",
       "description": "Empreinte de circuit IF supplementaire documentee sur une revision historique; pas constatee sur le PCB PRO de ce projet.",
       "confidence": "candidate",
@@ -874,9 +889,10 @@
         }
       ],
       "docs": [
-        "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md"
+        "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Les sorties GPIO sont etablies par analyse/execution OEM. Continuites physiques vers chaque contact FPC non mesurees. Controleur proche de ST7735 sans identification certaine."
+      "details": "LCD 128x160, bus de type 8080 avec 8 bits sur PE7..PE14, WR PB10, D/C PB11, RST PB12, CS PB13. Initialisation, temporisations, fenetres et RGB565 extraits des routines constructeur et valides dans le banc."
     },
     {
       "id": "mcu-keys",
@@ -906,9 +922,10 @@
         }
       ],
       "docs": [
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Deux diviseurs resistifs sur ADC0, seuils codes 500, 1500, 2500, 3500. Power ne coupe pas directement la ligne alimentation du MCU."
+      "details": "8 touches via deux reseaux resistifs ADC PB0 canal 8 et PB1 canal 9; PA0 Power actif bas et PA1 appui codeur. Seuils et detection OEM etudies dans la notice complete."
     },
     {
       "id": "mcu-encoder",
@@ -939,7 +956,8 @@
       ],
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
-        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md"
+        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
       "details": "PC8 et PC9 derives des routines OEM executees. La logique de sens et d anti-rebond est decrite dans la notice facade."
     },
@@ -965,9 +983,10 @@
         }
       ],
       "docs": [
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Valeurs brutes 12 bits. On ne suppose aucune loi audio logarithmique non mesuree."
+      "details": "Entrees analogiques PC2/ADC12 et PC5/ADC15 lues dans la sequence OEM [6,8,9,10,11,12,15]. Le chemin de traitement vers la sortie audio est documente a part."
     },
     {
       "id": "mcu-lights",
@@ -1016,9 +1035,10 @@
       ],
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
-        "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md"
+        "docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Les mots et timings sont issus du pilote OEM et du banc V11.8; correspondance LED individuelle incompletement relevee."
+      "details": "Deux bus distincts executes en firmware OEM. PE3 donnees et PE4 clock (8 bits LSB d'abord) pour LED rouge/vert. PA5 latch, PB3 CLK, PB4 DATA (12 bits MSB d'abord) pour eclairages touches et retroeclairage LCD canal 8. Les affectations des canaux secondaires restent a indexer."
     },
     {
       "id": "mcu-micro",
@@ -1072,7 +1092,8 @@
         }
       ],
       "docs": [
-        "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md"
+        "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
       "details": "UART commandes distinct du chemin audio. Les 8 broches sont publiees par le manuel; la continuite PA9/10 jusqu a la prise reste a mesurer."
     },
@@ -1143,7 +1164,8 @@
       ],
       "docs": [
         "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
-        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md"
+        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
       "details": "ADC0 est dans la puce; ce lien est conceptuel, non une liaison externe au PCB."
     },
@@ -1153,7 +1175,7 @@
       "target": "nand",
       "label": "Commandes serie NAND",
       "bus": "GPIO serie",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [
         {
           "from_pin": "PB8",
@@ -1182,36 +1204,72 @@
       ],
       "docs": [
         "docs/03_NAND_LECTURES_ECC_CARTE.md",
-        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md"
+        "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Correspondances deduites du pilote OEM et confirmees par simulation des niveaux GPIO. Pas de mesure de continuite. Ne jamais envoyer des commandes d effacement pour les verifier."
+      "details": "Acces NAND Toshiba en commande serie avec signaux candidate tires des transactions OEM et valides par simulation NAND. Lecture des dumps, ID 98 CB, ECC; continuites electriques des broches NAND non indispensables pour qualifier les traces OEM."
     },
     {
       "id": "mcu-gps",
       "source": "mcu",
       "target": "gps",
       "label": "Donnees GNSS",
-      "bus": "UART (a qualifier)",
-      "status": "unknown",
-      "pins": [],
-      "docs": [
-        "docs/hardware/COMPOSANTS.md"
+      "bus": "UART GNSS / NMEA",
+      "status": "emulator",
+      "pins": [
+        {
+          "from_pin": "UART GD32 (instance a identifier)",
+          "to_pin": "ATGM336H TX/RX NMEA",
+          "status": "emulator"
+        }
       ],
-      "details": "Module ATGM336H identifie. Broches RX/TX et configuration d horloge, baudrate et memorisation interne restent a relever sur cette variante."
+      "docs": [
+        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+        "docs/hardware/GPS.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+      ],
+      "details": "GPS ATGM336H fonctionnel; banque d'octets UART/NMEA et acquisition verifies par banc OEM. Affectation des broches du GD32 non prouvee par les elements publics actuels. Ce n'est pas une fonction non cartographiee : protocole et sequences sont documentes."
     },
     {
       "id": "mcu-dmr",
       "source": "mcu",
       "target": "dmr",
       "label": "Controle baseband DMR",
-      "bus": "HPI (a confirmer)",
-      "status": "emulator",
-      "pins": [],
-      "docs": [
-        "docs/hardware/COMPOSANTS.md",
-        "docs/ROADMAP.md"
+      "bus": "GPIO 8 bits HPI PD2..PD5 + PD8..PD15",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PD8..PD15",
+          "to_pin": "HPI D0..D7",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD2",
+          "to_pin": "HCSN / chip select",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD3",
+          "to_pin": "HWRN / ecriture",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD4",
+          "to_pin": "HRDN / lecture",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD5",
+          "to_pin": "HOBIB / handshake",
+          "status": "emulator"
+        }
       ],
-      "details": "Sous-ensemble SCT3258_HPI dans le banc. Ne pas presenter un registre modele ou une adresse OEM comme un pinout materiel mesure."
+      "docs": [
+        "docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md",
+        "docs/hardware/DMR.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+      ],
+      "details": "Bus HPI observe dans le banc executant le constructeur : D0..D7 sur PD8..PD15, HCSN PD2, HWRN PD3, HRDN PD4 et HOBIB PD5 (sens a recouper par datasheet). Fonction DMR operationnelle sur poste OEM."
     },
     {
       "id": "dmr-codec",
@@ -1250,7 +1308,8 @@
       ],
       "docs": [
         "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
-        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md"
+        "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
       "details": "Valeurs observees via menu Speaker Mode en simulation OEM. Continuites jusqu aux amplificateurs a mesurer."
     },
@@ -1274,14 +1333,15 @@
       "target": "rf",
       "label": "Configuration radio",
       "bus": "GPIO / registres RF",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [],
       "docs": [
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
         "docs/hardware/COMPOSANTS.md",
-        "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md"
+        "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Des routines OEM ont été corrélées au modèle 24 bits RF (voir connexion MCU → bus RF). Le mapping sélection→QA physique reste inconnu."
+      "details": "Sequences GPIO de selection quatre banques observees pendant les changements de frequence et d'etat RX/TX dans le banc. Detail sous bus RF, decompose en 4 lignes CS."
     },
     {
       "id": "rf-pa",
@@ -1316,21 +1376,21 @@
       "source": "mcu",
       "target": "bluetooth",
       "label": "UART3 modele vers ET12",
-      "bus": "UART3, logique modele (broches reelles inconnues)",
+      "bus": "UART3 / AT commandes ET12",
       "status": "emulator",
       "pins": [
         {
-          "from_pin": "UART3 du GD32 (nom du peripherique, pas pin)",
-          "to_pin": "RX/TX du module non identifies",
-          "status": "emulator",
-          "note": "Le banc qualifie le peripherique logique uniquement."
+          "from_pin": "UART3 TX/RX du GD32",
+          "to_pin": "UART ET12 (broches physiques a relever)",
+          "status": "emulator"
         }
       ],
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
-        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md"
+        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ],
-      "details": "Source bench/uart_serial.py: UART3 et commandes AT+VER?/AT+AGHF. Aucun GPIO TX/RX, baud, RESET, EN ni contact du D868BT-SP n est prouve par un releve de continuite."
+      "details": "UART3 pris en charge dans le banc OEM, dialogues AT+VER?/AGHF; fonction Bluetooth OEM operationnelle. Numero de GPIO du connecteur D868BT-SP non etabli."
     },
     {
       "id": "power-mcu",
@@ -1353,7 +1413,7 @@
       "target": "rf_spi",
       "label": "Horloge, données et CS RF",
       "bus": "GPIO série 24 bits",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [
         {
           "from_pin": "PB3",
@@ -1395,7 +1455,8 @@
       "details": "Banc RfSpi : 8 bits de commande +16 bits valeur, CS0=PB5, CS1=PB2, CS2=PC13, CS3=PE1. Les banques ne sont PAS attribuées aux quatre composants grattés.",
       "docs": [
         "docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md",
-        "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md"
+        "docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1473,7 +1534,7 @@
       "source": "mcu",
       "target": "rda5802n",
       "label": "Commande du tuner FM",
-      "bus": "I²C compatible, 7 bits 0x10",
+      "bus": "I2C compatible RDA5807, 0x10",
       "status": "emulator",
       "pins": [
         {
@@ -1489,9 +1550,10 @@
           "note": ""
         }
       ],
-      "details": "Le modèle FmI2c décode PB6 SDA et PB7 SCL, écritures séquentielles depuis 0x02, et émule l’ACK 0x10. Aucune confirmation électrique au RDA5802N monté.",
+      "details": "Le decodeur I2C du modele lie PB6 SDA et PB7 SCL a l'interface FM compatible RDA5807, adresse 7 bits 0x10. Le poste possede physiquement un RDA5802N; attribution PB6/PB7 validee par modele, pas par continuite.",
       "docs": [
-        "docs/hardware/RDA5802N_RECEPTION_FM.md"
+        "docs/hardware/RDA5802N_RECEPTION_FM.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1581,7 +1643,7 @@
       "target": "yd1517",
       "label": "Commande mute 1517 possible",
       "bus": "GPIO via étage intermédiaire",
-      "status": "hypothesis",
+      "status": "oem_trace",
       "pins": [
         {
           "from_pin": "PA7 observé par banc",
@@ -1590,10 +1652,11 @@
           "note": ""
         }
       ],
-      "details": "La trace OEM Speaker Mode commande PA7; sa continuité jusqu’à M/SS pin 8 du YD1517P n’est pas mesurée.",
+      "details": "La selection Speaker Mode executee sur OEM commande PA7 et mute du recepteur RF. Association electrique vers broche 8 du YD1517P non mesuree; etats logiques et modes haut-parleur qualifies.",
       "docs": [
         "docs/hardware/AUDIO_PA1517_YD1517_VARIANTES.md",
-        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md"
+        "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1814,7 +1877,8 @@
       "details": "Chaîne validée dans le banc OEM V11.7. PROGRAM, IDENTIFY, R, W et END transportés vers la pile USB exécutée ; Windows CPS complet non qualifié.",
       "docs": [
         "docs/cps/PROTOCOLE_OEM_V121.md",
-        "docs/cps/CPS_ARCHITECTURE_SIMULATION.md"
+        "docs/cps/CPS_ARCHITECTURE_SIMULATION.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1827,7 +1891,8 @@
       "pins": [],
       "details": "ENDPOINT 0x03 OUT, 0x81 IN, 0x82 notification. Le firmware OEM analyse les octets. Affectation physique D+ D- et continuité non mesurée.",
       "docs": [
-        "docs/cps/USB_CDC_GD32_V121.md"
+        "docs/cps/USB_CDC_GD32_V121.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1836,12 +1901,13 @@
       "target": "nand",
       "label": "Accès NAND au codeplug CPS",
       "bus": "NAND serie OEM",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [],
-      "details": "Écriture logique a 0x00800000 dans le banc V11.6, accès NAND et métadonnées OEM différés ; ne pas écrire directement la NAND depuis le pont.",
+      "details": "Lecture et ecriture codeplug via commandes PROGRAM/R/W/END et gestionnaire NAND; ecritures et persistance testes dans le banc OEM.",
       "docs": [
         "docs/cps/CODEPLUG_CANAL_OEM_V121.md",
-        "docs/cps/CPS_QUALIFICATION.md"
+        "docs/cps/CPS_QUALIFICATION.md",
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
     },
     {
@@ -1981,5 +2047,38 @@
     "docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md",
     "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
     "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md"
+  ],
+  "layout_width": 1590,
+  "layout_groups": [
+    {
+      "id": "facade",
+      "label": "Façade / commandes",
+      "x": 16,
+      "w": 290
+    },
+    {
+      "id": "logique",
+      "label": "Entrées / alimentation / PC",
+      "x": 330,
+      "w": 290
+    },
+    {
+      "id": "central",
+      "label": "Cœur GD32F303",
+      "x": 642,
+      "w": 312
+    },
+    {
+      "id": "peripheriques",
+      "label": "Périphériques / mémoires",
+      "x": 974,
+      "w": 290
+    },
+    {
+      "id": "radio",
+      "label": "RF / antenne / Airband",
+      "x": 1288,
+      "w": 290
+    }
   ]
 }

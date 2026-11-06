@@ -62,3 +62,12 @@ Voir [la méthode et les limites](docs/QUALIFICATION_ANALOGIQUE.md) et
 ### Reconstruction du pilote RF QA4818N
 
 [Monographie détaillée](docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md), [outil de traces](tools/qa4818n_trace.py), [calculateur C](firmware/rf/qa4818n_frequency.c) et [tests](tools/test_qa4818n_trace.py). Aucun TX ni câblage électrique n'est piloté ; les valeurs calculées selon AT1846S restent à confirmer sur QA4818N.
+
+
+## Mise à jour de la cartographie du 6 novembre 2026
+
+- Le GD32F303 est au centre du schéma PRO et PLUS.
+- Nouvelle [vue détaillée de façade](https://telectroboy.github.io/OpenD578/facade.html) avec boutons, codeur, deux volumes, écran LCD et LED.
+- L'Airband du PLUS figure dans la zone RF, et non dans la façade.
+- Les GPIO et bus identifiés en exécutant le firmware OEM sont affichés comme résultats de reverse engineering valides. Les mesures de continuité physique restantes sont documentées séparément.
+- [Correspondances et règles de validation](docs/hardware/VALIDATION_FONCTIONS_OEM.md).

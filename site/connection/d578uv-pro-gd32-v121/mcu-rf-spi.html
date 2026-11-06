@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
 <a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
@@ -16,9 +17,9 @@
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-rf-spi</div>
 <h1>Horloge, données et CS RF</h1>
 <p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/rf_spi.html">Bus RF 4 sélections</a></p>
-<dl class="facts"><dt>Bus</dt><dd>GPIO série 24 bits</dd><dt>Niveau de preuve</dt><dd>emulator</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<dl class="facts"><dt>Bus</dt><dd>GPIO série 24 bits</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
 <p>Banc RfSpi : 8 bits de commande +16 bits valeur, CS0=PB5, CS1=PB2, CS2=PC13, CS3=PE1. Les banques ne sont PAS attribuées aux quatre composants grattés.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PB3</code></td><td>SCLK bus RF</td><td>emulator</td></tr><tr><td><code>PB4</code></td><td>SDIO bidirectionnel</td><td>emulator</td></tr><tr><td><code>PB5</code></td><td>CS banque logique 0, actif bas</td><td>emulator</td></tr><tr><td><code>PB2</code></td><td>CS banque logique 1, actif bas</td><td>emulator</td></tr><tr><td><code>PC13</code></td><td>CS banque logique 2, actif bas</td><td>emulator</td></tr><tr><td><code>PE1</code></td><td>CS banque logique 3, actif bas</td><td>emulator</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">source</a></small></li><li><a href="../../doc/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">source</a></small></li></ul></main>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">source</a></small></li><li><a href="../../doc/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

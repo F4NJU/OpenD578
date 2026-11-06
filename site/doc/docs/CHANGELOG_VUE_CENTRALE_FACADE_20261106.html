@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 : réorganisation matérielle et façade (6 novembre 2026) - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>OpenD578 : réorganisation matérielle et façade (6 novembre 2026)</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/CHANGELOG_VUE_CENTRALE_FACADE_20261106.md">Modifier sur GitHub</a><a download href="../../raw/docs/CHANGELOG_VUE_CENTRALE_FACADE_20261106.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/CHANGELOG_VUE_CENTRALE_FACADE_20261106.md</code></p>
+<article class="markdown-body"><h1 id="opend578-reorganisation-materielle-et-facade-6-novembre-2026">OpenD578 : réorganisation matérielle et façade (6 novembre 2026)</h1>
+<h2 id="changements">Changements</h2>
+<ol>
+<li>GD32F303VKT6 central dans les deux variantes du schéma.</li>
+<li>Façade détaillée ajoutée avec LCD, huit touches analogiques, Power, appui codeur, deux volumes, LED et bus d'éclairage.</li>
+<li>Airband déplacé de la façade à la carte RF de la variante PLUS.</li>
+<li>Niveaux de preuve corrigés : une routine OEM observée est considérée comme une preuve logicielle ; une fonction opérationnelle ne devient pas « inconnue » pour défaut de continuité électrique.</li>
+<li>HPI SCT3258 ajouté explicitement aux liaisons : PD2, PD3, PD4, PD5, PD8..PD15, avec leur rôle déclaré.</li>
+<li>Fiches GPIO/NAND/RF/USB/microphone reliées aux composants et aux traces existantes.</li>
+<li>PLUS : six blocs de façade ajoutés. Le MCU GD32F303 était déjà confirmé sur la carte de l'utilisateur. Le GPIO exact de la variante PLUS n'est pas copié automatiquement du firmware PRO.</li>
+<li>Documentation des partages PB3/PB4 pour bus RF et rétroéclairage. Ne pas initialiser deux pilotes concurrents sans qualifier la commutation.</li>
+</ol>
+<h2 id="provenance-et-limites">Provenance et limites</h2>
+<ul>
+<li>Sources principales : notices LCD V11.8, façade GPIO, microphone V11.8, HPI SCT3258, modèles GPIO RF et tests du banc.</li>
+<li>Fonctionnement OEM confirmé par l'utilisateur sur poste physique.</li>
+<li>Cette mise à jour ne crée pas de firmware flashable ; elle modifie la documentation et la présentation.</li>
+<li>Les noms des circuits grattés et les pistes non mesurées restent présentés comme des attributions physiques à confirmer.</li>
+</ul>
+<h2 id="tests">Tests</h2>
+<ul>
+<li><code>python tools/validate_hardware_model.py</code></li>
+<li><code>python tools/build_site.py</code></li>
+<li><code>python tools/test_site.py</code></li>
+<li><code>node --check site-assets/site.js</code></li>
+</ul>
+<p>Le site est généré à partir des Markdown et JSON source unique, sans édition manuelle des pages HTML.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

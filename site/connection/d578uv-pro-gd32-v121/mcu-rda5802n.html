@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
 <a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
@@ -16,9 +17,9 @@
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-rda5802n</div>
 <h1>Commande du tuner FM</h1>
 <p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/rda5802n.html">RDA5802N - FM broadcast</a></p>
-<dl class="facts"><dt>Bus</dt><dd>I²C compatible, 7 bits 0x10</dd><dt>Niveau de preuve</dt><dd>emulator</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
-<p>Le modèle FmI2c décode PB6 SDA et PB7 SCL, écritures séquentielles depuis 0x02, et émule l’ACK 0x10. Aucune confirmation électrique au RDA5802N monté.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PB6</code></td><td>SDA du modèle, pin RDA inconnu</td><td>emulator</td></tr><tr><td><code>PB7</code></td><td>SCL du modèle, pin RDA inconnu</td><td>emulator</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/RDA5802N_RECEPTION_FM.html">RDA5802N : radio FM de radiodiffusion, interface GD32 et pilote autonome</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/RDA5802N_RECEPTION_FM.md">source</a></small></li></ul></main>
+<dl class="facts"><dt>Bus</dt><dd>I2C compatible RDA5807, 0x10</dd><dt>Niveau de preuve</dt><dd>emulator</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>Le decodeur I2C du modele lie PB6 SDA et PB7 SCL a l&#x27;interface FM compatible RDA5807, adresse 7 bits 0x10. Le poste possede physiquement un RDA5802N; attribution PB6/PB7 validee par modele, pas par continuite.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PB6</code></td><td>SDA du modèle, pin RDA inconnu</td><td>emulator</td></tr><tr><td><code>PB7</code></td><td>SCL du modèle, pin RDA inconnu</td><td>emulator</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/RDA5802N_RECEPTION_FM.html">RDA5802N : radio FM de radiodiffusion, interface GD32 et pilote autonome</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/RDA5802N_RECEPTION_FM.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>
