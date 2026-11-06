@@ -1,0 +1,52 @@
+{
+  "f1dmg": {
+    "saved": 458,
+    "failed": 53,
+    "pages": 211,
+    "images": 218,
+    "docs": 15
+  },
+  "theweeks": {
+    "saved": 0,
+    "failed": 1,
+    "pages": 0,
+    "images": 0,
+    "docs": 0
+  },
+  "vk7zja_v74": {
+    "saved": 47,
+    "failed": 6,
+    "pages": 1,
+    "images": 46,
+    "docs": 0
+  },
+  "vk7zja_mirror": {
+    "saved": 47,
+    "failed": 6,
+    "pages": 1,
+    "images": 46,
+    "docs": 0
+  },
+  "vk7zja_authorised_mirror": {
+    "saved": 99,
+    "failed": 0,
+    "pages": 1,
+    "images": 64,
+    "docs": 0
+  },
+  "oz1dgq": {
+    "saved": 2,
+    "failed": 5,
+    "pages": 1,
+    "images": 1,
+    "docs": 0
+  },
+  "comparison": {
+    "images_identiques_db1ig_carsten": 46,
+    "images_communes": 46,
+    "carsten_images_saved": 46,
+    "db1ig_images_saved": 64,
+    "archive_errors": 71,
+    "f1dmg_missing_linked_resources_20_22": 19
+  }
+}

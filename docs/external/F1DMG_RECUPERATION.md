@@ -1,3 +1,5 @@
+> **Mise a jour du 6 novembre 2026, apres reception de l archive utilisateur :** les fichiers HTML `page-20.htm` et `page-22.htm`, les photos et des PDF/DOC F1DMG ont bien ete sauvegardes sur le PC utilisateur. Le constat d indisponibilite ci-dessous concernait uniquement l acces direct depuis notre environnement Web. Voir [audit de la collecte reelle](archives_20261106/INDEX.md) et ses tableaux de manques.
+
 # F1DMG : page AnyTone et pistes de recuperation
 
 ## Ressources signalees

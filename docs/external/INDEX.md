@@ -14,7 +14,7 @@ Ce dossier ajoute les connaissances externes au projet **sans effacer ni remplac
 
 ## Accessibilite et droits
 
-La documentation VK7ZJA de 2022 est accessible sur plusieurs **miroirs d'une meme oeuvre**. [La copie DB1IG](https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php) mentionne l'autorisation du titulaire pour son miroir. Cela ne constitue pas une licence generale autorisant des copies publiques additionnelles. **Le site F1DMG ne repondait pas aux essais du 6 novembre 2026**, donc nous ne pouvons pas declarer ses images et textes sauvegardes.
+La documentation VK7ZJA de 2022 est accessible sur plusieurs **miroirs d'une meme oeuvre**. [La copie DB1IG](https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php) mentionne l'autorisation du titulaire pour son miroir. Cela ne constitue pas une licence generale autorisant des copies publiques additionnelles. **Etat actualise apres reception du ZIP utilisateur :** F1DMG ne repondait pas aux essais Web initiaux, mais les pages `page-20.htm` et `page-22.htm` ainsi que leurs photos et plusieurs documents sont **effectivement sauvegardes dans l archive privee**. Voir [audit et empreintes du 6 novembre](archives_20261106/INDEX.md); les contenus originaux ne sont pas republies ici.
 
 Pour eviter la perte d'originaux, l'outil `tools/archive_sources_privees.py` telecharge les HTML, images et documents accessibles **sur le PC de l'utilisateur** et conserve sans alteration les octets originaux, plus une version locale navigable et un manifeste avec SHA-256. La source publique OpenD578 contient les liens, les valeurs techniques, les analyses et nos propres textes ; les archives integralement copiees restent privees, sous les droits de leurs auteurs.
 
@@ -35,3 +35,7 @@ La [revue des sources DB1IG](db1ig/INDEX.md) complete le present fonds sans supp
 
 - [129 affirmations RadioFoundry comparées au firmware D578](radiofoundry/INDEX.md), avec les écarts de version et les chemins DMR/codec/NAND.
 - [Approfondissement individuel des 21 rubriques DB1IG auparavant résumées](db1ig/approfondissements/INDEX.md). Aucune rubrique historique n’a été retirée.
+
+## Archive effectivement recuperée le 6 novembre 2026
+
+- [Audit de la copie utilisateur du 6 novembre : F1DMG, VK7ZJA, fichiers manquants](archives_20261106/INDEX.md). Cette analyse remplace le diagnostic d indisponibilite fait avant la reception du ZIP utilisateur, sans supprimer les notices d origine.

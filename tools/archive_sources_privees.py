@@ -19,7 +19,7 @@ import time
 from datetime import datetime, timezone
 from collections import deque
 from urllib.error import HTTPError, URLError
-from urllib.parse import urljoin, urlsplit, urlunsplit, unquote, urlencode
+from urllib.parse import urljoin, urlsplit, urlunsplit, unquote, urlencode, quote
 from urllib.request import Request, urlopen
 
 SOURCES = {
@@ -47,6 +47,22 @@ SOURCES = {
         'seeds': ['https://qsl.net/oz1dgq/home-filer/anytone-hints.htm'],
         'hosts': {'qsl.net', 'www.qsl.net'}, 'crawl_pages': False,
     },
+    'f1dmg_anytone': {
+        'seeds': ['http://f1dmg.free.fr/page-20.htm', 'http://f1dmg.free.fr/page-22.htm'],
+        'hosts': {'f1dmg.free.fr'}, 'crawl_pages': False,
+    },
+    'db1ig_anytone_related': {
+        'seeds': [
+            'https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php',
+            'https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_878mods.php',
+            'https://db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_dmrbasics.php',
+        ],
+        'hosts': {'www.db1ig.de','db1ig.de'}, 'crawl_pages': False,
+    },
+    'radiofoundry': {
+        'seeds': ['https://radiofoundry.org/docs/spec/hardware-anytone'],
+        'hosts': {'radiofoundry.org','www.radiofoundry.org'}, 'crawl_pages': False,
+    },
     'fcc_d578': {
         'seeds': ['https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250',
                   'https://fccid.io/T4K-D578UV2'],
@@ -56,7 +72,7 @@ SOURCES = {
 IMAGE_EXT={'.jpg','.jpeg','.png','.gif','.webp','.svg','.bmp','.tif','.tiff'}
 DOC_EXT={'.pdf','.txt','.doc','.docx','.odt','.rtf','.csv'}
 STYLE_EXT={'.css','.ico','.woff','.woff2'}
-OPTIONAL_EXT={'.zip','.rar','.7z','.exe','.msi','.dll','.bin','.hex','.spi','.cdd'}
+OPTIONAL_EXT={'.zip','.rar','.7z','.exe','.msi','.dll','.bin','.hex','.spi','.cdd','.rdt','.hpt','.mpg','.mp4'}
 USER_AGENT='Mozilla/5.0 (compatible; OpenD578PersonalArchiver/1.0; offline historical research)'
 
 
@@ -64,7 +80,10 @@ def normal(url):
     p=urlsplit(url)
     if p.scheme.lower() not in ('http','https') or not p.hostname:
         return None
-    return urlunsplit((p.scheme.lower(),p.netloc.lower(),p.path or '/',p.query,''))
+    # HTTP clients reject literal spaces in URL paths. Preserve existing %XX escapes.
+    path=quote(p.path or '/', safe="/%:@!$&'()*+,;=-._~")
+    query=quote(p.query, safe="=&?/%:@!$'()*+,;+-._~")
+    return urlunsplit((p.scheme.lower(),p.netloc.lower(),path,query,''))
 
 
 def relative_filename(url):
@@ -136,6 +155,8 @@ class PrivateArchive:
         full=normal(urljoin(base or '',url))
         if not full or full in self.seen:return
         self.links.add(full)
+        # Apache autoindex sorting does not add information and multiplies pages.
+        if re.fullmatch(r'C=[NMSD];O=[AD]', urlsplit(full).query, re.I):return
         host=urlsplit(full).hostname
         if host not in self.config['hosts']:
             return
@@ -216,7 +237,7 @@ class PrivateArchive:
         pattern=re.compile(r'(?P<attr>\b(?:src|href|poster|data-src)\s*=\s*)(?P<q>[\'\"])(?P<val>.*?)(?P=q)',re.I|re.S)
         count=0
         for row in self.manifest:
-            if not ('sha256' in row and row['original_file'].lower().endswith(('.htm','.html','.php.html'))):continue
+            if not ('sha256' in row and row['original_file'].lower().endswith(('.htm','.html','.php','.php.html'))):continue
             src=self.output/row['original_file']
             target=self.output/'offline'/Path(row['original_file']).relative_to('originals')
             target.parent.mkdir(parents=True,exist_ok=True)
@@ -257,7 +278,7 @@ class PrivateArchive:
         with (self.output/'checksum.sha256').open('w',encoding='utf-8') as out:
             for row in self.manifest:
                 if 'sha256' in row:out.write(f"{row['sha256']}  {row['original_file']}\n")
-        valid=[r for r in self.manifest if r.get('original_file','').lower().endswith(('.html','.htm','.php.html'))]
+        valid=[r for r in self.manifest if r.get('original_file','').lower().endswith(('.html','.htm','.php','.php.html'))]
         items=[]
         for row in valid:
             rel='offline/'+str(Path(row['original_file']).relative_to('originals')).replace('\\','/')
@@ -291,6 +312,7 @@ def main(argv=None):
     ap.add_argument('--max-assets',type=int,default=2500)
     ap.add_argument('--timeout',type=float,default=15)
     ap.add_argument('--delay',type=float,default=0.8)
+    ap.add_argument('--max-file-mb',type=int,default=40,help='Maximum individual file size; no data is executed.')
     ap.add_argument('--include-tools',action='store_true',help='Also save linked binary executables/firmware and ZIP files; do not execute them.')
     ap.add_argument('--wayback',action='store_true',help='If F1DMG does not respond, attempt to capture known URLs from Wayback snapshots.')
     args=ap.parse_args(argv)
@@ -302,7 +324,7 @@ def main(argv=None):
     for site in args.sites:
         print(f'===== {site} =====',flush=True)
         a=PrivateArchive(run/site,site,max_pages=args.max_pages,max_assets=args.max_assets,
-                         timeout=args.timeout,delay=args.delay,include_tools=args.include_tools)
+                         timeout=args.timeout,delay=args.delay,include_tools=args.include_tools,max_file_mb=args.max_file_mb)
         saved=a.run()
         total+=saved
         if site=='f1dmg' and args.wayback:
@@ -317,7 +339,7 @@ def main(argv=None):
                 SOURCES[key]={'seeds':snapshots,'hosts':{'web.archive.org'},'crawl_pages':False}
                 print('===== f1dmg_wayback (historical snapshots) =====',flush=True)
                 b=PrivateArchive(run/key,key,max_pages=args.max_pages,max_assets=args.max_assets,
-                                 timeout=args.timeout,delay=args.delay,include_tools=args.include_tools)
+                                 timeout=args.timeout,delay=args.delay,include_tools=args.include_tools,max_file_mb=args.max_file_mb)
                 total+=b.run()
             elif missing: print('F1DMG: No accessible Wayback snapshot was discovered for missing seeds.',file=sys.stderr)
     summary={'timestamp_utc':stamp,'sites':args.sites,'saved_entries':total,'destination':str(run)}

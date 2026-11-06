@@ -91,3 +91,7 @@ La documentation contient une [revue comparative des principales pages AnyTone d
 - [Approfondissement des 21 sujets DB1IG restés en résumé](docs/external/db1ig/approfondissements/INDEX.md).
 - Documentation ajoutée sans suppression des analyses OEM, avec le GPIO D578 prioritaire sur le D868 et le bootloader V1.21 à `0x08006000`.
 - `python tools/check_research_coverage.py` contrôle l’intégrité des renvois et de la matrice.
+
+## Archives originales recues (6 novembre 2026)
+
+Voir [l audit de la collecte F1DMG et VK7ZJA](docs/external/archives_20261106/INDEX.md) pour les photos et documents reellement recuperes, les 71 echecs et les fichiers F1DMG ZIP/RDT/HPT a sauvegarder. Les octets originaux de tiers restent dans une archive privee distincte.
