@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Sources externes : questions de maintenance et de protocoles utiles au firmware alternatif - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Sources externes : questions de maintenance et de protocoles utiles au firmware alternatif</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/MAINTENANCE_ET_PROTOCOLES_D578.md">Modifier sur GitHub</a><a download href="../../../raw/docs/external/MAINTENANCE_ET_PROTOCOLES_D578.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/MAINTENANCE_ET_PROTOCOLES_D578.md</code></p>
+<article class="markdown-body"><h1 id="sources-externes-questions-de-maintenance-et-de-protocoles-utiles-au-firmware-alternatif">Sources externes : questions de maintenance et de protocoles utiles au firmware alternatif</h1>
+<h2 id="les-interfaces-a-distinguer">Les interfaces a distinguer</h2>
+<ol>
+<li><strong>USB CPS</strong> : configuration et codeplug, avec les commandes effectivement recuperees dans <code>docs/cps/PROTOCOLE_OEM_V121.md</code>. Les outils G4EML de la page VK7ZJA donnent d'autres voies de lecture des donnees, mais ne constituent pas une preuve de leur implementation interne.</li>
+<li><strong>Mode MCU UPDATE</strong> : programmation du firmware applicatif. Ne pas le confondre avec un redemarrage normal, un mode icones ou la mise a jour SCT3258.</li>
+<li><strong>Mise a jour des images/icones</strong> : utilise des fichiers CDD et un protocole de chargement historique, avec granularite/alignment de blocs et parfois decalage d'adresse specifique a l'utilitaire.</li>
+<li><strong>Mode SCT/DMR</strong> : micrologiciel du processeur de bande de base, distinct de l'application du GD32. Source historique signale des versions de code SCT3258 et un mecanisme de maintenance propre.</li>
+<li><strong>Test mode/alignement</strong> : reglages de puissance, sensibilité, FI et filtre. Le poste de l'utilisateur dispose d'observations de son propre mode TEST, superieures aux suppositions tirees d'un ancien manuel.</li>
+</ol>
+<h2 id="codeplug-et-sauvegardes">Codeplug et sauvegardes</h2>
+<p>La documentation ancienne insiste sur le triplet <strong>branche firmware / version CPS / structure du codeplug</strong>. Les incompatibilites ne se resument pas a un message Band Error : certains champs peuvent changer de sens sans aucun message explicite.</p>
+<p>Dans OpenD578, une sauvegarde NAND d'un poste donne contient aussi des valeurs propres a l'unite. Les plages d'alignement historiques communiquees par VK7ZJA sont <code>0x02F00000–0x02F80679</code>, et les informations locales <code>0x02FA0000–0x02FDFFFF</code>. Leur presence historique a ete recoupee avec le projet, mais toute ecriture dans ces zones doit rester interdite tant que les offsets physiques, les sauvegardes, et l'integrite ECC ne sont pas qualifies.</p>
+<p>Les observations du banc CPS PRO V1.21 sont distinctes de ces outils historiques : <strong>USB CDC, commande PROGRAM, reponse 51 58 06, lectures R, ecritures W, sortie END</strong>, avec ecriture des champs de canal teste dans la simulation. La presence de la commande <code>W</code> dans un simulateur n'autorise pas une ecriture sans sauvegarde sur un poste physique.</p>
+<h2 id="cartographie-de-facade-et-de-rf">Cartographie de facade et de RF</h2>
+<p>La bibliographie historique fournit des photos utiles pour comparer l'affectation des circuits. Dans les versions de l'utilisateur, nous disposons de traces OEM permettant de valider le pilotage fonctionnel du LCD, des boutons, du codeur, des potentiometres, des LED et du bus RF. Les photographies d'autres revisions sont des elements de recoupement, pas des motifs de retirer le statut « valide par firmware ».</p>
+<p>L'etude des quatre QA4818N peut beneficier des schemas bloc VK7ZJA (deux oscillateurs locaux et deux etages FI/BB), mais l'identification exacte de la banque selectionnee est celle relevee dans le pilote du D578. Les calculs de registres <code>0x29/0x2A</code> doivent etre confrontees aux transactions OEM (pas seulement a la formule AT1846S).</p>
+<h2 id="modifications-dangereuses-documentees-chez-vk7zja">Modifications dangereuses documentees chez VK7ZJA</h2>
+<p>Le texte ancien contient aussi des procedes capables d'effacer des plages NAND, de modifier des calibrations ou d'augmenter la puissance au-dela des reglages constructeur. Pour la documentation OpenD578, conserver l'existence des procedures, leurs liens et leur analyse, sans convertir ces techniques en actions automatiques. Le depot public privilegie le <strong>read-only</strong>, les comparaisons de dumps et les tests hors ligne.</p>
+<h2 id="elements-publics-sans-correspondance-automatique-avec-le-pro-v121">Elements publics sans correspondance automatique avec le PRO V1.21</h2>
+<ul>
+<li>Le marche comprend des cartes de revision AT32 plus recentes ; ne pas attribuer un brochage GD32 sans voir le microcontroleur.</li>
+<li>Les ecarts anciens D578 / D878 / Alinco ne prouvent aucune correspondance entre les firmwares.</li>
+<li>La presence d'un connecteur non equipe pour un airband futur ne prouve pas que la reception AM etait possible sur cette revision. Le PLUS de l'utilisateur possede une vraie carte RF additionnelle.</li>
+<li>Les anciens exemples de microphones Bluetooth ne sont pas une description du protocole BT01 ni du module ET12 du D578.</li>
+</ul>
+<p>Voir aussi <a href="INDEX_60_SUJETS_VK7ZJA.html">l'index des 60 sujets</a> et <a href="SOURCES_ET_VERSIONS.html">les sources et versions</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

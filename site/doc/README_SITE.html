@@ -10,8 +10,10 @@
 <a class="active" href="../docs.html">Documents</a>
 <a href="../cps.html">CPS / USB</a>
 <a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="docs/external/INDEX.html">Sources externes</a>
 <a href="../firmware.html">Firmware</a>
 <a href="../photos.html">Photos</a>
+<a href="../f1dmg.html">F1DMG</a>
 <a href="../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
@@ -79,6 +81,29 @@ liens de source a une republication sans autorisation.</p>
 <h2 id="programmation-cps">Programmation CPS</h2>
 <p>Un nouvel onglet <code>CPS / USB</code> regroupe les trames OEM <code>PROGRAM</code>, identification, <code>R</code>, <code>W</code>, <code>END</code>, les descripteurs USB CDC et le format des 128 premiers canaux du PRO V1.21. Les fichiers <code>bench/cps_bridge.py</code>, <code>bench/cps_probe.py</code>, <code>bench/web/mini_cps_protocol.js</code> et leurs tests proviennent de la <strong>source publique V11.7</strong>. Le scanner <code>tools/cps_trace_audit.py</code> analyse des journaux JSONL déjà capturés, sans connexion USB.</p>
 <p>Le dépôt ne comprend pas le constructeur CPS.exe ni les images constructeur. La compatibilité avec les postes physiques et la totalité des fonctions Windows reste à qualifier.</p>
+<h2 id="sources-externes-et-archivage-prive-novembre-2026">Sources externes et archivage prive (novembre 2026)</h2>
+<p>La navigation <strong>Sources externes</strong> reference les travaux F1DMG et VK7ZJA, les differentes revisions de sa documentation, les photos FCC et leurs recoupements avec les preuves du firmware OpenD578. Lire <code>docs/external/INDEX.md</code>. Les originaux et images peuvent etre sauvegardes <strong>localement</strong>, hors du depot GitHub, avec <code>tools/archive_sources_windows.ps1</code>. Aucun contenu tiers integral n'est republice dans GitHub sans autorisation.</p>
+<h2 id="revue-croisee-db1ig-vk7zja-du-6-novembre-2026">Revue croisee DB1IG / VK7ZJA du 6 novembre 2026</h2>
+<p>La documentation contient une <a href="docs/external/db1ig/INDEX.html">revue comparative des principales pages AnyTone de DB1IG</a>, avec un inventaire de 60 sujets cote a cote avec les fichiers OpenD578 existants. L'ajout est documentaire, et n'a aucun effet sur les pilotes RF ou les actions de programmation. Les originaux et photos conservent leurs references, sans reproduction integrale publique.</p>
+<h2 id="consolidation-radiofoundry-et-des-21-sujets-db1ig">Consolidation RadioFoundry et des 21 sujets DB1IG</h2>
+<ul>
+<li><a href="docs/external/radiofoundry/AUDIT_AFFIRMATIONS.html">Audit vérifiable de 129 affirmations, avec liens et statuts</a>.</li>
+<li><a href="docs/external/db1ig/approfondissements/INDEX.html">Approfondissement des 21 sujets DB1IG restés en résumé</a>.</li>
+<li>Documentation ajoutée sans suppression des analyses OEM, avec le GPIO D578 prioritaire sur le D868 et le bootloader V1.21 à <code>0x08006000</code>.</li>
+<li><code>python tools/check_research_coverage.py</code> contrôle l’intégrité des renvois et de la matrice.</li>
+</ul>
+<h2 id="archives-originales-recues-6-novembre-2026">Archives originales recues (6 novembre 2026)</h2>
+<p>Voir <a href="docs/external/archives_20261106/INDEX.html">l audit de la collecte F1DMG et VK7ZJA</a> pour les photos et documents reellement recuperes, les 71 echecs et les fichiers F1DMG ZIP/RDT/HPT a sauvegarder. Les octets originaux de tiers restent dans une archive privee distincte.</p>
+<h2 id="contribution-f1dmg-dossier-illustre-6-novembre-2026">Contribution F1DMG : dossier illustre (6 novembre 2026)</h2>
+<p>La rubrique F1DMG regroupe sur une meme page les photos, leurs explications
+techniques et les deux articles historiques, avec images a leur place :
+<code>https://telectroboy.github.io/OpenD578/f1dmg.html</code>.
+La galerie photographique devient un index secondaire. Les pages historiques
+et leur texte complet restent consultables. L'import des archives F1DMG se fait
+avec <code>tools/publish_f1dmg.py</code> sur la sauvegarde privee, sans envoyer les autres
+fichiers du ZIP vers GitHub. Guy conserve les droits sur ses contributions.
+Cette rubrique est presentee par Jean-Philippe (F4EGM), projet OpenD578.
+VK7ZJA et DB1IG sont des sources separees non couvertes par cette autorisation.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>

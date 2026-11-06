@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>RadioFoundry : comparaison contrôlée avec OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>RadioFoundry : comparaison contrôlée avec OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/INDEX.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/INDEX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/INDEX.md</code></p>
+<article class="markdown-body"><h1 id="radiofoundry-comparaison-controlee-avec-opend578">RadioFoundry : comparaison contrôlée avec OpenD578</h1>
+<p>Cette revue conserve les résultats techniques publiés dans <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, Anytone hardware</a>, <strong>sans recopier intégralement le texte d'un tiers</strong> et sans effacer notre recherche du firmware constructeur D578 GD32 V1.21. RadioFoundry constitue une référence technique sérieuse, à rapprocher des observations OEM pour donner une validation propre à notre révision.</p>
+<h2 id="acces-aux-analyses">Accès aux analyses</h2>
+<ul>
+<li><a href="AUDIT_AFFIRMATIONS.html">Audit des 129 affirmations de la source, une par une</a> : section, valeur rapportée, correspondance OpenD578, catégorie de preuve, notes de variante.</li>
+<li><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/AUDIT_AFFIRMATIONS.csv">Registre CSV exploitable</a> et <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/AUDIT_AFFIRMATIONS.json">JSON</a> : archivage, filtres et futurs rapprochements automatiques.</li>
+<li><a href="SCT3258_CHAND_BOOT_ET_CODEC.html">SCT3258 : boot, HPI, CHAN_D, vocoder et codec</a> : nouveaux champs détaillés et implications d'un transfert vocal vers MCU.</li>
+<li><a href="GPIO_868_VS_578.html">Cartographie GPIO : D868 contre notre D578</a> : différences majeures, dont clavier, DAC, RF et LCD.</li>
+<li><a href="CALIBRATIONS_ET_VARIANTES.html">Calibrations et NAND par modèle</a> : ne pas importer des offsets propres au D868 dans la NAND du D578.</li>
+<li><a href="FIRMWARE_MISE_A_JOUR.html">Firmware, CPS, CDD et bootloader</a> : mise à jour, emplacements flash, USB CDC et compatibilité.</li>
+</ul>
+<h2 id="hierarchie-de-preuves-utilisee">Hiérarchie de preuves utilisée</h2>
+<p>Le GPIO, la trame et la fonction exécutés dans le firmware OEM et reproduits dans notre banc sont <strong>validés dans le périmètre de cette exécution</strong>. Une référence de composant relevée sur le PCB est un fait physique pour la carte relevée. Les analyses RadioFoundry de firmware sont conservées avec leurs champs exacts et leur modèle cible. Une information issue de <strong>D868</strong> ne doit pas remplacer une observation <strong>D578</strong>. Les propositions d'architecture future sont documentées, sans devenir de fausses fonctionnalités présentes.</p>
+<p><strong>Attention aux contradictions de génération :</strong> nos D578 PRO et PLUS ont le GD32F303 ; une carte AT32 d'une autre série ne doit pas changer la documentation de nos appareils. Le bootloader <strong>24 Kio à <code>0x08000000</code> et application à <code>0x08006000</code></strong> du PRO GD32 V1.21 prévaut sur le boot 16 Kio indiqué pour des portables. La source décrit un mécanisme <code>CHAN_D</code> qui interdit de conclure prématurément à l'impossibilité d'un transfert vocal vers le MCU.</p>
+<h2 id="elements-restant-a-confronter-a-v121">Éléments restant à confronter à V1.21</h2>
+<ul>
+<li>Calcul du SHA-256 du bloc SCT 2 048 octets sur la <strong>copie locale légitime</strong> de la V1.21 et comparaison avec le hash source, sans inclusion des octets dans GitHub.</li>
+<li>Localisation et valeurs des commandes <code>VOCODER_IO_SET</code>, <code>CHAN_D</code>, <code>CODEC_SELECT</code> et <code>I2C_OPERATION</code> dans les routines OEM propres au PRO V1.21.</li>
+<li>Décomposition précise et temporisation des charges vocales <code>CHAN_D</code> ; preuve d'une capacité temps réel éventuelle, pas simple existence d'enregistrement.</li>
+<li>Correspondance des réglages calibrations NAND D578 → DAC/BH2226FV/QA4818N/SCT3258, sans transférer les tables de puissance D868.</li>
+<li>Séquence de chargement <code>UPDATE</code> du bootloader 24 Kio, séparée de la programmation <code>PROGRAM/R/W/END</code> du CPS.</li>
+</ul>
+<p>Les trois PDF Sicomm diffusés sur Hackaday sont référencés dans la <a href="SCT3258_CHAND_BOOT_ET_CODEC.html">fiche SCT3258</a>, mais non redistribués : leur licence n'est pas documentée. La section 2.3 de la page RadioFoundry demande encore une vérification intégrale de transcription du protocole de paquets ; elle est marquée comme telle dans le registre des affirmations.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Complements techniques tires de l&#x27;audit DB1IG / VK7ZJA - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Complements techniques tires de l&#x27;audit DB1IG / VK7ZJA</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/COMPLEMENTS_TECHNIQUES_D578.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/db1ig/COMPLEMENTS_TECHNIQUES_D578.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/COMPLEMENTS_TECHNIQUES_D578.md</code></p>
+<article class="markdown-body"><h1 id="complements-techniques-tires-de-laudit-db1ig-vk7zja">Complements techniques tires de l'audit DB1IG / VK7ZJA</h1>
+<p>Ce document conserve uniquement les <strong>nouveaux details techniques pertinents</strong> et notre analyse de leur integration au D578. Ce n'est ni une copie de la page VK7ZJA ni une preuve que les menus de 2022 ont le meme nom dans les firmwares PRO GD32 V1.21 et PLUS actuels. Les elements valides par l'OEM dans <code>docs/hardware/VALIDATION_FONCTIONS_OEM.md</code> conservent leur statut.</p>
+<p>Source principale : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA, D578 mods v7.4, miroir DB1IG</a>. Autres sources et renvois : <a href="AUDIT_CROISE_SOURCES.html">audit par source</a>.</p>
+<h2 id="1-deux-mecanismes-distincts-pour-le-microphone-filaire">1. Deux mecanismes distincts pour le microphone filaire</h2>
+<h3 id="11-mode-de-telecommande-numerique-connu">1.1. Mode de telecommande numerique connu</h3>
+<p>L'analyse executee du firmware OEM documente la liaison serie USART0 (GPIO PA9/PA10 dans le profil), les trames du microphone vers le poste sur 8 octets commencant par <code>0x41</code>, et les reponses/status de 16 octets commencant par <code>0x53</code>. Voir <code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code>. Ces donnees sont <strong>validees par l'analyse OEM</strong> et ne changent pas dans cet audit.</p>
+<h3 id="12-mode-level-detection-de-la-prise-micro-ajoute-par-la-source-historique">1.2. Mode <code>Level Detection</code> de la prise micro, ajoute par la source historique</h3>
+<p>Le guide historique mentionne une entree PTT par <strong>resistance inseree entre les broches 1 et 8</strong>, avec une valeur indiquee entre <strong>1 et 2,2 kohms</strong> et l'option CPS <strong><code>HandOpMode = Level Detection</code></strong>. Dans son schema de microphone de bureau, l'auteur insiste sur la separation de la masse microphone et de la masse logique et sur le conditionnement d'un electret.</p>
+<p><strong>Consequences pour le firmware :</strong></p>
+<ul>
+<li>La pile de communication micro devra gerer explicitement deux profils : telecommande numerique du combiné et entree par niveau/impedance. Le GPIO du detection de niveau ne doit <strong>pas</strong> etre deduit du seul chemin USART0.</li>
+<li>Le profil choisi influence la logique du PTT et l'interpretation des touches du micro. Il faut relever, dans le code constructeur, la lecture de <code>HandOpMode</code> et le branchement vers le detecteur de niveau.</li>
+<li>Le guide signale un risque de passage accidentel en emission si l'ancien microphone numerique est laisse branche sous le mauvais profil. Pour OpenD578, <strong>PTT doit etre inactif par defaut</strong> si le type de micro ou le profil est inconnu.</li>
+<li>Ne pas bricoler de pontage direct entre les pins : la resistance et la configuration logicielle sont une condition de cet usage historique.</li>
+</ul>
+<p><strong>Nouveau test sans RF :</strong> relever en banc la valeur de la configuration OEM et le chemin d'entree PTT correspondant, sans alimenter le PA. La capture de la transition physique doit etre executee ulterieurement sur charge adaptee si necessaire.</p>
+<h2 id="2-modes-de-demarrage-firmware-de-sous-modules-et-support-de-maintenance">2. Modes de demarrage, firmware de sous-modules et support de maintenance</h2>
+<p>La documentation historique donne plusieurs combinaisons qu'il ne faut pas fusionner sous une seule entree <code>UPDATE</code> :</p>
+<table>
+<thead>
+<tr>
+  <th>Demarrage historique</th>
+  <th>Sous-ensemble cible</th>
+  <th>Etat de documentation OpenD578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>P2 + appui dial</code></td>
+  <td>Ecran de reset</td>
+  <td>A rattacher au gestionnaire facade et a la machine d'etat OEM</td>
+</tr>
+<tr>
+  <td><code>P3 + appui dial</code></td>
+  <td>Diagnostic du module GPS</td>
+  <td>Nouveau chemin a comparer au driver NMEA et au modele GNSS</td>
+</tr>
+<tr>
+  <td><code>P4 + appui dial</code></td>
+  <td>MODE / TEST selon droits AT Options</td>
+  <td><strong>Deja analyse dans le firmware</strong> : permissions NAND, routines OEM et comportement reel sur deux appareils</td>
+</tr>
+<tr>
+  <td><code>P5 + appui dial</code></td>
+  <td>Test avec Bluetooth (BHT)</td>
+  <td>Nouveau cas de test pour les interfaces D868BT-SP/ET12</td>
+</tr>
+<tr>
+  <td><code>P6 + appui dial</code></td>
+  <td>Mise a jour LinkBoard Bluetooth</td>
+  <td>Distinguer transfert de donnees module et firmware MCU GD32</td>
+</tr>
+<tr>
+  <td><code>MENU + appui dial</code></td>
+  <td>Mise a jour baseband SCT3258</td>
+  <td>Nouvelle entree a relier au chargeur HPI existant</td>
+</tr>
+<tr>
+  <td><code>EXIT + appui dial</code></td>
+  <td>Diagnostic RSSI GPS</td>
+  <td>Verification possible de la gestion antenne/GNSS et UI</td>
+</tr>
+<tr>
+  <td><code>PTT micro + appui dial</code></td>
+  <td>Mise a jour firmware interne du microphone (Hand-Soft)</td>
+  <td>Ajouter une cible firmware separee du BT01 et du GD32</td>
+</tr>
+<tr>
+  <td><code>P1 + appui dial</code></td>
+  <td>Mise a jour des ressources/icones (selon version)</td>
+  <td>A comparer au mode MCU UPDATE et au conteneur <code>.spi</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ces combinaisons sont <strong>attribuees a la generation D578 decrite par VK7ZJA</strong>. Dans notre branche, l'entree TEST P4+DIAL dispose deja de traces et d'une validation utilisateur ; les autres scenarios doivent etre recherches dans la table de dispatch de boot, sans declarer les fonctions OEM non fonctionnelles.</p>
+<p>Voir <code>docs/TEST_MODE_OPTIONS.md</code>, <code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code>, <code>docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md</code>.</p>
+<h2 id="3-cartographie-de-lalignement-et-de-la-calibration-rf">3. Cartographie de l'alignement et de la calibration RF</h2>
+<p>Le grand tableau historique permet d'organiser le contenu du menu de service <strong>par type physique</strong> plutot que de traiter tous les octets comme de simples <code>0..255</code> :</p>
+<table>
+<thead>
+<tr>
+  <th>Groupe</th>
+  <th>Identifiants historiquement documentes</th>
+  <th>Signification pour le futur firmware</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Correction frequence</td>
+  <td><code>FQCA</code></td>
+  <td>Une correction fine de reference, distincte de la frequence de canal et du Doppler</td>
+</tr>
+<tr>
+  <td>Puissance UHF</td>
+  <td><code>PAHU</code>, <code>PAMU</code>, <code>PALU</code>, <code>PASU</code></td>
+  <td>Fourchettes par niveau Turbo/High/Medium/Low, a rapprocher du PA et de ses DAC</td>
+</tr>
+<tr>
+  <td>Puissance VHF</td>
+  <td><code>PAHV</code>, <code>PAMV</code>, <code>PALV</code>, <code>PASV</code></td>
+  <td>Calibration independante des quatre niveaux VHF</td>
+</tr>
+<tr>
+  <td>Deviation</td>
+  <td><code>MODU</code>, <code>MODV</code>, <code>MODV2</code>, <code>CTCW</code>, <code>DCSW</code></td>
+  <td>Modulation et tonalites a verifier sur analyseur, pas sur la seule courbe audio</td>
+</tr>
+<tr>
+  <td>Audio TX</td>
+  <td><code>MIC</code>, <code>TONEU</code>, <code>TONEV2</code></td>
+  <td>Gain micro et references de tons de test distincts des signaux de sortie HP</td>
+</tr>
+<tr>
+  <td>Filtrage de suivi A/B</td>
+  <td><code>BPFLUA</code>, <code>BPFMUA</code>, <code>BPFHUA</code>, <code>BPFLUB</code>, <code>BPFMUB</code>, <code>BPFHUB</code> ; equivalents <code>V</code></td>
+  <td>Points bas/moyen/haut par bande et par voie, probablement lies aux filtres accordables</td>
+</tr>
+<tr>
+  <td>Controle reception</td>
+  <td><code>AGCUA</code>, <code>AGCUB</code>, <code>AGCVA</code>, <code>AGCVB</code>, <code>SQTHUA</code>, <code>SQTHUB</code>, <code>SQTHVA</code>, <code>SQTHVB</code>, <code>RSSIUA</code>, <code>RSSIUB</code>, <code>RSSIVA</code>, <code>RSSIVB</code></td>
+  <td>Gains, seuils squelch et table RSSI propres aux voies</td>
+</tr>
+<tr>
+  <td>Tests numeriques</td>
+  <td><code>D FSKL/M/H*</code>, <code>D 600Hz*</code>, <code>D 300Hz*</code>, <code>D 1031*</code>, <code>D BER*</code>, <code>D DIGI</code></td>
+  <td>Voies de validation de modulation DMR, mesures BER et conditions de signal d'essai</td>
+</tr>
+<tr>
+  <td>Alimentation / divers</td>
+  <td><code>VBAT</code>, <code>A OBH/OBL</code>, <code>D OBH/OBL</code>, <code>F1 A0</code></td>
+  <td>Ne pas interpretter ni ecrire ces champs sans avoir reconstruit le chemin OEM correspondant</td>
+</tr>
+<tr>
+  <td>Receveur AM PLUS</td>
+  <td><code>AM BPFL/BPFM/BPFH</code>, <code>AM AGC</code>, <code>AM RSIV</code></td>
+  <td>Calibrations de la chaine AIRBAND supplementaire, distinctes du RDA5802N FM broadcast</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ce qui est deja valide dans OpenD578 :</strong> le mode TEST existe sur le poste de l'utilisateur, les droits de menu ont ete decodes a <code>0x02FA0002/0x02FA0006</code>, la logique OEM d'entree a ete reconnue et les circuits RF fonctionnent en exploitation. Ceci ne signifie pas que les <strong>correspondances octet NAND &lt;-&gt; groupe de calibration</strong> sont deja connues pour toutes les versions.</p>
+<p><strong>Prudence importante :</strong> les nombres de la colonne <code>Typical value</code> publies par VK7ZJA illustrent le comportement de son unite, <strong>pas celui des deux postes etudies</strong>. Le champ <code>VBAT</code> est explicitement critique. Aucune fonction de reecriture de calibration ne sera produite a partir de cette table seule. Notre futur schema doit permettre d'importer les valeurs mesurees et d'enregistrer des hashes avant/apres sans les copier sur un second appareil.</p>
+<p>La suite utile est : (1) lire en RAM, dans le modele OEM, le parametre de menu selectionne ; (2) identifier les fonctions qui chargent les zones d'alignement NAND ; (3) comparer aux changements de registres QA4818N et sorties BH2226FV ; (4) tester sans emission les gains et les filtres, puis seulement ensuite sur banc de mesure RF controle.</p>
+<h2 id="4-la-chaine-rf-historique-explique-mieux-les-etages-sur-le-pcb">4. La chaine RF historique explique mieux les etages sur le PCB</h2>
+<p>Les deux voies analogiques du D578 sont <strong>simultanees</strong> ; elles ne reposent pas sur une simple alternance de deux frequences comme certains portables. Le site signale neanmoins qu'une seule chaine de reception DMR est disponible simultanement. Le firmware alternatif doit donc differencier <code>2 x RX analogiques</code> et <code>1 x demodulateur DMR</code>, sans creer artificiellement un deuxieme demodulateur dans le SCT3258.</p>
+<p>Le schema historique associe les deux premieres FI 38,550 et 38,850 MHz a des etages convertisseurs directs QA4818N. Une photo de la carte montre des <strong>empreintes pour des filtres quartz supplementaires</strong>, non equipees. Ce constat correspond a une position physique et non a la preuve qu'un filtre supplementaire ameliorerait le poste. Notre topologie RF doit distinguer l'etage reel, l'empreinte absente et la carte AM du PLUS.</p>
+<p>Les tables BPF d'alignement sont une piste directe vers les commandes de DAC varactors. Une modification de blindage peut changer les capacites parasites et donc le suivi de filtrage. Un filtre non accorde pourrait expliquer une faible sensibilite hors bande sans que le synthese QA soit fautif.</p>
+<p><strong>Mesures historiques, non caracterisation de nos appareils :</strong> le guide donne des sensibilites de l'ordre de 0,18 uV VHF et 0,20 uV UHF en NFM pour son critere d'essai, et des niveaux TX autour de 58 W a 145,5 MHz et 43 W a 435 MHz en Turbo. Conserver la <strong>methode</strong>, la bande, les conditions et la provenance ; ne pas transformer ces chiffres en seuil d'acceptation rigide du GD32 PRO V1.21 ou du PLUS.</p>
+<h2 id="5-carte-gps-deux-coax-et-deux-domaines-de-sauvegarde">5. Carte GPS : deux coax et deux domaines de sauvegarde</h2>
+<p>Le guide historique illustre <strong>deux mini-connecteurs coaxiaux</strong> de la carte facade/CPU. L'un relie le SMA d'antenne GPS externe, l'autre est signale comme libre dans cette generation. Il ne faut ni le declarer relie au meme point RF ni presumer la presence des deux connecteurs sur chaque variante sans examiner la photo correspondante.</p>
+<p>Le projet a deja documente les deux reserves RTC/GPS de la carte, la nature XH414HG et les domaines <code>VBAT</code>. Le nouveau detail a capter est donc la <strong>topologie d'entree antenne</strong>, les pistes RF, les composants d'adaptation et les interfaces passives de test. Le fonctionnement GNSS de l'OEM demeure valide.</p>
+<h2 id="6-audio-bluetooth-et-traitement-du-microphone">6. Audio Bluetooth et traitement du microphone</h2>
+<p>Le texte VK7ZJA mentionne des options de routage du type <strong><code>BT + int mic</code></strong> et <strong><code>BT + int spk</code></strong>, et un usage d'un adaptateur audio Bluetooth externe avec un bouton PTT dedie. Elles suggerent une matrice de gestion de la source microphone et de la destination haut-parleur. Cela complete nos constats OEM <code>Speaker Mode</code>, GPIO PA7 et commande RF banque1/page0/0x25 ; cela ne fait pas des commandes <code>AT+AGHF</code> un schema audio exhaustif.</p>
+<p>Le <code>Mic Enhance</code> decrite dans ce guide concerne l'audio transmis en DMR selon le profil teste, pas la reception ni necessairement l'audio analogique FM. Cette distinction indique ou rechercher les coefficients et les routines : chemin TX/codec et SCT3258, pas seulement l'amplificateur YD1517P du haut-parleur.</p>
+<h2 id="7-cps-repartition-logicielle-et-mise-a-jour-des-ressources">7. CPS, repartition logicielle et mise a jour des ressources</h2>
+<p>Le D578 possede plusieurs cibles de firmware et de donnees. <strong>Ne pas tout presenter comme un CDD principal :</strong></p>
+<ul>
+<li>Application ARM du GD32 (firmware du poste et logicielle d'interface).</li>
+<li>Firmware du processeur DMR SCT3258 ; transfert distinct du contenu NAND codeplug.</li>
+<li>Module Bluetooth/LinkBoard ; eventuelle mise a jour distincte.</li>
+<li>Electronique du microphone filaire, mentionnee sous <code>Hand-Soft</code> dans les procedures historiques.</li>
+<li>Ressources graphiques du LCD dont les icones GPS, a distinguer de l'application MCU. Certaines archives historiques utilisent un conteneur <code>.spi</code> et un mode <code>UPDATE MODE</code> propre.</li>
+</ul>
+<p><strong>Migration CPS :</strong> l'export/import des canaux ne sauvegarde pas necessairement les options de configuration et certains parametres sensibles. L'outil OpenD578 doit conserver la version firmware, CPS, famille de MCU, MODE et version de structure de contacts, avec une politique explicite de conversion. Les commandes <code>PROGRAM/R/W/END</code> et les 64 octets d'enregistrement canal deja obtenus par simulation OEM sont des faits differents et <strong>doivent rester conserves comme tels</strong>.</p>
+<p>La page DB1IG sur les codeplugs et son outil Contacts donnent un modele de flux CSV, filtre region/pays, avec plusieurs presentations de noms, mais ne prouvent pas le format binaire du contact D578 en NAND.</p>
+<h2 id="8-autres-pistes-de-tests-et-maintenance">8. Autres pistes de tests et maintenance</h2>
+<ul>
+<li><strong>Squelch et scanning</strong> : differencier DMR simplex, DCDM et repetiteur, et le mode de reponse sur canal trouve. Il s'agit de fonctionnalites CPS/UI, pas de proprietes d'un seul QA4818N.</li>
+<li><strong>RDA FM broadcast</strong> : le syntoniseur FM grand public est un circuit autonome ; sa plage de memoires peut differer de la plage de tuning manuel, ce qui justifie des tests de registre et de limites d'interface.</li>
+<li><strong>Icones GPS</strong> : un paquet graphique peut utiliser un mode de mise a jour et une granularite differents du firmware MCU. Son existence prouve un protocole de chargement d'assets, pas son adresse exacte dans notre NAND.</li>
+<li><strong>Reprise apres echec de mise a jour</strong> : documenter le mode recovery, les conditions d'alimentation et les pertes possibles de codeplug ; aucune procedure ecriture ne doit s'executer sans backup.</li>
+<li><strong>Refroidissement</strong> : les modifications de ventilateur et boitier sont des choix de maintenance, non des instructions du firmware RF. Une commande de ventilateur OEM, si existante, devra etre recherchee separement.</li>
+</ul>
+<h2 id="9-points-de-confusion-ou-de-contradiction-a-ne-pas-fusionner">9. Points de confusion ou de contradiction a ne pas fusionner</h2>
+<table>
+<thead>
+<tr>
+  <th>Sujet</th>
+  <th>Ce qui est certain dans le projet</th>
+  <th>Ce qu'une source historique apporte</th>
+  <th>Decision documentaire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>PTT</td>
+  <td>USART0 et trames filaires OEM decodes</td>
+  <td>Detection resistive sur profil CPS different</td>
+  <td>Deux profils, deux pilotes eventuels</td>
+</tr>
+<tr>
+  <td>QA4818N</td>
+  <td>Quatre banques serie et protocoles OEM fonctionnels</td>
+  <td>Affectation par etage theorique et reference 26 MHz</td>
+  <td>Valider la fonction, garder attribution des boitiers a relier</td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td>NMEA et fonction OEM disponibles</td>
+  <td>Deux connecteurs coax sur ancienne revision</td>
+  <td>Ne pas supposer les deux presents sur toutes les cartes</td>
+</tr>
+<tr>
+  <td>TEST</td>
+  <td>Code permissions et sequence OEM identifies</td>
+  <td>Noms historiques et exemples de valeurs</td>
+  <td>Conserver l'OEM comme preuve, etiqueter exemples externes</td>
+</tr>
+<tr>
+  <td>RDA</td>
+  <td>I2C/modulation documentes dans modele</td>
+  <td>Memoire FM broadcast potentiellement 76 MHz</td>
+  <td>Verifier registre de sous-bande par OEM</td>
+</tr>
+<tr>
+  <td>Airband</td>
+  <td>Carte RF PLUS supplementaire observee</td>
+  <td>Ampli/etage AM historique</td>
+  <td>Ne pas confondre avec RDA FM broadcast</td>
+</tr>
+<tr>
+  <td>878 et D578</td>
+  <td>Composants de meme famille</td>
+  <td>Outils et formats de codeplug proches</td>
+  <td>Pas de transplantation brute d'offset ni de firmware</td>
+</tr>
+</tbody>
+</table>
+<p>Voir la <a href="MATRICE_60_THEMES.html">matrice des 60 sujets</a> pour le recoupement a l'echelle de chaque chapitre.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

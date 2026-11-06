@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Guy F1DMG : photographies, modifications et documentation AnyTone - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Guy F1DMG : photographies, modifications et documentation AnyTone</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/f1dmg/INDEX.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/f1dmg/INDEX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/f1dmg/INDEX.md</code></p>
+<article class="markdown-body"><h1 id="guy-f1dmg-photographies-modifications-et-documentation-anytone">Guy F1DMG : photographies, modifications et documentation AnyTone</h1>
+<h2 id="autorisation-et-credits">Autorisation et crédits</h2>
+<p><strong>Jean-Philippe (F4EGM)</strong> a obtenu de Guy <strong>F1DMG</strong>, par téléphone le <strong>6 novembre 2026</strong>, l'autorisation de reprendre ses travaux et ses photographies dans OpenD578.</p>
+<p>Merci à Guy pour son accueil chaleureux, sa gentillesse et sa disponibilité. Au téléphone, il a partagé avec plaisir ses expériences et ses idées. Son envie d'échanger, d'expliquer ses montages et d'aider les autres représente bien l'esprit radioamateur. Cette rubrique cherche à respecter son travail, avec ses photos au bon endroit et ses explications conservées. <strong>73 de Jean-Philippe, F4EGM.</strong></p>
+<p>Le contenu réutilisé reste attribué à son auteur. <strong>La licence GPL-3.0 du code source OpenD578 ne s'étend pas automatiquement aux photographies et documents de Guy.</strong> Une image hébergée sur son site peut, dans certains cas, provenir d'un autre auteur : l'archive conserve les URLs et le crédit d'origine pour permettre cette vérification. Les documents de Jason VK7ZJA et les reproductions du site DB1IG restent dans leurs rubriques distinctes, sans réutilisation de leurs images au titre de cette seule autorisation.</p>
+<p>Le <a href="https://telectroboy.github.io/OpenD578/f1dmg.html">dossier F1DMG illustré</a> présente chaque modification <strong>avec ses photographies dans la même section</strong> et les deux pages sources intégrales avec les images replacées au fil du texte. L'<a href="https://telectroboy.github.io/OpenD578/f1dmg/galerie.html">index photographique</a> est une aide secondaire pour retrouver les noms, sources et empreintes.</p>
+<p>Les encadrés « Pour OpenD578 » indiquent ce que nous pouvons reprendre pour notre projet, ou ce qui ne s’y applique pas. Les textes originaux de Guy restent séparés visuellement sous l'en-tête « Archives F1DMG », avec photos dans l'ordre de sa publication.</p>
+<h2 id="pages-historiques-conservees">Pages historiques conservées</h2>
+<ul>
+<li><code>http://f1dmg.free.fr/page-20.htm</code> : textes et images D578/D878, réglages, maintenance, microphone, refroidissement, configurations et aides CPS.</li>
+<li><code>http://f1dmg.free.fr/page-22.htm</code> : évolution PRO/PLUS, BT01, mises à jour et textes d'accompagnement.</li>
+<li><code>D578a</code> (et l’ancienne référence <code>/578a</code> dans certains documents) : <strong>ancienne adresse non fonctionnelle</strong> du site de Guy, mentionnée dans le contexte du déflecteur de ventilation. Elle reste dans l'historique, pas comme un lien actif à consulter.</li>
+</ul>
+<p>Ces pages ont été sauvegardées le 6 novembre 2026 dans l'archive originale <code>20261106T102717Z.zip</code>. La republication du contenu est produite par un script local, sans nouveau téléchargement ni dépendance à la disponibilité du site d'origine. Les anciennes URLs restent visibles à titre de provenance.</p>
+<h2 id="photographies-identifiees">Photographies identifiées</h2>
+<table>
+<thead>
+<tr>
+  <th>Fichier original</th>
+  <th>Sujet</th>
+  <th>Portée technique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>578a.jpg</code>, <code>578b.jpg</code></td>
+  <td>Déflecteur ajouté, ventilateur et grille de ventilation</td>
+  <td>Modification sur un exemplaire ; ne détermine pas un régime thermique normalisé</td>
+</tr>
+<tr>
+  <td><code>page-20/01Mb.jpg</code>, <code>02Mb.jpg</code>, <code>03Mb.jpg</code></td>
+  <td>Microphone modifié, câblage et prise</td>
+  <td>Montage individuel, distinct du microphone constructeur UART et du BT01</td>
+</tr>
+<tr>
+  <td><code>D578-PROTECTION-ROS.png</code></td>
+  <td>Partie de la carte et points de soudure</td>
+  <td>Repérage visuel de la carte ; seuils à mesurer sur notre poste</td>
+</tr>
+<tr>
+  <td><code>page-20/boutons3.jpg</code></td>
+  <td>Modification de boutons de façade</td>
+  <td>Ergonomie et pièces mécaniques ; le GPIO est relevé séparément</td>
+</tr>
+<tr>
+  <td><code>RAZ-ANYTONE.png</code></td>
+  <td>Proposition de raccordement RESET</td>
+  <td>Dessin explicitement marqué non essayé, ne pas présenter comme modification validée</td>
+</tr>
+<tr>
+  <td><code>DEBRID_578.jpg</code></td>
+  <td>Options logicielles de bande</td>
+  <td>Capture d'écran, non une démonstration des performances RF hors bande</td>
+</tr>
+<tr>
+  <td><code>ROAMING.png</code></td>
+  <td>Réglages d'interface CPS</td>
+  <td>Exemple daté et dépendant de la version</td>
+</tr>
+</tbody>
+</table>
+<p>La galerie générée ajoute <strong>tous les autres noms effectivement présents</strong> dans les deux pages, avec catégories, provenance, empreintes SHA-256 et liens vers l'image. Elle ne se limite pas à la sélection du tableau.</p>
+<h2 id="observations-pratiques-a-conserver-dans-les-tests">Observations pratiques à conserver dans les tests</h2>
+<h3 id="ventilateur-et-controle-thermique">Ventilateur et contrôle thermique</h3>
+<p>F1DMG rapporte une inversion du sens de circulation d'air et l'utilisation du réglage <code>FAN OPEN = BOTH</code>. Il décrit, pour sa configuration, une diminution de <strong>50 °C à 30 °C en quatre minutes</strong>. Il s'agit d'une observation de son poste, sans protocole de mesure reproductible décrit. Ce résultat ne doit pas être attribué au D578 PRO GD32 V1.21 du projet sans essais complémentaires.</p>
+<h3 id="correction-de-frequence-dmr">Correction de fréquence DMR</h3>
+<p>Dans une installation D578UV PRO avec hotspot Raspberry Pi/MMDVM, Guy a observé un décalage d'environ <strong>+330 à +340 Hz</strong>. Le menu cité est <code>MENU &gt; SETTING &gt; CHAN SET &gt; OFFSET D578</code> avec un pas de 10 Hz. Cette correction utilisateur et le calcul de Doppler du futur mode satellite sont deux fonctions différentes : ne pas les confondre dans le modèle RF.</p>
+<h3 id="scan-surveillance-et-touches">Scan, surveillance et touches</h3>
+<p>Les notes traitent du scan programmé, d'un maintien de l'activité par un appui sur <code>MENU</code>, de certains effets de <code>MENU</code> puis <code>#</code>, et de l'usage de la fonction <code>MONITOR</code>. Ces comportements dépendent du mode de scan et de la version du logiciel. Ils constituent des scénarios à ajouter au banc de test, <strong>pas</strong> des tests déjà validés dans le simulateur.</p>
+<h3 id="gps-roaming-sms-et-aprs">GPS Roaming, SMS et APRS</h3>
+<p>Le document <code>CMD-Roaming.doc</code> fournit une configuration d'exemple avec <code>GPS ON</code>, <code>GPS Roaming ON</code>, <code>Auto Roaming ON</code>, <code>Fixed Time Set 2</code>, <code>Repeater Check ON</code>, <code>Intervals Set 50</code>, <code>Reconnections 2</code>, <code>Outrange KIND</code>, <code>Effect Wait 2</code>. Guy décrit aussi un effet possible sur le double affichage VFO A/B. Les unités et les offsets NAND internes ne sont pas établis par cette notice.</p>
+<p>Ses pages évoquent également des interactions entre <code>APRS Receive</code> et certains SMS, ainsi que la saisie des champs <code>WIDE</code>. Il faut conserver le contexte de version et de réseau, et ne pas en faire des règles universelles pour le PRO/PLUS.</p>
+<h3 id="documents-techniques-de-guy">Documents techniques de Guy</h3>
+<p>Les ressources citées dans l'archive du 6 novembre incluent : <code>D578-REGLAGES.doc</code> (combinaisons de démarrage), <code>MISE_A_JOUR_D578.doc</code> (ordre des étapes CPS/firmware/réimport), <code>Mises_a_jour_pour_BT01.pdf</code>, <code>CMD-Roaming.doc</code>, <code>Cmd-SMS-Anytone-2c.pdf</code>, <code>SMS-d878.pdf</code> et <code>TouchesD578.pdf</code>. La mise à jour des ressources (SCT3258, ET12, icônes, CPS, codeplug) dépend des versions exactes de poste et de logiciel.</p>
+<p>Seuls les fichiers documentaires réellement présents dans le ZIP et <strong>liés par les deux pages AnyTone</strong> sont publiés automatiquement. Les exécutables, firmwares constructeur, codeplugs <code>.rdt</code>, fichiers de calibration, CSV de contacts, archives RAR/ZIP et clés éventuelles restent exclus.</p>
+<h2 id="methode-de-reproduction-et-controle-dintegrite">Méthode de reproduction et contrôle d'intégrité</h2>
+<p>Le script <code>tools/publish_f1dmg.py</code> :</p>
+<ol>
+<li>ouvre le ZIP utilisateur <strong>sans l'extraire aveuglément</strong>, sélectionne uniquement les pages AnyTone et leurs illustrations hébergées sur le domaine F1DMG ;</li>
+<li>vérifie le SHA-256 de tout objet qui possède une empreinte dans le manifeste de collecte ;</li>
+<li>filtre les HTML pour supprimer scripts, formulaires, iframes, attributs d'événement et chargements tiers ;</li>
+<li>écrit les images à noms fondés sur SHA-256 dans <code>site-assets/f1dmg/photos/</code>, et le catalogue dans <code>publication.json</code> ;</li>
+<li>laisse <code>tools/build_site.py</code> copier ces fichiers vers <code>site/f1dmg/</code> à chaque publication GitHub Pages.</li>
+</ol>
+<p>Un rapport conserve la liste des images mentionnées mais absentes de la sauvegarde. L'option <code>--include-all-f1dmg-images</code> permet une extension volontaire à <strong>toutes les images F1DMG présentes dans le ZIP</strong>, même hors des rubriques AnyTone ; ce mode nécessite une revue de périmètre et de droits avant publication.</p>
+<h2 id="documentation-deja-presente-dans-opend578">Documentation déjà présente dans OpenD578</h2>
+<ul>
+<li><a href="../archives_20261106/F1DMG_APPORTS_REELS.html">Analyse initiale des pages F1DMG</a>.</li>
+<li><a href="../archives_20261106/F1DMG_RELEVES_PRATIQUES.html">Observations pratiques et photos</a>.</li>
+<li><a href="../archives_20261106/ECARTS_AVEC_DEPOT.html">Table des écarts avec nos analyses firmware</a>.</li>
+<li><a href="../../02_CPU_FLASH_BOOT_USB_SWD.html">Modes TEST et architecture de démarrage</a>.</li>
+<li><a href="../../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Documentation microphone</a>.</li>
+<li><a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Pilotage de la façade</a>.</li>
+</ul>
+<p>Les pages historiques restent attribuées à Guy. Pour les correspondances GPIO, nous utilisons les relevés matériels et l’analyse du firmware de notre poste.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

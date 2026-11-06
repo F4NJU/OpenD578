@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>GPIO : comparer le D868 RadioFoundry et notre D578 GD32 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>GPIO : comparer le D868 RadioFoundry et notre D578 GD32</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/GPIO_868_VS_578.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/GPIO_868_VS_578.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/GPIO_868_VS_578.md</code></p>
+<article class="markdown-body"><h1 id="gpio-comparer-le-d868-radiofoundry-et-notre-d578-gd32">GPIO : comparer le D868 RadioFoundry et notre D578 GD32</h1>
+<p><strong>Origines indépendantes :</strong> <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry §4.1 à 4.3</a> documente surtout le firmware D868 ; <a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">notre fiche façade D578</a>, <a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">LCD V11.8</a>, <a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">NAND</a> et <a href="../../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">QA4818N</a> documentent le D578 V1.21.</p>
+<p>Les correspondances ci-dessous ne sont pas une nouvelle déduction : nous réutilisons les GPIO déjà identifiés par le firmware OEM. Lorsque les pins ne concordent pas avec le D868, la preuve <strong>D578</strong> prévaut sur la transposition.</p>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>D868 selon RadioFoundry</th>
+  <th>D578 selon notre OEM/banc</th>
+  <th>Traitement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>HPI DATA</td>
+  <td>PD8–PD15</td>
+  <td>PD8–PD15</td>
+  <td>Recoupement fonctionnel</td>
+</tr>
+<tr>
+  <td>HPI contrôle</td>
+  <td>PD2 CS, PD3 WR, PD4 RD, PD5 HOBIB</td>
+  <td>PD2/PD3/PD4/PD5</td>
+  <td>Recoupement fonctionnel</td>
+</tr>
+<tr>
+  <td>Contrôle SCT supplémentaire</td>
+  <td>PD6 reset, PC12 strap, PA8/PC6 enable</td>
+  <td>À rattacher aux routines V1.21</td>
+  <td>Ne pas importer une broche sans trace</td>
+</tr>
+<tr>
+  <td>LCD bus</td>
+  <td>PE7–PE14 (8 bits)</td>
+  <td>PE7–PE14</td>
+  <td>Déjà validé par le décodage OEM</td>
+</tr>
+<tr>
+  <td>LCD commande</td>
+  <td>PB10 RS, PB11 RESET, PB12 CS, PB13 WR ; PE15 RD</td>
+  <td>PB10–PB13 et lignes décrites dans notre fiche LCD</td>
+  <td>Préserver le mapping de notre banc</td>
+</tr>
+<tr>
+  <td>Clavier</td>
+  <td>D868 : balayage PE7–PE14, sens PA10/PA14/PE1/PB1/PB2/PC5</td>
+  <td>D578 : PB0 ADC8, PB1 ADC9, Power PA0, appui codeur PA1</td>
+  <td><strong>Différent</strong>, pas de substitution</td>
+</tr>
+<tr>
+  <td>Codeur</td>
+  <td>PC8/PC9</td>
+  <td>PC8/PC9</td>
+  <td>Recoupement</td>
+</tr>
+<tr>
+  <td>RF série</td>
+  <td>PB3 SCLK, PB4 SDIO, PB5 SEN</td>
+  <td>PB3/PB4, sélections PB5/PB2/PC13/PE1</td>
+  <td>D578 : <strong>quatre</strong> QA4818N</td>
+</tr>
+<tr>
+  <td>NAND série</td>
+  <td>PB8 CS, PB14 CLK, PB15 IO0, PA15 IO1</td>
+  <td>Voir monographie V1.21 et modèle NAND</td>
+  <td>Recoupement des signaux, pas garantie de brochage du boîtier</td>
+</tr>
+<tr>
+  <td>FM broadcast</td>
+  <td>PB6/PB7, adresse I²C 0x10</td>
+  <td>PB6/PB7, RDA5802N dans le modèle</td>
+  <td>Confirmé par modèle OEM et observation CI</td>
+</tr>
+<tr>
+  <td>Accéléromètre</td>
+  <td>MMA8653FC à 0x1D, détection D868</td>
+  <td>Pas de présence identifiée sur D578</td>
+  <td>Ne pas créer ce CI sur le schéma D578</td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td>D868 USART1 PA2/PA3 à 9600 bit/s</td>
+  <td>ATGM336H, interface NMEA documentée localement</td>
+  <td>Ne pas recopier les pins D868 sans contrôle D578</td>
+</tr>
+<tr>
+  <td>USB</td>
+  <td>PA11/PA12</td>
+  <td>PA11/PA12</td>
+  <td>USB FS du GD32</td>
+</tr>
+<tr>
+  <td>DAC puissance</td>
+  <td>D868 PA4 (DAC1), PA5 configuré</td>
+  <td>D578 : BH2226FV documenté, PA5 utilisé dans l'éclairage selon le banc</td>
+  <td><strong>Divergence matérielle</strong> ; ne pas conduire PA avec profil 868</td>
+</tr>
+<tr>
+  <td>PWM</td>
+  <td>D868 PA6, PB0, PB9</td>
+  <td>D578 PB0 participe à la lecture ADC clavier</td>
+  <td><strong>Divergence</strong></td>
+</tr>
+<tr>
+  <td>ADC</td>
+  <td>D868 PC0/PC1/PC2</td>
+  <td>D578 PC2 ADC12 volume, PC5 ADC15 autre volume</td>
+  <td><strong>Divergence</strong></td>
+</tr>
+<tr>
+  <td>LED</td>
+  <td>Divers GPIO D868 non attribués</td>
+  <td>D578 PE3/PE4 rouge/vert et autres sorties observées</td>
+  <td>Ne plus marquer inconnues les fonctions OEM V1.21</td>
+</tr>
+</tbody>
+</table>
+<h2 id="demonstration-de-difference-non-triviale">Démonstration de différence non triviale</h2>
+<p>Le firmware D868 scrute son clavier sur des lignes parallèles partagées avec le LCD, mais notre D578 utilise des <strong>réseaux de touches analogiques</strong>. En recopiant le code de balayage D868, on pourrait provoquer des écritures LCD erronées tout en laissant les boutons inopérants. De même, sur D868, <code>PB0</code> peut servir de PWM ; sur D578, il représente le canal ADC d'un ensemble de boutons. Les deux cartes peuvent employer la même famille MCU sans être identiques.</p>
+<p>Pour le conducteur RF, distinguer trame (8 bits d'adresse et 16 bits de données) et <strong>quatre signaux distincts de sélection</strong>. Pour la NAND, conserver l'usage des lectures dual-output et le suivi ECC sans assimiler les adresses de NAND aux adresses ARM. Pour les LED, l'attribution fonctionnelle exige l'analyse des trames validées OEM, mais l'utilisateur confirme le bon fonctionnement des commandes sur son poste.</p>
+<h2 id="ce-qui-est-encore-a-cartographier">Ce qui est encore à cartographier</h2>
+<p>Le brochage interne d'un boîtier D868 ne fait pas une preuve de la nappe D578, les rails d'alimentation de la façade ne peuvent pas être reconstruits par une simple affectation GPIO, et les commandes exactes du PA RF doivent être celles de la V1.21. Les points non raccordés sont indiqués avec une tâche de mesure ou une adresse de routine correspondante, sans rétrograder les fonctions déjà observées.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

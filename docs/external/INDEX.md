@@ -39,3 +39,5 @@ La [revue des sources DB1IG](db1ig/INDEX.md) complete le present fonds sans supp
 ## Archive effectivement recuperée le 6 novembre 2026
 
 - [Audit de la copie utilisateur du 6 novembre : F1DMG, VK7ZJA, fichiers manquants](archives_20261106/INDEX.md). Cette analyse remplace le diagnostic d indisponibilite fait avant la reception du ZIP utilisateur, sans supprimer les notices d origine.
+
+- [Dossier illustré F1DMG : explications, photos et archives originales](f1dmg/INDEX.md).

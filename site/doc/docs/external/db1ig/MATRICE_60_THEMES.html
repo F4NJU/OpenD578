@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Comparaison des 60 sujets VK7ZJA avec le depot OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Comparaison des 60 sujets VK7ZJA avec le depot OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/MATRICE_60_THEMES.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/db1ig/MATRICE_60_THEMES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/MATRICE_60_THEMES.md</code></p>
+<article class="markdown-body"><h1 id="comparaison-des-60-sujets-vk7zja-avec-le-depot-opend578">Comparaison des 60 sujets VK7ZJA avec le depot OpenD578</h1>
+<p>Base comparee : <code>OpenD578_COMPLET_SOURCES_F1DMG_VK7ZJA_20261106.zip</code> (SHA-256 <code>7979659602bf66a217cd904ab6d44e92e3772f5efc942a26647904f206d349a9</code>).</p>
+<p>Les documents « existants » sont des <strong>fichiers reellement presents dans la base locale</strong>, pas des pages garanties visibles sur le GitHub le plus recent. <strong>Une rubrique existante peut manquer de details</strong>. La provenance de tous ces sujets est historique, via <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">DB1IG / VK7ZJA D578 v7.4</a>.</p>
+<table>
+<thead>
+<tr>
+  <th>ID</th>
+  <th>Rubrique source</th>
+  <th>Existant OpenD578</th>
+  <th>Etat</th>
+  <th>Complement a consigner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>VK578-01</td>
+  <td>Présentation générale</td>
+  <td><a href="../../hardware/VERSIONS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Sous-versions GD32 et AT32 et baseband differents ; creer champs de compatibilite par unite.</td>
+</tr>
+<tr>
+  <td>VK578-02</td>
+  <td>Erreurs de bande</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Version MODE/RDT et provenance codeplug : garder separer des addresses NAND.</td>
+</tr>
+<tr>
+  <td>VK578-03</td>
+  <td>Comparaison D578 et D878</td>
+  <td><a href="../../hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Dual RX D578 contre dual watch D878 ; une seule chaine DMR simultanee.</td>
+</tr>
+<tr>
+  <td>VK578-04</td>
+  <td>Comparaison D578 et Alinco DR-MD500/520</td>
+  <td><a href="../../hardware/VERSIONS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Materiel historique proche Alinco DR-MD500/520 ; verifier les differences de menu et micro.</td>
+</tr>
+<tr>
+  <td>VK578-05</td>
+  <td>Conseils d'utilisation du CPS</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Exporter les options non couvertes par Export All ; profil CPS/firmware/codeplug.</td>
+</tr>
+<tr>
+  <td>VK578-06</td>
+  <td>Alertes antivirus sur le CPS</td>
+  <td><a href="../INDEX_60_SUJETS_VK7ZJA.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Conserver empreinte et source de l executable ; eviter le conseil historique de desactiver antivirus.</td>
+</tr>
+<tr>
+  <td>VK578-07</td>
+  <td>Sélecteur des touches micro</td>
+  <td><a href="../../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Interrupteur lateral Up/Down du microphone OEM distinct de trame USART0.</td>
+</tr>
+<tr>
+  <td>VK578-08</td>
+  <td>Mise à jour du firmware principal</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Differencier mise a jour GD32, icones SPI et mises a jour de sous-modules.</td>
+</tr>
+<tr>
+  <td>VK578-09</td>
+  <td>Pilotes USB sous Windows</td>
+  <td><a href="../../cps/USB_CDC_GD32_V121.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Faire correspondre etat CDC Windows/Linux et mode update, sans supposer meme driver.</td>
+</tr>
+<tr>
+  <td>VK578-10</td>
+  <td>Diagnostics des erreurs écran</td>
+  <td><a href="../../LED_STATUS_BUS.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Cataloguer les messages erreurs et leurs conditions, sans confondre panne flash et mauvais codeplug.</td>
+</tr>
+<tr>
+  <td>VK578-11</td>
+  <td>Répertoire d'autres documentations</td>
+  <td><a href="../SOURCES_ET_VERSIONS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Versions, miroirs, source primaire et liens morts avec statut de conservation.</td>
+</tr>
+<tr>
+  <td>VK578-12</td>
+  <td>Paramétrage APRS</td>
+  <td><a href="../../hardware/GPS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Parametrage APRS a distinguer de reception APRS propre a certaines cartes PLUS.</td>
+</tr>
+<tr>
+  <td>VK578-13</td>
+  <td>Répondre pendant un balayage</td>
+  <td><a href="../../cps/PROTOCOLE_OEM_V121.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Comportement PTT sur canal detecte en balayage : politique UI/timer.</td>
+</tr>
+<tr>
+  <td>VK578-14</td>
+  <td>Réinitialisation du poste</td>
+  <td><a href="../../TEST_MODE_OPTIONS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Reset utilisateur ne doit pas effacer alignement usine ; tests non destructifs.</td>
+</tr>
+<tr>
+  <td>VK578-15</td>
+  <td>Compatibilité des modes de confidentialité DMR</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Les modes de privacy ne sont pas tous inter-operables ; distinguer baseband du chiffrement utilisateur.</td>
+</tr>
+<tr>
+  <td>VK578-16</td>
+  <td>Écran et façade déportés</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Nappe facade de 40 voies citee comme option de deport non OEM ; integrite signal.</td>
+</tr>
+<tr>
+  <td>VK578-17</td>
+  <td>Microphones Bluetooth</td>
+  <td><a href="../../hardware/BT01_MICROPHONE_BLUETOOTH.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Verifier BT01/ET12 sans supposer qu un casque Bluetooth standard utilise le meme profil.</td>
+</tr>
+<tr>
+  <td>VK578-18</td>
+  <td>Étiquettes et repères des touches</td>
+  <td><a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Etiquettes et reperage physique a conserver avec les photos, sans impact GPIO.</td>
+</tr>
+<tr>
+  <td>VK578-19</td>
+  <td>Deux sorties haut-parleur</td>
+  <td><a href="../../hardware/AUDIO.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Sorties HP pouvant muter ou garder actif HP interne ; lien avec PA7/codec.</td>
+</tr>
+<tr>
+  <td>VK578-20</td>
+  <td>Prise micro et microphone de table</td>
+  <td><a href="../../NOTICE_CHANGELOG_MICROPHONE_V11_8.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>PTT resistif entre broches 1 et 8, 1 a 2,2 kohms, <code>HandOpMode=Level Detection</code> ; profil separable d USART0.</td>
+</tr>
+<tr>
+  <td>VK578-21</td>
+  <td>Console d'alimentation et bureau</td>
+  <td><a href="../INDEX_60_SUJETS_VK7ZJA.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Accessoire console de bureau : sans impact sur le firmware embarque.</td>
+</tr>
+<tr>
+  <td>VK578-22</td>
+  <td>Entrées/sorties audio via micro filaire</td>
+  <td><a href="../../hardware/AUDIO.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Audio TX/RX externe type SignaLink : niveaux, masses audio et logique differents.</td>
+</tr>
+<tr>
+  <td>VK578-23</td>
+  <td>Audio externe par module Bluetooth</td>
+  <td><a href="../../hardware/BLUETOOTH_D868BT_SP_ET12.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Options BT+int mic / BT+int spk ; ajouter matrice routage audio.</td>
+</tr>
+<tr>
+  <td>VK578-24</td>
+  <td>Télécommande PTT via oreillette</td>
+  <td><a href="../../hardware/BP02_PTT_BLUETOOTH.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Exemples Jabra/Plantronics : indices de commandes PTT Bluetooth, pas preuve BP-02.</td>
+</tr>
+<tr>
+  <td>VK578-25</td>
+  <td>Images de fond personnalisées</td>
+  <td><a href="../../hardware/COMPOSANTS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Fonds en memoire NAND ; comparer images et canaux couleur de la ressource OEM.</td>
+</tr>
+<tr>
+  <td>VK578-26</td>
+  <td>Traitement du microphone</td>
+  <td><a href="../../hardware/AUDIO.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Mic Enhance agit sur DMR TX selon historique ; pas meme profil analogique.</td>
+</tr>
+<tr>
+  <td>VK578-27</td>
+  <td>Tonalités de signalisation</td>
+  <td><a href="../../hardware/AUDIO.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Tonalites constructeur a analyser comme stimuli audio, distinctes CTCSS/DCS.</td>
+</tr>
+<tr>
+  <td>VK578-28</td>
+  <td>Numérotation et carnets EchoLink</td>
+  <td><a href="../../cps/CODEPLUG_CANAL_OEM_V121.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>EchoLink et numerotation : comportement de carnet CPS non couche SCT HPI.</td>
+</tr>
+<tr>
+  <td>VK578-29</td>
+  <td>Combinaisons de touches au démarrage</td>
+  <td><a href="../../TEST_MODE_OPTIONS.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Table P2/P3/P4/P5/P6/MENU/EXIT/DIAL et PTT micro ; plusieurs chargeurs.</td>
+</tr>
+<tr>
+  <td>VK578-30</td>
+  <td>Sélection des bandes d'exploitation</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Table MODE historique par firmware ; ne pas changer bande pour etudier GPIO.</td>
+</tr>
+<tr>
+  <td>VK578-31</td>
+  <td>Extension historique de la réception</td>
+  <td><a href="../../hardware/RF.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Ne pas confondre FW RX modifie de 2022 avec PRO GD32 V1.21.</td>
+</tr>
+<tr>
+  <td>VK578-32</td>
+  <td>Mesures de sensibilité et de puissance</td>
+  <td><a href="../../hardware/RF.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Jeux de mesures historiques de sensibilite et PA a des frequences de test.</td>
+</tr>
+<tr>
+  <td>VK578-33</td>
+  <td>Réception de la bande aéronautique</td>
+  <td><a href="../../hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Carte RF PLUS AM distincte du RDA FM broadcast et du front end de base.</td>
+</tr>
+<tr>
+  <td>VK578-34</td>
+  <td>Balayage FM et DMR</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Simplex, DCDM, repetiteur et DataACK : cas de test DMR/CPS.</td>
+</tr>
+<tr>
+  <td>VK578-35</td>
+  <td>Découpages de réception FM</td>
+  <td><a href="../../hardware/RF.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Cas hors bande : filtres front-end expliquent variation sensibilite.</td>
+</tr>
+<tr>
+  <td>VK578-36</td>
+  <td>Plage élargie du récepteur FM broadcast</td>
+  <td><a href="../../hardware/RDA5802N_RECEPTION_FM.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>RDA FM : memoires 76-87,5 MHz versus limites VFO et registre de bande.</td>
+</tr>
+<tr>
+  <td>VK578-37</td>
+  <td>Polices et icônes</td>
+  <td><a href="../../03_NAND_LECTURES_ECC_CARTE.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Distinction entre assets SPI/iconos et font et firmware principal.</td>
+</tr>
+<tr>
+  <td>VK578-38</td>
+  <td>Iconographie GPS</td>
+  <td><a href="../../hardware/GPS.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Paquet historique d icones GPS avec mise a jour dediee et conteneur <code>.spi</code>.</td>
+</tr>
+<tr>
+  <td>VK578-39</td>
+  <td>Mode test et étalonnages</td>
+  <td><a href="../../TEST_MODE_OPTIONS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Table historique de champs FQCA/PA*/BPF*/AGC*/SQTH*/RSSI*/BER/FSK.</td>
+</tr>
+<tr>
+  <td>VK578-40</td>
+  <td>Utilitaire AT Options de G4EML</td>
+  <td><a href="../../TEST_MODE_OPTIONS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>AT Options v8 et bits de permissions recoupes avec observations OEM V1.21.</td>
+</tr>
+<tr>
+  <td>VK578-41</td>
+  <td>Mot de passe au démarrage</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Mot de passe de demarrage : mode recovery distinct de verrou CPS.</td>
+</tr>
+<tr>
+  <td>VK578-42</td>
+  <td>Mot de passe de programmation CPS</td>
+  <td><a href="../../cps/PROTOCOLE_OEM_V121.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Mot de passe CPS : ne pas le confondre avec cle crypto ou deverrouillage TEST.</td>
+</tr>
+<tr>
+  <td>VK578-43</td>
+  <td>Documents d'homologation FCC</td>
+  <td><a href="../../hardware/PHOTOS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Photos de versions et documents de certification, schematics indisponibles non inventes.</td>
+</tr>
+<tr>
+  <td>VK578-44</td>
+  <td>Photos de démontage de la carte</td>
+  <td><a href="../../hardware/PHOTOS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Positions RF 38 MHz, PCB dessous/dessus et carte facade, photo par variante.</td>
+</tr>
+<tr>
+  <td>VK578-45</td>
+  <td>Réserves d'alimentation RTC et GPS</td>
+  <td><a href="../../hardware/SAUVEGARDE_RTC_GPS_XH414HG.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>RTC et GPS sauvegardes separement ; fonction valide, composants de versions a comparer.</td>
+</tr>
+<tr>
+  <td>VK578-46</td>
+  <td>Modification du haut-parleur interne</td>
+  <td><a href="../../hardware/AUDIO.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Modification mecanique HP et difference mesuree en historique, pas driver audio.</td>
+</tr>
+<tr>
+  <td>VK578-47</td>
+  <td>Connecteur antenne SO-239 / N</td>
+  <td><a href="../../hardware/COMPOSANTS.html">Fiche existante</a></td>
+  <td><code>RECOUPEMENT_EXISTANT</code></td>
+  <td>Connecteur antenne principal et variantes de chassis : dossier mecanique.</td>
+</tr>
+<tr>
+  <td>VK578-48</td>
+  <td>Antennes GPS internes</td>
+  <td><a href="../../hardware/GPS.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Deux connecteurs GPS U.FL/IPX sur facade historique ; un inutilise.</td>
+</tr>
+<tr>
+  <td>VK578-49</td>
+  <td>Refroidissement et circulation d'air</td>
+  <td><a href="../../hardware/ETAGES_RF_PROTECTION_FI.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Ventilateur, sens de flux et F1DMG ancien : mesure thermique avant modification.</td>
+</tr>
+<tr>
+  <td>VK578-50</td>
+  <td>Blindage complémentaire de réception</td>
+  <td><a href="../../hardware/ETAGES_RF_PROTECTION_FI.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Blindage RX ajoute -&gt; capacites parasites -&gt; retouche calibration BPF A/B.</td>
+</tr>
+<tr>
+  <td>VK578-51</td>
+  <td>Liste des circuits et topologie du D578</td>
+  <td><a href="../../hardware/COMPOSANTS.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Tous circuits 578 historiques recoupes avec listes des composants PRO/PLUS.</td>
+</tr>
+<tr>
+  <td>VK578-52</td>
+  <td>Carte des plages NAND</td>
+  <td><a href="../../03_NAND_LECTURES_ECC_CARTE.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Conserver carte NAND historique et NAND OEM brut + OOB comme deux referentiels.</td>
+</tr>
+<tr>
+  <td>VK578-53</td>
+  <td>Utilitaire de sauvegarde NAND</td>
+  <td><a href="../../03_NAND_LECTURES_ECC_CARTE.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Outils de lecture historiques et sauvegardes sans operation destructrice.</td>
+</tr>
+<tr>
+  <td>VK578-54</td>
+  <td>Sauvegarde d'alignement propre au poste</td>
+  <td><a href="../../PROGRAMMING_AND_CALIBRATION.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>Etalonnages usine propres a chaque poste, jamais recopier valeurs example.</td>
+</tr>
+<tr>
+  <td>VK578-55</td>
+  <td>Récupération d'un poste bloqué</td>
+  <td><a href="../../USB_DEBUG_AND_RECOVERY.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Procedure recovery non equivalente a reset ou mise a jour standard.</td>
+</tr>
+<tr>
+  <td>VK578-56</td>
+  <td>Prévention des blocages</td>
+  <td><a href="../../USB_DEBUG_AND_RECOVERY.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Defroster et recuperation des blocages : risque perte codeplug, analyser causes.</td>
+</tr>
+<tr>
+  <td>VK578-57</td>
+  <td>Structure des conteneurs CDD/CDI/SPI</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>CDD/CDI/SPI et update SCT distincts ; verifier checksums/offsets.</td>
+</tr>
+<tr>
+  <td>VK578-58</td>
+  <td>Aide CPS en français</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Fiche existante</a></td>
+  <td><code>DETAIL_NOUVEAU_A_INTEGRER</code></td>
+  <td>Aides CPS HPT et traductions : versions et encodages a tracer.</td>
+</tr>
+<tr>
+  <td>VK578-59</td>
+  <td>Mise à jour interne SCT3258</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Fiche existante</a></td>
+  <td><code>DEJA_DOCUMENTE_A_PRECISER</code></td>
+  <td>SCT3258 a firmware separe, historique de versions jusqu a 2.01.07BF.</td>
+</tr>
+<tr>
+  <td>VK578-60</td>
+  <td>Pistes de développement futur</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Fiche existante</a></td>
+  <td><code>RESUME_A_DEVELOPPER</code></td>
+  <td>Etudier codec DSP, nappe facade et vocoder comme pistes futures, pas fonctions OEM implementees.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interpretation-des-statuts">Interpretation des statuts</h2>
+<ul>
+<li><code>DEJA_DOCUMENTE_A_PRECISER</code> : la documentation locale traite deja le mecanisme ; enrichir le detail sans l ecraser.</li>
+<li><code>DETAIL_NOUVEAU_A_INTEGRER</code> : source historique indiquant un detail technique peu ou pas documente ; creer une fiche ou des tests.</li>
+<li><code>RESUME_A_DEVELOPPER</code> : la fiche existante aborde seulement la fonction ou son principe ; detailler les interfaces et decisions.</li>
+<li><code>RECOUPEMENT_EXISTANT</code> : ne pas recopier une conclusion identique ; ajouter le lien et la provenance si absent.</li>
+</ul>
+<p>Les 60 fiches historiques restent consultables dans <a href="../INDEX_60_SUJETS_VK7ZJA.html">l ancien index VK7ZJA</a>. Les nouvelles conclusions et l inventaire DB1IG par site sont dans <a href="AUDIT_CROISE_SOURCES.html">l audit source par source</a>.</p>
+<h2 id="conditions-de-fiabilite">Conditions de fiabilite</h2>
+<p>Une capture OEM executee sur le PRO V1.21 constitue une preuve valide de fonctionnement pour cette revision. Une photographie d une ancienne version et la valeur d alignement d un autre poste n ont pas la meme portee. Les modes specifiques PLUS et AT32 sont mis en evidence, et les conteneurs firmware et offsets codeplug ne sont pas transplantes entre variantes.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

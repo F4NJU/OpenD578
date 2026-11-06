@@ -35,6 +35,7 @@ jobs:
           python -m unittest discover -s tools -p test_evidence.py -v
           python tools/build_site.py
           python tools/test_site.py
+          python -m unittest discover -s tools -p test_f1dmg_publish.py -v
           python -m unittest discover -s tools -p test_bluetooth_tools.py -v
       - name: Validate QA4818N frequency and trace analyzers
         run: |

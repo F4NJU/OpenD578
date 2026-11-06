@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>VK578-42 : Mot de passe de programmation CPS - OpenD578</title>
+<link rel="stylesheet" href="../../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../../index.html">Vue eclatee</a>
+<a href="../../../../../facade.html">Facade</a>
+<a class="active" href="../../../../../docs.html">Documents</a>
+<a href="../../../../../cps.html">CPS / USB</a>
+<a href="../../../evidence/INDEX.html">Preuves</a>
+<a href="../../INDEX.html">Sources externes</a>
+<a href="../../../../../firmware.html">Firmware</a>
+<a href="../../../../../photos.html">Photos</a>
+<a href="../../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>VK578-42 : Mot de passe de programmation CPS</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/approfondissements/VK578-42_mot_de_passe_de_programmation_cps.md">Modifier sur GitHub</a><a download href="../../../../../raw/docs/external/db1ig/approfondissements/VK578-42_mot_de_passe_de_programmation_cps.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/approfondissements/VK578-42_mot_de_passe_de_programmation_cps.md</code></p>
+<article class="markdown-body"><h1 id="vk578-42-mot-de-passe-de-programmation-cps">VK578-42 : Mot de passe de programmation CPS</h1>
+<p><strong>Revue approfondie 06/11/2026.</strong> Source principale : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA, D578 mods v7.4, miroir DB1IG</a>. Complément éventuel : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, matériel AnyTone</a>.</p>
+<p><strong>Statut de la documentation :</strong> analyse enrichie ; les fonctions validées en exécution sur le D578 OEM conservent ce statut. Les valeurs historiques d'un autre poste restent rattachées à cet appareil.</p>
+<p><strong>Source initialement déjà conservée dans OpenD578 :</strong> <a href="../../../cps/PROTOCOLE_OEM_V121.html">docs/cps/PROTOCOLE_OEM_V121.md</a>. Aucune ancienne donnée n'est supprimée.</p>
+<p><strong>Séparation CPS :</strong> l'authentification ou mot de passe de programmation se situe au niveau de l'accès au codeplug, distinct du transport USB CDC et du protocole de trames <code>PROGRAM/R/W/END</code> reconstruit. Une réussite du handshake n'implique pas que l'ensemble des zones NAND soit lisible ou éditable.</p>
+<p><strong>Pour l'analyseur :</strong> tracer <code>USB_session</code>, <code>CPS_handshake</code>, <code>model_identity</code>, <code>lock_state</code>, <code>read_write_permission</code>, <code>codeplug_region</code> et <code>reply</code>. Si la réponse indique une protection, elle ne doit pas être assimilée à un timeout ou à un checksum invalide. Les secrets ne doivent pas entrer dans les journaux publics.</p>
+<p><strong>Validation :</strong> capturer des sessions autorisées sur le poste propriétaire (avec et sans option de mot de passe si l'utilisateur en a la maîtrise), puis déduire séparément la machine d'état d'accès et le format des canaux. Le dossier de compatibilité PRO/PLUS conserve ces cas par version.</p>
+<h2 id="provenance-et-suite-verifiable">Provenance et suite vérifiable</h2>
+<ul>
+<li>Ancienne lacune identifiée : Mot de passe CPS : ne pas le confondre avec cle crypto ou deverrouillage TEST.</li>
+<li>Source historique : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">guide original, édition octobre 2022</a>, rubrique « Mot de passe de programmation CPS ».</li>
+<li>Application locale : comparer les paramètres en mode non destructif avec l'image OEM de la révision étudiée, conserver trames, adresses et horodatages.</li>
+<li>Niveau de preuve : les observations OEM du dépôt sont indépendantes du texte historique ; une fonctionnalité expérimentale est étiquetée comme telle.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../../assets/models.js" defer></script><script src="../../../../../assets/search-data.js" defer></script><script src="../../../../../assets/site.js" defer></script>
+</body></html>

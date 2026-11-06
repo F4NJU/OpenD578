@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>VK7ZJA : donnees techniques extraites et recoupees - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>VK7ZJA : donnees techniques extraites et recoupees</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/VK7ZJA_TECHNIQUE_RECOUPEE.md">Modifier sur GitHub</a><a download href="../../../raw/docs/external/VK7ZJA_TECHNIQUE_RECOUPEE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/VK7ZJA_TECHNIQUE_RECOUPEE.md</code></p>
+<article class="markdown-body"><h1 id="vk7zja-donnees-techniques-extraites-et-recoupees">VK7ZJA : donnees techniques extraites et recoupees</h1>
+<p>Source : Jason Reilly VK7ZJA, <em>AnyTone AT-D578UV mods and information</em>, edition 7.4 (20/10/2022), hebergee notamment sur <a href="https://radio.carstenbauer.net/578techmods.htm">carstenbauer.net</a> et <a href="https://www.reddicams.co.uk/radio/AnytoneJR/578techmods.htm">reddicams.co.uk</a>. Les caracteristiques ci-dessous sont des <strong>reformulations techniques</strong>, pas une copie du texte de l'auteur.</p>
+<h2 id="architecture-numerique-et-rf">Architecture numerique et RF</h2>
+<table>
+<thead>
+<tr>
+  <th>Sous-systeme</th>
+  <th>Observation source</th>
+  <th>Correspondance OpenD578</th>
+  <th>Controle restant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MCU</td>
+  <td>GD32F303VKT6, Cortex-M4, 3 Mio flash interne, 96 Kio RAM ; certaines revisions ulterieures utilisent un autre fabricant</td>
+  <td>Le PRO de notre projet est confirme GD32 ; le PLUS de l'utilisateur aussi</td>
+  <td>Bien conserver la revision par carte, ne pas generaliser les brochages OEM</td>
+</tr>
+<tr>
+  <td>Bande de base DMR</td>
+  <td>SCT3258TD / processeur SiComm, oscillateur autour de 12,2 MHz</td>
+  <td>Fiches DMR HPI et sequences d'initialisation</td>
+  <td>Sens des bus et tables de configuration associees aux versions</td>
+</tr>
+<tr>
+  <td>Audio</td>
+  <td>TLV320AIC3204 et amplificateur YD1517P sur le PRO ancien</td>
+  <td>Monographies audio et differences PA1517G sur le PLUS</td>
+  <td>Raccorder les gains et mises en veille par trace OEM</td>
+</tr>
+<tr>
+  <td>RF analogique</td>
+  <td>4 QA4818N avec reference 26 MHz : paire de synthese OL, paire de reception conversion directe apres premiere FI</td>
+  <td>Calculateur 0x29/0x2A et traceur QA4818N experimental</td>
+  <td>Attribution physique des quatre selections, registres verifiables pour chaque scenario</td>
+</tr>
+<tr>
+  <td>Premier etage FI</td>
+  <td>38,550 et 38,850 MHz ; deux chaines de reception</td>
+  <td>Calculs de freq OL/FI et schema du site</td>
+  <td>Injection haute/basse et affectation A/B suivant la bande</td>
+</tr>
+<tr>
+  <td>Filtrage</td>
+  <td>Quatre cellules d'accord a varactors pour chaque entree VHF/UHF</td>
+  <td>BH2226FV et chaines de commande analogiques</td>
+  <td>Tensions/DAC par bande et par freq a extraire des traces</td>
+</tr>
+<tr>
+  <td>Puissance RF</td>
+  <td>Deux AFT05MP075N, chacun utilise pour une section de puissance VHF ou UHF</td>
+  <td>Deux PA independants deja repertories</td>
+  <td>Enveloppe thermique, bias et commande du PTT a qualifier</td>
+</tr>
+<tr>
+  <td>Broadcast FM</td>
+  <td>RDA5802N</td>
+  <td>Fiche RDA/I2C et banc</td>
+  <td>Bus reel et init OEM selon version</td>
+</tr>
+<tr>
+  <td>GPS</td>
+  <td>ATGM336H GPS + BeiDou, reception sur coax externe</td>
+  <td>Monographie GPS et simulation UART</td>
+  <td>Entrée de sauvegarde et chemin d'alimentation</td>
+</tr>
+<tr>
+  <td>NAND</td>
+  <td>TC58CVG1S3HRAIG 2 Gbit = 256 Mio</td>
+  <td>Dumps utilisateur et monographie NAND</td>
+  <td>Adressage logique, OOB et gestion des mauvais blocs</td>
+</tr>
+</tbody>
+</table>
+<p>Le schema historique mentionne une <strong>troisieme chaine FI non peuplee</strong> et des empreintes de filtres optionnelles. Ce sont des observations d'une carte ancienne, pas la preuve que les memes empreintes existent a l'identique sur les deux versions GD32 et PLUS.</p>
+<h2 id="nand-repartition-historique-a-ne-pas-confondre-avec-un-format-confirme">NAND : repartition historique a ne pas confondre avec un format confirme</h2>
+<table>
+<thead>
+<tr>
+  <th>Plage logique selon VK7ZJA</th>
+  <th>Usage publie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>0x00000000–0x0014FFFF</code></td>
+  <td>Polices alternatives</td>
+</tr>
+<tr>
+  <td><code>0x00150000–0x00159FFF</code></td>
+  <td>Image d'accueil constructeur</td>
+</tr>
+<tr>
+  <td><code>0x0015A000–0x001FFFFF</code></td>
+  <td>Icones couleur</td>
+</tr>
+<tr>
+  <td><code>0x003E0000–0x0041FFFF</code></td>
+  <td>Donnees non identifiees</td>
+</tr>
+<tr>
+  <td><code>0x00420000–0x00434FFF</code></td>
+  <td>Autres icones</td>
+</tr>
+<tr>
+  <td><code>0x00435000–0x0043BFFF</code></td>
+  <td>Police monochrome (usage incertain)</td>
+</tr>
+<tr>
+  <td><code>0x00800000–0x02A9FFFF</code></td>
+  <td>Codeplug hors base contacts DMR</td>
+</tr>
+<tr>
+  <td><code>0x02AC0000–0x02AC9FFF</code></td>
+  <td>Image d'accueil personnalisee</td>
+</tr>
+<tr>
+  <td><code>0x02B00000–0x02B09FFF</code></td>
+  <td>Fond BK1</td>
+</tr>
+<tr>
+  <td><code>0x02B80000–0x02B89FFF</code></td>
+  <td>Fond BK2</td>
+</tr>
+<tr>
+  <td><code>0x02F00000–0x02F80679</code></td>
+  <td>Ajustements RF et sauvegardes</td>
+</tr>
+<tr>
+  <td><code>0x02FA0000–0x02FDFFFF</code></td>
+  <td>Informations locales et sauvegardes</td>
+</tr>
+<tr>
+  <td><code>0x02FE0000–0x03000000</code></td>
+  <td>Usage indetermine</td>
+</tr>
+<tr>
+  <td><code>0x05500000–0x07FFFFFF</code> (plage approximative)</td>
+  <td>Base IDs DMR</td>
+</tr>
+<tr>
+  <td><code>0x0C8E0000–0x0FFFFFFF</code> (plage approximative)</td>
+  <td>Enregistrements DMR</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attention :</strong> ces adresses de VK7ZJA concernent l'adressage logique du constructeur. Les dumps bruts utilisateur incluent eventuellement les pages OOB et erreurs ECC. Il ne faut pas transposer directement ces plages a un fichier de lecture physique sans definir la transformation.</p>
+<h2 id="sauvegardes-rtc-et-gps">Sauvegardes RTC et GPS</h2>
+<p>La carte facade/CPU historique comporte deux reserves independantes : pres de la nappe pour le RTC et entre les potentiometres de volume pour le demarrage a chaud GPS. L'auteur donne la reference <code>XH414HG IV01E</code>. Notre documentation distingue ce marquage d'une pile CR non rechargeable et recoupe la categorie de condensateur rechargeable du fabricant. Les deux composants ont ete observes par l'utilisateur sur son PCB ; leur role est appuye par la source historique. Voir <code>docs/hardware/</code> et <code>docs/evidence/</code> pour les renvois.</p>
+<h2 id="microphone-et-audio">Microphone et audio</h2>
+<p>Le micro utilise des lignes serie et audio distinctes. Une adaptation de micro de table est decrite sur l'ancien 578, avec une commande PTT analogique entre broches 1 et 8 au travers d'une resistance d'au moins 1 kOhm lorsque <code>HandOpMode</code> est configure pour une detection de niveau. <strong>Ce n'est pas le protocole UART du micro d'origine</strong> et ce reglage ne doit pas etre transpose sans verification a un firmware OpenD578. Le chapitre historique distingue aussi les deux jacks haut-parleur (l'un coupe le haut-parleur interne et l'autre non).</p>
+<h2 id="maintenance-sauvegardes-et-erreurs">Maintenance, sauvegardes et erreurs</h2>
+<p>La source distingue : mode de programmation MCU, mode mise a jour des icones, mode test/calibration et mode mise a jour SCT3258. Les combinaisons de touches et l'effet sur la NAND peuvent varier suivant la generation. Le site conserve les profils PRO/PLUS et les observations effectives du poste. Lors d'une mise a jour firmware, le codeplug doit etre reconstruit dans une version CPS compatible. La sauvegarde de l'alignement est prioritaire avant toute tentative d'effacement ou de restauration.</p>
+<p>L'outil Flash Utility de G4EML et les procedures de restauration signalees dans la source utilisent historiquement une granularite de 256 Kio et un decalage d'adresse de 0x20000 pour certaines ecritures. <strong>Ne pas utiliser ces constantes comme API d'ecriture universelle</strong> : elles sont documentees comme comportements d'outil et peuvent provoquer des corruptions. Cette monographie ne fournit aucune sequence automatique de restauration.</p>
+<h2 id="preuves-photographiques-a-conserver">Preuves photographiques a conserver</h2>
+<p>La source illustre au moins : arriere de carte afficheur avec GPS/Bluetooth ; arriere sans carte Bluetooth ; face avant et MCU sous LCD ; carte RF dessus/dessous ; filtres a quartz 38 MHz ; deux reserves RTC/GPS ; connecteurs audio ; remplacement connecteur antenne ; blindages RF ; antenne GPS interne. Les images doivent etre sauvegardees <strong>avec leur fichier HTML et les legendes d'origine</strong> dans l'archive privee, et rester liees a leur auteur sur GitHub.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

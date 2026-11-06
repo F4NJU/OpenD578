@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Centre documentaire F1DMG, VK7ZJA et ressources publiques AnyTone - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Centre documentaire F1DMG, VK7ZJA et ressources publiques AnyTone</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/INDEX.md">Modifier sur GitHub</a><a download href="../../../raw/docs/external/INDEX.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/INDEX.md</code></p>
+<article class="markdown-body"><h1 id="centre-documentaire-f1dmg-vk7zja-et-ressources-publiques-anytone">Centre documentaire F1DMG, VK7ZJA et ressources publiques AnyTone</h1>
+<p>Ce dossier ajoute les connaissances externes au projet <strong>sans effacer ni remplacer</strong> les analyses OEM, les traces, le banc ou les notices deja presentes. Il sert de guide de conservation et de recoupement, avec des versions identifiees.</p>
+<h2 id="acces-par-sujet">Acces par sujet</h2>
+<ul>
+<li><a href="SOURCES_ET_VERSIONS.html">Fiches des sources, miroirs et dates</a> : F1DMG, theweeks.org, VK7ZJA 7.4, autres miroirs, FCC, constructeurs.</li>
+<li><a href="INDEX_60_SUJETS_VK7ZJA.html">Index complet des 60 themes VK7ZJA</a> : couverture des circuits, firmware, CPS, affichage, microphone, test mode, recuperation et modifications.</li>
+<li><a href="VK7ZJA_TECHNIQUE_RECOUPEE.html">Architecture et valeurs techniques recoupees</a> : chaine 38 MHz, QA4818N, composants, memoire NAND, reserves RTC/GPS.</li>
+<li><a href="MAINTENANCE_ET_PROTOCOLES_D578.html">CPS, bootloader, alignements et maintenance</a> : lecture/ecriture, formats historiques, risques, recoupements avec nos analyses.</li>
+<li><a href="F1DMG_RECUPERATION.html">F1DMG : pistes et etat de recuperation</a> : page 20, ancien chemin refroidissement et aides CPS francaises.</li>
+<li><a href="PHOTOS_ET_DOCUMENTS_CIBLES.html">Inventaire des photographies et documents</a> : vues PCB/facade et correspondance avec les fiches OpenD578.</li>
+<li><a href="ARCHIVAGE_PRIVE_WINDOWS.html">Sauvegarde privee sous Windows</a> : script de capture, provenance et empreintes, sans copie de materiel tiers dans GitHub.</li>
+</ul>
+<h2 id="accessibilite-et-droits">Accessibilite et droits</h2>
+<p>La documentation VK7ZJA de 2022 est accessible sur plusieurs <strong>miroirs d'une meme oeuvre</strong>. <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">La copie DB1IG</a> mentionne l'autorisation du titulaire pour son miroir. Cela ne constitue pas une licence generale autorisant des copies publiques additionnelles. <strong>Etat actualise apres reception du ZIP utilisateur :</strong> F1DMG ne repondait pas aux essais Web initiaux, mais les pages <code>page-20.htm</code> et <code>page-22.htm</code> ainsi que leurs photos et plusieurs documents sont <strong>effectivement sauvegardes dans l archive privee</strong>. Voir <a href="archives_20261106/INDEX.html">audit et empreintes du 6 novembre</a>; les contenus originaux ne sont pas republies ici.</p>
+<p>Pour eviter la perte d'originaux, l'outil <code>tools/archive_sources_privees.py</code> telecharge les HTML, images et documents accessibles <strong>sur le PC de l'utilisateur</strong> et conserve sans alteration les octets originaux, plus une version locale navigable et un manifeste avec SHA-256. La source publique OpenD578 contient les liens, les valeurs techniques, les analyses et nos propres textes ; les archives integralement copiees restent privees, sous les droits de leurs auteurs.</p>
+<h2 id="principe-de-preuve">Principe de preuve</h2>
+<ul>
+<li><strong>Mesure materielle / firmware OEM execute</strong> : valide pour la revision concernee.</li>
+<li><strong>Observation statique / simulation</strong> : comportement etablit dans le perimetre des tests.</li>
+<li><strong>Documentation d'une autre revision</strong> : source de comparaison, et non preuve de cablage sur le PRO GD32 de l'utilisateur.</li>
+<li><strong>Source historique indisponible</strong> : reference notee, contenu non reconstitue artificiellement.</li>
+</ul>
+<p>Conserver les contradictions entre versions et les relever dans le dossier de preuves plutot que de remplacer la vieille information par la plus recente.</p>
+<h2 id="revue-db1ig-du-6-novembre-2026">Revue DB1IG du 6 novembre 2026</h2>
+<p>La <a href="db1ig/INDEX.html">revue des sources DB1IG</a> complete le present fonds sans supprimer les 60 rubriques VK7ZJA deja archivees. Elle fournit une <a href="db1ig/MATRICE_60_THEMES.html">comparaison sujet par sujet</a>, un <a href="db1ig/AUDIT_CROISE_SOURCES.html">audit des nouvelles decouvertes</a>, des <a href="db1ig/COMPLEMENTS_TECHNIQUES_D578.html">fiches techniques</a> et un <a href="db1ig/PLAN_EXPERIMENTAL.html">plan d'exploitation</a>. Les traductions et miroirs sont distingues des preuves OEM du poste etudie.</p>
+<h2 id="revue-radiofoundry-et-approfondissements-complets">Revue RadioFoundry et approfondissements complets</h2>
+<ul>
+<li><a href="radiofoundry/INDEX.html">129 affirmations RadioFoundry comparées au firmware D578</a>, avec les écarts de version et les chemins DMR/codec/NAND.</li>
+<li><a href="db1ig/approfondissements/INDEX.html">Approfondissement individuel des 21 rubriques DB1IG auparavant résumées</a>. Aucune rubrique historique n’a été retirée.</li>
+</ul>
+<h2 id="archive-effectivement-recuperee-le-6-novembre-2026">Archive effectivement recuperée le 6 novembre 2026</h2>
+<ul>
+<li><p><a href="archives_20261106/INDEX.html">Audit de la copie utilisateur du 6 novembre : F1DMG, VK7ZJA, fichiers manquants</a>. Cette analyse remplace le diagnostic d indisponibilite fait avant la reception du ZIP utilisateur, sans supprimer les notices d origine.</p>
+</li>
+<li><p><a href="f1dmg/INDEX.html">Dossier illustré F1DMG : explications, photos et archives originales</a>.</p>
+</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

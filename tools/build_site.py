@@ -140,7 +140,7 @@ def category(rel:str):
 
 
 def nav(dest:Path,active:str=''):
-    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('sources.html','Code source')]
+    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('f1dmg.html','F1DMG'),('sources.html','Code source')]
     out=['<nav class="nav" aria-label="Navigation">']
     for name,label in links:
         clazz=' class="active"' if name==active else ''
@@ -426,6 +426,8 @@ def main():
     photos_page(models)
     build_source_index()
     build_assets(models,docs)
+    from f1dmg_site import build_f1dmg_site
+    build_f1dmg_site(ROOT,SITE,shell,x)
     (SITE/'.nojekyll').touch()
     print(f'Built {len(docs)} Markdown pages, {sum(len(m["nodes"]) for m in models)} components, {sum(len(m["edges"]) for m in models)} connections at {SITE}')
     return 0

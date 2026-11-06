@@ -10,8 +10,10 @@
 <a class="active" href="../docs.html">Documents</a>
 <a href="../cps.html">CPS / USB</a>
 <a href="docs/evidence/INDEX.html">Preuves</a>
+<a href="docs/external/INDEX.html">Sources externes</a>
 <a href="../firmware.html">Firmware</a>
 <a href="../photos.html">Photos</a>
+<a href="../f1dmg.html">F1DMG</a>
 <a href="../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../docs.html">Documents</a> / Projet</div>
@@ -55,6 +57,8 @@ GitHub Actions when <code>main</code> is pushed. The Markdown and JSON are canon
 <p>Reconstructed peripheral documentation, GD32F303VKT6 pin map and <em>unwired</em> KiCad reference sheet are newly authored using surviving analyses and published component datasheets. They are <strong>not</strong> original files from the earlier chats. The hardware models now include candidate RTC/GNSS backup capacitors with per-connection confidence, based on the user's earlier board observation and VK7ZJA's photos of other board revisions. Original boot/flash/NAND dumps and Phase60 exact build files remain absent. All added external datasheets, photos and manuals are linked and not copied. Evidence ledger and reconstruction inventory: <code>docs/evidence/INDEX.md</code> and <code>docs/archives/ORIGINAUX_A_RECUPERER.md</code>.</p>
 <h2 id="qa4818n-analyse-du-6-novembre-2026">QA4818N : analyse du 6 novembre 2026</h2>
 <p>Source externe: guide de programmation AT1846S et documentation de VK7ZJA. Source locale: banc <code>bench/rf_spi.py</code> V11.7 et index des routines V1.21. Le code C est entièrement nouveau et utilise seulement une formule de codage de fréquence de référence. Il ne réutilise ni firmware OEM ni routine OEM, et ne peut pas piloter directement les GPIO. Les valeurs de démonstration sont étiquetées <code>synthetic</code> ; aucune capture originale constructeur du changement de fréquence n'est embarquée. Une copie officielle de V1.21 est référencée dans les précédents travaux par SHA-256 <code>02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a</code>, mais l'image n'est pas incluse ici.</p>
+<h2 id="ajout-documentaire-f1dmg-vk7zja-du-06112026">Ajout documentaire F1DMG / VK7ZJA du 06/11/2026</h2>
+<p>Nos syntheses originales des sites tiers sont conservees sous <code>docs/external/</code>, avec auteurs, URL, edition et distinction des versions. Le programme <code>tools/archive_sources_privees.py</code> permet au proprietaire du poste de sauvegarder localement l'HTML et les photos historiques <strong>en dehors du depot public</strong>. Les copies physiques de ces sites ne sont pas integrees a OpenD578. Ne pas confondre les anciennes caracteristiques RF et les cartes PRO/PLUS constatees par l'utilisateur ; les observations OEM executable et les mesures directes ont leur propre niveau de preuve.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../assets/models.js" defer></script><script src="../assets/search-data.js" defer></script><script src="../assets/site.js" defer></script>

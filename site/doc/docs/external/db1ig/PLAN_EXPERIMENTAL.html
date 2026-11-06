@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Plan d&#x27;exploitation des nouveaux indices DB1IG, sans perte des preuves OEM - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Plan d&#x27;exploitation des nouveaux indices DB1IG, sans perte des preuves OEM</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/PLAN_EXPERIMENTAL.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/db1ig/PLAN_EXPERIMENTAL.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/PLAN_EXPERIMENTAL.md</code></p>
+<article class="markdown-body"><h1 id="plan-dexploitation-des-nouveaux-indices-db1ig-sans-perte-des-preuves-oem">Plan d'exploitation des nouveaux indices DB1IG, sans perte des preuves OEM</h1>
+<p>Le but est de combler les trous de la documentation, <strong>pas</strong> de revalider des fonctions qui marchent deja dans le firmware constructeur. Chaque capture sera associee a une variante, un firmware, une sequence d'evenements, un hachage de l'image et une provenance.</p>
+<h2 id="ordre-de-travail-recommande">Ordre de travail recommande</h2>
+<table>
+<thead>
+<tr>
+  <th>Priorite</th>
+  <th>Experimentation</th>
+  <th>Observable concret</th>
+  <th>A comparer a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>P1</td>
+  <td>Rechercher les neuf combinaisons de boot dans le dispatch startup OEM</td>
+  <td>Tests GPIO/ADC, chaines UI, branches, chemins de chargement</td>
+  <td><code>docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code>, <code>docs/TEST_MODE_OPTIONS.md</code></td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td><code>HandOpMode</code> et microphone de table</td>
+  <td>Offset config, branche USART versus detection niveau, verrou PTT</td>
+  <td><code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code>, <code>docs/cps/</code></td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td>Afficher la liste OEM des parametres TEST sans changer de valeur</td>
+  <td>Nom du champ, index, plage, provenance, banque et RAM</td>
+  <td><code>docs/test_mode_20261104.json</code>, <code>docs/TEST_MODE_OPTIONS.md</code></td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td>Relier <code>BPF*</code> a la commande analogique des filtres</td>
+  <td>Mot reg ecrit dans BH2226FV ou commande equivalent</td>
+  <td><code>docs/hardware/BH2226_H2226_DAC_RF.md</code>, <code>bench/rf_spi.py</code></td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td>Relier <code>PA*</code> aux niveaux TX mais en observation du code sans PA</td>
+  <td>Sequence DAC/RF hors emission, restrictions safety</td>
+  <td><code>docs/hardware/PA_RF_AFT05MP075N.md</code></td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td>Historiser types de ressources firmware</td>
+  <td>Chargeur MCU, <code>.spi</code> graphiques, SCT, ET12, Hand-Soft</td>
+  <td><code>docs/peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td><code>BT + int mic/spk</code> et <code>Mic Enhance</code></td>
+  <td>Sources/sorties activees, commandes codec, flags</td>
+  <td><code>docs/hardware/AUDIO.md</code>, <code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Diagnostic GPS startup/RSSI</td>
+  <td>Chaine d'initialisation et sources NMEA, UI LCD</td>
+  <td><code>docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Programmer en simulateur des stations FM broadcast 76-108 MHz</td>
+  <td>Valeurs I2C RDA et limitation UI versus tuner</td>
+  <td><code>docs/hardware/RDA5802N_RECEPTION_FM.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Non regression codeplug a deux versions</td>
+  <td>Import/export CSV, options non incluses, hashes alignement</td>
+  <td><code>docs/cps/CPS_QUALIFICATION.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Tests DMR simplex / DCDM / repetiteur en lecture seule</td>
+  <td>Differences registres SCT et flags UI, une seule chaine DMR a la fois</td>
+  <td><code>docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md</code></td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Transcription des valeurs RF historiques</td>
+  <td>Tableau baseline avec methodes de mesure, sans ecriture</td>
+  <td><code>docs/hardware/RF.md</code></td>
+</tr>
+<tr>
+  <td>P3</td>
+  <td>Relever photographiquement les deux coax GPS et les filtres FI optionnels</td>
+  <td>Presence/absence revision PRO/PLUS + empreintes</td>
+  <td><code>hardware/photos/</code>, <code>docs/hardware/ETAGES_RF_PROTECTION_FI.md</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="format-minimal-de-fiche-de-preuve">Format minimal de fiche de preuve</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;OEM_V121_BT_AUDIO_ROUTING_001&quot;,
+  &quot;radio&quot;: &quot;D578UV PRO GD32&quot;,
+  &quot;firmware&quot;: &quot;GD V1.21&quot;,
+  &quot;source_type&quot;: &quot;OEM_EXECUTED_IN_BENCH&quot;,
+  &quot;image_sha256&quot;: &quot;REPLACE_WITH_REAL_SHA256&quot;,
+  &quot;stimulus&quot;: &quot;BT audio option toggled in simulated menu&quot;,
+  &quot;observation&quot;: &quot;REPLACE_WITH_OBSERVED_GPIO_OR_REG_TRACE&quot;,
+  &quot;related_module&quot;: &quot;TLV320AIC3204/ET12&quot;,
+  &quot;physical_continuity&quot;: &quot;NOT_REQUIRED_FOR_OEM_FUNCTIONAL_VALIDATION&quot;,
+  &quot;source_reference&quot;: &quot;docs/hardware/BLUETOOTH_D868BT_SP_ET12.md&quot;
+}
+</code></pre>
+<p>Les libelles <code>REPLACE_WITH...</code> sont des espaces a remplir, pas des resultats inventes.</p>
+<h2 id="ce-que-lon-ne-fait-pas-automatiquement">Ce que l'on ne fait pas automatiquement</h2>
+<ul>
+<li>Aucune emission RF, mise en PTT ou modification de calibration pendant le sondage.</li>
+<li>Aucun chargement d'un exemple d'alignement d'un autre D578 dans la NAND du poste.</li>
+<li>Aucun transfert de firmware D878, AT32 ou Alinco vers le GD32 PRO V1.21.</li>
+<li>Aucune interpretation d'un miroir/traduction VK7ZJA comme confirmation independante.</li>
+<li>Aucun classement « non valide » des pilotes OEM fonctionnels faute de mesure de continuite.</li>
+</ul>
+<p>L'ensemble des notes anciennes reste disponible. Les nouvelles mesures sont ajoutees dans un sous-dossier de preuves horodate, pas en remplacement des traces precedentes.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

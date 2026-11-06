@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>SCT3258 : bootstrap, HPI, codec et circulation de la voix - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>SCT3258 : bootstrap, HPI, codec et circulation de la voix</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/SCT3258_CHAND_BOOT_ET_CODEC.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/SCT3258_CHAND_BOOT_ET_CODEC.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/SCT3258_CHAND_BOOT_ET_CODEC.md</code></p>
+<article class="markdown-body"><h1 id="sct3258-bootstrap-hpi-codec-et-circulation-de-la-voix">SCT3258 : bootstrap, HPI, codec et circulation de la voix</h1>
+<p><strong>Source principale :</strong> <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, Anytone hardware, sections 2.1 à 2.5</a>. <strong>Base locale :</strong> <a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">monographie du SCT3258 du D578</a>, <a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">ADC/DAC et codec</a>. Fiche de recherche. Aucune émission, aucun dump propriétaire redistribué.</p>
+<h2 id="1-les-responsabilites-sont-separees">1. Les responsabilités sont séparées</h2>
+<table>
+<thead>
+<tr>
+  <th>Domaine</th>
+  <th>Circuit et fonctionnement</th>
+  <th>Ce que notre port doit fournir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Contrôle/menus</td>
+  <td>GD32F303, firmware OEM étudié dans OpenD578</td>
+  <td>Configuration, appels HPI et état radio</td>
+</tr>
+<tr>
+  <td>DMR couche PHY/MAC et codec voix</td>
+  <td>SCT3258 avec son firmware interne et vocoder AMBE+2</td>
+  <td>Commandes DMR, réception d'événements, alimentation du FIFO et démarrage du SCT</td>
+</tr>
+<tr>
+  <td>Conversion audio</td>
+  <td>TLV320AIC3204, PCM/I2S vers SCT</td>
+  <td>Paramètres du codec, chemin analogique et niveau du signal</td>
+</tr>
+<tr>
+  <td>Données stockées</td>
+  <td>NAND Toshiba du D578</td>
+  <td>Codeplug, calibrations, enregistrements selon zones, sans toucher au firmware interne SCT</td>
+</tr>
+</tbody>
+</table>
+<p>La conversion PCM↔AMBE ne doit pas être supposée fournie par le GD32. Les échanges du GD32 avec le codec passent par les commandes de contrôle envoyées au SCT, dont <code>CODEC_SELECT</code>, <code>SET_I2C_ADDRESS</code>, <code>I2C_OPERATION</code> et les trames <em>codec bypass</em> (bit 6 de TYPE signalé dans l'analyse externe). Cette architecture explique qu'un pilote AIC3204 purement MCU/I²C ne suffit pas à reproduire le fonctionnement OEM.</p>
+<h2 id="2-hpi-et-initialisation">2. HPI et initialisation</h2>
+<p>Le SCT3258 possède un <strong>HPI parallèle asynchrone de 8 bits</strong> avec commandes de lecture/écriture, signaux de contrôle et une ligne <code>HOBIB</code> de disponibilité. Les sélections de timing Intel/Motorola sont déterminées au démarrage, la documentation mentionnant la broche PIO1. Le modèle OEM D578 associe DATA0..7 à <code>PD8..PD15</code>, HCSN/HWRN/HRDN à <code>PD2/PD3/PD4</code>, et HOBIB à <code>PD5</code>. Ces affectations sont des observations de notre modèle constructeur, non une simple importation du brochage D868.</p>
+<p>Le bootstrap décrit par Sicomm est de <strong>1 024 mots de 16 bits</strong> (2 048 octets), transférés octet faible puis octet fort après reset. Le SCT exécute cette amorce qui lui permet ensuite de démarrer le programme situé dans sa mémoire propre. La réponse nominale citée est <code>84 A9 61 00 02 20 17 01</code>. Notre modèle sait vérifier cette étape. Pour le firmware alternatif, un timeout HPI ou un contenu de boot inconnu doit provoquer une erreur nette, jamais une activation RF.</p>
+<p>RadioFoundry a identifié, dans plusieurs images OEM de la famille, un bloc de 2 048 octets portant le SHA-256 :</p>
+<pre><code class="language-text">743515b9f7cd90737c1fff29b652b7558bc5a56487ec38df4fdea8877e7a619a
+</code></pre>
+<p>Cette empreinte <strong>ne prouve pas encore l'identité du bloc présent dans notre PRO GD32 V1.21</strong> sans recalcul sur l'image d'origine. La source signale quatre variantes de patch envoyées en fonction d'un mode, à des offsets tels que <code>0x34C</code>, <code>0x352</code> ou <code>0x45C–0x45D</code>. Le sens de ces modes n'est pas déterminé. Ne pas patcher ces octets sur le poste sur la seule base de cette analyse. Ne pas placer le bloc propriétaire dans GitHub.</p>
+<p>Le contrôleur SCT est distinct du bootloader GD32 : charger une nouvelle application MCU ne remplace pas son UserFlash ni les différentes images de vocoder. Les mises à jour SCT doivent garder leur propre procédure et version.</p>
+<h2 id="3-commandes-vocales-oem-identifiees-par-radiofoundry">3. Commandes vocales OEM identifiées par RadioFoundry</h2>
+<p>Le firmware OEM utilise une <strong>interface de niveau applicatif DMR</strong> pour les appels vocaux. Les champs signalés comprennent : <code>DMR_FLC</code>, <code>DMR_CC</code>, <code>DMR_CALLED_ID_BCD</code>, <code>DMR_OWN_ID_BCD</code>, <code>DMR_CALL_OPTION</code>, <code>DMR_CALL_SLOT</code>, <code>DMR_OFFSET</code>, puis <code>DMR_CALL_START</code>. Des données utilisent également <code>DIGC_DATA_FRAME</code> ; ce n'est pas nécessairement le chemin utilisé pour tous les appels voix.</p>
+<p><strong>Découverte :</strong> les messages <code>CHAN_D</code> transportent des blocs de <strong>36 octets</strong> lors de l'enregistrement et de la lecture de communications par la NAND. <code>VOCODER_IO_SET</code> est envoyé avec des valeurs <code>0x04</code>, <code>0x08</code>, <code>0x10</code>, <code>0x20</code>, <code>0x40</code>, puis zéro pour terminer. La source indique que <code>0x40</code> route une source de voix issue du MCU vers la chaîne de modulation. Cela prouve un mécanisme d'échange de données vocales dans les firmwares étudiés, pas encore un interfaçage temps réel complet pour notre V1.21.</p>
+<p>La décomposition de 36 octets en <strong>quatre blocs de 72 bits</strong> avec cadence d'environ <strong>80 ms</strong> est explicitement donnée comme hypothèse dans la source. Ne pas la graver dans une ABI tant que les trames, le sens de transfert, les compteurs et les marqueurs de fin ne sont pas vérifiés. Les slots DMR ont une périodicité de <strong>60 ms</strong> (alternance des deux slots) ; il faut mesurer la relation entre les deux cadences au lieu de leur attribuer un ratio simpliste.</p>
+<h2 id="4-gains-reglages-et-champs-protocole-a-conserver">4. Gains, réglages et champs protocole à conserver</h2>
+<p>Noms reconnus dans l'étude OEM externe :</p>
+<ul>
+<li>Acquisition de voie : <code>ANALOG_CONFIG</code>, <code>CTC_PARAM</code>, <code>ANALOG_SUBAUDIO</code>, <code>SQ_LEVEL</code>, <code>AFC_CONFIG</code>.</li>
+<li>Gains audio/RF : <code>MOD_GAIN</code>, <code>DEMOD_GAIN</code>, <code>DIGI_MIC_GAIN</code>, <code>DIGI_SPEAKER_GAIN</code>, <code>MISC_GAIN</code>.</li>
+<li>Compensations : <code>DC_OFFSET</code>, <code>IQCOMP_COEF</code>, <code>MODOUT_CONFIG</code>, <code>EQUALIZER_FILTER</code>.</li>
+<li>Service/DMR : <code>BER_REPORT</code>, <code>PARITY_ENABLE</code>, <code>SCRAMBLER_SEED</code>.</li>
+<li>Identifiants conservés bruts parce que non décrits dans le manuel v1.0 : <code>0x2B</code>, <code>0x3B</code>.</li>
+</ul>
+<p>Ce sont des <strong>noms de champs</strong>, pas des unités d'étalonnage universelles. Une écriture de <code>MOD_GAIN=123</code> ne devient pas une valeur nominale du D578 sans son contexte. Rapprocher les paramètres de la NAND, des tables du mode TEST et des traces HPI existantes.</p>
+<h2 id="5-consequences-concretes-pour-le-firmware-opend578">5. Conséquences concrètes pour le firmware OpenD578</h2>
+<ol>
+<li>Pilote <code>sct3258_hpi</code> : GPIO déterministes, changement de sens DATA0..7, IRQ HOBIB, timeout et FIFO bornés.</li>
+<li><code>sct_boot</code> : vérification du hash de l'amorce fournie localement par le propriétaire, chargement 1 024 mots, validation de l'ACK, timeout.</li>
+<li><code>sct_codec</code> : initialisation du TLV320AIC3204 via SCT, matrice de chemins MIC/HP et restrictions de volume.</li>
+<li><code>sct_voice</code> : démarrage/fin d'appels en mode OEM easy, gestion du slot, identifiants DMR et contrôle d'état.</li>
+<li><code>sct_chan_d</code> <strong>expérimental</strong> : décodeur passif des charges de 36 octets, vérification de l'horodatage et de la continuité, <strong>sans TX par défaut</strong>.</li>
+<li><code>sct_data</code> : cas séparés <code>DIGC_DATA_FRAME</code> pour CSBK/headers/UDT et différents débits, avec détection d'erreur par type.</li>
+</ol>
+<p>Les possibilités privacy, hotspot et passerelle vocale dépendront des tests CHAN_D en DMR et de la légalité des usages. Ne pas déclarer ces fonctions impossibles par principe, mais ne pas les annoncer comme opérationnelles avant essai.</p>
+<h2 id="6-methode-de-recoupement-non-destructive">6. Méthode de recoupement non destructive</h2>
+<p>À partir d'un corpus OEM légitimement détenu, analyser les chaînes <code>DMR_CALL_START</code>, <code>VOCODER_IO_SET</code>, <code>CHAN_D</code>, <code>I2C_OPERATION</code>, ainsi que les références de code et la table d'identifiants HPI ; confronter aux journaux du banc. Capturer au moins trois scénarios distincts : RX DMR, enregistrement et lecture d'un message enregistré. Pour chacun, consigner le nombre de trames, leur payload, la variante de firmware, la réponse HOBIB et les interruptions. La définition du protocole ne doit être publiée comme <strong>validée OEM D578</strong> qu'après rattachement effectif à une trace V1.21.</p>
+<p><strong>Références primaires externes :</strong> <a href="https://cdn.hackaday.io/files/1642237026116832/CT3258_datasheet.pdf">CT3258 datasheet</a> ; <a href="https://cdn.hackaday.io/files/1642237026116832/SCT3258_datasheet_v2_0.pdf">SCT3258 v2.0</a> ; <a href="https://cdn.hackaday.io/files/1642237026116832/CT3258_Packet_Interface.pdf">Packet Interface CT3258 v1.0</a> ; <a href="https://www.cmlmicro.com/products/sct3258td-dmr-dpmr-analog-processor/">CML SCT3258TD</a>. Les PDF sont liés et non réhébergés faute de licence explicite.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

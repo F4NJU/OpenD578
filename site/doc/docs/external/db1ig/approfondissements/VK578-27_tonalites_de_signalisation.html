@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>VK578-27 : Tonalités de signalisation - OpenD578</title>
+<link rel="stylesheet" href="../../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../../index.html">Vue eclatee</a>
+<a href="../../../../../facade.html">Facade</a>
+<a class="active" href="../../../../../docs.html">Documents</a>
+<a href="../../../../../cps.html">CPS / USB</a>
+<a href="../../../evidence/INDEX.html">Preuves</a>
+<a href="../../INDEX.html">Sources externes</a>
+<a href="../../../../../firmware.html">Firmware</a>
+<a href="../../../../../photos.html">Photos</a>
+<a href="../../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>VK578-27 : Tonalités de signalisation</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/approfondissements/VK578-27_tonalites_de_signalisation.md">Modifier sur GitHub</a><a download href="../../../../../raw/docs/external/db1ig/approfondissements/VK578-27_tonalites_de_signalisation.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/approfondissements/VK578-27_tonalites_de_signalisation.md</code></p>
+<article class="markdown-body"><h1 id="vk578-27-tonalites-de-signalisation">VK578-27 : Tonalités de signalisation</h1>
+<p><strong>Revue approfondie 06/11/2026.</strong> Source principale : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA, D578 mods v7.4, miroir DB1IG</a>. Complément éventuel : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, matériel AnyTone</a>.</p>
+<p><strong>Statut de la documentation :</strong> analyse enrichie ; les fonctions validées en exécution sur le D578 OEM conservent ce statut. Les valeurs historiques d'un autre poste restent rattachées à cet appareil.</p>
+<p><strong>Source initialement déjà conservée dans OpenD578 :</strong> <a href="../../../hardware/AUDIO.html">docs/hardware/AUDIO.md</a>. Aucune ancienne donnée n'est supprimée.</p>
+<p><strong>Trois chemins différents :</strong> les bips d'interface et signalisations utilisateur passent par la chaîne audio, les tonalités CTCSS/DCS influencent la modulation RF et les messages vocaux DMR sont gérés via le SCT3258. Les regrouper dans une routine audio unique conduit à de mauvaises conclusions sur les registres.</p>
+<p><strong>Recette de référence non musicale :</strong> le guide VK7ZJA donne pour le bip d'autorisation TX une séquence de cinq entrées dont quatre actives : 1570 Hz/50 ms, 1050 Hz/40 ms, 1570 Hz/40 ms et 1320 Hz/40 ms, puis silence. La première durée est présentée comme un ajustement historique de firmware et n'est pas un timing mesuré sur V1.21.</p>
+<p><strong>Analyse OEM à produire :</strong> enregistrer l'appel UI, le générateur de ton, l'activation amplificateur PA7, le chemin U2429G/codec et les éventuels accès SCT. Pour la comparaison, injecter des événements d'interface sans transmettre et analyser la sortie haut-parleur sur oscilloscope ou capture audio. Ne pas assimiler ces tons au DMR <code>TONEU/TONEV2</code> du mode TEST.</p>
+<h2 id="provenance-et-suite-verifiable">Provenance et suite vérifiable</h2>
+<ul>
+<li>Ancienne lacune identifiée : Tonalites constructeur a analyser comme stimuli audio, distinctes CTCSS/DCS.</li>
+<li>Source historique : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">guide original, édition octobre 2022</a>, rubrique « Tonalités de signalisation ».</li>
+<li>Application locale : comparer les paramètres en mode non destructif avec l'image OEM de la révision étudiée, conserver trames, adresses et horodatages.</li>
+<li>Niveau de preuve : les observations OEM du dépôt sont indépendantes du texte historique ; une fonctionnalité expérimentale est étiquetée comme telle.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../../assets/models.js" defer></script><script src="../../../../../assets/search-data.js" defer></script><script src="../../../../../assets/site.js" defer></script>
+</body></html>

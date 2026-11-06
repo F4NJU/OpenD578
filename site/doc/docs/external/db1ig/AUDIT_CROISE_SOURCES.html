@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Audit DB1IG source par source et comparaison avec OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Audit DB1IG source par source et comparaison avec OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/AUDIT_CROISE_SOURCES.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/db1ig/AUDIT_CROISE_SOURCES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/AUDIT_CROISE_SOURCES.md</code></p>
+<article class="markdown-body"><h1 id="audit-db1ig-source-par-source-et-comparaison-avec-opend578">Audit DB1IG source par source et comparaison avec OpenD578</h1>
+<p><strong>Date : 6 novembre 2026. Base locale :</strong> archive <code>OpenD578_COMPLET_SOURCES_F1DMG_VK7ZJA_20261106.zip</code>, extraite avant cet audit. Cette base reprend les correctifs de facade et les dossiers historiques du projet. Le depot GitHub en ligne n'a pas ete interroge directement ; les eventuels commits plus recents ne sont donc pas couverts.</p>
+<h2 id="methode-de-rapprochement">Methode de rapprochement</h2>
+<ul>
+<li>Les 60 chapitres VK7ZJA de l'index existant ont ete repris <strong>sans suppression</strong> et relies aux vrais documents OpenD578.</li>
+<li>Chaque difference est rangee dans une categorie : <code>deja documente</code>, <code>resume a enrichir</code>, <code>nouveau detail</code>, <code>transposable apres verification</code>, <code>hors coeur firmware</code>.</li>
+<li>Les routines OEM, GPIO, traces et resultats physiques du projet ont priorite pour <strong>la revision de l'utilisateur</strong>. L'etude historique complete les fonctions, pas leur statut.</li>
+<li>Une valeur historique, une recommandation d'usage et un mot de registre observe sur le poste ne sont pas interchangeables.</li>
+</ul>
+<h2 id="source-db1ig-01-copie-vk7zja-d578-v74-20-octobre-2022">Source DB1IG-01 : copie VK7ZJA D578, v7.4 (20 octobre 2022)</h2>
+<p><strong>Original :</strong> Jason Reilly, VK7ZJA. <strong>Miroir :</strong> DB1IG (avec l'autorisation historique mentionnee par l'hebergeur). <strong>Lien :</strong> <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php</a>. <strong>Version allemande</strong> : <a href="https://www.db1ig.de/pages/de/anytone/jason_reilly_vk7zja_-_de/jason-reilly-vk7zja-578mods.php">https://www.db1ig.de/pages/de/anytone/jason_reilly_vk7zja_-_de/jason-reilly-vk7zja-578mods.php</a>.</p>
+<h3 id="nouveaux-details-a-ajouter-au-fonds-existant">Nouveaux details a ajouter au fonds existant</h3>
+<table>
+<thead>
+<tr>
+  <th>ID</th>
+  <th>Sujet</th>
+  <th>Etat dans OpenD578 avant revue</th>
+  <th>Apport exploitable</th>
+  <th>Priorite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>D578-01</td>
+  <td>PTT microphone de table</td>
+  <td>USART0, trames filaires et pinout presents</td>
+  <td>Autre voie PTT : resistance 1 a 2,2 kohms entre broches 1/8, <code>HandOpMode = Level Detection</code>; risque de TX involontaire si mal configure</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>D578-02</td>
+  <td>Reglages audio Bluetooth</td>
+  <td>BT01/BP-02/ET12 deja documentes</td>
+  <td>Interactions <code>BT + int mic</code> et <code>BT + int spk</code>, utiles pour modeliser le routage et le microphone externe</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>D578-03</td>
+  <td>Modes de demarrage</td>
+  <td>MCU UPDATE, P4+DIAL et plusieurs autres cas notes</td>
+  <td>Table historique des modes dedies GPS, SCT, LinkBoard, Hand-Soft, icones et BHT</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>D578-04</td>
+  <td>Alignement</td>
+  <td>Options TEST et octets de permission tres bien analyses</td>
+  <td>Vocabulaire complet par bande et voie : FQCA, PA*, BPF*, AGC*, RSSI*, MOD*, SQTH*, CTCW, DCSW, TONE* et BER/FSK</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>D578-05</td>
+  <td>GPS antennes</td>
+  <td>Module GNSS, alimentation de secours, UART presents</td>
+  <td>Deux mini-connecteurs coaxiaux sur carte facade historique ; un utilise pour SMA externe, autre libre</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-06</td>
+  <td>Filtres FI</td>
+  <td>Topologie double FI 38,55/38,85 MHz connue</td>
+  <td>Emplacements de filtres supplementaires et resistances 0 ohm ; etage distinct du module AM PLUS</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-07</td>
+  <td>Traitement audio</td>
+  <td>Codec AIC3204 et commandes audio presents</td>
+  <td><code>Mic Enhance</code> signale comme effet sur TX DMR et non sur TX analogique / RX ; verifier registres et chemin OEM</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-08</td>
+  <td>FM broadcast</td>
+  <td>RDA5802N documente dans le banc</td>
+  <td>Stations entre 76 et 87,5 MHz via memoires, limites de sous-bandes du tuner selon configuration</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-09</td>
+  <td>Caracterisation reception</td>
+  <td>Etages RF et filtres connus</td>
+  <td>Mesures historiques RF/sensibilite, point de comparaison pour essais de non-regression</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-10</td>
+  <td>Caracterisation puissance</td>
+  <td>Etages AFT05MP075N connus</td>
+  <td>Mesures historiques LOW/MID/HIGH/TURBO pour 145,5 et 435 MHz ; ne pas substituer aux alignements individuels</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-11</td>
+  <td>Icones GPS</td>
+  <td>Ecran/bitmaps/NAND et mode update documentes</td>
+  <td>L'archive historique distingue le paquet d'icones <code>.spi</code>, son mode d'entree et le contenu GPS</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-12</td>
+  <td>Modes analogique et DMR</td>
+  <td>DMR operationnel sur OEM, RX independantes connues</td>
+  <td>Deux RX FM simultanees mais une seule demodulation DMR concurrente dans le poste historique</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-13</td>
+  <td>Codeplug et migration</td>
+  <td>USB CPS + NAND + format canal deja analyses</td>
+  <td><code>Export All</code> ne couvre pas necessairement toutes les options et secrets ; reconstruction CPS par generation</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>D578-14</td>
+  <td>Recovery</td>
+  <td>Recuperation MCU UPDATE et bootloader connus</td>
+  <td>Procedure historique de demarrage d'urgence et separations entre reset, recovery et reprogrammation</td>
+  <td>P2</td>
+</tr>
+<tr>
+  <td>D578-15</td>
+  <td>Blindage et filtrage</td>
+  <td>FI/varactors connus</td>
+  <td>Blindage supplementaire historique, influence de capacite parasite puis necessite de recalibrer BPF A/B</td>
+  <td>P3</td>
+</tr>
+<tr>
+  <td>D578-16</td>
+  <td>Refroidissement</td>
+  <td>PA et alimentation connus</td>
+  <td>Modifications historiques ventilation/deflecteurs ; une branche F1DMG ancienne y est citee</td>
+  <td>P3</td>
+</tr>
+<tr>
+  <td>D578-17</td>
+  <td>Façade deportable</td>
+  <td>Bus LCD identifie par OEM</td>
+  <td>Hypothese de deport par nappe 40 voies : contrainte de temps de propagation/EMI, pas option OEM</td>
+  <td>P3</td>
+</tr>
+<tr>
+  <td>D578-18</td>
+  <td>Mises a jour de sous-modules</td>
+  <td>SCT/BT documentes</td>
+  <td>Distinction explicite application GD32, DSP SCT, Bluetooth LinkBoard, MCU microphone et ressources graphiques</td>
+  <td>P1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recoupements deja solides :</strong> GD32F303VKT6, NAND TC58CVG1S3HRAIG, TLV320AIC3204, SCT3258, RDA5802N, QA4818N x4 / reference 26 MHz, AFT05MP075N x2, double FI et sauvegarde RTC/GPS. Voir <code>docs/hardware/VALIDATION_FONCTIONS_OEM.md</code>, <code>docs/peripherals/</code>, <code>docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md</code> et <code>docs/TEST_MODE_OPTIONS.md</code>.</p>
+<p><strong>Limite de transposition :</strong> la page de 2022 n'a pas teste les deux cartes de l'utilisateur sous les versions firmware 2024/2026. Les modifications de bandes et les valeurs exemples du menu TEST ne doivent pas etre executees comme instructions de developpement ni comme calibrations usine.</p>
+<h2 id="source-db1ig-02-copie-vk7zja-d868d878-v20-20-octobre-2022">Source DB1IG-02 : copie VK7ZJA D868/D878, v20 (20 octobre 2022)</h2>
+<p><strong>Lien :</strong> <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_878mods.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_878mods.php</a>. Versions allemandes du meme texte : ne constituent pas une confirmation independante.</p>
+<p><strong>Pertinence croisee :</strong> la famille D868/D878 partage des concepts de MCU GD32, baseband SCT3258, codec AIC3204, GPS ATGM336H et circuits d'extension Bluetooth/APRS. Ce document fournit une chronologie materielle, des outils d'actualisation du SCT, des pistes de sauvegarde des calibrations, de traitement des erreurs codeplug et de proprietes du logiciel CPS.</p>
+<p><strong>Informations candidates absentes ou incompletes dans OpenD578 :</strong></p>
+<ol>
+<li><strong>Evolution D878 -&gt; D878-II</strong> : une carte fille realise Bluetooth + reception APRS FSK, alors que le D578 PRO n'a pas l'APRS RX et que le PLUS possede une carte supplementaire RF/Bluetooth propre a sa variante. Ce rapprochement justifie une comparaison photographique, pas une equivalence de circuit.</li>
+<li><strong>AT1846S contre QA4818N</strong> : l'AT1846S du portable n'est pas un schema directement applicable aux quatre QA4818N du mobile. Les mots PLL en <code>0x29/0x2A</code> sont encore a comparer aux transactions OEM reelles.</li>
+<li><strong>Aide de sauvegarde d'alignement et formats de flash</strong> : utile pour verifier les outils OpenD578, mais les offsets NAND et le conteneur RDT du D878 ne sont <strong>pas automatiquement</strong> ceux du D578. En particulier l'octet <code>0x0011</code> cite pour un codeplug portable ne doit pas etre inscrit dans un D578 sans preuve.</li>
+<li><strong>Firmware interne SCT3258</strong> : historique de plusieurs versions de baseband, dont <code>V2.01.07BF</code>. La version sur chaque poste doit etre lue avant comparaison et il faut conserver les fichiers du module distincts de ceux du MCU.</li>
+<li><strong>Audio et Bluetooth</strong> : comportements de certains casques Bluetooth, DMR vocoder et traitement micro qui generent des cas de test pour BT01/BP-02, mais ne suffisent pas a definir le protocole UART ET12.</li>
+<li><strong>Technologie GPS</strong> : modules differents selon generation et sauvegarde de position, pas de transplantation automatique des circuits 878 vers 578.</li>
+</ol>
+<p><strong>Existant recoupe :</strong> <code>docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md</code>, <code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code>, <code>docs/peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.md</code>, <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code>.</p>
+<h2 id="source-db1ig-03-guide-vk7zja-sur-les-bases-dmr">Source DB1IG-03 : guide VK7ZJA sur les bases DMR</h2>
+<p><strong>Lien :</strong> <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_dmrbasics.php">https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_dmrbasics.php</a>.</p>
+<p><strong>Valeur ajoutee :</strong> lexique des concepts du protocole radio DMR (color code, timeslots, groupes, identifiants, Tier II, simplex). OpenD578 possede deja la couche physique de simulation SCT/HPI, mais ne doit pas confondre ces concepts d'exploitation avec les registres du SCT3258. Utilisation prevue : fiches d'acceptation DMR (appel prive, appel groupe, slot, RAS non presume, filtrage par color code) et distinction entre protocole radio et transport HPI OEM.</p>
+<p><strong>Priorite :</strong> P2 pour la qualification fonctionnelle DMR ; ce guide pedagogique ne contient pas un schema de communication GD32 &lt;-&gt; SCT.</p>
+<h2 id="source-db1ig-04-guide-db1ig-de-creation-dun-premier-codeplug">Source DB1IG-04 : guide DB1IG de creation d'un premier codeplug</h2>
+<p><strong>Lien :</strong> <a href="https://www.db1ig.de/pages/de/anytone/anytone-der-erster-codeplug.php">https://www.db1ig.de/pages/de/anytone/anytone-der-erster-codeplug.php</a>.</p>
+<p><strong>Information a conserver :</strong> codeplug, CPS et firmware doivent etre rapproches par version. La page recommande de reconstruire un codeplug apres changement de firmware, en passant par export/import. Le D578 n'exige pas toujours une nouvelle version du CPS a chaque petite mise a jour, ce qui interdit de coder une regle trop rigide.</p>
+<p><strong>Consequence pour OpenD578 :</strong> ajouter aux essais du CPS un <code>profil_version</code> (variante PRO/PLUS, branche GD32/AT32, application, version codeplug, MODE, capacite contacts), un import/export sans perte, et un diff sur les champs conserves. La documentation actuelle de <code>docs/cps/</code> couvre les trames USB et les canaux, mais pas tout le cycle de migration utilisateur.</p>
+<h2 id="source-db1ig-05-digital-contact-list-editor-db1ig">Source DB1IG-05 : Digital Contact List Editor (DB1IG)</h2>
+<p><strong>Lien :</strong> <a href="https://www.db1ig.de/pages/en/software-corner/-anytone--digital-contact-list-editor.php">https://www.db1ig.de/pages/en/software-corner/-anytone--digital-contact-list-editor.php</a>.</p>
+<p><strong>Nouveau par rapport au CPS minimal OpenD578 :</strong> outil DB1IG de preparation des contacts depuis RadioID.net, avec selection region/pays, estimation de capacite et quatre presentations, puis export CSV pour CPS. Le logiciel n'est pas la preuve du format NAND binaire ; il constitue un <strong>oracle de structure CSV et de limite de contacts par modele</strong>.</p>
+<p><strong>Action :</strong> inventorier les champs exportes, comparer avec <code>docs/cps/CODEPLUG_CANAL_OEM_V121.md</code> et preparer l'importeur de contacts distinct de la table canaux. Ne pas integrer l'executable tiers dans le depot sans licence.</p>
+<h2 id="source-db1ig-06-mode-demploi-digital-contact-list-editor">Source DB1IG-06 : mode d'emploi Digital Contact List Editor</h2>
+<p><strong>Lien :</strong> <a href="https://www.db1ig.de/pages/en/software-corner/-anytone--digital-contact-list-editor/digitale-kontaktlisten-editor-howto.php">https://www.db1ig.de/pages/en/software-corner/-anytone--digital-contact-list-editor/digitale-kontaktlisten-editor-howto.php</a>.</p>
+<p><strong>Apport :</strong> options de selection RadioID.net, quatre rendus de liste et etapes d'export CSV, pour definir des cas de test de longueur de chaine, encodage, champ indicatif/nom, ordre, tri, doublons et capacites PRO/PLUS. Cette page precise explicitement les limitations des portables D868/D878 ; ne pas transposer leur plafond aux D578.</p>
+<h2 id="source-db1ig-07-page-daccueil-des-miroirs-vk7zja">Source DB1IG-07 : page d'accueil des miroirs VK7ZJA</h2>
+<p><strong>Lien :</strong> <a href="https://db1ig.de/pages/en/anytone/jason_reilly_vk7zja.php">https://db1ig.de/pages/en/anytone/jason_reilly_vk7zja.php</a>.</p>
+<p><strong>Apport documentaire :</strong> liste des oeuvres historiques : D578, D868/D878, bases DMR et documents GD-77. Ce sont des sources primaires distinctes dans leur sujet, mais plusieurs traductions/miroirs du meme travail ne doivent pas etre comptes comme autant de preuves materielle independantes.</p>
+<h2 id="sources-de-recoupement-non-independantes-et-independantes">Sources de recoupement non independantes et independantes</h2>
+<ul>
+<li><strong>Non independantes :</strong> traduction allemande DB1IG de l'article D578, autre miroir VK7ZJA chez theweeks.org, reddicams, radio.carstenbauer.net et PDF de reproduction. Ces copies peuvent renseigner les changements entre editions, sans constituer de nouvelles observations.</li>
+<li><strong>Independantes par nature :</strong> observations OEM et relevages physiques F4EGM ; datasheets constructeur GD32F303, QA/AT1846S, TLV320AIC3204, RDA5802N ; rapports FCC identifiant les variantes ; outils libres qdmr/codeplug si la branche D578 correspond.</li>
+</ul>
+<h2 id="synthese-des-priorites">Synthese des priorites</h2>
+<p><strong>P1, directement exploitable pour le developpement :</strong> matrices de boot/mise a jour, microphone resistif et HandOpMode, table de parametres TEST vers adresses NAND et routines OEM, compatibilite CPS/versions, separation des firmware MCU/SCT/BT/micro.</p>
+<p><strong>P2, validation fonctionnelle :</strong> chemin audio Bluetooth avec les reglages Mic/Speaker, donnees RF historiques de reference, test BER/FSK et qualite du mode DMR, antenne GPS, banque des bitmaps <code>.spi</code>, contacts CSV.</p>
+<p><strong>P3, observation et maintenance :</strong> refroidissement, positions FI supplementaires, ecran deportable, boitier/connecteur, ergonomie et accessoires.</p>
+<p>Les nouveaux constats et les procedures recommandables sont detailles dans <a href="COMPLEMENTS_TECHNIQUES_D578.html">les complements techniques</a>. La matrice <a href="MATRICE_60_THEMES.html">des 60 rubriques</a> permet un suivi sans perte de sujet.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

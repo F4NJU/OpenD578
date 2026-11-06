@@ -1,0 +1,15 @@
+pour le help en ligne il n'existe pour le D868
+
+mais il est possible de ce reporter sur une installation pour le D878
+qui contien le help en ligne au bas des canaux
+
+il suffit d'installer le cps du D878 et de comparer les 2 cps
+de cette façon vous pouvez voir le détail des fonction equivalantes
+quand vous vous mettez sur une case a cocher
+
+intaller la version du D878 v126  pour faire les comparaisons avec D868 
+ca doit pas etre trop mal
+
+attetion les codepluc d'un est de lautre ne sont pas compatibles
+cette installation est faite que pour la comparaison
+

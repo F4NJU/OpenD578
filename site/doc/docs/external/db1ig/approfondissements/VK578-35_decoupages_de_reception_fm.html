@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>VK578-35 : Découpages de réception FM - OpenD578</title>
+<link rel="stylesheet" href="../../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../../index.html">Vue eclatee</a>
+<a href="../../../../../facade.html">Facade</a>
+<a class="active" href="../../../../../docs.html">Documents</a>
+<a href="../../../../../cps.html">CPS / USB</a>
+<a href="../../../evidence/INDEX.html">Preuves</a>
+<a href="../../INDEX.html">Sources externes</a>
+<a href="../../../../../firmware.html">Firmware</a>
+<a href="../../../../../photos.html">Photos</a>
+<a href="../../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>VK578-35 : Découpages de réception FM</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/approfondissements/VK578-35_decoupages_de_reception_fm.md">Modifier sur GitHub</a><a download href="../../../../../raw/docs/external/db1ig/approfondissements/VK578-35_decoupages_de_reception_fm.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/approfondissements/VK578-35_decoupages_de_reception_fm.md</code></p>
+<article class="markdown-body"><h1 id="vk578-35-decoupages-de-reception-fm">VK578-35 : Découpages de réception FM</h1>
+<p><strong>Revue approfondie 06/11/2026.</strong> Source principale : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA, D578 mods v7.4, miroir DB1IG</a>. Complément éventuel : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, matériel AnyTone</a>.</p>
+<p><strong>Statut de la documentation :</strong> analyse enrichie ; les fonctions validées en exécution sur le D578 OEM conservent ce statut. Les valeurs historiques d'un autre poste restent rattachées à cet appareil.</p>
+<p><strong>Source initialement déjà conservée dans OpenD578 :</strong> <a href="../../../hardware/RF.html">docs/hardware/RF.md</a>. Aucune ancienne donnée n'est supprimée.</p>
+<p><strong>Front-end et sensibilité :</strong> les mesures VK7ZJA montrent une réception médiocre à certaines fréquences hors bandes nominales, bien que le poste puisse y afficher une fréquence. Cela cadre avec les quatre étages de filtrage de suivi à varactors décrits pour les entrées VHF/UHF, ainsi qu'avec les commandes <code>BPFL*</code>, <code>BPFM*</code>, <code>BPFH*</code> du mode TEST.</p>
+<p><strong>Repères historiques :</strong> les mesures de synthèse sont données dans l'ancien guide pour un critère de 10 dBQ en NFM, environ 0,18 µV en VHF et 0,20 µV en UHF. Des essais très hors bande sont plusieurs dizaines de dB plus défavorables. Les résultats ne sont pas la calibration de notre PCB.</p>
+<p><strong>Démarche firmware :</strong> distinguer <code>PLL_locked</code>, <code>RF_gain</code>, <code>RF_tracking_voltage</code>, <code>IF_gain</code> et <code>squelch</code>; chercher la relation fréquence→valeurs de réglage dans la NAND et les écritures DAC/BH2226. Une fréquence programmée correcte ne suffit pas à déclarer un profil RF validé. Conserver fréquence, niveau injecté, critère et mode dans chaque capture.</p>
+<h2 id="provenance-et-suite-verifiable">Provenance et suite vérifiable</h2>
+<ul>
+<li>Ancienne lacune identifiée : Cas hors bande : filtres front-end expliquent variation sensibilite.</li>
+<li>Source historique : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">guide original, édition octobre 2022</a>, rubrique « Découpages de réception FM ».</li>
+<li>Application locale : comparer les paramètres en mode non destructif avec l'image OEM de la révision étudiée, conserver trames, adresses et horodatages.</li>
+<li>Niveau de preuve : les observations OEM du dépôt sont indépendantes du texte historique ; une fonctionnalité expérimentale est étiquetée comme telle.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../../assets/models.js" defer></script><script src="../../../../../assets/search-data.js" defer></script><script src="../../../../../assets/site.js" defer></script>
+</body></html>

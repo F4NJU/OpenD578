@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>F1DMG : observations d&#x27;utilisation et modifications de poste - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>F1DMG : observations d&#x27;utilisation et modifications de poste</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/archives_20261106/F1DMG_RELEVES_PRATIQUES.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/archives_20261106/F1DMG_RELEVES_PRATIQUES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/archives_20261106/F1DMG_RELEVES_PRATIQUES.md</code></p>
+<article class="markdown-body"><h1 id="f1dmg-observations-dutilisation-et-modifications-de-poste">F1DMG : observations d'utilisation et modifications de poste</h1>
+<p>Cette fiche rassemble les elements retrouves dans les originaux <code>page-20.htm</code> et <code>page-22.htm</code> de la sauvegarde privee du 6 novembre 2026. Ce sont des <strong>releves de F1DMG</strong>, pas des mesures effectuees sur nos exemplaires D578 PRO GD32 V1.21 et PLUS. Les observations figurent ici pour eviter leur disparition et orienter une reproduction sous controle.</p>
+<h2 id="parametres-radio-et-cps">Parametres radio et CPS</h2>
+<table>
+<thead>
+<tr>
+  <th>Point dans la source</th>
+  <th>Description attribuee a F1DMG</th>
+  <th>Portee pour OpenD578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Correction de frequence DMR</td>
+  <td>Il rapporte un decalage de l'ordre de <strong>+330 a +340 Hz</strong> dans son installation hotspot Raspberry Pi/MMDVM avec un D578UV PRO et mentionne un menu <code>MENU &gt; SETTING &gt; CHAN SET &gt; OFFSET D578</code> par pas utilisateur de 10 Hz</td>
+  <td>Exemple d'installation, ni erreur garantie de nos oscillateurs ni regle de correction Doppler</td>
+</tr>
+<tr>
+  <td>Scan programme</td>
+  <td>Limites basse/haute a definir et choix <code>Programme scan</code> sur D578, distinct du scan normal</td>
+  <td>Expliquer l'ergonomie OEM, pas de nouvelles trames SPI</td>
+</tr>
+<tr>
+  <td>Arret du scan sur canal actif</td>
+  <td>Appui long sur <code>MENU</code> pendant l'activite; une autre astuce utilise <code>MENU</code> puis <code>#</code> pour eviter le retour au canal initial apres PTT, selon le mode de scan</td>
+  <td>Comportements de F1DMG, a caracteriser par version et mode</td>
+</tr>
+<tr>
+  <td>Squelch analogique</td>
+  <td>Affecter une touche <code>MONITOR</code>, puis utiliser une touche du microphone pour maintenir l'ouverture; F1DMG decrit plusieurs sequences pour la desactiver</td>
+  <td>Cas de test de l'UI, distinct des registres de squelch dans la RF</td>
+</tr>
+<tr>
+  <td>SMS et APRS</td>
+  <td>F1DMG indique des problemes de SMS lorsque l'option <code>APRS Receive</code> est active sur le canal</td>
+  <td>Observation historique, eviter une regle generale sans mesure</td>
+</tr>
+<tr>
+  <td>Chemin APRS</td>
+  <td>Consigne de supprimer une virgule entre les deux champs <code>WIDE</code> selon sa configuration</td>
+  <td>Exemple de saisie utilisateur, ne pas appliquer par defaut dans un firmware alternatif</td>
+</tr>
+<tr>
+  <td>1750 Hz / DTMF</td>
+  <td>References de declenchement automatique du 1750 Hz et documents de commande DTMF pour l'ATV</td>
+  <td>Ajouter les cas d'usage audio, pas de preuve de minuterie GPIO</td>
+</tr>
+<tr>
+  <td>Mise a jour du codeplug</td>
+  <td>Ne pas melanger les versions D878 v1/v2 et D578 PRO/PLUS; exporter/ressaisir les objets lors des changements CPS</td>
+  <td>Important pour les migrations entre structures NAND</td>
+</tr>
+</tbody>
+</table>
+<p>Les rapports de pannes firmware tres anciennes (redemarrage, heure/date, DTMF C/D, instabilites V1.12/V1.17, etc.) peuvent viser plusieurs radios de generations differentes sur la meme page. <strong>Aucun de ces exemples ne doit etre attribue automatiquement au D578 PRO GD32 V1.21.</strong> Conserver le contexte de la page avant d'ajouter un ticket de regression.</p>
+<h2 id="modifications-physiques-illustrees-par-les-photographies-dorigine">Modifications physiques illustrees par les photographies d'origine</h2>
+<p>Les images suivantes sont presentes dans l'archive utilisateur et sont identifiables visuellement. Ne pas les publier sans accord de l'auteur.</p>
+<ul>
+<li><strong><code>578a.jpg</code></strong>: photo d'un deflecteur de ventilation ajoute a l'arriere du mobile. <strong><code>578b.jpg</code></strong>: vue de la grille et du ventilateur du poste. F1DMG indique avoir inverse le sens de son ventilateur et utilise l'option <code>FAN OPEN = BOTH</code>; il rapporte un passage de 50 degres C a 30 degres C en quatre minutes dans <em>sa</em> configuration. Ce n'est pas une mesure thermique de reference et ne garantit pas la securite d'une inversion de flux sur d'autres installations.</li>
+<li><strong><code>page-20/01Mb.jpg</code>, <code>02Mb.jpg</code>, <code>03Mb.jpg</code></strong>: modification d'un microphone externe avec composant electret, ajout de cablage, interrupteur et connecteur jack. Cette realisation est distincte du protocole USART0 du microphone constructeur et du microphone Bluetooth BT01.</li>
+<li><strong><code>D578-PROTECTION-ROS.png</code></strong>: photographie d'une <strong>zone de circuit imprime avec points de soudure/modification</strong>, presentee par F1DMG au titre de la protection ROS. La seule image ne permet pas de valider le schema complet de cette protection, ses seuils ou son action sur l'emetteur.</li>
+<li><strong><code>page-20/boutons3.jpg</code></strong>: photographie de modification de la presentation des boutons de facade; utile pour l'ergonomie, sans etablir un nouveau brochage.</li>
+<li><strong><code>RAZ-ANYTONE.png</code></strong>: dessin d'un raccordement de reset vers le GD32. L'image comprend une mention <strong>« je n'ai pas essaye »</strong> : il s'agit d'une hypothese de modification, <strong>pas d'une procedure validee</strong>. La liaison SWD/NRST du poste doit rester definie par les observations materielles propres a notre revision.</li>
+<li><strong><code>DEBRID_578.jpg</code></strong>: illustration d'options de logiciel, pas une preuve que les filtres et l'etage de puissance couvrent les frequences selectionnees.</li>
+</ul>
+<p>Les chemins sont ceux de la collection privee <code>f1dmg/originals/f1dmg.free.fr/</code> sous la racine du ZIP. Les valeurs et modifications de F1DMG sont conservees pour analyse historique et comparaison, <strong>sans recommander une intervention sur un appareil sous tension ou en emission</strong>.</p>
+<h2 id="suites-documentaires">Suites documentaires</h2>
+<ol>
+<li>Ajouter dans les tests UI du simulateur les cas <code>scan</code>/<code>MENU</code>/PTT/<code>MONITOR</code>, <strong>sans affirmer que les cas sont deja rejoues</strong>.</li>
+<li>Comparer, dans les versions ayant la fonction, le champ d'offset accessible par CPS, l'offset FM/DMR et la correction Doppler du projet satellite. Ces trois termes ne sont pas equivalents.</li>
+<li>Documenter le capteur thermique, la commande ventilateur et la protection ROS a partir des routines OEM V1.21; les photos F1DMG ne doivent pas etre substituees aux GPIO decodes.</li>
+<li>Traiter SMS, APRS, roaming et 1750 Hz comme services firmware distincts du protocole USB CPS et du bus SCT3258.</li>
+</ol>
+<p>Sources: <a href="http://f1dmg.free.fr/page-20.htm">http://f1dmg.free.fr/page-20.htm</a> et <a href="http://f1dmg.free.fr/page-22.htm">http://f1dmg.free.fr/page-22.htm</a>, captures originales datées du 6 novembre 2026 dans l'archive privee. Se reporter au <a href="BILAN_ARCHIVE_ET_INTEGRITE.html">bilan d'integrite</a> et a <a href="ECARTS_AVEC_DEPOT.html">l'inventaire des ecarts</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

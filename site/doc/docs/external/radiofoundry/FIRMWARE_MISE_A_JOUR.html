@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Mise à jour OEM, CPS, bootloader et récupération par variante - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Mise à jour OEM, CPS, bootloader et récupération par variante</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md</code></p>
+<article class="markdown-body"><h1 id="mise-a-jour-oem-cps-bootloader-et-recuperation-par-variante">Mise à jour OEM, CPS, bootloader et récupération par variante</h1>
+<p>Source : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, section 3</a> ; références locales : <a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">bootloader V1.21</a>, <a href="../../cps/PROTOCOLE_OEM_V121.html">USB CPS</a>, <a href="../../cps/COMPATIBILITE_PRO_PLUS.html">compatibilité PRO/PLUS</a>.</p>
+<h2 id="1-trois-logiciels-independants-dans-le-poste">1. Trois logiciels indépendants dans le poste</h2>
+<p>Le MCU GD32 démarre son bootloader OEM et ensuite l'application. Le SCT3258 a son <strong>firmware interne</strong> plus un bootstrap envoyé à chaque reset par le MCU. Les modules Bluetooth/LinkBoard et le contrôleur du microphone possèdent eux aussi des chemins de mise à jour ou une version logicielle spécifique. Les ressources d'icônes ne doivent pas être prises pour un firmware applicatif. Une mise à jour SCT n'est pas un remplacement de bootloader GD32.</p>
+<h2 id="2-conteneurs-et-protocole-de-chargement">2. Conteneurs et protocole de chargement</h2>
+<p>L'étude externe distingue <code>.spi</code> (fichier présenté à l'outil CPS), <code>.CDI</code> (métadonnées et identité) et <code>.CDD</code> (image). Les tailles varient avec la version : <code>.spi</code> peut mesurer 14 ou 51 octets, <code>.CDI</code> environ 278 octets dans certains packages firmware. Des jeux d'icônes utilisent d'autres tailles. Le binaire CDD peut contenir une table de vecteurs Cortex-M lisible, mais cela ne prouve pas que le chargeur accepte toute image arbitraire.</p>
+<p>RadioFoundry décrit un dialogue <code>UPDATE</code> suivi de <strong>paquets de 32 octets avec checksum additif</strong> pour les firmwares étudiés. Dans notre propre banc, la programmation CPS des données utilise <strong>un autre état</strong> : <code>PROGRAM</code>, <code>R</code>, <code>W</code>, <code>END</code>, avec des contrôles de blocs. Il faut créer deux décodeurs et deux jeux de tests séparés ; ne pas envoyer <code>UPDATE</code> lors d'un test de lecture CPS.</p>
+<p>Le nombre <code>921600</code> visible dans le logiciel QX est une indication d'interface utilisateur, pas une preuve que le câble USB fait fonctionner un UART matériel à ce débit. Le chemin demeure USB CDC, dont le débit virtuel peut être arbitraire.</p>
+<h2 id="3-difference-fondamentale-du-boot-gd32-v121">3. Différence fondamentale du boot GD32 V1.21</h2>
+<table>
+<thead>
+<tr>
+  <th>Édition</th>
+  <th>Boot/application</th>
+  <th>Source de preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Images D868/D878 anciennes citées par RadioFoundry</td>
+  <td>Boot 16 Kio, appli vers <code>0x08004000</code></td>
+  <td>Source comparative autre modèle</td>
+</tr>
+<tr>
+  <td><strong>Notre D578 PRO GD32 V1.21</strong></td>
+  <td><strong>Boot 24 Kio</strong>, application à <code>0x08006000</code></td>
+  <td>Dump SWD réel + comparaison avec CDD V1.21</td>
+</tr>
+<tr>
+  <td>D578 PLUS AT32</td>
+  <td>Famille MCU différente et fichiers séparés</td>
+  <td>Version externe, <strong>non</strong> notre unité PLUS GD32</td>
+</tr>
+</tbody>
+</table>
+<p>Nous avons également observé l'exécution en <strong>MCU UPDATE</strong> et une limitation du chargeur constructeur aux premières adresses de Flash accessibles pendant le transfert. Les mécanismes de protection de dépassement restent à vérifier. Le firmware alternatif satellite ne doit <strong>pas</strong> être assemblé à l'adresse <code>0x08004000</code> pour cette unité.</p>
+<h2 id="4-sequences-materielles-et-precautions">4. Séquences matérielles et précautions</h2>
+<ul>
+<li>D578 : l'étude externe mentionne <code>MENU+EXIT</code> pour accéder à l'UPDATE MCU. Notre analyse a déjà identifié ce mode et l'accès SWD sous cet état.</li>
+<li>Entrée SCT : les guides historiques donnent <code>MENU+DIAL</code> sur D578 ; une combinaison <code># + touche supérieure</code> concerne d'autres membres de la famille. Ne pas exporter le raccourci du portable à la façade du D578.</li>
+<li>L'option de réinitialisation après mise à jour peut <strong>effacer le codeplug</strong> ; sauvegarder <code>.rdt</code> et options CPS avant action.</li>
+<li><code>BOOT0</code>/ROM : la présence de fonctions de boot ROM dans la famille GD32 ne garantit pas que BOOT0 soit accessible sur PCB. Notre voie de lecture valide est le SWD dans MCU UPDATE ; ne pas proposer de recovery ROM garanti.</li>
+<li>Le changement de MCU GD32/AT32 implique des images incompatibles, même si le produit commercial possède le même nom.</li>
+</ul>
+<h2 id="5-qualification-demandee">5. Qualification demandée</h2>
+<p>Construire un parseur <strong>hors ligne</strong> du triplet <code>.spi/.CDI/.CDD</code>, une vérification du checksum en lecture, des vecteurs d'adresse et du modèle. Lire les valeurs d'identité du poste et confronter à la cartographie SWD V1.21 avant d'envisager la moindre écriture. Conserver les charges utiles OEM propriétaires <strong>hors GitHub</strong> avec leurs empreintes. Aucun fichier de ce dossier n'est un firmware flashable.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

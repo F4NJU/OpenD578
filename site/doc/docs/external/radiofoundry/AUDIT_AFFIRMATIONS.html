@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>RadioFoundry : audit affirmation par affirmation - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>RadioFoundry : audit affirmation par affirmation</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/AUDIT_AFFIRMATIONS.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/AUDIT_AFFIRMATIONS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/AUDIT_AFFIRMATIONS.md</code></p>
+<article class="markdown-body"><h1 id="radiofoundry-audit-affirmation-par-affirmation">RadioFoundry : audit affirmation par affirmation</h1>
+<p>Source principale : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry / Anytone hardware</a>. Date de revue : 6 novembre 2026.</p>
+<p><strong>129 affirmations classées.</strong> Il s'agit de notre <strong>reformulation factuelle</strong> des tableaux, sections et questions accessibles sur RadioFoundry. Les numéros identifient nos fiches, pas les lignes du HTML. Les passages non récupérés littéralement sont explicitement signalés.</p>
+<p>Statuts : <code>D578_OEM</code> (comparaison avec les analyses et le banc constructeur D578), <code>D578_PHYS</code> (composant observé sur nos unités), <code>FAMILLE</code> (comparatif externe des générations), <code>D868_SEUL</code> (ne pas transposer les GPIO), <code>EXT_SCT</code> (donnée de datasheet rapportée), <code>HYPOTHESE</code> (hypothèse ou vérification en suspens), <code>DIFFERENCE_VERSION</code> (conflit apparent expliqué par une autre carte/édition), <code>PORTAGE</code> (recommandation d'architecture). <strong>Ces catégories ne sont pas un jugement de la qualité du travail de RadioFoundry.</strong></p>
+<p>Répartition : <code>D578_OEM</code> 21 ; <code>D578_PHYS</code> 7 ; <code>D868_SEUL</code> 20 ; <code>DIFFERENCE_VERSION</code> 4 ; <code>EXT_SCT</code> 13 ; <code>FAMILLE</code> 40 ; <code>HYPOTHESE</code> 12 ; <code>PORTAGE</code> 12</p>
+<table>
+<thead>
+<tr>
+  <th>N°</th>
+  <th>§ source</th>
+  <th>Affirmation / information</th>
+  <th>Correspondance ou destination</th>
+  <th>Statut</th>
+  <th>Remarque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>RF-001</td>
+  <td>1</td>
+  <td>MCU de notre D578 : GD32F303VKT6 présent sur les unités PRO et PLUS examinées</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Identité notée sur les deux cartes</td>
+</tr>
+<tr>
+  <td>RF-002</td>
+  <td>1</td>
+  <td>Autres générations D578 : Certaines séries tardives utilisent AT32F435/437 et requièrent une autre branche</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Ne pas changer la cible GD32 de l'utilisateur</td>
+</tr>
+<tr>
+  <td>RF-003</td>
+  <td>1</td>
+  <td>MCU portables D868 : Versions VET6/VGT6 et 64/96 Kio de SRAM selon révision</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas transposer au VKT6</td>
+</tr>
+<tr>
+  <td>RF-004</td>
+  <td>1</td>
+  <td>MCU D878 : GD32F303VGT6 documenté pour D878 classique</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>878UVII non identifié par la source</td>
+</tr>
+<tr>
+  <td>RF-005</td>
+  <td>1</td>
+  <td>SCT3258 DMR : Baseband Sicomm présent, vocoder AMBE+2 intégré</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Présent dans l'architecture DMR OEM</td>
+</tr>
+<tr>
+  <td>RF-006</td>
+  <td>1</td>
+  <td>Codec : TLV320AIC3204 relié au SCT en audio numérique I2S</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Commandes de codec via SCT déjà modélisées</td>
+</tr>
+<tr>
+  <td>RF-007</td>
+  <td>1</td>
+  <td>RF D578 : Quatre QA4818N, deux oscillateurs locaux et deux récepteurs après FI</td>
+  <td><a href="../../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Quatre boîtiers relevés, fonctions recoupées VK7ZJA</td>
+</tr>
+<tr>
+  <td>RF-008</td>
+  <td>1</td>
+  <td>Référence QA : Oscillateur 26 MHz des étages QA4818N</td>
+  <td><a href="../../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Quartz 26.00 observé</td>
+</tr>
+<tr>
+  <td>RF-009</td>
+  <td>1</td>
+  <td>Radio portative RF : AT1846S sur les D868/D878, et non quatre QA comme D578</td>
+  <td><a href="../../hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Différence de topologie</td>
+</tr>
+<tr>
+  <td>RF-010</td>
+  <td>1</td>
+  <td>NAND D578 : TC58CVG1S3HRAIG 2 Gbit externe</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Marquage et dump observés</td>
+</tr>
+<tr>
+  <td>RF-011</td>
+  <td>1</td>
+  <td>NAND 868/878 : 1 Gbit sur générations 868/878, 2 Gbit sur 878UVII</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Ne pas généraliser les offsets</td>
+</tr>
+<tr>
+  <td>RF-012</td>
+  <td>1</td>
+  <td>Récepteur FM broadcast : RDA5802N présent et piloté via le bus de commande</td>
+  <td><a href="../../hardware/RDA5802N_RECEPTION_FM.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Présence relevée sur le PCB</td>
+</tr>
+<tr>
+  <td>RF-013</td>
+  <td>1</td>
+  <td>PA VHF/UHF : Deux transistors AFT05MP075N</td>
+  <td><a href="../../hardware/ETAGES_RF_PROTECTION_FI.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Observation utilisateur des boîtiers</td>
+</tr>
+<tr>
+  <td>RF-014</td>
+  <td>1</td>
+  <td>Amplification haut-parleur : La source cite des YD1517P; notre PRO a YD1517P et notre PLUS PA1517G</td>
+  <td><a href="../../hardware/AUDIO_PA1517_YD1517_VARIANTES.html">Voir la fiche</a></td>
+  <td><code>DIFFERENCE_VERSION</code></td>
+  <td>Ne pas assimiler deux boîtiers à deux puces sans photo</td>
+</tr>
+<tr>
+  <td>RF-015</td>
+  <td>1</td>
+  <td>GPS D578 : Module ATGM336H reçu par notre utilisateur</td>
+  <td><a href="../../peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_PHYS</code></td>
+  <td>Génération familiale peut différer</td>
+</tr>
+<tr>
+  <td>RF-016</td>
+  <td>1</td>
+  <td>Bluetooth : Cartes annexes et firmware Bluetooth/APRS selon variantes</td>
+  <td><a href="../../hardware/BLUETOOTH_D868BT_SP_ET12.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Carte utilisateur marquée D868BT-SP; ne pas déduire BK3260 exact</td>
+</tr>
+<tr>
+  <td>RF-017</td>
+  <td>1</td>
+  <td>Écran D578 : Contrôleur déclaré non identifié par RadioFoundry, alors que notre banc décode le bus LCD</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Notre analyse complète ce manque de leur étude</td>
+</tr>
+<tr>
+  <td>RF-018</td>
+  <td>1</td>
+  <td>Capteur accéléromètre : MMA8653FC à 0x1D trouvé par analyse du D868, non prouvé pour D578</td>
+  <td><a href="../../hardware/AUDIT_FONCTIONS_PARTIELLES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas ajouter un accéléromètre fictif au D578</td>
+</tr>
+<tr>
+  <td>RF-019</td>
+  <td>2.1</td>
+  <td>Boîtier SCT : SCT3258 annoncé en QFN64</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Spécification fabricant à recouper pour la variante physique</td>
+</tr>
+<tr>
+  <td>RF-020</td>
+  <td>2.1</td>
+  <td>Tensions SCT : Coeur 1,2 V, I/O 2,5–3,3 V</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Aucune mesure de rail sur notre carte</td>
+</tr>
+<tr>
+  <td>RF-021</td>
+  <td>2.1</td>
+  <td>Horloge SCT : Entrée 12,288 MHz et PLL interne montant à 110,592 MHz</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Ne pas confondre avec quartz GD32 12 MHz et QA 26 MHz</td>
+</tr>
+<tr>
+  <td>RF-022</td>
+  <td>2.1</td>
+  <td>Port HPI : Bus parallèle asynchrone 8 bits, timings Intel ou Motorola</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>PD2–PD5, PD8–PD15 dans modèle D578</td>
+</tr>
+<tr>
+  <td>RF-023</td>
+  <td>2.1</td>
+  <td>Strap de HPI : PIO1 au reset choisit le mode Intel quand à l'état bas</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Strap GPIO D578 non mesuré</td>
+</tr>
+<tr>
+  <td>RF-024</td>
+  <td>2.1</td>
+  <td>HOBIB : Ligne de disponibilité FIFO/interrupt host</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>PD5 dans modèle D578, niveaux à conserver</td>
+</tr>
+<tr>
+  <td>RF-025</td>
+  <td>2.1</td>
+  <td>FIFO SCT : Files internes décrites comme 64 mots</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Gérer overflow, backpressure et timeout</td>
+</tr>
+<tr>
+  <td>RF-026</td>
+  <td>2.1</td>
+  <td>Audio numérique SCT : Port codec I2S 16 bits stéréo, 24 kHz selon datasheet</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Le codec est configuré via le baseband</td>
+</tr>
+<tr>
+  <td>RF-027</td>
+  <td>2.1</td>
+  <td>Port vocoder supplémentaire : Un deuxième port série permet un vocoder externe</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Pas de vocoder externe séparé prouvé</td>
+</tr>
+<tr>
+  <td>RF-028</td>
+  <td>2.1</td>
+  <td>Firmware SCT : UserFlash + images vocoder internes chargées séparément</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Ne pas confondre avec application GD32 ou NAND</td>
+</tr>
+<tr>
+  <td>RF-029</td>
+  <td>2.1</td>
+  <td>Activation vocoder : Procédure d'activation et voix par fichiers distincts</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Dépend du fabricant et des droits</td>
+</tr>
+<tr>
+  <td>RF-030</td>
+  <td>2.1</td>
+  <td>Signal de créneau : PIO3 peut signaler les slots DMR sur une période de 60 ms</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Attribution PD0 seulement hypothèse 868</td>
+</tr>
+<tr>
+  <td>RF-031</td>
+  <td>2.2</td>
+  <td>Charge initiale SCT : 1024 mots de 16 bits soit 2048 octets chargés après reset</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Cadre du bootstrap SCT</td>
+</tr>
+<tr>
+  <td>RF-032</td>
+  <td>2.2</td>
+  <td>Ordre des octets : Ordre faible octet avant fort durant le transfert bootstrap</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Vérifier routine d'envoi V1.21</td>
+</tr>
+<tr>
+  <td>RF-033</td>
+  <td>2.2</td>
+  <td>Accusé SCT : Séquence de réponse 84 A9 61 00 02 20 17 01</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Déjà décrite par la fiche OpenD578</td>
+</tr>
+<tr>
+  <td>RF-034</td>
+  <td>2.2</td>
+  <td>Localisation du bootstrap : Bloc dans la Flash application MCU, pas dans la NAND</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Comparer hash du firmware PRO V1.21 propriétaire local</td>
+</tr>
+<tr>
+  <td>RF-035</td>
+  <td>2.2</td>
+  <td>Hash bootstrap : Empreinte SHA-256 743515b9f7cd90737c1fff29b652b7558bc5a56487ec38df4fdea8877e7a619a</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Empreinte de plusieurs images étudiées par RadioFoundry, pas calcul local V1.21</td>
+</tr>
+<tr>
+  <td>RF-036</td>
+  <td>2.2</td>
+  <td>Patching bootstrap : Quatre modes de patch avec offsets 0x34C,0x352 ou 0x45C–0x45D</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Sens des modes non identifié</td>
+</tr>
+<tr>
+  <td>RF-037</td>
+  <td>2.2</td>
+  <td>Séparation DMR/dPMR : Images d'amorçage distinctes selon mode SCT</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>EXT_SCT</code></td>
+  <td>Ne pas supposer sélection sur nos postes</td>
+</tr>
+<tr>
+  <td>RF-038</td>
+  <td>2.3</td>
+  <td>Interface paquets détaillée : Le chapitre du protocole HPI doit être confronté au manuel Packet Interface v1.0; son contenu détaillé n'est pas récupéré de façon autonome dans cet audit</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Ne pas inventer les champs absents de la récupération</td>
+</tr>
+<tr>
+  <td>RF-039</td>
+  <td>2.4</td>
+  <td>DMR Layer2 potentiel : Mode couche 2 permet des données structurées et liaison vocale selon protocole</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Mode OEM vocal décrit ailleurs en easy mode</td>
+</tr>
+<tr>
+  <td>RF-040</td>
+  <td>2.4</td>
+  <td>Data services Layer2 : CSBK et taux 1/2,3/4,1 via DIGC_DATA_FRAME sont envisagés</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Tester les types de données séparément</td>
+</tr>
+<tr>
+  <td>RF-041</td>
+  <td>2.4</td>
+  <td>Privacy voix : La confidentialité appliquée aux bits AMBE exige leur accès ou une fonction intégrée du SCT</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Ni impossibilité absolue ni support complet prouvés</td>
+</tr>
+<tr>
+  <td>RF-042</td>
+  <td>2.4</td>
+  <td>Hotspot : Pont MMDVM vocal soumis au format et au timing des flux CHAN_D</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Démonstration de principe, pas fonctionnalité en exploitation</td>
+</tr>
+<tr>
+  <td>RF-043</td>
+  <td>2.4</td>
+  <td>Vocoder interne : Le port doit déclarer que le vocoder est hébergé dans le baseband</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Évite de recréer une conversion logicielle inutile</td>
+</tr>
+<tr>
+  <td>RF-044</td>
+  <td>2.5</td>
+  <td>Mode vocal OEM : Firmware configure SCT avec mode Layer3 easy</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Source analyses OEM RadioFoundry, confirmer variante V1.21</td>
+</tr>
+<tr>
+  <td>RF-045</td>
+  <td>2.5</td>
+  <td>Champs identification DMR : DMR_FLC, DMR_CC, DMR_CALLED_ID_BCD, DMR_OWN_ID_BCD, DMR_CALL_OPTION, DMR_CALL_SLOT, DMR_OFFSET</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Table exacte à comparer aux transactions V1.21</td>
+</tr>
+<tr>
+  <td>RF-046</td>
+  <td>2.5</td>
+  <td>Commande début appel : DMR_CALL_START pilote le démarrage d'une session</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Sécuriser les états TX avant tout portage</td>
+</tr>
+<tr>
+  <td>RF-047</td>
+  <td>2.5</td>
+  <td>Trames data : DIGC_DATA_FRAME est employé par un groupe limité de routines de données</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Ce n'est pas le chemin audio principal OEM</td>
+</tr>
+<tr>
+  <td>RF-048</td>
+  <td>2.5</td>
+  <td>Sélecteur vocoder : VOCODER_IO_SET valeurs 04,08,10,20,40 et zéro final</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Nouveaux paramètres précis à tester</td>
+</tr>
+<tr>
+  <td>RF-049</td>
+  <td>2.5</td>
+  <td>Canal vocal : CHAN_D transporte une charge de 36 octets depuis ou vers le MCU</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Format interne non démontré pour V1.21</td>
+</tr>
+<tr>
+  <td>RF-050</td>
+  <td>2.5</td>
+  <td>Enregistrement vers NAND : Données CHAN_D enregistrées et lues dans la NAND pour lecture vocale</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Rattacher aux zones recording, pas codeplug</td>
+</tr>
+<tr>
+  <td>RF-051</td>
+  <td>2.5</td>
+  <td>Routage vers modulateur : Valeur 0x40 de VOCODER_IO_SET peut utiliser flux MCU comme source</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Risque TX, ne pas expérimenter sur antenne</td>
+</tr>
+<tr>
+  <td>RF-052</td>
+  <td>2.5</td>
+  <td>Hypothèse paquet AMBE : 36 octets pourraient correspondre à quatre cadres de 72 bits codés sur ~80ms</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>La source elle-même marque cette interprétation incertaine</td>
+</tr>
+<tr>
+  <td>RF-053</td>
+  <td>2.5</td>
+  <td>Codec via baseband : CODEC_SELECT, SET_I2C_ADDRESS et I2C_OPERATION plus paquets bypass TYPE bit 6</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Peut accélérer pilote AIC3204</td>
+</tr>
+<tr>
+  <td>RF-054</td>
+  <td>2.5</td>
+  <td>Gains : MOD_GAIN, DEMOD_GAIN, DIGI_MIC_GAIN, DIGI_SPEAKER_GAIN, MISC_GAIN</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Noms de champs, unités encore absentes</td>
+</tr>
+<tr>
+  <td>RF-055</td>
+  <td>2.5</td>
+  <td>Radio analogique et squelch : ANALOG_CONFIG, CTC_PARAM, ANALOG_SUBAUDIO, SQ_LEVEL</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Confronter au mode FM déjà simulé</td>
+</tr>
+<tr>
+  <td>RF-056</td>
+  <td>2.5</td>
+  <td>Corrections analogiques : DC_OFFSET, IQCOMP_COEF, AFC_CONFIG, MODOUT_CONFIG, EQUALIZER_FILTER</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Lien calibrations et champ HPI à relever</td>
+</tr>
+<tr>
+  <td>RF-057</td>
+  <td>2.5</td>
+  <td>Indicateurs numériques : BER_REPORT, PARITY_ENABLE</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Test DMR passif</td>
+</tr>
+<tr>
+  <td>RF-058</td>
+  <td>2.5</td>
+  <td>Champs sans nom : Identifiants 0x2B et 0x3B absents du manuel SCT v1.0</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Conserver les IDs bruts</td>
+</tr>
+<tr>
+  <td>RF-059</td>
+  <td>2.5</td>
+  <td>Scrambler : SCRAMBLER_SEED envoyé dans certaines conditions</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Ne pas déduire l'algorithme de la commande seule</td>
+</tr>
+<tr>
+  <td>RF-060</td>
+  <td>3</td>
+  <td>USB interface : Device USB CDC ACM, débit de ligne série virtuel pas cadence USB</td>
+  <td><a href="../../cps/USB_CDC_GD32_V121.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Conservé dans OpenD578</td>
+</tr>
+<tr>
+  <td>RF-061</td>
+  <td>3</td>
+  <td>Entrée MCU UPDATE D578 : MENU+EXIT sur génération documentée</td>
+  <td><a href="../../02_CPU_FLASH_BOOT_USB_SWD.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Différencier de P4+DIAL TEST</td>
+</tr>
+<tr>
+  <td>RF-062</td>
+  <td>3</td>
+  <td>Entrée MCU UPDATE 868/878 : PTT+PF3 sur portatifs de la famille</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Pas une touche D578</td>
+</tr>
+<tr>
+  <td>RF-063</td>
+  <td>3</td>
+  <td>Outil mise à jour : QX_Firmware_Update reçoit un conteneur .spi</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>CPS Tool -&gt; Firmware et Icon Update</td>
+</tr>
+<tr>
+  <td>RF-064</td>
+  <td>3</td>
+  <td>Triplet update : .spi manifest, .CDI métadonnées et .CDD image binaire</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Les tailles dépendent du modèle</td>
+</tr>
+<tr>
+  <td>RF-065</td>
+  <td>3</td>
+  <td>Tailles manifestes : .spi de 14 ou 51 octets selon lot; .CDI ~278 octets firmware</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>À classifier par version</td>
+</tr>
+<tr>
+  <td>RF-066</td>
+  <td>3</td>
+  <td>Image D578 PLUS GD 2.08 : La source mentionne un CDD de 1 020 408 octets</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>À garder séparé du PRO GD 1.21</td>
+</tr>
+<tr>
+  <td>RF-067</td>
+  <td>3</td>
+  <td>Image D578 PLUS AT 2.08 : CDD de 1 040 008 octets</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Pas pour PRO/PLUS GD utilisateur</td>
+</tr>
+<tr>
+  <td>RF-068</td>
+  <td>3</td>
+  <td>Transaction UPDATE : Commande texte UPDATE, blocs de 32 octets et checksum additif</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>À comparer au bootloader propre au PRO V1.21</td>
+</tr>
+<tr>
+  <td>RF-069</td>
+  <td>3</td>
+  <td>Staging image : Mise en scène sur NAND puis installation au reboot selon RadioFoundry</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Notre image 24 Kio et limite 1 Mio à prendre en compte</td>
+</tr>
+<tr>
+  <td>RF-070</td>
+  <td>3</td>
+  <td>Sélection MCU : Différence d'identité GD/AT vérifiée par le CPS constructeur</td>
+  <td><a href="../../cps/COMPATIBILITE_PRO_PLUS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Rester sur GD</td>
+</tr>
+<tr>
+  <td>RF-071</td>
+  <td>3</td>
+  <td>Images non chiffrées étudiées : CDD contiennent une table de vecteurs ARM claire</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Ne démontre pas toutes les protections au chargement</td>
+</tr>
+<tr>
+  <td>RF-072</td>
+  <td>3</td>
+  <td>Boot 868 : Boot 16 Kio, application 0x08004000 sur éditions citées</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>DIFFERENCE_VERSION</code></td>
+  <td>Ne pas recopier vers PRO V1.21</td>
+</tr>
+<tr>
+  <td>RF-073</td>
+  <td>3</td>
+  <td>Boot PRO V1.21 : Notre lecture SWD donne boot 24 Kio et application 0x08006000</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Preuve supérieure pour le modèle testé</td>
+</tr>
+<tr>
+  <td>RF-074</td>
+  <td>3</td>
+  <td>SWD D868 : Unité D868 documentée accessible via AF pads et ST-LINK</td>
+  <td><a href="../../02_CPU_FLASH_BOOT_USB_SWD.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Pour D578 nos propres pads SWD ont été identifiés</td>
+</tr>
+<tr>
+  <td>RF-075</td>
+  <td>3</td>
+  <td>SWJ AFIO : Application de certains portables désactive SWJ au lancement</td>
+  <td><a href="../../02_CPU_FLASH_BOOT_USB_SWD.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Pour D578 l'accès est validé dans MCU UPDATE</td>
+</tr>
+<tr>
+  <td>RF-076</td>
+  <td>3</td>
+  <td>Mode flash SCT : SCT3258 dispose d'une procédure de mise à jour distincte</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Voir MENU+DIAL et écran Boot Mode for SCT</td>
+</tr>
+<tr>
+  <td>RF-077</td>
+  <td>3</td>
+  <td>Passerelle USB-HPI : En mode update SCT le MCU peut relayer des données USB vers SCT sans les décoder</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>À comparer aux routines du boot SCT</td>
+</tr>
+<tr>
+  <td>RF-078</td>
+  <td>3</td>
+  <td>BOOT0 : Accessibilité du BOOT0 et ROM recovery de certaines cartes non prouvée</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Pas un chemin de récupération prêt à l'emploi</td>
+</tr>
+<tr>
+  <td>RF-079</td>
+  <td>4.1</td>
+  <td>Bus D868 HPI : PD8–PD15 D0..D7 et PD2..PD5 HCS/HWR/HRD/HOBIB</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Même attribution dans notre modèle D578</td>
+</tr>
+<tr>
+  <td>RF-080</td>
+  <td>4.1</td>
+  <td>Contrôle SCT 868 : PD6 reset, PC12 strap, PA8/PC6 enables</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Pas de correspondance OEM D578 établie pour toute la ligne</td>
+</tr>
+<tr>
+  <td>RF-081</td>
+  <td>4.1</td>
+  <td>D868 LCD : PE7–PE14 data, PB10/PB11/PB12/PB13 contrôle, PE15 RD</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Sous-ensemble PE7..PE14 et PB10..PB13 confirmé par banc OEM D578</td>
+</tr>
+<tr>
+  <td>RF-082</td>
+  <td>4.1</td>
+  <td>D868 keypad scan : Partage lignes LCD PE7..PE14 avec scan clavier et PA10/PA14/PE1/PB1/PB2/PC5</td>
+  <td><a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Voir la fiche</a></td>
+  <td><code>DIFFERENCE_VERSION</code></td>
+  <td>Notre D578 utilise PB0/PB1 ADC et PA0/PA1; ne pas substituer</td>
+</tr>
+<tr>
+  <td>RF-083</td>
+  <td>4.1</td>
+  <td>D868 encodeur : PC8/PC9 en quadrature</td>
+  <td><a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Idem côté D578 documenté</td>
+</tr>
+<tr>
+  <td>RF-084</td>
+  <td>4.1</td>
+  <td>D868 RF 3 fils : PB3 SCLK, PB4 SDIO, PB5 SEN</td>
+  <td><a href="../../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>D578 possède quatre sélections supplémentaires</td>
+</tr>
+<tr>
+  <td>RF-085</td>
+  <td>4.1</td>
+  <td>D868 NAND pins : PB8 CS, PB14 CLK, PB15 IO0, PA15 IO1</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Comparer sens des broches dans la fiche propre au D578</td>
+</tr>
+<tr>
+  <td>RF-086</td>
+  <td>4.1</td>
+  <td>NAND dual output : Lecture dual IO0/IO1, MOSI et MISO commutent direction</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Pilotage bus documenté</td>
+</tr>
+<tr>
+  <td>RF-087</td>
+  <td>4.1</td>
+  <td>IDs NAND : Fabricants 0x98 Toshiba, 0xC8 GigaDevice selon tables OEM portables</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Notre NAND Toshiba confirmée</td>
+</tr>
+<tr>
+  <td>RF-088</td>
+  <td>4.1</td>
+  <td>D868 I2C : PB6/PB7 et récepteur RDA5802N à adresse 0x10</td>
+  <td><a href="../../hardware/RDA5802N_RECEPTION_FM.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Présence et modèle D578 à 0x10</td>
+</tr>
+<tr>
+  <td>RF-089</td>
+  <td>4.1</td>
+  <td>D868 MMA8653 : Accéléromètre candidat adresse 0x1D</td>
+  <td><a href="../../hardware/AUDIT_FONCTIONS_PARTIELLES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Aucune présence confirmée sur D578</td>
+</tr>
+<tr>
+  <td>RF-090</td>
+  <td>4.1</td>
+  <td>GPS D868 : USART1 PA2/PA3, 9600 bps et NMEA</td>
+  <td><a href="../../peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas attribuer le pinout D868 au D578 sans trace</td>
+</tr>
+<tr>
+  <td>RF-091</td>
+  <td>4.1</td>
+  <td>USB FS : PA11/PA12</td>
+  <td><a href="../../cps/USB_CDC_GD32_V121.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>USB D578 identifié</td>
+</tr>
+<tr>
+  <td>RF-092</td>
+  <td>4.1</td>
+  <td>Codec pas sur I2C MCU : Contrôle AIC3204 transitant via baseband SCT</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Commandes SCT de bypass documentées</td>
+</tr>
+<tr>
+  <td>RF-093</td>
+  <td>4.2</td>
+  <td>LCD 868 : Séquence ST7735S SLPOUT, B1..B4, C0..C5, E0/E1, COLMOD=55</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Notre moteur D578 possède ses commandes vérifiées, ne pas substituer ces timings</td>
+</tr>
+<tr>
+  <td>RF-094</td>
+  <td>4.2</td>
+  <td>Format pixels : RGB565 sur bus parallèle 8 bits</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Décodeur LCD testé</td>
+</tr>
+<tr>
+  <td>RF-095</td>
+  <td>4.2</td>
+  <td>Résolution LCD 868 : 128×160 sur portrait; écran D578 différent</td>
+  <td><a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">Voir la fiche</a></td>
+  <td><code>DIFFERENCE_VERSION</code></td>
+  <td>Dimensions D578 dans notre fiche</td>
+</tr>
+<tr>
+  <td>RF-096</td>
+  <td>4.3</td>
+  <td>DAC 868 PA4 : Sortie DAC CH1 pour puissance PA avec interpolation calibration</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas imposer ce réglage au D578 et BH2226</td>
+</tr>
+<tr>
+  <td>RF-097</td>
+  <td>4.3</td>
+  <td>DAC 868 PA5 : DAC CH2 configuré mais usage non retrouvé</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Sur notre D578 PA5 participe à éclairage selon banc</td>
+</tr>
+<tr>
+  <td>RF-098</td>
+  <td>4.3</td>
+  <td>PWM 868 : PA6 TIMER2_CH0, PB0 TIMER2_CH2, PB9 TIMER3_CH3</td>
+  <td><a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Notre D578 PB0 ADC touches, conflit de variantes à éviter</td>
+</tr>
+<tr>
+  <td>RF-099</td>
+  <td>4.3</td>
+  <td>ADC 868 : PC0/PC1/PC2 candidats ADC alimentation et autres</td>
+  <td><a href="../../peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Notre D578 PC2 correspond volume identifié</td>
+</tr>
+<tr>
+  <td>RF-100</td>
+  <td>4.3</td>
+  <td>Slot TDMA 868 : PD0 entrée IRQ pilotant PC4/PE6 et DAC dans le code</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Interprétation PIO3 non démontrée pour D578</td>
+</tr>
+<tr>
+  <td>RF-101</td>
+  <td>4.3</td>
+  <td>PA7 868 : Sortie probable activation ampli audio</td>
+  <td><a href="../../hardware/AUDIO.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Notre D578 PA7 candidat mute dans modèle</td>
+</tr>
+<tr>
+  <td>RF-102</td>
+  <td>4.3</td>
+  <td>GPIO inconnus 868 : PA1,PC3/PC4/PC13,PD1/PD7,PC7,PE2..PE6</td>
+  <td><a href="../../hardware/AUDIT_FONCTIONS_PARTIELLES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas faire reculer cartographie D578 validée</td>
+</tr>
+<tr>
+  <td>RF-103</td>
+  <td>4.4</td>
+  <td>Copies alignement NAND 868 : Calibration primaire 0x02F60000, secours 0x02F80000</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas supposer identiques aux offsets D578</td>
+</tr>
+<tr>
+  <td>RF-104</td>
+  <td>4.4</td>
+  <td>Volume alignement 868 : Blocs de ~1,5 Kio selon modèle</td>
+  <td><a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>D578 secteur externe plus large</td>
+</tr>
+<tr>
+  <td>RF-105</td>
+  <td>4.4</td>
+  <td>Tables puissance 868 : Quatre tables UHF 81 octets et VHF 39 octets par niveau</td>
+  <td><a href="../../hardware/ETAGES_RF_PROTECTION_FI.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne pas assigner à calibration D578 sans décodage</td>
+</tr>
+<tr>
+  <td>RF-106</td>
+  <td>4.4</td>
+  <td>Enregistrement options 868 : Deux copies d'un enregistrement 34 octets à 0x02501000 et 0x02521000</td>
+  <td><a href="../../cps/CODEPLUG_CANAL_OEM_V121.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>NAND différent, pas un offset PRO V1.21</td>
+</tr>
+<tr>
+  <td>RF-107</td>
+  <td>4.4</td>
+  <td>Calibration lecture seule : Portage recommande lecture conservatrice avec repli sur copie intacte</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Ne jamais appliquer table 868 à PA D578</td>
+</tr>
+<tr>
+  <td>RF-108</td>
+  <td>4.5</td>
+  <td>AT1846S commun : Registres table commune, variantes bande/bande passante et gain AGC page 1</td>
+  <td><a href="../../hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Recouper les quatre QA, ne pas imposer table 868</td>
+</tr>
+<tr>
+  <td>RF-109</td>
+  <td>4.5</td>
+  <td>Bascule TX/RX 868 : Registre 0x30 commande changement d'état sur AT1846S</td>
+  <td><a href="../../hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Déterminer écriture exacte pour QA D578</td>
+</tr>
+<tr>
+  <td>RF-110</td>
+  <td>5</td>
+  <td>Port GD32F30x : Besoin d'horloges, GPIO, interruptions, timers, USB, ADC, DAC et UART</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Notre base GD32 prioritaire</td>
+</tr>
+<tr>
+  <td>RF-111</td>
+  <td>5</td>
+  <td>Port AT32F43x : Plateforme séparée pour variantes non GD32</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Pas une cible présente dans les unités utilisateur</td>
+</tr>
+<tr>
+  <td>RF-112</td>
+  <td>5</td>
+  <td>Pilote HPI : Reset, charge boot, FIFO, paquets, protocole SCT, timing 60ms</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Réutiliser nos trames OEM</td>
+</tr>
+<tr>
+  <td>RF-113</td>
+  <td>5</td>
+  <td>Pilote QA : Transport GPIO 3 fils et tables par variante</td>
+  <td><a href="../../firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Ne pas utiliser le I2C hardware à la place</td>
+</tr>
+<tr>
+  <td>RF-114</td>
+  <td>5</td>
+  <td>Pilote AIC : Configuration via SCT I2C_OPERATION/codec bypass</td>
+  <td><a href="../../firmware/PILOTES_RDA_QA_BH_U2429_AUDIO.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Tracer l'ordre de 20 paquets</td>
+</tr>
+<tr>
+  <td>RF-115</td>
+  <td>5</td>
+  <td>NAND : Pilote SPI NAND dual output, ECC et bad blocks</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Conserver les captures de l'unité</td>
+</tr>
+<tr>
+  <td>RF-116</td>
+  <td>5</td>
+  <td>LCD : Transport parallèle 8080 8 bits</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>LCD D578 OEM acquis</td>
+</tr>
+<tr>
+  <td>RF-117</td>
+  <td>5</td>
+  <td>Programmation : USB CDC ou SWD, aucun binaire flashable fourni</td>
+  <td><a href="../../firmware/VALIDATION.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Préserver boot 24 Kio</td>
+</tr>
+<tr>
+  <td>RF-118</td>
+  <td>5</td>
+  <td>Calibration : Lire et vérifier sans jamais écraser l'alignement de l'unité</td>
+  <td><a href="../../firmware/VALIDATION.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Conserver empreinte d'archives</td>
+</tr>
+<tr>
+  <td>RF-119</td>
+  <td>5</td>
+  <td>Modes voix : Capacité HAL selon disponibilité effective de trames CHAN_D</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>PORTAGE</code></td>
+  <td>Conditionner hotspot plutôt que le déclarer impossible</td>
+</tr>
+<tr>
+  <td>RF-120</td>
+  <td>6</td>
+  <td>Questions MCU 868 : Pinout variante VET6/VGT6 et pull-ups/downs à recouper</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Ne remet pas en cause notre GD32 VKT6</td>
+</tr>
+<tr>
+  <td>RF-121</td>
+  <td>6</td>
+  <td>GPIO non identifiés 868 : Rôles DAC/PWM/I/O partiellement inconnus sur le D868</td>
+  <td><a href="../../hardware/AUDIT_FONCTIONS_PARTIELLES.html">Voir la fiche</a></td>
+  <td><code>D868_SEUL</code></td>
+  <td>Nos broches D578 OEM prévalent</td>
+</tr>
+<tr>
+  <td>RF-122</td>
+  <td>6</td>
+  <td>Cartographie 578 chez RF : Source indique cartographie 578 non complète</td>
+  <td><a href="../../hardware/CONNEXIONS.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>Notre banc D578 documente des GPIO supplémentaires</td>
+</tr>
+<tr>
+  <td>RF-123</td>
+  <td>6</td>
+  <td>CDD format : Cortex-M clair, D578 à 0x08006000 dans leur liste de questions</td>
+  <td><a href="../../peripherals/05_BOOTLOADER_24K_DUMP_VECTEURS_USB_FMC_DEVELOPPEMENT_OPEN_SOURCE.html">Voir la fiche</a></td>
+  <td><code>D578_OEM</code></td>
+  <td>App V1.21 confirmée par dump SWD</td>
+</tr>
+<tr>
+  <td>RF-124</td>
+  <td>6</td>
+  <td>Modes boot SCT : Sens des quatre modes de patch du bloc inconnu</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Garder valeur brute</td>
+</tr>
+<tr>
+  <td>RF-125</td>
+  <td>6</td>
+  <td>CHAN_D temps réel : Format DMR du flux 36 octets et synchronisation DMR à démontrer</td>
+  <td><a href="../../firmware/ARCHITECTURE.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Ne pas confondre enregistrement et hotspot qualifié</td>
+</tr>
+<tr>
+  <td>RF-126</td>
+  <td>6</td>
+  <td>Types de paquet DMR : Valider chaque data type DIGC_DATA_FRAME en mode layer2</td>
+  <td><a href="../../peripherals/04_DMR_SCT3258_BOOTSTRAP_HPI_PAQUETS_CODEC_PARAMETRES.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Conserver les trames non reconnues</td>
+</tr>
+<tr>
+  <td>RF-127</td>
+  <td>6</td>
+  <td>Accès calibrations via USB : Indéterminé si le protocole CPS expose toute la NAND</td>
+  <td><a href="../../cps/PROTOCOLE_OEM_V121.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>Ne pas supposer bypass d'écriture</td>
+</tr>
+<tr>
+  <td>RF-128</td>
+  <td>6</td>
+  <td>BOOT0 et RDP : Accès BOOT0 et protections sur autres variantes non garantis</td>
+  <td><a href="../../02_CPU_FLASH_BOOT_USB_SWD.html">Voir la fiche</a></td>
+  <td><code>HYPOTHESE</code></td>
+  <td>SWD fonctionne en MCU UPDATE sur notre unité</td>
+</tr>
+<tr>
+  <td>RF-129</td>
+  <td>6</td>
+  <td>MCU D878UVII/AT32 : Identité précise de certaines révisions non établie</td>
+  <td><a href="../../hardware/VERSIONS.html">Voir la fiche</a></td>
+  <td><code>FAMILLE</code></td>
+  <td>Sans incidence sur les deux D578 GD observés</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ecarts-quil-ne-faut-pas-effacer">Écarts qu'il ne faut pas effacer</h2>
+<ol>
+<li><strong>D578 PRO V1.21 :</strong> bootloader SWD 24 Kio, vecteurs appli à <code>0x08006000</code>. Le boot 16 Kio / appli <code>0x08004000</code> cité dans des variantes anciennes ne remplace pas notre dump.</li>
+<li><strong>D868 ≠ D578 :</strong> GPIO LCD, encodeur et HPI partiellement identiques ; clavier D868 scanné sur lignes LCD mais D578 observé via ADC PB0/PB1. Même différence pour PA5, PC2 et d'autres fonctions.</li>
+<li><strong>PRO ≠ PLUS :</strong> on conserve YD1517P sur le PRO et PA1517G sur le PLUS, ainsi que les connecteurs Airband manquants sur PRO. Ne pas modifier le comptage de puces sans photographie.</li>
+<li><strong>Possibilités DMR :</strong> le chapitre 2.4 décrit des contraintes pour un accès AMBE ; le chapitre 2.5 rapporte <code>CHAN_D</code>/<code>VOCODER_IO_SET</code>, qui ouvre un chemin qu'il faut valider. Ne retenir ni « hotspot impossible » ni « hotspot déjà fonctionnel » comme résultat actuel.</li>
+<li><strong>Calibration :</strong> les offsets <code>0x02F60000</code> / <code>0x02F80000</code> et les tables 81/39 octets viennent de la section d'analyse <strong>D868</strong>. Les secteurs NAND du D578 ne doivent pas être remplacés par ceux-là.</li>
+<li><strong>Source « facts only » :</strong> RadioFoundry explique lui-même ne pas disposer d'une carte AnyTone et précise les éléments notés <em>unverified</em>. Nous utilisons ses résultats de firmware comme corpus technique sérieux, avec correspondance au modèle et à la version, pas comme une mesure physique sur nos unités.</li>
+</ol>
+<h2 id="point-de-couverture-incomplet">Point de couverture incomplet</h2>
+<p>Le texte détaillé de la sous-section <code>2.3</code> n'a pas été livré séparément par l'index web utilisé ; la documentation locale du protocole HPI et les liens vers les manuels Sicomm sont préservés, mais cette sous-section reste une <strong>vérification de transcription</strong>, et non un texte dont nous prétendons avoir inspecté chaque caractère.</p>
+<p><a href="SCT3258_CHAND_BOOT_ET_CODEC.html">Analyses DMR et <code>CHAN_D</code></a> · <a href="GPIO_868_VS_578.html">Comparaison GPIO 868 / 578</a> · <a href="CALIBRATIONS_ET_VARIANTES.html">NAND et puissance</a> · <a href="FIRMWARE_MISE_A_JOUR.html">Mise à jour USB et bootloader</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

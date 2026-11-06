@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>VK578-16 : Écran et façade déportés - OpenD578</title>
+<link rel="stylesheet" href="../../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../../index.html">Vue eclatee</a>
+<a href="../../../../../facade.html">Facade</a>
+<a class="active" href="../../../../../docs.html">Documents</a>
+<a href="../../../../../cps.html">CPS / USB</a>
+<a href="../../../evidence/INDEX.html">Preuves</a>
+<a href="../../INDEX.html">Sources externes</a>
+<a href="../../../../../firmware.html">Firmware</a>
+<a href="../../../../../photos.html">Photos</a>
+<a href="../../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>VK578-16 : Écran et façade déportés</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/db1ig/approfondissements/VK578-16_ecran_et_facade_deportes.md">Modifier sur GitHub</a><a download href="../../../../../raw/docs/external/db1ig/approfondissements/VK578-16_ecran_et_facade_deportes.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/db1ig/approfondissements/VK578-16_ecran_et_facade_deportes.md</code></p>
+<article class="markdown-body"><h1 id="vk578-16-ecran-et-facade-deportes">VK578-16 : Écran et façade déportés</h1>
+<p><strong>Revue approfondie 06/11/2026.</strong> Source principale : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">VK7ZJA, D578 mods v7.4, miroir DB1IG</a>. Complément éventuel : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry, matériel AnyTone</a>.</p>
+<p><strong>Statut de la documentation :</strong> analyse enrichie ; les fonctions validées en exécution sur le D578 OEM conservent ce statut. Les valeurs historiques d'un autre poste restent rattachées à cet appareil.</p>
+<p><strong>Source initialement déjà conservée dans OpenD578 :</strong> <a href="../../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md</a>. Aucune ancienne donnée n'est supprimée.</p>
+<p><strong>Observation historique :</strong> le guide VK7ZJA mentionne l'idée d'une façade séparée par rallongement de la nappe plate d'environ 40 voies. Ce n'est pas une fonction logicielle de déport native ni la garantie qu'un câble long fonctionne sans retouche.</p>
+<p><strong>Pourquoi le détail compte :</strong> notre pilote LCD exploite les écritures parallèles <code>PE7..PE14</code> et les strobes <code>PB10..PB13</code>. Une nappe longue pourrait accroître la capacité et les réflexions ; alimentation, masse, touches, éclairage, ADC des volumes et microphone font aussi partie de la connectique de façade.</p>
+<p><strong>Dossier électrique requis :</strong> attribuer une fonction à chaque broche de la nappe par continuité et documentation OEM ; rechercher les rails GND/3,3 V/5 V et les retours ; mesurer l'intégrité des signaux et la marge des temporisations LCD. Les GPIO MCU ne sont pas les numéros physiques de la nappe. Le site doit montrer séparément leur topologie et l'hypothèse de déport.</p>
+<h2 id="provenance-et-suite-verifiable">Provenance et suite vérifiable</h2>
+<ul>
+<li>Ancienne lacune identifiée : Nappe facade de 40 voies citee comme option de deport non OEM ; integrite signal.</li>
+<li>Source historique : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_578mods.php">guide original, édition octobre 2022</a>, rubrique « Écran et façade déportés ».</li>
+<li>Application locale : comparer les paramètres en mode non destructif avec l'image OEM de la révision étudiée, conserver trames, adresses et horodatages.</li>
+<li>Niveau de preuve : les observations OEM du dépôt sont indépendantes du texte historique ; une fonctionnalité expérimentale est étiquetée comme telle.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../../assets/models.js" defer></script><script src="../../../../../assets/search-data.js" defer></script><script src="../../../../../assets/site.js" defer></script>
+</body></html>

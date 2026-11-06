@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>F1DMG : ce qui a ete reellement retrouve dans le ZIP - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>F1DMG : ce qui a ete reellement retrouve dans le ZIP</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/archives_20261106/F1DMG_APPORTS_REELS.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/archives_20261106/F1DMG_APPORTS_REELS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/archives_20261106/F1DMG_APPORTS_REELS.md</code></p>
+<article class="markdown-body"><h1 id="f1dmg-ce-qui-a-ete-reellement-retrouve-dans-le-zip">F1DMG : ce qui a ete reellement retrouve dans le ZIP</h1>
+<p>Le site auparavant difficile a charger en direct est maintenant represente par deux HTML principaux et des documents annexes. Cette fiche est une synthese originale des faits disponibles. Les octets, photos et fichiers de l'auteur restent dans l'archive privee.</p>
+<h2 id="pages-principales">Pages principales</h2>
+<ul>
+<li><code>f1dmg/originals/f1dmg.free.fr/page-20.htm</code>, source <a href="http://f1dmg.free.fr/page-20.htm">http://f1dmg.free.fr/page-20.htm</a>: 53 661 octets, 34 balises image. Contient des liens vers les mises a jour, options, zones, contacts, parametres utilisateur, photos et aides de programmation D578/D878.</li>
+<li><code>f1dmg/originals/f1dmg.free.fr/page-22.htm</code>, source <a href="http://f1dmg.free.fr/page-22.htm">http://f1dmg.free.fr/page-22.htm</a>: 136 785 octets, 44 balises image. Presente les differences de versions PRO/PLUS, les procedures BT01, les liens vers VK7ZJA, les aides CPS et les documents SMS.</li>
+<li>Parmi les autres pages HTML utiles du site, la racine relie surtout ces deux rubriques. Les autres pages explorees portent majoritairement sur radio-sondes, meteo, bricolages ou annuaires, pas sur la carte du D578.</li>
+</ul>
+<h2 id="documents-conserves-et-leur-vraie-portee">Documents conserves et leur vraie portee</h2>
+<h3 id="modes-de-demarrage-et-menu-test">Modes de demarrage et menu TEST</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/D578-REGLAGES.doc</code> (26 624 octets).</p>
+<p>Le document liste notamment le mode de mise a jour principal avec <strong>MENU+EXIT</strong>, puis les combinaisons <code>P1+Dial</code>, <code>P2+Dial</code>, <code>P3+Dial</code>, <code>P4+Dial</code>, <code>P5+Dial</code>, <code>MENU+Dial</code> et <code>EXIT+Dial</code> pour les ressources d'affichage, le reset, le GPS, le mode TEST, le Bluetooth et la mise a jour SCT. Il distingue trois niveaux d'acces TEST. Ce contenu <strong>recoupe</strong> le guide VK7ZJA et les analyses OEM existantes. Il est utile comme traduction / document historique, mais ne fait pas une seconde mesure independante du GPIO.</p>
+<h3 id="migration-firmware-baseband-et-codeplug">Migration firmware, baseband et codeplug</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/page-20/MISE_A_JOUR_D578.doc</code> (17 920 octets).</p>
+<p>La procedure presente un enchainement historique complet : export des objets CPS, mise a jour du firmware principal, remise a zero, mise a jour optionnelle du SCT3258, puis des ressources d'icones, installation de la version CPS compatible, lecture d'un poste remis a zero, reimport des objets, verification et ecriture des options, restauration des images et sauvegarde du nouveau codeplug. Le texte remercie VK7ZJA; ce contenu n'est pas une confirmation independante de son guide.</p>
+<p><strong>Apport OpenD578:</strong> documenter cette succession comme <em>contrat de migration</em> entre branches CPS, a rapprocher du protocole USB deja analyse. La procedure n'est pas une autorisation de flasher le poste PRO V1.21 avec des images d'autres generations.</p>
+<h3 id="versions-historiques-et-bluetooth-bt01">Versions historiques et Bluetooth BT01</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/Mises_a_jour_pour_BT01.pdf</code> (185 025 octets, une page texte).</p>
+<p>La fiche distingue un D578 PRO et un PLUS, les versions historiques de SCT <code>V2.01.07BF</code>, les branches CPS <code>&gt;=1.17</code> pour PRO et <code>&gt;=2.04</code> pour PLUS, et le fichier <code>B707_Audio_AGHF_ET12_QX-V10043.bin</code>. Elle signale la coexistence de MCU <strong>AT</strong> et <strong>GD</strong> ainsi que des variantes de firmware Bluetooth marquees 19043 et 10043. Sa transcription contient une graphie <code>V177</code> (presumee erreur historique, ne pas la rectifier silencieusement); elle ne garantit pas les exigences des versions actuelles.</p>
+<p><strong>Attention technique:</strong> le document parle d'« update BT01 » et d'un fichier <code>ET12</code>. Il faudra distinguer le firmware du microphone <strong>BT01</strong> de celui du module radio Bluetooth <strong>D868BT-SP/ET12</strong> du D578. L'archive n'apporte pas le programme binaire lui-meme et ne demontre pas a quel microcontroleur precise il est destine.</p>
+<h3 id="roaming-parametres-de-configuration-et-effets-fonctionnels">Roaming : parametres de configuration et effets fonctionnels</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/CMD-Roaming.doc</code> (13 824 octets).</p>
+<p>F1DMG donne un exemple de configuration: <code>GPS ON</code>, <code>GPS Roaming ON</code>, zone de roaming preselectionnee, <code>Auto Roaming ON</code>, <code>Fixed Time Set 2</code>, <code>Repeater Check ON</code>, <code>Intervals Set 50</code>, <code>Reconnections 2</code>, <code>Outrange KIND</code>, <code>Effect Wait 2</code>. Il signale que l'option GPS Roaming peut faire passer l'affichage en VFO A seul, avec restauration du double affichage A/B lorsque l'option est desactivee. Les <strong>unites</strong>, formats internes et compatibilites de ces nombres ne sont pas justifies dans le document.</p>
+<p><strong>Apport:</strong> modele des interactions d'etat GPS/Roaming/VFO, utile a la documentation de l'interface OEM. Ne pas prendre cet exemple d'un operateur comme un parametrage par defaut de tous les appareils.</p>
+<h3 id="messages-sms-dmr">Messages SMS DMR</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/Cmd-SMS-Anytone-2c.pdf</code> (558 763 octets, cinq pages dont le contenu est principalement image). La premiere page mentionne les options <code>SMS Confirmation</code>, <code>TX Allow = Always</code>, <code>DMR Mode = Repeater</code>, ainsi que plusieurs fonctions a desactiver selon la configuration de test et des commandes de configuration BrandMeister de l'epoque. Le document <code>SMS-d878.pdf</code> (3 pages) est egalement present.</p>
+<p><strong>Apport:</strong> tests des options CPS / commandes utilisateur, distincts des primitives du protocole USB CPS et du transport des trames SMS par le SCT3258. Les valeurs de serveurs et TG de 2022 sont des donnees historiques non garanties actuelles.</p>
+<h3 id="exemple-de-programmation-des-touches">Exemple de programmation des touches</h3>
+<p>Original: <code>f1dmg/originals/f1dmg.free.fr/TouchesD578.pdf</code> (1 010 068 octets, une page majoritairement graphique, date manuscrite 2022).</p>
+<p>F1DMG y renseigne ses <strong>propres</strong> affectations des touches P1-P6, des touches PA-PD du microphone, de l'appui long et de la selection de canal. Il distingue visuellement les commandes de la facade et celles du microphone. Ceci constitue un exemple d'ergonomie et de representation de CPS, <strong>pas</strong> une table GPIO. Les affectations peuvent etre personnalisees.</p>
+<h2 id="photographies-archivees-avec-valeur-documentaire">Photographies archivees avec valeur documentaire</h2>
+<ul>
+<li><code>D578-PROTECTION-ROS.png</code> : <strong>photographie d'une zone de PCB et de points de soudure</strong> rattachee a la protection ROS. Ce n'est pas une mesure de seuil ou un schema certifie.</li>
+<li><code>DEBRID_578.jpg</code> : illustration de configuration logicielle des bandes; ne demontre pas la couverture RF physique.</li>
+<li><code>578a.jpg</code> : photo de l'ajout d'un <strong>deflecteur de ventilateur</strong>; <code>578b.jpg</code> : grille et ventilateur du poste. Ce sont les images pertinentes pour la modification de refroidissement evoquee par F1DMG.</li>
+<li><code>page-20/01Mb.jpg</code>, <code>page-20/02Mb.jpg</code>, <code>page-20/03Mb.jpg</code> : composants et modification de microphone avec jack/interrupteur; ne pas confondre avec le microphone OEM ni BT01.</li>
+<li><code>page-20/boutons3.jpg</code> : modification visuelle des boutons et de la facade.</li>
+<li><code>RAZ-ANYTONE.png</code> : proposition de raccordement RESET au GD32 explicitement <strong>non essayee</strong> par son auteur; a conserver comme hypothese et non comme pinout valide.</li>
+<li><code>ROAMING.png</code> : illustration de l'interface utilisateur CPS, a attribuer a sa revision.</li>
+</ul>
+<p>La <a href="F1DMG_RELEVES_PRATIQUES.html">fiche des observations pratiques F1DMG</a> distingue les details de ces images et les hypotheses non testees. Les originaux restent dans l'archive privee.</p>
+<h2 id="ressources-volontairement-non-publiees">Ressources volontairement non publiees</h2>
+<p>Les CSV volumineux de listes de contacts sont conserves par F1DMG. Ils peuvent etre anciens, inclure des identifiants individuels, et ne representent pas un format binaire NAND. Les fichiers de codeplug <code>.rdt</code>, firmware, HPT et les archives ZIP/RAR correspondantes n'ont pas ete captures par le script utilise. Voir <a href="RECUPERATION_ET_PRIORITES.html">reprises a effectuer</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Calibration, NAND et variantes : éviter la transposition D868 vers D578 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Calibration, NAND et variantes : éviter la transposition D868 vers D578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/CALIBRATIONS_ET_VARIANTES.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/CALIBRATIONS_ET_VARIANTES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/radiofoundry/CALIBRATIONS_ET_VARIANTES.md</code></p>
+<article class="markdown-body"><h1 id="calibration-nand-et-variantes-eviter-la-transposition-d868-vers-d578">Calibration, NAND et variantes : éviter la transposition D868 vers D578</h1>
+<p>Sources : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry §4.4 et §5</a>, <a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">notre NAND du D578</a>, <a href="../../03_NAND_LECTURES_ECC_CARTE.html">carte mémoire V1.21</a>, <a href="../../TEST_MODE_OPTIONS.html">paramètres TEST</a>.</p>
+<h2 id="1-ce-que-decrit-effectivement-radiofoundry">1. Ce que décrit effectivement RadioFoundry</h2>
+<p>La section 4 est intitulée <strong>carte des broches du D868UV</strong>. Dans son sous-chapitre NAND, RadioFoundry cite deux copies d'un ensemble de calibration à <code>0x02F60000</code> et <code>0x02F80000</code>, des tables UHF de 81 éléments et VHF de 39 éléments associées aux niveaux de puissance, ainsi qu'un petit enregistrement de 34 octets dupliqué vers <code>0x02501000</code> et <code>0x02521000</code>. Il s'agit de conclusions issues des images <strong>D868</strong> examinées par le projet.</p>
+<p>Sur nos D578, la NAND physique est une <code>TC58CVG1S3HRAIG</code> de 2 Gbit. Les données que nous avons établies portent sur le format <code>main/OOB</code>, les commandes SPI et les zones occupées ; le guide historique VK7ZJA situe les calibrations radio dans une plage plus large vers <code>0x02F00000...0x02F80679</code> et les données de configuration vers <code>0x02FA0000...0x02FDFFFF</code>. <strong>Ne pas effacer ces plages avec une reconstitution 868.</strong></p>
+<table>
+<thead>
+<tr>
+  <th>Domaine</th>
+  <th>Référence RadioFoundry D868</th>
+  <th>OpenD578 D578</th>
+  <th>Décision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Flash externe</td>
+  <td>GigaDevice/Toshiba selon lot, typiquement 1 Gbit</td>
+  <td>Toshiba 2 Gbit, main 256 MiB</td>
+  <td>Utiliser le pilote NAND propre à la puce</td>
+</tr>
+<tr>
+  <td>Calibration PA</td>
+  <td>Tables par MHz et par puissance vers 0x02F60000 avec backup vers 0x02F80000</td>
+  <td>Zones autour de 0x02F00000 à étudier sur capture D578</td>
+  <td>Comparer par signatures, ne pas recopier offset</td>
+</tr>
+<tr>
+  <td>Puissance RF</td>
+  <td>DAC MCU PA4 sur D868</td>
+  <td>D578 avec BH2226FV et contrôles RF identifiés dans le banc</td>
+  <td>Reconstituer courbe à partir des écritures OEM D578</td>
+</tr>
+<tr>
+  <td>Paramètres locaux</td>
+  <td>Record 34 octets à 0x02501000 et 0x02521000</td>
+  <td>Zones propres D578 et validation CPS du codeplug</td>
+  <td>Ne pas attribuer ces offsets au D578</td>
+</tr>
+<tr>
+  <td>Bad blocks / ECC</td>
+  <td>Driver SPI NAND avec repli</td>
+  <td>Capture brute + statut ECC disponible</td>
+  <td>Gérer ECC et sauvegarder OOB</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-plan-concret-de-correlation-sans-ecriture">2. Plan concret de corrélation sans écriture</h2>
+<ol>
+<li>Identifier le marqueur du firmware, l'empreinte du dump NAND et la variante précise avant chaque comparaison.</li>
+<li>Lire <strong>sur une copie</strong> les secteurs connus d'alignement ; calculer SHA-256 et rechercher les répétitions A/B.</li>
+<li>Cartographier les tables par longueur, checksum et éventuels marqueurs, sans fixer les valeurs nominales d'un autre poste.</li>
+<li>Dans le banc OEM, modifier seulement des <strong>stimuli de test</strong>, comme fréquence de réception, bande et réglage UI existant, puis relever les lectures NAND et les écritures vers QA4818N/BH2226FV/SCT3258.</li>
+<li>Associer <code>FQCA</code>, <code>PA*</code>, <code>BPF*</code>, <code>AGC*</code>, <code>SQTH*</code>, <code>RSSI*</code> et tests BER à une donnée <strong>lue</strong> puis à une routine constructeur, plutôt qu'à une adresse présumée.</li>
+<li>Exiger un export original et une restauration vérifiée avant toute opération d'écriture sur le poste réel. Aucun chemin d'écriture des calibrations n'est activé par ces documents.</li>
+</ol>
+<h2 id="3-fichiers-de-preuve-a-conserver">3. Fichiers de preuve à conserver</h2>
+<p>Un paquet de mesure devrait contenir <code>unit.json</code> (modèle, GD/AT, version, NAND ID), <code>capture_manifest.json</code>, <code>nand_hashes.json</code>, <code>nandslices.json</code> (positions uniquement), <code>oem_trace.json</code> et la matrice <code>calibration_to_gpio.csv</code>. Les dumps bruts et secrets restent dans le stockage privé. Cela préserve les résultats antérieurs sans exposer de données constructeur ni valeurs d'étalonnage personnelles sur GitHub.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

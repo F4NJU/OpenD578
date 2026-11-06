@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Sauvegarde AnyTone : bilan et controle d&#x27;integrite - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Sauvegarde AnyTone : bilan et controle d&#x27;integrite</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/archives_20261106/BILAN_ARCHIVE_ET_INTEGRITE.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/archives_20261106/BILAN_ARCHIVE_ET_INTEGRITE.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/archives_20261106/BILAN_ARCHIVE_ET_INTEGRITE.md</code></p>
+<article class="markdown-body"><h1 id="sauvegarde-anytone-bilan-et-controle-dintegrite">Sauvegarde AnyTone : bilan et controle d'integrite</h1>
+<h2 id="provenance">Provenance</h2>
+<p>Archive utilisateur: <code>20261106T102717Z.zip</code>, generee le 6 novembre 2026. Racine interne <code>20261106T102717Z/</code>. Elle comprend les HTML <strong>originaux</strong>, les fichiers enregistres, des copies <code>offline/</code>, des indexes et des manifests. Un fichier original est considere present uniquement lorsqu'il figure dans le ZIP <strong>et</strong> que son contenu correspond au SHA-256 enregistre par le telechargeur.</p>
+<table>
+<thead>
+<tr>
+  <th>Fonds</th>
+  <th style="text-align:right">Ressources reussies</th>
+  <th style="text-align:right">Tentatives en erreur</th>
+  <th style="text-align:right">Pages HTML</th>
+  <th style="text-align:right">Images</th>
+  <th style="text-align:right">PDF/DOC (type indique)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>F1DMG</td>
+  <td style="text-align:right">458</td>
+  <td style="text-align:right">53</td>
+  <td style="text-align:right">211</td>
+  <td style="text-align:right">218</td>
+  <td style="text-align:right">15</td>
+</tr>
+<tr>
+  <td>VK7ZJA : DB1IG</td>
+  <td style="text-align:right">99</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">64 (y compris ressources graphiques du site)</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>VK7ZJA : Carstenbauer v7.4</td>
+  <td style="text-align:right">47</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">46</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>VK7ZJA : Reddicams</td>
+  <td style="text-align:right">47</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">46</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>OZ1DGQ/QSL</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>TheWeeks</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>653</strong></td>
+  <td style="text-align:right"><strong>71</strong></td>
+  <td style="text-align:right"><strong>215</strong></td>
+  <td style="text-align:right"><strong>375</strong></td>
+  <td style="text-align:right"><strong>15</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Le ZIP contient <strong>1008 entrees</strong> et environ <strong>163 Mo de donnees decompressees</strong>. Le nombre de pages de F1DMG est trompeur: les listes de repertoires Apache ont ete rapatriees avec de multiples variantes de tri <code>?C=...;O=...</code>; le crawl ne represente pas 211 articles AnyTone distincts. Parmi les pages avec texte pertinent identifiees, <code>page-20.htm</code> et <code>page-22.htm</code> sont les principales. Une dizaine de milliers d'octets de HTML peut aussi correspondre a un repertoire, pas a une documentation technique.</p>
+<p><strong>Controle effectue:</strong> les 653 fichiers a etat HTTP 200 sont presents et correspondent individuellement au SHA-256 de leur entree <code>manifest.json</code>. Aucun nom de fichier du ZIP ne se repete. Cela confirme l'integrite de la sauvegarde et de son inventaire, <strong>pas</strong> la validite technique de toutes les affirmations des auteurs.</p>
+<h2 id="limites-objectives">Limites objectives</h2>
+<ul>
+<li>Pour F1DMG, 53 echecs de collecte, dont des anciennes URL 404 (<code>/578a</code>, <code>/578b</code>) et d'autres fichiers de sections sans rapport avec le D578.</li>
+<li>La page TheWeeks echoue pour un certificat TLS refuse sur le PC collecteur (<code>CERTIFICATE_VERIFY_FAILED</code>). Le contenu historique de VK7ZJA se trouve sur plusieurs autres miroirs recuperes.</li>
+<li>Les miroirs Carstenbauer et Reddicams perdent six images chacun, car le telechargeur n'encode pas les espaces des URL. Cinq de ces images sont recuperables directement dans la copie DB1IG; le cas <code>578 head connections.jpg</code> reste absent de la sauvegarde.</li>
+<li>QSL/OZ1DGQ: trois erreurs d'URL non encodee et deux documents introuvables (404). Les rapports FCC en PDF ne font pas partie de cette collecte.</li>
+<li>La page <code>RadioFoundry</code> et les documents <code>qdmr</code> et <code>CodeplugStudio</code> ne figurent pas dans ce ZIP. Leur connaissance est presente dans des <em>documents du depot</em>, pas dans ces originaux sauvegardes.</li>
+<li>Les ZIP/RAR, codeplugs <code>.rdt</code>, fichiers d'aide <code>.HPT</code> et videos <code>.mpg</code> accessibles par des liens de F1DMG ont en majorite ete <strong>ignores par le filtre d'extensions de l'outil</strong>. Ils ne doivent pas etre marques definitivement inaccessibles.</li>
+</ul>
+<h2 id="recoupement-photographique">Recoupement photographique</h2>
+<p>Le miroir DB1IG contient 64 ressources graphiques au sens large. Pour les <strong>46 images</strong> de D578 ayant le meme nom dans DB1IG et Carstenbauer, les empreintes SHA-256 sont identiques. Ce sont donc, pour ces images, des copies exactes et non deux mesures independantes. Les photographies d'anciennes cartes doivent conserver leur attribution de revision.</p>
+<p>Les fichiers CSV de listes de contacts de plusieurs dizaines de Mo sont archives, mais leur contenu est date et comporte potentiellement des identifiants de correspondants. Les garder prives et ne pas les publier comme un codeplug de reference universel.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

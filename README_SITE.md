@@ -95,3 +95,15 @@ La documentation contient une [revue comparative des principales pages AnyTone d
 ## Archives originales recues (6 novembre 2026)
 
 Voir [l audit de la collecte F1DMG et VK7ZJA](docs/external/archives_20261106/INDEX.md) pour les photos et documents reellement recuperes, les 71 echecs et les fichiers F1DMG ZIP/RDT/HPT a sauvegarder. Les octets originaux de tiers restent dans une archive privee distincte.
+
+## Contribution F1DMG : dossier illustre (6 novembre 2026)
+
+La rubrique F1DMG regroupe sur une meme page les photos, leurs explications
+techniques et les deux articles historiques, avec images a leur place :
+`https://telectroboy.github.io/OpenD578/f1dmg.html`.
+La galerie photographique devient un index secondaire. Les pages historiques
+et leur texte complet restent consultables. L'import des archives F1DMG se fait
+avec `tools/publish_f1dmg.py` sur la sauvegarde privee, sans envoyer les autres
+fichiers du ZIP vers GitHub. Guy conserve les droits sur ses contributions.
+Cette rubrique est presentee par Jean-Philippe (F4EGM), projet OpenD578.
+VK7ZJA et DB1IG sont des sources separees non couvertes par cette autorisation.

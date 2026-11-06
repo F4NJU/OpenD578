@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Inventaire des photographies et fichiers a archiver - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Inventaire des photographies et fichiers a archiver</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/PHOTOS_ET_DOCUMENTS_CIBLES.md">Modifier sur GitHub</a><a download href="../../../raw/docs/external/PHOTOS_ET_DOCUMENTS_CIBLES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/PHOTOS_ET_DOCUMENTS_CIBLES.md</code></p>
+<article class="markdown-body"><h1 id="inventaire-des-photographies-et-fichiers-a-archiver">Inventaire des photographies et fichiers a archiver</h1>
+<p>L'objectif est de <strong>ne perdre aucune piece</strong> : chaque photo ou document identifie dans les pages d'origine doit etre conserve avec son URL, legende, version et empreinte. Aucun de ces fichiers n'est copie dans le depot public sans autorisation.</p>
+<h2 id="illustrations-vk7zja-578-photos-a-retrouver-dans-les-originaux">Illustrations VK7ZJA 578 (photos a retrouver dans les originaux)</h2>
+<table>
+<thead>
+<tr>
+  <th>Sujet/legende de la source</th>
+  <th>Preuve technique recherchée</th>
+  <th>Correspondance OpenD578</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Vue arriere facade, Bluetooth et GPS installes</td>
+  <td>Placement carte D868BT-SP et ATGM336H, connecteurs GPS u.FL</td>
+  <td><code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code> ; monographie GPS</td>
+</tr>
+<tr>
+  <td>Vue arriere facade sans Bluetooth</td>
+  <td>Pistes et points de raccordement de la carte fille</td>
+  <td>Cartographie MCU et bus Bluetooth</td>
+</tr>
+<tr>
+  <td>Vue face avant facade</td>
+  <td>Lignes de touches, LED, LCD et potentiometres</td>
+  <td><code>docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code></td>
+</tr>
+<tr>
+  <td>MCU sous LCD</td>
+  <td>Confirmation du boitier GD32 et de la geographie des GPIO</td>
+  <td>Brochage CPU et preuves OEM</td>
+</tr>
+<tr>
+  <td>PCB RF dessus</td>
+  <td>Etages PA, filtres, synthese et connecteurs</td>
+  <td>Monographie QA4818N et carte RF</td>
+</tr>
+<tr>
+  <td>PCB RF dessous</td>
+  <td>Circuits LQFP32 masques, FI et chaines A/B</td>
+  <td>Attribution des quatre QA4818N</td>
+</tr>
+<tr>
+  <td>Filtres quartz 38 MHz</td>
+  <td>Deux FI et empreintes non peuplees</td>
+  <td><code>docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md</code></td>
+</tr>
+<tr>
+  <td>Reserves de la facade CPU</td>
+  <td>Sauvegarde RTC versus GPS et references visibles</td>
+  <td>Dossier preuves RTC/GPS</td>
+</tr>
+<tr>
+  <td>Prise micro et schema micro de bureau</td>
+  <td>Separation masse audio/masse logique et adaptation PTT</td>
+  <td><code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code></td>
+</tr>
+<tr>
+  <td>Sorties audio et haut-parleur</td>
+  <td>Difference de coupure interne/externe</td>
+  <td>Monographie audio</td>
+</tr>
+<tr>
+  <td>Amelioration blindage RF</td>
+  <td>Blindages additionnels et ajustement varactors</td>
+  <td>Chaînes RF ; calibrations</td>
+</tr>
+<tr>
+  <td>Antenne GPS interne</td>
+  <td>Emplacements u.FL et implantation possible</td>
+  <td>Monographie GPS</td>
+</tr>
+<tr>
+  <td>Circuit ventilateur/deflecteur</td>
+  <td>Piste F1DMG <code>/578a</code></td>
+  <td>Refroidissement ; mesures thermiques</td>
+</tr>
+</tbody>
+</table>
+<h2 id="autres-ressources-a-indexer">Autres ressources a indexer</h2>
+<ul>
+<li>Documentation VK7ZJA ancienne : <a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm</a></li>
+<li>Version VK7ZJA 7.4 : <a href="https://radio.carstenbauer.net/578techmods.htm">https://radio.carstenbauer.net/578techmods.htm</a></li>
+<li>Autre miroir : <a href="https://www.reddicams.co.uk/radio/AnytoneJR/578techmods.htm">https://www.reddicams.co.uk/radio/AnytoneJR/578techmods.htm</a></li>
+<li>Copie PDF : <a href="https://www.radiomanual.info/schemi/Vari/Alinco_DR-MD500_DR-MD520_AnyTone_AT-D578UV_mods_and_information_VK7ZJA_2023.pdf">https://www.radiomanual.info/schemi/Vari/Alinco_DR-MD500_DR-MD520_AnyTone_AT-D578UV_mods_and_information_VK7ZJA_2023.pdf</a></li>
+<li>Collection D578 et documents FCC : <a href="https://qsl.net/oz1dgq/home-filer/anytone-hints.htm">https://qsl.net/oz1dgq/home-filer/anytone-hints.htm</a></li>
+<li>Photos d'homologation (revision ancienne) : <a href="https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250">https://fccid.io/T4K-D578UV/Internal-Photos/Internal-Photos-4513250</a></li>
+<li>F1DMG, page 20 : <a href="http://f1dmg.free.fr/page-20.htm">http://f1dmg.free.fr/page-20.htm</a></li>
+<li>F1DMG, ancien complement refroidissement : <a href="http://f1dmg.free.fr/578a">http://f1dmg.free.fr/578a</a></li>
+</ul>
+<h2 id="organisation-conseillee-dans-larchive-privee">Organisation conseillee dans l'archive privee</h2>
+<p>Conserver <strong>l'original</strong> dans <code>originals/</code> et la consultation locale dans <code>offline/</code>. Ne pas renommer arbitrairement les images : leurs noms de fichiers, chemins et hashes sont utiles pour detecter les duplicates et restaurer des liens anciens. Relier ensuite les constats dans les fiches OpenD578 par URL et numero de photo, sans reproduire les photos dans GitHub.</p>
+<h2 id="etat-du-6-novembre-2026">Etat du 6 novembre 2026</h2>
+<p>Les adresses et legendes ont ete recoupees dans les index de sources. Les fichiers images originaux ne sont <strong>pas encore captures dans cet environnement</strong> : les acces HTTP directs necessaires aux telechargements echouent et F1DMG ne repond pas. Le script de sauvegarde destine a Windows effectue cette collecte depuis une connexion externe et produit un journal precis de ce qu'il a effectivement pu recuperer.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

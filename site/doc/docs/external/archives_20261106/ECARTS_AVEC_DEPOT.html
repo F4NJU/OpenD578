@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Comparaison directe avec le depot OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Comparaison directe avec le depot OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/archives_20261106/ECARTS_AVEC_DEPOT.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/archives_20261106/ECARTS_AVEC_DEPOT.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/archives_20261106/ECARTS_AVEC_DEPOT.md</code></p>
+<article class="markdown-body"><h1 id="comparaison-directe-avec-le-depot-opend578">Comparaison directe avec le depot OpenD578</h1>
+<p>Base de comparaison: archive de depot <code>OpenD578_COMPLET_RADIOFOUNDRY_DB1IG_20261106.zip</code> et copie extraites dans notre contexte. Les contenus du ZIP utilisateur ont ete lus localement, tandis que les documents sources et HAL du depot sont issus de nos travaux precedents. Aucun fichier public ancien n'a ete supprime.</p>
+<table>
+<thead>
+<tr>
+  <th>Cle</th>
+  <th>Nouvelle preuve / connaissance</th>
+  <th>Fiche OpenD578 existante</th>
+  <th>Verdict de couverture</th>
+  <th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>F1-01</td>
+  <td>HTML F1DMG <code>page-20.htm</code> reellement capture, 53 661 octets</td>
+  <td><code>docs/external/F1DMG_RECUPERATION.md</code></td>
+  <td><strong>Ancienne conclusion d'indisponibilite depassee</strong></td>
+  <td>Ajouter notice datee et empreinte</td>
+</tr>
+<tr>
+  <td>F1-02</td>
+  <td>HTML F1DMG <code>page-22.htm</code> reellement capture, 136 785 octets</td>
+  <td><code>docs/external/F1DMG_RECUPERATION.md</code></td>
+  <td><strong>Nouvelle page exploitable</strong></td>
+  <td>Indexer BT01, CPS, versions, fichiers</td>
+</tr>
+<tr>
+  <td>F1-03</td>
+  <td>Modes de demarrage francais <code>D578-REGLAGES.doc</code></td>
+  <td><code>docs/TEST_MODE_OPTIONS.md</code>, <code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code></td>
+  <td>Deja etabli par OEM/historique</td>
+  <td>Conserver seconde presentation attribuee</td>
+</tr>
+<tr>
+  <td>F1-04</td>
+  <td>Procedure d'export/reinitialisation/reimport <code>MISE A JOUR D578.doc</code></td>
+  <td><code>docs/cps/COMPATIBILITE_PRO_PLUS.md</code>, <code>docs/PROGRAMMING_AND_CALIBRATION.md</code></td>
+  <td>Partiellement presente</td>
+  <td>Developper procedure migration des donnees</td>
+</tr>
+<tr>
+  <td>F1-05</td>
+  <td>Versions historiques BT01, ET12 et SCT dans PDF F1DMG</td>
+  <td><code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code>, <code>docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md</code></td>
+  <td>Nouveau detail de versions</td>
+  <td>Separer module ET12 de BT01 physique</td>
+</tr>
+<tr>
+  <td>F1-06</td>
+  <td>Valeurs d'exemple et effets <code>CMD-Roaming.doc</code></td>
+  <td><code>docs/cps/CODEPLUG_CANAL_OEM_V121.md</code>, <code>docs/external/db1ig/</code></td>
+  <td><strong>Details absents</strong></td>
+  <td>Decrire parametres sans inventer un encodage NAND</td>
+</tr>
+<tr>
+  <td>F1-07</td>
+  <td>SMS BrandMeister + options CPS</td>
+  <td><code>docs/cps/PROTOCOLE_OEM_V121.md</code></td>
+  <td><strong>Guide d'utilisation absent</strong></td>
+  <td>Creer fiche differenciant DMR SMS / CPS USB</td>
+</tr>
+<tr>
+  <td>F1-08</td>
+  <td>Exemple manuscrit <code>TouchesD578.pdf</code></td>
+  <td><code>docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md</code></td>
+  <td>Exemple ergonomique nouveau</td>
+  <td>Conserver comme configuration F1DMG, ne pas modifier GPIO</td>
+</tr>
+<tr>
+  <td>F1-09</td>
+  <td>Photos <code>DEBRID_578</code>, protection ROS, antenne, touches</td>
+  <td><code>docs/hardware/PHOTOS.md</code></td>
+  <td>Photos non indexees individuellement</td>
+  <td>Ajouter inventaire prive par source et revision</td>
+</tr>
+<tr>
+  <td>F1-10</td>
+  <td>Codeplug D578 V1.11 <code>.rdt</code>, fichier AT Options, aides HPT, firmware ZIP</td>
+  <td><code>docs/external/F1DMG_RECUPERATION.md</code></td>
+  <td><strong>Non telecharges</strong></td>
+  <td>Relancer collecte ciblee</td>
+</tr>
+<tr>
+  <td>F1-11</td>
+  <td>Modifier le refroidissement: <code>578a.jpg</code> deflecteur, <code>578b.jpg</code> grille/ventilateur; exemple <code>FAN OPEN = BOTH</code> et 50 vers 30 degres C en 4 min</td>
+  <td><code>docs/hardware/PHOTOS.md</code>, <code>docs/external/db1ig/</code></td>
+  <td><strong>Photos et observation specifique nouvelles</strong></td>
+  <td>Fiche F1DMG pratique; ne pas generaliser la thermique</td>
+</tr>
+<tr>
+  <td>F1-12</td>
+  <td>Photos de modification microphone avec electret, jack et interrupteur <code>01Mb</code>/<code>02Mb</code>/<code>03Mb.jpg</code></td>
+  <td><code>docs/NOTICE_CHANGELOG_MICROPHONE_V11_8.md</code></td>
+  <td><strong>Realisation privee nouvelle</strong>, differente de l'USART0 OEM</td>
+  <td>Conserver les images en prive et delimiter le circuit</td>
+</tr>
+<tr>
+  <td>F1-13</td>
+  <td><code>RAZ-ANYTONE.png</code> propose une intervention sur NRST avec la mention non essaye</td>
+  <td><code>docs/02_CPU_FLASH_BOOT_USB_SWD.md</code></td>
+  <td><strong>Hypothese historique non validee</strong></td>
+  <td>Ne pas convertir en procedure SWD</td>
+</tr>
+<tr>
+  <td>F1-14</td>
+  <td>Regles pratiques et observations scan/PTT, Monitor, offset hotspot +330/+340 Hz, 1750 Hz, APRS WIDE, SMS</td>
+  <td><code>docs/QUALIFICATION_ANALOGIQUE.md</code>, <code>docs/cps/</code></td>
+  <td><strong>Cas utilisateur non indexes</strong></td>
+  <td>Voir <code>F1DMG_RELEVES_PRATIQUES.md</code></td>
+</tr>
+<tr>
+  <td>VK-01</td>
+  <td>46 photographies communes VK7ZJA prouvees identiques par SHA</td>
+  <td><code>docs/hardware/PHOTOS.md</code>, <code>docs/external/PHOTOS_ET_DOCUMENTS_CIBLES.md</code></td>
+  <td>Faits techniques presents, octets archives hors depot</td>
+  <td>Indexer hashes et photos sans les republier</td>
+</tr>
+<tr>
+  <td>VK-02</td>
+  <td>Passage nappe facade 40 broches, photo <code>578 head connections.jpg</code></td>
+  <td><code>docs/external/db1ig/approfondissements/VK578-16_ecran_et_facade_deportes.md</code></td>
+  <td>Mention deja presente, illustration source manquante</td>
+  <td>Tenter URL encodee, analyser la nappe</td>
+</tr>
+<tr>
+  <td>VK-03</td>
+  <td>Frequences FI, quatre QA4818N, NAND, SCT3258</td>
+  <td><code>docs/hardware/RF.md</code>, <code>docs/peripherals/*</code>, <code>docs/hardware/QA4818N*</code></td>
+  <td><strong>Deja documente et souvent valide par OEM</strong></td>
+  <td>Joindre provenance photo, ne pas retrograder preuve</td>
+</tr>
+<tr>
+  <td>VK-04</td>
+  <td>Donnees de calibration, outils flash et recovery historiques</td>
+  <td><code>docs/PROGRAMMING_AND_CALIBRATION.md</code>, <code>docs/external/db1ig/</code></td>
+  <td>Partie technique documentee, utilitaires sources absents</td>
+  <td>Conserver outils anciens separement, lecture seule en priorite</td>
+</tr>
+<tr>
+  <td>EXT-01</td>
+  <td>Miroir TheWeeks</td>
+  <td><code>docs/external/SOURCES_ET_VERSIONS.md</code></td>
+  <td>Pas capture (TLS)</td>
+  <td>Garder lien / erreur et mirroirs alternatifs</td>
+</tr>
+<tr>
+  <td>EXT-02</td>
+  <td>OZ1DGQ : PDF manuels/FCC</td>
+  <td><code>docs/hardware/PHOTOS.md</code></td>
+  <td>Page index capturee, PDF non captures</td>
+  <td>Encoder espaces ; chercher documents FCC officiels</td>
+</tr>
+<tr>
+  <td>EXT-03</td>
+  <td>RadioFoundry, qdmr, CodeplugStudio, FCC</td>
+  <td><code>docs/external/radiofoundry/</code> et references externes</td>
+  <td><strong>Pas dans le ZIP utilisateur</strong></td>
+  <td>Archivage complementaire a planifier</td>
+</tr>
+<tr>
+  <td>EXT-04</td>
+  <td>Archive complete des autres pages DB1IG</td>
+  <td><code>docs/external/db1ig/</code></td>
+  <td>Seule <code>578mods.php</code> capturee</td>
+  <td>Collecter 878mods, DMRbasics, codeplug, editor (sources externes)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ce-que-cette-archive-ne-permet-pas-de-conclure">Ce que cette archive ne permet pas de conclure</h2>
+<p>Elle ne contient pas de session SWD nouvelle, de capture UART/SPI du poste, ni de nouveau dump de la Flash du GD32. Elle ne permet donc pas de deviner une commande QA4818N precise, de prouver une affectation GPIO manquante ou d'identifier les zones NAND inconnues. Les preuves OEM deja existantes dans le depot demeurent valides, les instructions d'utilisation F1DMG sont un niveau de preuve different.</p>
+<p>Pour une enquete de firmware alternatif, les fichiers les plus utiles a examiner de nouveau sont les ressources CPS <code>.HPT</code>, codeplugs <code>.rdt</code> versionnes et leurs diffs, outils de service/documentation, et un eventuel protocole de mise a jour SCT. Les listes CSV de milliers de contacts et les captures ecran d'interface ont une valeur inferieure pour le developpement des pilotes.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

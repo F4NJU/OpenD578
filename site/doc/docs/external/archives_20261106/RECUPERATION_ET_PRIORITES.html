@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Reprendre les collectes incompletes sans perte de provenance - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
+<div class="doc-heading"><h1>Reprendre les collectes incompletes sans perte de provenance</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/archives_20261106/RECUPERATION_ET_PRIORITES.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/archives_20261106/RECUPERATION_ET_PRIORITES.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/external/archives_20261106/RECUPERATION_ET_PRIORITES.md</code></p>
+<article class="markdown-body"><h1 id="reprendre-les-collectes-incompletes-sans-perte-de-provenance">Reprendre les collectes incompletes sans perte de provenance</h1>
+<h2 id="priorite-a-ressources-anytone-citees-mais-non-recuperees">Priorite A : ressources AnyTone citees mais non recuperees</h2>
+<p>L'analyse des liens des pages F1DMG <code>page-20.htm</code> et <code>page-22.htm</code> retrouve <strong>19 URL de type fichier sans sauvegarde effective</strong> (certaines exterieures au site F1DMG). Le CSV <code>F1DMG_LIENS_NON_RECUPERES.csv</code> dans le paquet d'audit donne les URLs completes, textes de lien et etats.</p>
+<table>
+<thead>
+<tr>
+  <th>Objet cite par F1DMG</th>
+  <th>URL d'origine</th>
+  <th>Importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Codeplug D578 V1.11 (<code>.rdt</code>)</td>
+  <td><a href="http://f1dmg.free.fr/Exemple-v1.11-2020.rdt">http://f1dmg.free.fr/Exemple-v1.11-2020.rdt</a></td>
+  <td>Etude des champs et des migrations anciennes</td>
+</tr>
+<tr>
+  <td>Aides CPS francaises (<code>.zip</code>)</td>
+  <td><a href="http://f1dmg.free.fr/Help-TRADUCTION-FR-ANYTONED578-D878.zip">http://f1dmg.free.fr/Help-TRADUCTION-FR-ANYTONED578-D878.zip</a></td>
+  <td>Terminologie CPS et options accessibles</td>
+</tr>
+<tr>
+  <td>AT Options (<code>.rar</code>)</td>
+  <td><a href="http://f1dmg.free.fr/AT-Option-anytone-2a8.rar">http://f1dmg.free.fr/AT-Option-anytone-2a8.rar</a></td>
+  <td>Historique des options de service et permissions</td>
+</tr>
+<tr>
+  <td>Firmware historique D578 (<code>.zip</code>)</td>
+  <td><a href="http://f1dmg.free.fr/D578UV-V119-2-OM.zip">http://f1dmg.free.fr/D578UV-V119-2-OM.zip</a></td>
+  <td>Reference de version, ne pas melanger les branches</td>
+</tr>
+<tr>
+  <td>Aide CPS HPT</td>
+  <td><a href="http://f1dmg.free.fr/D878-V301-UV-UVII-English.HPT">http://f1dmg.free.fr/D878-V301-UV-UVII-English.HPT</a></td>
+  <td>Format d'aide/traduction constructeur</td>
+</tr>
+<tr>
+  <td>Video verrouillage micro (<code>.mpg</code>)</td>
+  <td><a href="http://f1dmg.free.fr/page-20/veroumicro.mpg">http://f1dmg.free.fr/page-20/veroumicro.mpg</a></td>
+  <td>Verification comportement utilisateur</td>
+</tr>
+<tr>
+  <td>Archive du microphone BT01</td>
+  <td><a href="http://www.wouxun.us/Software/AnyTone-Software/BT01-BT-Microphone.zip">http://www.wouxun.us/Software/AnyTone-Software/BT01-BT-Microphone.zip</a></td>
+  <td>Historique de distribution, composants a identifier</td>
+</tr>
+<tr>
+  <td>Codeplug AT168 satellite (<code>.rdt</code>)</td>
+  <td><a href="http://f1dmg.free.fr/AT168-OK-DMG-SATv105.rdt">http://f1dmg.free.fr/AT168-OK-DMG-SATv105.rdt</a></td>
+  <td><strong>Autre appareil</strong>, ne pas traiter comme exemple de D578</td>
+</tr>
+</tbody>
+</table>
+<p>Certains de ces contenus peuvent ne plus exister sur le serveur. Le fait qu'ils ne soient pas dans l'archive provient principalement du filtre du telechargeur, qui excluait par defaut les ZIP/RAR et ne reconnaissait pas <code>.rdt</code>, <code>.HPT</code>, <code>.mpg</code> comme fichier. Les URLs conservees ne garantissent <strong>pas</strong> leur disponibilite actuelle.</p>
+<p><strong>Securite :</strong> ne pas executer de binaire externe historique; relever l'origine, la date, la taille, le SHA-256 et examiner en lecture seule. Ne jamais envoyer sur un poste GD32 un firmware d'une autre branche.</p>
+<h2 id="priorite-b-photos-et-miroirs">Priorite B : photos et miroirs</h2>
+<ul>
+<li><a href="https://radio.carstenbauer.net/578%20head%20connections.jpg">Photo nappe de facade 40 broches</a> : le navigateur peut l'accepter si les espaces sont codes, l'ancienne archive ne l'a pas telechargee.</li>
+<li><code>578 BT Mic.jpg</code>, <code>578 KC8GL label.jpg</code>, <code>578 speaker sockets.jpg</code>, <code>578 speaker mod1.jpg</code>, <code>578 speaker mod2.jpg</code> : les miroirs Carstenbauer/Reddicams ont echoue, mais DB1IG en conserve des copies sous des noms ajustes. Les 46 autres images partagees DB1IG/Carstenbauer sont strictement identiques par SHA.</li>
+<li><a href="https://www.theweeks.org/tmp/FILES/Anytone-Mods/578mods.htm">TheWeeks</a> : echec TLS. Ne pas desactiver la verification de certificat sans justification; conserver le lien et utiliser DB1IG/Carstenbauer comme miroirs disponibles.</li>
+<li><a href="https://qsl.net/oz1dgq/home-filer/anytone-hints.htm">Collection OZ1DGQ</a> : reessayer trois liens PDF en encodant leurs espaces; deux autres ont renvoye 404.</li>
+</ul>
+<h2 id="priorite-c-couverture-externe">Priorite C : couverture externe</h2>
+<ul>
+<li>DB1IG : <a href="https://www.db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_878mods.php">D878mods</a>, <a href="https://db1ig.de/pages/en/anytone/jason_reilly_vk7zja/jason_reilly_vk7zja_dmrbasics.php">DMR basics</a>, pages d'export CPS et d'editeur de contacts. La presente archive contient seulement <code>578mods.php</code>.</li>
+<li><a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry</a> : contenu technique deja etudie dans OpenD578, mais page originale absente de ce ZIP.</li>
+<li>FCC : photos et rapports de certification <code>T4K-D578UV</code>, <code>T4K-D578UVIII</code> et revisions comparables, avec la reference exacte de chaque PCB.</li>
+<li>Depots open source <code>dmr-tools/codeplugs</code>, <code>qdmr</code>, <code>CodeplugStudio</code>, <code>anytone-flash-tools</code>: conserver versions, commits et licenses separement. Ne pas melanger code source tiers et reverses constructeur.</li>
+</ul>
+<h2 id="outil-de-collecte">Outil de collecte</h2>
+<p>Le code <code>tools/archive_sources_privees.py</code> du depot a ete corrige pour normaliser les URL contenant des espaces et pour reconnaitre <code>.rdt</code>, <code>.HPT</code>, <code>.mpg</code> et <code>.mp4</code> lorsque l'option de collecte des archives binaires est activee. Une configuration ciblee <code>f1dmg_anytone</code> capture les deux principales pages sans explorer des centaines de repertoires sans rapport. Les fichiers originaux restent archives <strong>en prive</strong> et une nouvelle execution ne doit pas ecraser le ZIP fourni.</p>
+<p>Sous Windows, depuis la racine du depot, avec Python 3 :</p>
+<pre><code class="language-powershell">py -3 tools/archive_sources_privees.py --sites f1dmg_anytone vk7zja_v74 db1ig_anytone_related radiofoundry --include-tools --max-pages 30 --max-assets 1200 --destination &quot;$HOME\Downloads\OpenD578_archives_privees&quot;
+</code></pre>
+<p>Les liens externes de F1DMG (hebergeurs tiers) ne sont pas suivis automatiquement pour raison de provenance et de limites de domaine. Ils sont enumeres dans le CSV pour un archivage cible separe. L'outil peut rencontrer des erreurs 404, HTTPS ou de restrictions d'acces. Ces erreurs doivent etre conservees, jamais remplacees par de faux fichiers.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>
