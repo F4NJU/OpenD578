@@ -46,8 +46,8 @@ Les **onze bits D0 à D10 sont transmis dans cet ordre** et lus sur le **front m
 
 | Bits | Signification de la fiche UTC |
 | --- | --- |
-| D0 | `0` = deux canaux réglés en même temps ; `1` = un seul canal |
-| D1 | `0` = canal 1 ; `1` = canal 2 (utile si D0=1) |
+| D1 | `0` = deux canaux réglés en même temps ; `1` = un seul canal |
+| D0 | `0` = canal 1 ; `1` = canal 2 (utile si D1=1) |
 | D2..D6 | Atténuation grossière, pas de **4 dB** ; ordre LSB-first, code 21 pour 0 dB, 1 pour −80 dB |
 | D7..D8 | Atténuation fine, pas de **1 dB** ; code 3 pour 0 dB, 2 pour −1 dB, 1 pour −2 dB, 0 pour −3 dB |
 | D9..D10 | Deux bits à **1** pour terminer/valider la trame |
@@ -55,3 +55,6 @@ Les **onze bits D0 à D10 sont transmis dans cet ordre** et lus sur le **front m
 Pour une atténuation entière `A` de 0 à 83 dB, le codage extrait de la table constructeur est `coarse = 21 - floor(A/4)` et `fine = 3 - (A % 4)`. Exemple : A=0 donne `D2..D6=10101`, `D7..D8=11` ; A=83 donne `10000` et `00`. Les bits sont affichés dans l'ordre **D2 vers D6 / D7 vers D8**, pas dans l'ordre traditionnel d'un nombre écrit sur 5 bits.
 
 Un encodeur C **sans GPIO**, compilable sur ordinateur, est livré dans `firmware/hal/serial_command_encoders.c` avec tests dans `firmware/tests/test_serial_command_encoders.c`. **Il ne prouve pas l’accès au U2429 du D578** et ne permet pas de forcer ses lignes.
+
+
+Correction du 9 novembre : DATA PA13, CLOCK PA14 validés par analyse OEM après libération SWJ. D0 choisit le canal, D1 individuel/commun ; les anciennes inversions sont corrigées dans le code C et les tests. Le transport analogique complet reste distinct de cette commande validée. Voir [tableau IO](io/TABLEAU_IO_D578.md).

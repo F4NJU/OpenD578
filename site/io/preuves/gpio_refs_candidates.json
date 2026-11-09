@@ -1,0 +1,5804 @@
+[
+  {
+    "call": "0x8000458",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x1",
+    "pins": [
+      "PA0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8000470",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x1",
+    "pins": [
+      "PA0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80021a4",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x80021b6",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x4",
+    "pins": [
+      "PE2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80021c0",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x4",
+    "pins": [
+      "PE2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800405a",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8004080",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x800408e",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x800409c",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x80040b6",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x80040be",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80040c6",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80040ce",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x20",
+    "pins": [
+      "PE5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80040d6",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x8",
+    "pins": [
+      "PC3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80040de",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80040e6",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80041ac",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x80042b4",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x20",
+    "pins": [
+      "PE5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042c4",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042cc",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042d8",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042e6",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042f0",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80042fe",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8004316",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80066c2",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80066d2",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8000",
+    "pins": [
+      "PE15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8006a5c",
+    "api": "read",
+    "port": "0x40011400",
+    "mask": "0x1",
+    "pins": [
+      "PD0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8006a66",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f122",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f132",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f160",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x400",
+    "pins": [
+      "PA10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f172",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x400",
+    "pins": [
+      "PA10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f17e",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x200",
+    "pins": [
+      "PA9"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f190",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x200",
+    "pins": [
+      "PA9"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f1a4",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x200",
+    "pins": [
+      "PA9"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x800f1b6",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x200",
+    "pins": [
+      "PA9"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x801b2da",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x801b4fc",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x801b544",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80212a8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80212b2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80213d0",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80213da",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80213ec",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80213f6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021418",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021434",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802143e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802144e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021458",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021468",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021472",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021482",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802148c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802149c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214a6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214b6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214c0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214ca",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214d4",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214e4",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214ee",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80214f8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021502",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021512",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802151c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021566",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x0",
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8021570",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802157a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80219bc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80219c6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b3c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b46",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b58",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b62",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b7c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b86",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021b98",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021ba2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021bb8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021bc2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021bd4",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021bde",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021bfe",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c08",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c1a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c24",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c60",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c6a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c7c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c86",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021c9c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021ca6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021cb8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021cc2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021d22",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8021ffe",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022008",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022060",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802206a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802207c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022086",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802209c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220a6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220b8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220c2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220da",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220e4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80220f6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022100",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802211e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022128",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802213a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022144",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022180",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802218a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802219c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80221a6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80221bc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80221c6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80221d8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80221e2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022284",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022b9a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022ba4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022bdc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022be6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022bf8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c02",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c14",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c1e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c2e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c38",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8022c68",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8023964",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802396e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239b2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239bc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239ce",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239d8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239ee",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80239f8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8023a0c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8023a16",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8023a42",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024088",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024092",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80240bc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80240c6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80240d8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80240e2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802411e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024128",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802413a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024144",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802415a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024164",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024176",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8024180",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802423e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c0e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c18",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c52",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c5c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c6e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026c78",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cb4",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cbe",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cd0",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cda",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cf0",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026cfa",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026d0c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026d16",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026dde",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026de8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026dfa",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e04",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e1a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e24",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e36",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e40",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e4a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8026e9e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80274d2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80274dc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80274ec",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80274f6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027506",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027510",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027520",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802752a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802753a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027544",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027554",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x802755e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027568",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027588",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8027592",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80275a6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80275b0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80275c2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80275cc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80275d6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038502",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x803850c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038516",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x1000",
+    "pins": [
+      "PB12"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038526",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x1000",
+    "pins": [
+      "PB12"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038536",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x1000",
+    "pins": [
+      "PB12"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038874",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x803887e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80388c2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80388cc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80388de",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80388e8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038900",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x803890a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038920",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x803892a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038956",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038b7a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038b84",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038bd2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038bdc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038bf4",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038bfe",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8038c1a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8059026",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8059040",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8063178",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8063190",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8064650",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8064668",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80646a8",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x806482e",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8064846",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8064888",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x806c974",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x806c98c",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x806c9a4",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x806c9bc",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8070382",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8070d22",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8070e3c",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80718c6",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80718dc",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80718f6",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8071906",
+    "api": "read",
+    "port": "0x40011400",
+    "mask": "0x1",
+    "pins": [
+      "PD0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8071912",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x807191e",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80777f4",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x807780a",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8077898",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8079f84",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x807c580",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x807c59e",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80886f0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088712",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088738",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088746",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088754",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088762",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088778",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088786",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088794",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887a2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887b0",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887c6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887d4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887e2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80887f8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088806",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088814",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808882c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808883a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088862",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808886e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088890",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808889a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80888a8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80888b6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80888fe",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088918",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088926",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8088934",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8089b38",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8089b82",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8089c24",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c2c",
+    "api": "init",
+    "port": "0x40011400",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c34",
+    "api": "init",
+    "port": "0x40011c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c4c",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c56",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c66",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089c76",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089cec",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x1",
+    "pins": [
+      "PA0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8089d56",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089e32",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089e4e",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8089f6a",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8000",
+    "pins": [
+      "PE15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8089ff6",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x1",
+    "pins": [
+      "PA0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a0d0",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a11a",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a1c0",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a1c8",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x8",
+    "pins": [
+      "PC3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a1e6",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a200",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a218",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a234",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a24e",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a26a",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a272",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a27a",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a282",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a28a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a292",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x10",
+    "pins": [
+      "PC4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2a0",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2a8",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x1",
+    "pins": [
+      "PE0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2b8",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x8000",
+    "pins": [
+      "PE15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2ce",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x10",
+    "pins": [
+      "PC4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2d8",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x10",
+    "pins": [
+      "PC4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a2f6",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a2fe",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a31a",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a3a4",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a3d0",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a3fe",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a406",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a412",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a420",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a42a",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a438",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a450",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a4b6",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a4be",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x8",
+    "pins": [
+      "PE3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a4c6",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x10",
+    "pins": [
+      "PE4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a4ce",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x20",
+    "pins": [
+      "PE5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a7a4",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808a7ac",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x20",
+    "pins": [
+      "PA5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a7de",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x20",
+    "pins": [
+      "PA5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a7ec",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a7f8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a806",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a810",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a81e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a83c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a84a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a854",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a862",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a87c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a88a",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x20",
+    "pins": [
+      "PA5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808a9fc",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808aa18",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808aa32",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808aa3a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa42",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa4c",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x2000",
+    "pins": [
+      "PC13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa54",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x2",
+    "pins": [
+      "PE1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa78",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa8a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aa96",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aaa6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aabc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aad2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aae6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aaf0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aafc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab08",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab28",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab44",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab4c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab56",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab5e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab6a",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x2000",
+    "pins": [
+      "PC13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ab74",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x2",
+    "pins": [
+      "PE1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aba6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808abb0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808abbc",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x2000",
+    "pins": [
+      "PC13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808abc6",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x2",
+    "pins": [
+      "PE1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808abd6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808abea",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8",
+    "pins": [
+      "PB3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac02",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac0c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac18",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x2000",
+    "pins": [
+      "PC13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac22",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x2",
+    "pins": [
+      "PE1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac38",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac5c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x20",
+    "pins": [
+      "PB5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac66",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x4",
+    "pins": [
+      "PB2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac72",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x2000",
+    "pins": [
+      "PC13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac7c",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x2",
+    "pins": [
+      "PE1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ac88",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x10",
+    "pins": [
+      "PB4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808acbe",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808acda",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808ace4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad3e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad4e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x4000",
+    "pins": [
+      "PB14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad5a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x4000",
+    "pins": [
+      "PB14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad64",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad82",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad90",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ad9e",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x8000",
+    "pins": [
+      "PA15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808adae",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808add2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ade0",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808adee",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x8000",
+    "pins": [
+      "PA15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ae02",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x4000",
+    "pins": [
+      "PB14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ae12",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x8000",
+    "pins": [
+      "PB15"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ae70",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808ae8a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aea8",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aec2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808aeea",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af04",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af2c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af3e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af52",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af6a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808af74",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808afa6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808afca",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808afe4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b1fe",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b216",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b220",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b24a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b254",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b286",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b29e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b2b8",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b418",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b42a",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b442",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b45c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b534",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b564",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b582",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x100",
+    "pins": [
+      "PB8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b63e",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808b64e",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808b67c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b686",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b696",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6a0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6aa",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6c2",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6cc",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6dc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6e6",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b6f0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b700",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x800",
+    "pins": [
+      "PB11"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b70a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b71a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b724",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x400",
+    "pins": [
+      "PB10"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b72e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x2000",
+    "pins": [
+      "PB13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b76c",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808b774",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x10",
+    "pins": [
+      "PA4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808b7d0",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808b7e4",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808b7f8",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808c2b2",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c2c2",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c2d2",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c2e2",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c2f0",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c300",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c310",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c320",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c32e",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c33e",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c34e",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c374",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c39c",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c3c4",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c3d6",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c470",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808c48a",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x4000",
+    "pins": [
+      "PA14"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c494",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x2000",
+    "pins": [
+      "PA13"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808c7b0",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808c7d0",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808ca06",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808ca14",
+    "api": "init",
+    "port": "0x40011400",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808cb1c",
+    "api": "read",
+    "port": "0x40011400",
+    "mask": "0x1",
+    "pins": [
+      "PD0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808cb2e",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808cb7c",
+    "api": "read",
+    "port": "0x40011400",
+    "mask": "0x1",
+    "pins": [
+      "PD0"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808cb96",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808cc1c",
+    "api": "read",
+    "port": "0x40011000",
+    "mask": "0x200",
+    "pins": [
+      "PC9"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808cc28",
+    "api": "read",
+    "port": "0x40011000",
+    "mask": "0x100",
+    "pins": [
+      "PC8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d25c",
+    "api": "init",
+    "port": "0x40010c00",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808d264",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d26c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d278",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d29a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d2c0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d2ce",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d2dc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d2ea",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d300",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d30e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d31c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d32a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d338",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d34e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d35c",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d36a",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d380",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d38e",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d39c",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d3b4",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d3c2",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d3ea",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d3f6",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d418",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d422",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d430",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d43e",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d486",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d4a0",
+    "api": "set",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d4ae",
+    "api": "read",
+    "port": "0x40010c00",
+    "mask": "0x40",
+    "pins": [
+      "PB6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d4bc",
+    "api": "clear",
+    "port": "0x40010c00",
+    "mask": "0x80",
+    "pins": [
+      "PB7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x808d72a",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808d746",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808d7ca",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808d7f2",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808e48a",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x808e49e",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8090aca",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8090ad4",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8090aec",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80921ae",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092e92",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8092ea4",
+    "api": "clear",
+    "port": "0x40010800",
+    "mask": "0x100",
+    "pins": [
+      "PA8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092eae",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092eb8",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092ec2",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092ecc",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x2",
+    "pins": [
+      "PD1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092ed6",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x80",
+    "pins": [
+      "PD7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092ee0",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x40",
+    "pins": [
+      "PD6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092eea",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x1000",
+    "pins": [
+      "PC12"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092ef2",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x80",
+    "pins": [
+      "PC7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092efa",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x40",
+    "pins": [
+      "PC6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8092f20",
+    "api": "init",
+    "port": "0x40010800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8092f42",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8092fe4",
+    "api": "init",
+    "port": "0x40011400",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8092ffe",
+    "api": "init",
+    "port": "0x40011400",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x8093066",
+    "api": "init",
+    "port": "0x40011000",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x809307c",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x100",
+    "pins": [
+      "PA8"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093084",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809308c",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093094",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809309c",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x2",
+    "pins": [
+      "PD1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930a4",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x80",
+    "pins": [
+      "PD7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930ae",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x1000",
+    "pins": [
+      "PC12"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930b6",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x80",
+    "pins": [
+      "PC7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930be",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x40",
+    "pins": [
+      "PC6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930cc",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x40",
+    "pins": [
+      "PD6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930da",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x40",
+    "pins": [
+      "PD6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80930f0",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x40",
+    "pins": [
+      "PD6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093100",
+    "api": "read",
+    "port": "0x40011400",
+    "mask": "0x20",
+    "pins": [
+      "PD5"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809314c",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80932e4",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80932ec",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093304",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809330c",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093320",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093328",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809334c",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093354",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093364",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093374",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809338a",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x10",
+    "pins": [
+      "PD4"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809339a",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80933ae",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80933ba",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809347a",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x8",
+    "pins": [
+      "PD3"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809348a",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x4",
+    "pins": [
+      "PD2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093656",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x2",
+    "pins": [
+      "PD1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093660",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x2",
+    "pins": [
+      "PD1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093670",
+    "api": "set",
+    "port": "0x40011000",
+    "mask": "0x80",
+    "pins": [
+      "PC7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809367a",
+    "api": "clear",
+    "port": "0x40011000",
+    "mask": "0x80",
+    "pins": [
+      "PC7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093692",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80936e8",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x80937f2",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093a68",
+    "api": "set",
+    "port": "0x40011400",
+    "mask": "0x80",
+    "pins": [
+      "PD7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8093a72",
+    "api": "clear",
+    "port": "0x40011400",
+    "mask": "0x80",
+    "pins": [
+      "PD7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x8099e4c",
+    "api": "set",
+    "port": "0x40010800",
+    "mask": "0x80",
+    "pins": [
+      "PA7"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809a122",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b018",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b030",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b0a8",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b0c4",
+    "api": "read",
+    "port": "0x40010800",
+    "mask": "0x2",
+    "pins": [
+      "PA1"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b160",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x40",
+    "pins": [
+      "PE6"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b390",
+    "api": "init",
+    "port": "0x40011800",
+    "mask": null,
+    "pins": [],
+    "r2": null
+  },
+  {
+    "call": "0x809b3a2",
+    "api": "set",
+    "port": "0x40011800",
+    "mask": "0x4",
+    "pins": [
+      "PE2"
+    ],
+    "r2": null
+  },
+  {
+    "call": "0x809b3ac",
+    "api": "clear",
+    "port": "0x40011800",
+    "mask": "0x4",
+    "pins": [
+      "PE2"
+    ],
+    "r2": null
+  }
+]

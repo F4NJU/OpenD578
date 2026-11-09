@@ -2,14 +2,14 @@ id,group,title,scope,model,automation,acceptance,blockers
 ihm.power,ihm,"Mise en marche, arrêt et réveil",oem_candidate,partial,none,watchdog et retour dans un état sûr,watchdog reset request observed; automatic reboot missing
 ihm.keys,ihm,"Touches P1–P6, MENU et EXIT",oem_candidate,partial,none,"appui court, long, maintien et relâchement",real OEM key decoder probes
 ihm.encoder,ihm,Encodeur et appui du cadran,oem_candidate,partial,none,"sens, pas, verrouillage et absence de double événement",OEM EXTI decoder probes
-ihm.mic_keys,ihm,Clavier du microphone,oem_candidate,partial,none,"chiffres, fonctions, appuis longs et verrouillage haut/bas",captured UART input protocol
+ihm.mic_keys,ihm,Clavier du microphone,oem_candidate,partial,software_irq,"chiffres, fonctions, appuis longs et verrouillage haut/bas","USART0 IRQ37, 8-byte frames, holds/releases; full OEM operation remains scenario-dependent"
 ihm.dual_ptt,ihm,PTT principal et sélection A/B du microphone,oem_candidate,partial,partial_oem_only,sélection réelle de la voie et relâchement,Main microphone PTT executed; alternate A/B PTT behavior not fully qualified
 ihm.lcd,ihm,Écran et rendu,oem_candidate,partial,none,"pixels, veille, réveil et mises à jour concurrentes",GPIO LCD bus decoder
-ihm.backlight,ihm,Rétroéclairage écran,oem_candidate,partial,none,luminosité et extinction commandées sur le bus,lighting channel 8 caller and bus evidence
+ihm.backlight,ihm,Rétroéclairage écran,oem_candidate,partial,software_gpio,luminosité et extinction commandées sur le bus,"BH2226 wire nibble 8 = DA1; latch-driven, not DA8"
 ihm.key_lights,ihm,Éclairage des touches du poste,oem_candidate,unimplemented,none,sorties électriques et intensités par groupe,No end-to-end automated qualification
-ihm.status_led,ihm,LED de statut du poste,oem_candidate,partial,partial_oem_only,séquence PE3/PE4 vert/repos/rouge/repos ; polarité et câblage physiques à confirmer,Red/green bus sequence tested; physical continuity and other colours unverified
-ihm.mic_led_main,ihm,Indicateurs de voie principale du microphone,oem_candidate,unimplemented,none,sélection A/B sans déduction depuis une variable OEM,No end-to-end automated qualification
-ihm.mic_led_rt,ihm,Indicateurs RX/TX du microphone,oem_candidate,unimplemented,none,trames radio vers microphone et état lumineux par voie,No end-to-end automated qualification
+ihm.status_led,ihm,LED de statut du poste,oem_candidate,partial,software_gpio,séquence PE3/PE4 vert/repos/rouge/repos validée par firmware ; sorties auxiliaires ouvertes,PE3/PE4 OEM sequence validated by firmware; other driver outputs remain unassigned
+ihm.mic_led_main,ihm,Indicateurs de voie principale du microphone,oem_candidate,partial,software_uart_tx,sélection A/B sans déduction depuis une variable OEM,"OEM TX commands decoded; unknown states retained, no indicator from key clicks"
+ihm.mic_led_rt,ihm,Indicateurs RX/TX du microphone,oem_candidate,partial,software_uart_tx,trames radio vers microphone et état lumineux par voie,OEM TX command fixtures; no independent RF/audio validation
 ihm.mic_backlight,ihm,Éclairage du clavier microphone,oem_candidate,unimplemented,none,"commande, alimentation, temporisation et intensité",No end-to-end automated qualification
 ihm.locks,ihm,Verrouillages des commandes,oem_candidate,unimplemented,none,"façade, encodeur, clavier et touches haut/bas du microphone",No end-to-end automated qualification
 ihm.menu_timeout,ihm,Sortie temporisée des menus,oem_candidate,unimplemented,none,délai virtuel et retour à la vue active,No end-to-end automated qualification

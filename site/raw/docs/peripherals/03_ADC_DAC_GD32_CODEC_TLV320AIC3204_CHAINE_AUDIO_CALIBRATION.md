@@ -31,11 +31,11 @@ Le **SGM8272** est un double amplificateur operationnel analogique et le **MC341
 
 ## 3. BH2226FV, sorties DAC et plages de tension
 
-Le BH2226FV-E2 est un composant 8 bits x 8 canaux, **SSOP-B16**, alimentation specifiee **2,7 a 5,5 V**, interface serie 3 fils. Un mot ordinaire contient une selection de canal et une valeur 8 bits, **12 bits au total** ; la table de commandes initiales doit etre lue dans la notice ROHM (power down, DAC/I/O). Une encodeur logiciel pur existe dans `firmware/hal/serial_command_encoders.c` et ses tests, **sans acces GPIO**.
+Le BH2226FV-E2 est un composant 8 bits x 8 canaux, **SSOP-B16**, alimentation specifiee **2,7 a 5,5 V**, interface serie 3 fils. Un mot ordinaire contient une selection de canal et une valeur 8 bits, **12 bits au total** ; la table de commandes initiales doit etre lue dans la notice ROHM (power down, DAC/I/O). Un encodeur logiciel pur existe dans `firmware/hal/serial_command_encoders.c` et ses tests, **sans acces GPIO**.
 
 | Sortie | Alias datasheet | Destination sur le D578 |
 | --- | --- | --- |
-| 1 | DA1 | **Non tracee** |
+| 1 | DA1 | Rétroéclairage LCD ; nibble fil 0x8, N1 |
 | 2 | DA2 | Non tracee |
 | 3 | DA3 | Non tracee |
 | 4 | DA4 | Non tracee |
@@ -93,3 +93,6 @@ Une documentation de calibration exploitable doit contenir : variante et numero 
 - TI TLV320AIC3204 : <https://www.ti.com/product/TLV320AIC3204>.
 - RadioFoundry, chemin codec via SCT : <https://radiofoundry.org/docs/spec/hardware-anytone>.
 - UTC U2429G : <https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf>.
+
+
+Mise à jour du 9 novembre 2026 : BH2226 PA5 CSB/PB3 CLK/PB4 DI ; U2429 DATA PA13/CLOCK PA14, après libération SWJ. U2429 D0 choisit le canal, D1 choisit individuel/commun. Voir [contrats audio OEM V0.13](AUDIO_LIAISONS_LOGIQUES_OEM_V013.md) et [tableau IO](../hardware/io/TABLEAU_IO_D578.md).

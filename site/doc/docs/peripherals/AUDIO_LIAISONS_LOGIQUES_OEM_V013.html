@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>D578 PRO GD32 V1.21 — liaisons audio déduites du firmware - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>D578 PRO GD32 V1.21 — liaisons audio déduites du firmware</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/AUDIO_LIAISONS_LOGIQUES_OEM_V013.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/AUDIO_LIAISONS_LOGIQUES_OEM_V013.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/AUDIO_LIAISONS_LOGIQUES_OEM_V013.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="d578-pro-gd32-v121-liaisons-audio-deduites-du-firmware">D578 PRO GD32 V1.21 — liaisons audio déduites du firmware</h1>
+<p>8 novembre 2026 — Jean-Philippe (F4EGM), projet OpenD578.</p>
+<p>Le contrat de commande audio peut être reconstruit à partir du firmware : entrées acquises, sélection de chemin, gains, coupures et ordre des écritures. Le relevé complet des pistes et de la réponse analogique n'est pas un préalable à la réécriture de ces fonctions. Le banc sert à confronter cette réécriture aux comportements de l'OEM.</p>
+<p>Cette étape apporte huit fonctions C comparées aux instructions OEM sur <strong>62 402 cas</strong>, sans différence, et un décodage passif des commandes dans le banc Web 0.13. Elle ne raccorde pas encore le flux sonore complet.</p>
+<h2 id="image-de-reference-et-methode">Image de référence et méthode</h2>
+<p>La référence est la Flash complète PRO GD32 V1.21 de SHA-256 <code>e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e</code>. Les adresses ci-dessous servent à reproduire l'analyse ; la réécriture C n'appelle aucune routine OEM et n'utilise aucune adresse SRAM fixe.</p>
+<p>Deux sources de preuve se complètent :</p>
+<ul>
+<li>Les captures 0.11/0.12 proviennent d'un démarrage OEM avec les sauvegardes du projet, puis d'entrées GPIO/ADC/UART. Leurs menus, commandes et lectures NAND sont conservés. Aucune variable OEM n'y a été forcée.</li>
+<li>Le nouveau test différentiel exécute <strong>des routines isolées</strong> dans une instance Unicorn distincte, avec des paramètres et des données RAM de test explicites. Les appels terminaux RF/GPIO sont enregistrés, puis comparés à la réécriture C. Ce test n'est pas présenté comme un nouveau démarrage du poste. Ses données de test ne sont jamais importées par le banc Web.</li>
+</ul>
+<p>Le second test vérifie les mots, leur ordre, la suppression des écritures redondantes et la conservation des bits voisins. Il ne vérifie pas les délais électriques entre fronts.</p>
+<h2 id="commandes-retrouvees">Commandes retrouvées</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction logique</th>
+  <th>Liaison ou commande émise</th>
+  <th>Routine OEM</th>
+  <th>Résultat établi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Deux volumes indépendants</td>
+  <td>U2429, DATA PA13, CLOCK PA14</td>
+  <td><code>0x0808C354</code>, <code>0x0808C3EC</code></td>
+  <td>Mots série, sélection du canal, coupure, table des niveaux</td>
+</tr>
+<tr>
+  <td>Quantification du volume</td>
+  <td>Valeur acquise → niveau 0…32</td>
+  <td><code>0x0808B922</code></td>
+  <td>Les 4 096 valeurs ADC 12 bits correspondent à la réécriture</td>
+</tr>
+<tr>
+  <td>Coupure du HP poste</td>
+  <td>PA7 = 1 coupe, PA7 = 0 ouvre</td>
+  <td><code>0x08090A86</code>, <code>0x08090ADC</code></td>
+  <td>Commande logique et combinaison des modes HP</td>
+</tr>
+<tr>
+  <td>Coupure du HP micro</td>
+  <td>Banque RF 1, page 0, registre <code>0x25</code>, bit 4</td>
+  <td>mêmes routines, wrapper <code>0x08072544</code></td>
+  <td>1 coupe ; 0 ouvre</td>
+</tr>
+<tr>
+  <td>Préférence de chemin du micro</td>
+  <td>Même registre, bit 7</td>
+  <td><code>0x080929B6</code>, wrapper <code>0x08072574</code></td>
+  <td>Dans l'application standard du réglage : MAIN met 1, SUB met 0</td>
+</tr>
+<tr>
+  <td>Porte de routage complémentaire</td>
+  <td>Même registre, bit 2</td>
+  <td><code>0x080929B6</code>, <code>0x08090A22</code>, wrapper <code>0x08072514</code></td>
+  <td>Dépend du mode HP, de SUB et du contexte ; ce n'est pas un sélecteur fixe A/B</td>
+</tr>
+<tr>
+  <td>Entrée et code micro FM filaire</td>
+  <td>Banque RF 0, reg. <code>0x18</code>, puis page 1 reg. <code>0x17</code></td>
+  <td><code>0x0806F07C</code></td>
+  <td>Niveau utilisateur combiné au MIC usine, appliqué lors de la configuration TX</td>
+</tr>
+<tr>
+  <td>Calibrations par poste</td>
+  <td>Lecture NAND puis commandes RF</td>
+  <td><code>0x0801A576</code> et routines RF</td>
+  <td>Les valeurs de la sauvegarde restent la source, sans gain usine ajouté par le banc</td>
+</tr>
+</tbody>
+</table>
+<p>La correspondance A → CH1 et B → CH2 de l'U2429 est observée dans les scénarios 0.11. L'attribution permanente de toutes les sources aux sorties nécessite de suivre aussi les commutations de rôle MAIN/SUB. Deux canaux de volume ne signifient pas deux haut-parleurs fixes.</p>
+<h2 id="modes-des-haut-parleurs">Modes des haut-parleurs</h2>
+<p>La routine d'ouverture produit le tableau suivant dans le chemin standard, hors maintien temporaire et hors mode spécial :</p>
+<table>
+<thead>
+<tr>
+  <th>Mode OEM</th>
+  <th>PA7</th>
+  <th>PIO <code>0x25</code> bit 4</th>
+  <th>Commande logique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Mic Spk</td>
+  <td>1</td>
+  <td>0</td>
+  <td>HP micro ouvert, HP poste coupé</td>
+</tr>
+<tr>
+  <td>Radio Spk</td>
+  <td>0</td>
+  <td>1</td>
+  <td>HP poste ouvert, HP micro coupé</td>
+</tr>
+<tr>
+  <td>Both</td>
+  <td>0</td>
+  <td>0</td>
+  <td>Deux sorties ouvertes</td>
+</tr>
+<tr>
+  <td>Coupure globale</td>
+  <td>1</td>
+  <td>1</td>
+  <td>Deux sorties coupées</td>
+</tr>
+</tbody>
+</table>
+<p>L'OEM écrit d'abord la commande du bit 4, si elle change, puis PA7. Le getter <code>0x08090A10</code> peut imposer Radio Spk par un état interne distinct du choix sauvegardé. Un maintien temporaire peut aussi empêcher l'ouverture. Ces conditions sont des paramètres explicites des fonctions C ; elles ne sont pas effacées pour simplifier le tableau.</p>
+<h2 id="mainsub-et-les-deux-bits-de-routage">MAIN/SUB et les deux bits de routage</h2>
+<p>La routine <code>0x080929B6</code> établit, dans son chemin standard :</p>
+<table>
+<thead>
+<tr>
+  <th>Réglage appliqué</th>
+  <th>Bit 7</th>
+  <th>Bit 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MAIN</td>
+  <td>1</td>
+  <td>0</td>
+</tr>
+<tr>
+  <td>SUB avec Both et état de maintien secondaire à 0</td>
+  <td>0</td>
+  <td>1</td>
+</tr>
+<tr>
+  <td>SUB dans les autres cas standard</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Une autre routine, <code>0x08090A22</code>, peut ensuite modifier le bit 2 : elle impose 1 pour Both + SUB, ou applique son argument dans les autres cas. La routine <code>0x08090A4C</code> peut modifier le bit 7 selon des états auxiliaires. <strong>Lire un bit isolé ne suffit donc pas à reconstituer la source A/B effectivement audible.</strong></p>
+<p>Les captures OEM en RX A confirment SUB <code>0x0066</code> → MAIN <code>0x00E6</code>, soit le seul changement du bit 7, avec bit 2 déjà à 1 dans les deux états. Cela explique pourquoi une simple table « bit 2 = voie A/B » aurait été incorrecte.</p>
+<p>Le bit 7 révèle bien une commande de préférence MAIN/SUB. Le MCU pilote aussi des routes temporaires : le modèle Web présente les commandes reçues et laisse la source effective indéterminée tant que ces autres commutations ne sont pas raccordées. Il ne lit pas le menu en RAM pour fabriquer un résultat.</p>
+<h2 id="micro-fm-et-calibration-nand">Micro FM et calibration NAND</h2>
+<p>Dans le chemin filaire standard (<code>cfg+0x21 = 0</code>), le niveau utilisateur sélectionne deux champs différents :</p>
+<table>
+<thead>
+<tr>
+  <th>Niveau affiché</th>
+  <th>Sélecteur, reg. <code>0x18</code></th>
+  <th>Ajustement du code MIC usine</th>
+  <th>Exemple avec MIC = 54 : page 1 reg. <code>0x17</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Level 1</td>
+  <td>2</td>
+  <td>+1</td>
+  <td><code>0x03B8</code></td>
+</tr>
+<tr>
+  <td>Level 2</td>
+  <td>3</td>
+  <td>−2</td>
+  <td><code>0x03A0</code></td>
+</tr>
+<tr>
+  <td>Level 3</td>
+  <td>4</td>
+  <td>0</td>
+  <td><code>0x03B0</code></td>
+</tr>
+<tr>
+  <td>Level 4</td>
+  <td>5</td>
+  <td>0</td>
+  <td><code>0x03B0</code></td>
+</tr>
+<tr>
+  <td>Level 5</td>
+  <td>6</td>
+  <td>+1</td>
+  <td><code>0x03B8</code></td>
+</tr>
+<tr>
+  <td>Level 6</td>
+  <td>7</td>
+  <td>+1</td>
+  <td><code>0x03B8</code></td>
+</tr>
+</tbody>
+</table>
+<p>Registre <code>0x18 = 0x0125 | (sélecteur &lt;&lt; 11)</code> ; page 1 registre <code>0x17 = 0x0200 | (code appliqué &lt;&lt; 3)</code>, réduit au mot de 16 bits. L'ordre émis est : reg. <code>0x18</code>, page 1, reg. <code>0x17</code>, retour page 0. Les six niveaux × les 64 valeurs de calibration MIC ont été comparés. Le calcul conserve les débordements de 16 bits de l'OEM aux valeurs extrêmes ; aucun écrêtage supplémentaire n'est annoncé comme identique à l'OEM.</p>
+<p>Ce tableau décrit des <strong>codes de commande</strong>, pas une progression en dB. Le changement de sélecteur explique pourquoi le seul ajustement MIC ne décrit pas à lui seul le niveau micro. La formule ne doit pas être étendue au chemin spécial sans analyser ses autres branches.</p>
+<p>Les captures 0.12 établissent Level 4 → Level 5 en TX VHF et Level 5 en TX UHF, avec MIC usine 54. La calibration MODV1 = 45 produit les bits bas 90 de reg. <code>0x40</code> en VHF ; MODU = 105 produit 210 en UHF. Les champs usine MIC/MODU/MODV1/CTCW proviennent des lectures NAND effectivement transmises au MCU. Aucune commande codec/SCT supplémentaire n'a été observée pendant ces transitions FM : le modèle ne doit pas envoyer automatiquement ce réglage à travers un traitement DMR.</p>
+<h2 id="reecriture-pour-le-firmware-libre">Réécriture pour le firmware libre</h2>
+<p><code>firmware/hal/audio_control.h</code> et <code>.c</code> fournissent des fonctions C11 sans dépendance au firmware propriétaire : ouverture/coupure HP, préférence de chemin, deux commandes de routage contextuelles, réglage micro FM, quantification et encodage du volume. Elles produisent des plans d'opérations, avec un callback de transport fourni par le firmware libre. Le transport doit gérer la configuration GPIO, les verrous de bus et les impulsions électriques.</p>
+<p>Les états dont le sens métier n'est pas encore établi restent explicitement identifiés dans l'en-tête. Ils ne sont pas renommés « Bluetooth », « squelch » ou « réception active » sur une supposition. Le backend reçoit aussi le choix transport RF direct/file, qui n'est pas une garantie de délai au cycle.</p>
+<p>Une erreur du callback interrompt le plan et retourne le nombre d'opérations réussies. Après une erreur partielle, l'appelant déduit l'état courant de ce préfixe ; il ne valide pas le mot final d'un plan incomplet. Les fonctions ne commandent aucune mise en émission.</p>
+<h2 id="validation-et-suite">Validation et suite</h2>
+<table>
+<thead>
+<tr>
+  <th>Contrat comparé</th>
+  <th style="text-align:right">Cas sans différence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Ouverture HP</td>
+  <td style="text-align:right">12 288</td>
+</tr>
+<tr>
+  <td>Application MAIN/SUB</td>
+  <td style="text-align:right">24 576</td>
+</tr>
+<tr>
+  <td>Porte de routage bit 2</td>
+  <td style="text-align:right">12 288</td>
+</tr>
+<tr>
+  <td>Route auxiliaire bit 7</td>
+  <td style="text-align:right">8 192</td>
+</tr>
+<tr>
+  <td>Coupure globale</td>
+  <td style="text-align:right">512</td>
+</tr>
+<tr>
+  <td>Micro FM standard</td>
+  <td style="text-align:right">384</td>
+</tr>
+<tr>
+  <td>Quantification volume</td>
+  <td style="text-align:right">4 096</td>
+</tr>
+<tr>
+  <td>Encodage volume, deux canaux</td>
+  <td style="text-align:right">66</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>62 402</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Reproduction depuis le paquet : <code>python3 preuves/routage_v013/compare_oem_audio.py CHEMIN_FLASH resultat.json</code>. Dépendances : Python, Unicorn et compilateur C11 <code>cc</code>. Le script contrôle l'empreinte de la Flash et compile les sources C du paquet dans un répertoire temporaire. Les résultats sont dans <code>preuves/routage_v013/audio_contract_differential.json</code>.</p>
+<p>Le prochain travail utile consiste à suivre les autres commutations de sources et le traitement FM jusqu'à un trajet numérique continu dans le banc, puis à brancher les mêmes contrats sur les pilotes du firmware libre. La métrologie fine des amplificateurs et des HP peut venir ensuite. Les contacts de prises qui changent le trajet sans retour au MCU peuvent rester invisibles dans le firmware ; ils demandent un modèle d'environnement ou un contrôle matériel ciblé.</p>
+<p>Un OEM fonctionnel dans le banc donnera une base de tests solide pour le firmware libre : mêmes entrées, mêmes commandes attendues et mêmes sauvegardes. La validation sur le poste restera nécessaire pour les effets matériels que le banc ne représente pas. Le DMR reste reporté.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
 <a href="evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
 <div class="doc-heading"><h1>Moteur satellite OpenGD77, code compilé et stratégie d&#x27;intégration</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md">Modifier sur GitHub</a><a download href="../../raw/docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/05_SATELLITE_CODE_INTEGRATION_EXP06.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="moteur-satellite-opengd77-code-compile-et-strategie-dintegration">Moteur satellite OpenGD77, code compilé et stratégie d'intégration</h1>
 <h2 id="architecture-satellite-recherchee">Architecture satellite recherchée</h2>
 <p>Le portage est une <strong>fonction additionnelle</strong>, pas un remplacement du firmware AnyTone par OpenGD77. Le moteur orbital OpenGD77/PLAN13 et les routines de passes sont isolés en composants C. Les TLE sont sélectionnés à la demande, mis en cache pour <strong>un satellite actif</strong>, avec au plus 25 entrées TLE potentielles dans l'adaptateur. Le constructeur conserve l'interface, les timers, les fréquences et la sécurité RF; le module satellite propose des résultats, sans écrire directement dans le transceiver.</p>

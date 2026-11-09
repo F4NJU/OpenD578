@@ -2,11 +2,13 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Controle Bluetooth PLUS - OpenD578</title>
+<title>UART3 partage Bluetooth / APRS RX - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../simulator/index.html">Simulateur</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
 <a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
@@ -17,11 +19,11 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison plus-gd32-bluetooth</div>
-<h1>Controle Bluetooth PLUS</h1>
-<p><a href="../../component/d578uv-plus-carte-am-observations/mcu_plus.html">MCU GD32F303 PLUS</a> &rarr; <a href="../../component/d578uv-plus-carte-am-observations/bt_support_plus.html">Carte support Bluetooth</a></p>
-<dl class="facts"><dt>Bus</dt><dd>UART candidat ; exact non verifie</dd><dt>Niveau de preuve</dt><dd>hypothesis</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
-<p>Le PLUS utilise un GD32F303 et un module Bluetooth documente ET12. L UART3 du simulateur PRO n est pas transpose comme brochage physique du PLUS.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td colspan="3">Aucune broche supplémentaire identifiée pour cette liaison; consulter les fonctions, trames et références OEM.</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/BLUETOOTH_D868BT_SP_ET12.html">Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">source</a></small></li><li><a href="../../doc/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">Bluetooth : variantes D578 PRO/PLUS et piste de compatibilite D878</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md">source</a></small></li><li><a href="../../doc/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.html">Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md">source</a></small></li></ul></main>
+<h1>UART3 partage Bluetooth / APRS RX</h1>
+<p><a href="../../component/d578uv-plus-carte-am-observations/mcu_plus.html">MCU GD32F303 PLUS</a> &rarr; <a href="../../component/d578uv-plus-carte-am-observations/bt_support_plus.html">Carte BT+APRS / BHT_BOARD</a></p>
+<dl class="facts"><dt>Bus</dt><dd>UART candidat ; exact non verifie</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
+<p>Liaison validee par analyse OEM : PC10 : RX de la carte : commandes AT / échanges Bluetooth et BT+APRS; PC11 : TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PC10</code></td><td>RX de la carte : commandes AT / échanges Bluetooth et BT+APRS</td><td>oem_trace</td></tr><tr><td><code>PC11</code></td><td>TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/BLUETOOTH_D868BT_SP_ET12.html">Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">source</a></small></li><li><a href="../../doc/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.html">Bluetooth : variantes D578 PRO/PLUS et piste de compatibilite D878</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md">source</a></small></li><li><a href="../../doc/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.html">Firmware alternatif : couches Bluetooth D868BT-SP / ET12, BT01 et PTT BP-02</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/APRS_RX_PLUS.html">N14 — Réception APRS analogique du D578UV PLUS</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/APRS_RX_PLUS.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

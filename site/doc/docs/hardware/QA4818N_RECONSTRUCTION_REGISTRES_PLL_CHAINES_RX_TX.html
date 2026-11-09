@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="qa4818n-x4-reconstruction-du-protocole-des-frequences-des-banques-et-des-commandes-rf">QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</h1>
 <p><strong>OpenD578, variante PRO GD32 V1.21, étude du 6 novembre 2026.</strong></p>
 <p><strong>Statut : pilote de codage et analyseur de trames disponibles, pas de firmware RF matériellement validé.</strong> Les séquences du constructeur <em>peuvent</em> être mesurées par le banc <code>bench/rf_spi.py</code>, mais <strong>aucune capture complète et authentifiée d'un changement de fréquence RX/TX n'a été retrouvée dans les archives publiques actuellement accessibles</strong>. Les valeurs numériques ci-dessous proviennent soit d'une équation publiée pour l'AT1846S, soit d'un scénario explicitement hypothétique. Il serait incorrect de les appeler « mots observés du D578 » sans enregistrer un <code>RF_control_spi.frames</code> ou <code>radio.frames</code> exécuté avec l'application OEM.</p>

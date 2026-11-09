@@ -62,15 +62,21 @@ for n in range(7,15):
 for name,label in {'PB10':'LCD WR# candidate','PB11':'LCD D/C candidate','PB12':'LCD RESET# candidate','PB13':'LCD CS# candidate'}.items():
  ANNO[name]=(label,'OEM 8080 GPIO trace; LCD pad continuity TBD')
 
+# Canonical firmware-resolved signals, including N14 APRS RX PLUS.
+resolved_path=ROOT/'docs/hardware/io/TABLEAU_IO_D578.json'
+resolved={r['Signal GD32']:r for r in json.loads(resolved_path.read_text())}
+for signal,row in resolved.items():
+ ANNO[signal]=(row['Fonction du signal distant'],row['Validation']+'; '+row['Preuves']+'; '+row['Précision restante'])
+
 pinmap=ROOT/'hardware/pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv'
 pinmap.parent.mkdir(parents=True,exist_ok=True)
 with pinmap.open('w',newline='',encoding='utf8') as f:
- w=csv.writer(f)
+ w=csv.writer(f,lineterminator="\n")
  w.writerow(['physical_pin','gd32_pin','board_signal_candidate','claim_level','provenance'])
  for number,name in enumerate(NAMES,1):
   net,proof=ANNO.get(name,('Not traced','No board signal claimed'))
-  level='unmapped' if name not in ANNO else ('physical' if name in ('PA13','PA14') else 'datasheet_and_external' if name=='VBAT' else 'oem_or_emulator_candidate')
-  w.writerow([number,name,net,level,proof])
+  level=resolved[name]['Validation'] if name in resolved else 'unmapped' if name not in ANNO else ('physical' if name in ('PA13','PA14') else 'datasheet_and_external' if name=='VBAT' else 'oem_or_emulator_candidate')
+  w.writerow([number,name,net,level,proof.rstrip()])
 
 # KiCad symbol with all 100 pins. Pins are deliberately NOT connected in the
 # schematic, so this is a schematic-level pin reference only, never a PCB netlist.
@@ -104,7 +110,7 @@ sheetid=U();symbol_id=U()
 parts=['(kicad_sch (version 20230121) (generator "eeschema")',f'(uuid "{sheetid}")','(paper "A3")',
  '(title_block (title "OpenD578 GD32F303VKT6 - BROCHAGE RECONSTITUE / PAS DE NETLISTE") (date "2026-11-05") (rev "0.4"))',
  '(lib_symbols',lib,')',
- '(text "RECONSTRUCTION: pinout du composant selon datasheet; toutes les pistes du D578 restent a qualifier. NE PAS FABRIQUER DE PCB A PARTIR DE CE FICHIER." (at 30 20 0) (effects (font (size 1.3 1.3)) (justify left bottom)) (uuid "'+U()+'"))',
+ '(text "RECONSTRUCTION: pinout du composant selon datasheet; liaisons firmware qualifiees dans le tableau IO ; cette feuille ne comporte aucun fil. NE PAS FABRIQUER DE PCB A PARTIR DE CE FICHIER." (at 30 20 0) (effects (font (size 1.3 1.3)) (justify left bottom)) (uuid "'+U()+'"))',
  '(symbol (lib_id "OpenD578:GD32F303VKT6") (at 190.5 150 0) (unit 1) (in_bom yes) (on_board yes) (dnp no)',f'(uuid "{symbol_id}")',
  prop('Reference','U1',190.5,77.0),prop('Value','GD32F303VKT6',190.5,226.0)]
 for i in range(1,101):parts.append(f'(pin "{i}" (uuid "{U()}"))')
@@ -113,5 +119,5 @@ sheet=ROOT/'hardware/kicad/OpenD578_GD32F303VKT6_RECONSTITUE.kicad_sch'
 sheet.write_text('\n'.join(parts)+'\n',encoding='utf8')
 
 README=ROOT/'hardware/kicad/README.md'
-README.write_text('''# KiCad : reconstruction de brochage, PAS le schema AnyTone original\n\nFichiers **nouveaux**, reconstruits le 05/11/2026 a partir de la datasheet GigaDevice.\nIls ne remplacent pas le fichier historique `D578_GD32_Brochage_KiCad_V0_3.zip`, dont les octets originaux sont indisponibles.\n\n- `.kicad_sym` : 100 broches physiques de l\'encombrement GD32F303VKT6 LQFP100, regroupement de symboles par numero pour la lisibilite.\n- `.kicad_sch` : feuille **sans aucun fil**, une reference de brochage uniquement.\n- `../pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv` : hypothese de fonction par broche et provenance.\n\nLes fichiers ont ete controles lexicalement et par nombre de broches, mais **pas ouverts dans KiCad dans cette session** ; avant modification, les ouvrir dans la version locale de KiCad et verifier l\'affichage.\n\nDatasheet : https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf ; section 2.6.2 / Table 2-5.\n''',encoding='utf8')
+README.write_text('''# KiCad : reconstruction de brochage, PAS le schema AnyTone original\n\nFichiers **nouveaux**, reconstruits le 05/11/2026 a partir de la datasheet GigaDevice.\nIls ne remplacent pas le fichier historique `D578_GD32_Brochage_KiCad_V0_3.zip`, dont les octets originaux sont indisponibles.\n\n- `.kicad_sym` : 100 broches physiques de l\'encombrement GD32F303VKT6 LQFP100, regroupement de symboles par numero pour la lisibilite.\n- `.kicad_sch` : feuille **sans aucun fil**, une reference de brochage uniquement.\n- `../pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv` : fonction par broche, statut de validation et provenance ; voir le tableau IO resolu.\n\nLes fichiers ont ete controles lexicalement et par nombre de broches, mais **pas ouverts dans KiCad dans cette session** ; avant modification, les ouvrir dans la version locale de KiCad et verifier l\'affichage.\n\nDatasheet : https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf ; section 2.6.2 / Table 2-5.\n''',encoding='utf8')
 print('CSV',pinmap,'Symbol',symfile,'Schematic',sheet,'100 pins',len(pins))

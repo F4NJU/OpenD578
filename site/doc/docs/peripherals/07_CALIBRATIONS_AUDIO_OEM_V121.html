@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Audio et calibrations propres au poste — Web 0.12 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>Audio et calibrations propres au poste — Web 0.12</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/07_CALIBRATIONS_AUDIO_OEM_V121.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/07_CALIBRATIONS_AUDIO_OEM_V121.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/07_CALIBRATIONS_AUDIO_OEM_V121.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="audio-et-calibrations-propres-au-poste-web-012">Audio et calibrations propres au poste — Web 0.12</h1>
+<p><strong>8 novembre 2026 — PRO GD32 V1.21, sauvegardes du projet.</strong> La prise en compte des paramètres usine est vérifiée sur les transactions OEM en TX VHF et UHF. <strong>La chaîne sonore complète reste non qualifiée : le paquet ne restitue pas encore un son fidèle de bout en bout.</strong></p>
+<h2 id="ce-qui-est-applique-depuis-vos-sauvegardes">Ce qui est appliqué depuis vos sauvegardes</h2>
+<p>L'OEM lit la NAND par ses GPIO, choisit sa copie et programme ses périphériques. Le modèle matériel ne lit aucune variable OEM pour choisir un gain et ne remplace aucun paramètre par une valeur nominale.</p>
+<p>La routine <code>0x0801A576</code> sélectionne entre <code>0x02F60000</code> et <code>0x02F80000</code>, puis lit notamment 32 octets à l'offset 0 vers <code>0x200093F0</code> et 32 octets à l'offset <code>0x40</code> vers <code>0x20009410</code>. Ces adresses SRAM servent uniquement à l'analyse passive de la preuve. Les paramètres de fonctionnement du modèle viennent des transactions GPIO/HPI achevées.</p>
+<p>La campagne retrouve la copie <code>0x02F60000</code>. Les 64 octets de ces deux premiers enregistrements concordent entre le fil NAND et les tampons OEM. L'observateur distingue le chargement interne d'une page NAND et les octets réellement transmis au MCU : un préchargement de 2 Kio ne fait pas apparaître artificiellement 2 Kio de paramètres « utilisés ».</p>
+<h2 id="reglages-retrouves-dans-le-mode-de-service">Réglages retrouvés dans le mode de service</h2>
+<p>Les libellés proviennent de la table OEM à <code>0x080C0B34</code>. Le dispatch TBB à <code>0x08065662</code> permet de relier chaque commande aux champs de calibration ci-dessous.</p>
+<table>
+<thead>
+<tr>
+  <th>Réglage de service</th>
+  <th style="text-align:right">Mode OEM</th>
+  <th style="text-align:right">Offset dans la copie sélectionnée</th>
+  <th style="text-align:right">Valeur de votre capture</th>
+  <th>Qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MODU</td>
+  <td style="text-align:right">18</td>
+  <td style="text-align:right"><code>+0x05</code></td>
+  <td style="text-align:right">105</td>
+  <td>Lecture NAND et commande TX UHF vérifiées</td>
+</tr>
+<tr>
+  <td>MIC</td>
+  <td style="text-align:right">19</td>
+  <td style="text-align:right"><code>+0x19</code></td>
+  <td style="text-align:right">54</td>
+  <td>Lecture NAND et code micro appliqué vérifiés</td>
+</tr>
+<tr>
+  <td>TONEU</td>
+  <td style="text-align:right">20</td>
+  <td style="text-align:right"><code>+0x17</code></td>
+  <td style="text-align:right">115</td>
+  <td>Mapping statique et lecture NAND ; réponse de tonalité ouverte</td>
+</tr>
+<tr>
+  <td>TONEV2</td>
+  <td style="text-align:right">21</td>
+  <td style="text-align:right"><code>+0x18</code></td>
+  <td style="text-align:right">58</td>
+  <td>Mapping statique et lecture NAND ; réponse de tonalité ouverte</td>
+</tr>
+<tr>
+  <td>CTCW</td>
+  <td style="text-align:right">22</td>
+  <td style="text-align:right"><code>+0x06</code></td>
+  <td style="text-align:right">72</td>
+  <td>Lecture et champ de commande de sous-audio retrouvés en TX</td>
+</tr>
+<tr>
+  <td>DCSW</td>
+  <td style="text-align:right">23</td>
+  <td style="text-align:right"><code>+0x07</code></td>
+  <td style="text-align:right">56</td>
+  <td>Mapping statique et lecture NAND ; émission DCS non qualifiée</td>
+</tr>
+<tr>
+  <td>MODV1</td>
+  <td style="text-align:right">53</td>
+  <td style="text-align:right"><code>+0x45</code></td>
+  <td style="text-align:right">45</td>
+  <td>Lecture NAND et commande TX VHF vérifiées</td>
+</tr>
+<tr>
+  <td>MODV2</td>
+  <td style="text-align:right">54</td>
+  <td style="text-align:right"><code>+0x57</code></td>
+  <td style="text-align:right">100</td>
+  <td>Mapping statique et lecture NAND ; transfert physique ouvert</td>
+</tr>
+</tbody>
+</table>
+<p>Ce sont des <strong>codes bruts</strong>, pas des dB, des volts ou une déviation en hertz. Le logiciel ne fixe aucune de ces valeurs dans les modèles de gain. L'interface les affiche seulement après leur lecture sur le fil et pour la Flash de référence reconnue. Une Flash différente conserve l'émulation et les observations brutes ; les libellés dépendant de cette version ne sont pas prétendus qualifiés.</p>
+<p>La routine <code>0x0801A15E</code>, autrefois présentée comme un chargement candidat, appartient à l'initialisation des valeurs et appelle le chemin d'écriture <code>0x0808B32A</code>. Le chargement étudié ici utilise <code>0x0808B5A4</code> depuis <code>0x0801A594</code> et les appels suivants. Cette distinction corrige la description historique sans modifier l'OEM.</p>
+<h2 id="micro-fm-le-test-en-tx-etait-necessaire">Micro FM : le test en TX était nécessaire</h2>
+<table>
+<thead>
+<tr>
+  <th>Cas obtenu par les commandes OEM</th>
+  <th style="text-align:right">Réglage AnaMic</th>
+  <th style="text-align:right">MIC usine lu</th>
+  <th>QA banque 0, page 0 / <code>0x18</code></th>
+  <th>QA page 1 / <code>0x17</code></th>
+  <th style="text-align:right">Code micro appliqué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>TX VHF initial</td>
+  <td style="text-align:right">Level 4</td>
+  <td style="text-align:right">54</td>
+  <td><code>0x2925</code></td>
+  <td><code>0x03B0</code></td>
+  <td style="text-align:right">54</td>
+</tr>
+<tr>
+  <td>Menu Level 5 confirmé, avant TX</td>
+  <td style="text-align:right">Level 5</td>
+  <td style="text-align:right">54</td>
+  <td><code>0x2925</code></td>
+  <td><code>0x03B0</code></td>
+  <td style="text-align:right">54</td>
+</tr>
+<tr>
+  <td>TX VHF après changement</td>
+  <td style="text-align:right">Level 5</td>
+  <td style="text-align:right">54</td>
+  <td><code>0x3125</code></td>
+  <td><code>0x03B8</code></td>
+  <td style="text-align:right">55</td>
+</tr>
+<tr>
+  <td>TX UHF, mémoire ON0CS UHF</td>
+  <td style="text-align:right">Level 5</td>
+  <td style="text-align:right">54</td>
+  <td><code>0x3125</code></td>
+  <td><code>0x03B8</code></td>
+  <td style="text-align:right">55</td>
+</tr>
+</tbody>
+</table>
+<p>La routine <code>0x0806F07C</code> combine le réglage utilisateur et le champ MIC lu à l'offset <code>+0x19</code>. Dans ces cas, le sélecteur provient de la table OEM <code>0x080C090A</code>, puis le code de l'étage est encodé dans le mot <code>0x0200 | (code &lt;&lt; 3)</code>. La formule décrit l'encodage observé ; elle ne certifie pas la loi analogique du QA4818.</p>
+<p>L'application du nouveau réglage est différée jusqu'au TX dans cette campagne. Le test qui s'arrêtait à la confirmation du menu en 0.11 ne suffisait donc pas.</p>
+<p>Le registre QA page 0 / <code>0x40</code> vaut <code>0x365A</code> en TX VHF : son octet inférieur vaut deux fois MODV1 (45). Il vaut <code>0x38D2</code> en TX UHF : l'octet inférieur vaut deux fois MODU (105). Le registre <code>0x51</code> vaut <code>0x90C8</code> ; ses sept bits bas retrouvent CTCW (72). Les bits supérieurs et leurs variantes suivent l'OEM, sans synthèse d'une valeur à partir du nom de canal.</p>
+<p>Aucune nouvelle commande SCT ni écriture codec n'est observée dans ces transitions FM : les 24 demandes codec restent inchangées. Ce constat situe les commandes de gain étudiées dans le chemin QA ; il ne constitue pas une preuve de continuité physique de tous les signaux audio. Les gains et filtres documentés du SCT ne sont pas appliqués arbitrairement à cette chaîne FM.</p>
+<h2 id="acces-au-mode-de-reglage-au-boot">Accès au mode de réglage au boot</h2>
+<p>La nouvelle commande de façade <strong>Maintenir P4 + appui codeur</strong> agit uniquement sur les entrées de touches. Après chargement, maintenir ces entrées avant Reset, démarrer et utiliser Power au premier sommeil du MCU ; relâcher ensuite les touches. Elle ne modifie pas la NAND.</p>
+<p>Dans la capture chargée, Full Test vaut zéro et le bit Band Select est désactivé. Le gate OEM conserve cette décision ; le démarrage avec la combinaison retombe sur l'écran d'exploitation, identique à la référence. Les calibrations restent lues et appliquées en fonctionnement ordinaire. Aucun octet de permission de service n'est forcé pour fabriquer l'accès.</p>
+<h2 id="changements-livres">Changements livrés</h2>
+<ul>
+<li>Traçage passif des octets NAND réellement transmis, de leurs pages et de la provenance capture/overlay.</li>
+<li>Tableau en lecture seule des huit réglages de service ; absence de données conservée comme « non lu ».</li>
+<li>Affichage distinct du MIC usine et du code micro effectivement écrit au QA.</li>
+<li>Décodage séparé des gains SCT Q16.11/Q16.12, du mode analogique et de la demande de calibration automatique de démodulation. Les champs non reçus restent inconnus.</li>
+<li>112 tests logiciels réussis ; campagne OEM de 14 captures, démarrage à froid, TX VHF avant/après changement de niveau et TX UHF. Zéro overrun USART0 dans ces captures.</li>
+</ul>
+<p>Les fichiers d'entrée ne sont pas écrits. Les empreintes de la Flash et de la NAND principale correspondent aux références originales ; les empreintes OOB/ECC sont également consignées. Les écritures normales de l'OEM restent dans l'overlay de la session. Le niveau utilisateur a été changé dans cet overlay ; aucune édition de calibration n'est injectée par le script.</p>
+<h2 id="reproduire">Reproduire</h2>
+<p>Depuis le dossier du paquet :</p>
+<pre><code>node --test browser-bench/tests/*.test.mjs
+node preuves/replay_calibration_oem.mjs &quot;/chemin/full_flash_pass1.bin&quot; &quot;/dossier/des/trois/NAND&quot; resultats_calibration_v012
+node preuves/verify_calibration_oem.mjs resultats_calibration_v012 &gt; resume_calibration.json
+</code></pre>
+<p>La campagne exécute environ 3,74 milliards d'entrées d'instruction. Elle ne saute aucun délai ; sa durée réelle dépend du PC. Le core et les échanges sont ceux de <code>web0120r1</code>. Le rendu documentaire final est vérifié par rejeu des données et tests, sans nouveau contrôle visuel du panneau dans un navigateur. Les anciennes campagnes complètes CPS/GPS ne sont pas répétées ici.</p>
+<h2 id="donnees-encore-necessaires-pour-clore-toute-la-chaine-sonore">Données encore nécessaires pour clore toute la chaîne sonore</h2>
+<table>
+<thead>
+<tr>
+  <th>Trajet</th>
+  <th>Ce qui manque encore</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Micro filaire → QA → modulation FM</td>
+  <td>Loi physique des gains QA, filtres, limiteur et réponse de déviation aux codes appliqués</td>
+</tr>
+<tr>
+  <td>RX A/B → U2429 → amplis</td>
+  <td>Continuité des voies et réponse des étages analogiques ; la commande du volume seule ne donne pas cette réponse</td>
+</tr>
+<tr>
+  <td>HP poste, HP microphone, prises externes</td>
+  <td>Câblage des entrées/sorties U2429 et des amplis, sélection et contacts des deux prises sur cette révision</td>
+</tr>
+<tr>
+  <td>Tonalités, CTCSS/DCS, APRS</td>
+  <td>Formes d'onde et traitements à valider, distincts des codes de calibration retrouvés</td>
+</tr>
+<tr>
+  <td>Trajets qui utilisent le codec/SCT</td>
+  <td>Configuration interne et flux audio effectifs, à relever sur les liaisons concernées</td>
+</tr>
+</tbody>
+</table>
+<p>Les documents publics consultés et les monographies originales du projet laissent ces connexions ou lois non déterminées. Une réponse sonore complète avec des gains inventés ne répondrait pas au critère de fidélité. Aucun oscillateur ni boucle sonore générique n'est ajouté pour la faire passer pour terminée. Le DMR reste différé.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

@@ -1,0 +1,33 @@
+import {CAsicControl} from './gps-casic.mjs?build=web0151r2';
+/* Independent NMEA line source. Never reads or writes MCU firmware state. */
+import {compileMotion,motionAt} from './gps-route.mjs?build=web0151r2';
+export const VIRTUAL_HZ=120000000;
+export function nmea(body){if(typeof body!=='string'||!/^[\x20-\x7e]+$/.test(body)||/[$*\r\n]/.test(body))throw Error('Corps NMEA invalide');let sum=0;for(const c of body)sum^=c.charCodeAt(0);return '$'+body+'*'+sum.toString(16).toUpperCase().padStart(2,'0')+'\r\n';}
+function coordinate(value,lat){const limit=lat?90:180;if(!Number.isFinite(value)||Math.abs(value)>limit)throw Error('Coordonnée GNSS hors plage');let d=Math.floor(Math.abs(value)),min=Math.round((Math.abs(value)-d)*60*1e4)/1e4;if(min>=60){d++;min=0;}return [String(d).padStart(lat?2:3,'0')+min.toFixed(4).padStart(7,'0'),lat?(value>=0?'N':'S'):(value>=0?'E':'W')];}
+export function gpsSentences(latitude,longitude,utc,fix,{speedKmh=0,course=0,talker='GP',vtg=false}={}){
+ const date=new Date(utc);if(!Number.isFinite(date.getTime())||!Number.isFinite(speedKmh)||speedKmh<0||!Number.isFinite(course)||course<0||course>=360||!['GP','GN','GL','GA','GB','BD'].includes(talker))throw Error('Navigation GNSS invalide');
+ const [la,ns]=coordinate(latitude,true),[lo,ew]=coordinate(longitude,false),pad=(x,n=2)=>String(x).padStart(n,'0'),time=pad(date.getUTCHours())+pad(date.getUTCMinutes())+pad(date.getUTCSeconds())+'.'+pad(date.getUTCMilliseconds(),3),day=pad(date.getUTCDate())+pad(date.getUTCMonth()+1)+pad(date.getUTCFullYear()%100),knots=(fix?speedKmh/1.852:0).toFixed(2),heading=((Math.round((fix?course:0)*100)%36000)/100).toFixed(2);
+ return nmea(`${talker}RMC,${time},${fix?'A':'V'},${la},${ns},${lo},${ew},${knots},${heading},${day},,,${fix?'A':'N'}`)+nmea(`${talker}GGA,${time},${la},${ns},${lo},${ew},${fix?1:0},${fix?'04':'00'},1.0,100.0,M,0.0,M,,`)+nmea(fix?`${talker}GSV,1,1,04,01,45,000,40,02,50,090,42,03,55,180,43,04,60,270,44`:`${talker}GSV,1,1,00`)+(vtg?nmea(`${talker}VTG,${heading},T,,M,${knots},N,${(fix?speedKmh:0).toFixed(2)},K,${fix?'A':'N'}`):'');
+}
+export class GpsInput{
+ constructor(){this.casic=new CAsicControl();this.config={mode:'absent',latitude:48,longitude:2,utc:'2026-11-08T12:00:00Z',hertz:1,motion:'static',baud:9600,talker:'GP',fault:'none',faultEvery:0};this.next=Infinity;this.origin=0;this.frames=0;this.bytes=0;this.startup=false;this.missedPeriods=0;this.faults=0;this.events=[];this.motion=compileMotion(this.config);this.lastSample=null;}
+ configure(input,time){const c={mode:input.mode,latitude:Number(input.latitude),longitude:Number(input.longitude),utc:input.utc,hertz:Number(input.hertz),motion:input.motion??'static',speedKmh:Number(input.speedKmh??36),course:Number(input.course??90),durationSeconds:Number(input.durationSeconds??12),sideMeters:Number(input.sideMeters??30),startDelaySeconds:Number(input.startDelaySeconds??2),baud:Number(input.baud??9600),talker:input.talker??'GP',vtg:!!input.vtg,fault:input.fault??'none',faultEvery:Number(input.faultEvery??0),...(input.route?{route:input.route.map(p=>({...p}))}:{})};
+  if(!['absent','fix','no_fix'].includes(c.mode)||![1,2,4].includes(c.hertz)||![4800,9600,19200,38400,57600,115200].includes(c.baud)||!['none','checksum','truncated'].includes(c.fault)||!Number.isInteger(c.faultEvery)||c.faultEvery<0||c.faultEvery>1000000)throw Error('Scénario GNSS invalide');
+  if(typeof c.utc!=='string'||!/(Z|[+-]\d\d:\d\d)$/.test(c.utc))throw Error('UTC GNSS : préciser Z ou un décalage horaire');
+  const motion=compileMotion(c),sample=motionAt(motion,0),text=gpsSentences(sample.latitude,sample.longitude,c.utc,c.mode==='fix',{...sample,talker:c.talker,vtg:c.vtg});
+  if(text.length*10/c.baud>1/c.hertz)throw Error('Débit UART insuffisant pour les phrases et la cadence choisies');
+  if(input.startupBody!==undefined&&input.startupBody!==null&&(!/^[A-Z0-9,]+$/.test(input.startupBody)||input.startupBody.length>120))throw Error('Notification GNSS explicite invalide');
+  this.startup=!!input.startupBody&&c.mode!=='absent'&&this.config.mode==='absent';if(input.startupBody)c.startupBody=input.startupBody;
+  this.config=c;this.motion=motion;this.origin=time;this.next=c.mode==='absent'?Infinity:time;this.sessionFrames=0;this.lastSample=null;
+ }
+ onHostByte(byte,time,sourceByteSteps=null){const changed=this.casic.input(byte,{connected:this.config.mode!=='absent',sourceByteSteps,receiverBaud:this.config.baud});if(changed&&this.config.mode!=='absent')this.next=Math.min(this.next,time);return [];}
+ advance(time,uart){if(this.config.mode==='absent'||time<this.next)return;const period=this.casic.intervalMs===null?VIRTUAL_HZ/this.config.hertz:this.casic.intervalMs*VIRTUAL_HZ/1000,due=Math.floor((time-this.next)/period)+1,at=this.next+(due-1)*period;this.missedPeriods+=due-1;this.next+=due*period;
+  const sample=motionAt(this.motion,(at-this.origin)/VIRTUAL_HZ),utc=new Date(Date.parse(this.config.utc)+(at-this.origin)/120000).toISOString();
+  let text=this.startup?nmea(this.config.startupBody):gpsSentences(sample.latitude,sample.longitude,utc,this.config.mode==='fix',{...sample,talker:this.casic.talker(this.config.talker),vtg:this.config.vtg||!!this.casic.rates?.VTG});this.startup=false;this.sessionFrames++;text=this.casic.filter(text,this.sessionFrames);if(text.length*10/this.config.baud>period/VIRTUAL_HZ)throw Error('GPS : phrases demandées dépassent la capacité UART du profil');
+  const corrupt=this.config.fault!=='none'&&this.config.faultEvery>0&&this.sessionFrames%this.config.faultEvery===0;
+  if(corrupt){if(this.config.fault==='checksum')text=text.replace(/\*([0-9A-F]{2})/g,(_,h)=>'*'+(parseInt(h,16)^1).toString(16).toUpperCase().padStart(2,'0'));else text=text.slice(0,text.indexOf('*')-3);this.faults++;}
+  const bytes=new TextEncoder().encode(text);uart.schedule(bytes,{at,byteSteps:VIRTUAL_HZ*10/this.config.baud});this.frames++;this.bytes+=bytes.length;this.lastSample={...sample,utc,validInput:this.config.mode==='fix',corrupted:corrupt};
+  this.events.push({at,bytes:bytes.length,hex:Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join(''),sample:this.lastSample});if(this.events.length>16)this.events.shift();
+ }
+ status(){return {...this.config,moduleControl:this.casic.status(),effectiveIntervalMs:this.casic.intervalMs??1000/this.config.hertz,frames:this.frames,bytes:this.bytes,missedPeriods:this.missedPeriods,corruptedFrames:this.faults,lastSample:this.lastSample,route:{durationSeconds:this.motion.duration,points:this.motion.points,geometry:'great-circle arcs on sphere R=6371008.8m; synthetic ground track'},events:this.events,source:'synthetic GNSS input, fixed-rate NMEA serial line; not a GNSS RF receiver or OEM fix',directFirmwareStateWrite:false};}
+}

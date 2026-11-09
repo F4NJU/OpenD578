@@ -1,0 +1,12 @@
+00003EF0 push       {r4, r5, r6, lr}
+00003EF2 mov        r4, r0
+00003EF4 mov        r5, r1
+00003EF6 ldr        r1, [pc, #0x10] ; [00003F08]=00004F4C
+00003EF8 movs       r0, #6
+00003EFA bl         #0x4844
+00003EFE mov        r1, r5
+00003F00 mov        r0, r4
+00003F02 bl         #0x4818
+00003F06 pop        {r4, r5, r6, pc}
+00003F08 ldr        r7, [pc, #0x130] ; [0000403C]=4A180049
+00003F0A movs       r0, r0

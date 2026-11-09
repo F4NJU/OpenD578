@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>État confirmé du projet — 9 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="external/INDEX.html">Sources externes</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../f1dmg.html">F1DMG</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>État confirmé du projet — 9 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/ETAT_CONFIRME_20261109.md">Modifier sur GitHub</a><a download href="../../raw/docs/ETAT_CONFIRME_20261109.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/ETAT_CONFIRME_20261109.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="etat-confirme-du-projet-9-novembre-2026">État confirmé du projet — 9 novembre 2026</h1>
+<p>Jean-Philippe (F4EGM). Cette page rassemble les corrections actuelles ; les archives datées restent des traces historiques.</p>
+<h2 id="acces">Accès</h2>
+<ul>
+<li><a href="hardware/io/TABLEAU_IO_D578.html">Tableau IO, 86 signaux utiles</a> ; recherche interactive dans la rubrique Tableau IO du site.</li>
+<li><a href="hardware/io/ANALYSE_INCONNUES.html">Analyse des inconnues et preuves N1–N14</a>.</li>
+<li><a href="hardware/io/COMPARAISON_PRO_PLUS.html">Comparaison PRO V1.21 / PLUS V2.08</a>.</li>
+<li><a href="hardware/io/APRS_RX_PLUS.html">Réception APRS analogique du PLUS</a>.</li>
+<li>Le simulateur est accessible dans la navigation, rubrique Simulateur. Ses sources sont dans browser-bench/ ; son guide est intégré.</li>
+</ul>
+<h2 id="corrections-integrees">Corrections intégrées</h2>
+<table>
+<thead>
+<tr>
+  <th>Sujet</th>
+  <th>État actuel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>GPS</td>
+  <td>PA2 TX / PA3 RX, USART1 sans remap ; NMEA et commandes CASIC. Scénarios trajet/vitesse disponibles ; le défaut décimal du formateur OEM n’est pas corrigé à sa place.</td>
+</tr>
+<tr>
+  <td>Microphone filaire</td>
+  <td>USART0 PA9 TX / PA10 RX ; touches, durées, acquittements et commandes de voyants dans le banc. Ne démontre pas un transport PCM complet.</td>
+</tr>
+<tr>
+  <td>Volumes</td>
+  <td>U2429 DATA PA13 / CLOCK PA14 après libération SWJ ; D0 canal, D1 individuel/commun. Encodeur C corrigé.</td>
+</tr>
+<tr>
+  <td>BH2226</td>
+  <td>PA5 CSB / PB3 CLK / PB4 DI ; nibble série inversé par rapport à l’ordre de présentation ROHM. Code fil 8 = DA1 rétroéclairage LCD. Encodeur C corrigé.</td>
+</tr>
+<tr>
+  <td>Voyants poste</td>
+  <td>PE3 données / PE4 horloge, 8 bits LSB-first ; rouge et vert issus des commandes OEM, pas des clics de l’interface.</td>
+</tr>
+<tr>
+  <td>Tuner RDA / KT</td>
+  <td>PB6 SDA / PB7 SCL. Chemins 0x10 RDA et 0x35 compatible KT présents dans les applications. Le modèle Web actuel ne représente pas entièrement le second tuner.</td>
+</tr>
+<tr>
+  <td>APRS RX PLUS</td>
+  <td>Carte BT+APRS BHT_BOARD : NRZI et retrait du bourrage ; UART3 PC11 RX / PC10 TX, 115200 bit/s, préfixe +APRS: et trame AX.25. Entrée RF/audio de BHT non attribuée.</td>
+</tr>
+<tr>
+  <td>PB9</td>
+  <td>PWM TIMER3_CH3 pour tonalités / signalisation, aussi utilisé par APRS TX ; aucune lecture GPIO identifiée.</td>
+</tr>
+<tr>
+  <td>PC0</td>
+  <td>ADC0_IN10 acquisition audio RX / signalisation ; pas d’attribution arbitraire au ROS.</td>
+</tr>
+<tr>
+  <td>PC3 / PE15</td>
+  <td>Séquences connues ; destination distante non résolue. Non déclarées libres.</td>
+</tr>
+<tr>
+  <td>PLUS</td>
+  <td>570 signatures GPIO directes communes aux deux applications ; 36 exécutions isolées comparées. Cela ne certifie pas tout le matériel ni le démarrage PLUS.</td>
+</tr>
+</tbody>
+</table>
+<p>Une liaison fonctionnellement établie dans le firmware est validée pour le projet ; sa continuité n’est pas redemandée. Une référence de silicium ou un trajet analogique non établi reste indiqué comme inconnu. Aucun inverseur matériel n’est inventé à partir d’une polarité logicielle.</p>
+<h2 id="simulateur-integre">Simulateur intégré</h2>
+<p>Le banc Web 0.15.1 charge les sauvegardes et exécute l’ARM dans le navigateur avec Flash, SRAM, NAND et périphériques. Il reprend les derniers travaux disponibles : façade, micro, GPS, observation des commandes audio/calibrations, USB/CPS, couleurs LCD corrigées et réduction des surcoûts de journalisation et ADC. Les sources du moteur et licences sont conservées.</p>
+<p>Les anciennes références V11.x concernent le banc local Python ; elles ne décrivent pas la version du banc Web. Les validations archivées restent attachées à leur scénario, firmware et version.</p>
+<p>La performance reste insuffisante pour promettre le temps réel : sur les mesures bornées conservées, gain global d’environ 1,10×, microbenchmark ADC 3,31×. Le hook JavaScript par instruction demeure. Aucun saut de routine ni écran préfabriqué n’a été ajouté pour donner l’impression d’un démarrage plus rapide.</p>
+<h2 id="travaux-encore-necessaires">Travaux encore nécessaires</h2>
+<ul>
+<li>Transport audio PCM complet, filtres et gains physiques de bout en bout, HP poste/micro/externe.</li>
+<li>Protection ROS/SWR : entrée et algorithme avec preuve de coupure OEM sur VHF et UHF ; pas de seuil inventé.</li>
+<li>Entrée RF/audio de BHT et démodulation AFSK complète ; contrôle FCS à établir.</li>
+<li>Modèle complet du tuner KT à 0x35, au-delà de son identification par firmware.</li>
+<li>Requalification longue du banc complet après modifications et amélioration majeure des performances.</li>
+<li>DMR différé, conformément au périmètre retenu.</li>
+</ul>
+<p>Le passage général du site vérifie la génération, les modèles, la navigation, les liens locaux et les régressions logicielles. Il ne signifie pas que chaque affirmation historique provenant de sources externes a été démontrée par une nouvelle exécution OEM.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

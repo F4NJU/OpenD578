@@ -1,0 +1,200 @@
+{
+  "method": "Exécution isolée des routines OEM Cortex-M4 ; GPIO MMIO enregistrés. Pas un démarrage complet. Aucun périphérique réel. Pas de validation de délai électrique.",
+  "full_flash_sha256": "e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e",
+  "application_sha256": "02b2a3b56bd57c7ada581eb52b9b6f41c5d51aaec1b068d37585efd58dff9c9a",
+  "boolean_cases": [
+    {
+      "function": "0x809b396",
+      "argument": 0,
+      "writes": [
+        [
+          "0x40011814",
+          4,
+          "0x4"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x809b396",
+      "argument": 1,
+      "writes": [
+        [
+          "0x40011810",
+          4,
+          "0x4"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x809364c",
+      "argument": 0,
+      "writes": [
+        [
+          "0x40011414",
+          4,
+          "0x2"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x809364c",
+      "argument": 1,
+      "writes": [
+        [
+          "0x40011410",
+          4,
+          "0x2"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x8093666",
+      "argument": 0,
+      "writes": [
+        [
+          "0x40011014",
+          4,
+          "0x80"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x8093666",
+      "argument": 1,
+      "writes": [
+        [
+          "0x40011010",
+          4,
+          "0x80"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x8093a5e",
+      "argument": 0,
+      "writes": [
+        [
+          "0x40011414",
+          4,
+          "0x80"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x8093a5e",
+      "argument": 1,
+      "writes": [
+        [
+          "0x40011410",
+          4,
+          "0x80"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x808a2c4",
+      "argument": 0,
+      "writes": [
+        [
+          "0x40011014",
+          4,
+          "0x10"
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "function": "0x808a2c4",
+      "argument": 1,
+      "writes": [
+        [
+          "0x40011010",
+          4,
+          "0x10"
+        ]
+      ],
+      "result": "PASS"
+    }
+  ],
+  "BH2226_init_frames": [
+    {
+      "wire_word": "0x900",
+      "opcode_MSB": "0x9",
+      "selector_D8_D11": 9,
+      "DA": null,
+      "data": 0
+    },
+    {
+      "wire_word": "0x3ff",
+      "opcode_MSB": "0x3",
+      "selector_D8_D11": 12,
+      "DA": null,
+      "data": 255
+    },
+    {
+      "wire_word": "0xfff",
+      "opcode_MSB": "0xf",
+      "selector_D8_D11": 15,
+      "DA": null,
+      "data": 255
+    },
+    {
+      "wire_word": "0x800",
+      "opcode_MSB": "0x8",
+      "selector_D8_D11": 1,
+      "DA": 1,
+      "data": 0
+    },
+    {
+      "wire_word": "0xc00",
+      "opcode_MSB": "0xc",
+      "selector_D8_D11": 3,
+      "DA": 3,
+      "data": 0
+    },
+    {
+      "wire_word": "0x200",
+      "opcode_MSB": "0x2",
+      "selector_D8_D11": 4,
+      "DA": 4,
+      "data": 0
+    },
+    {
+      "wire_word": "0xa00",
+      "opcode_MSB": "0xa",
+      "selector_D8_D11": 5,
+      "DA": 5,
+      "data": 0
+    },
+    {
+      "wire_word": "0x600",
+      "opcode_MSB": "0x6",
+      "selector_D8_D11": 6,
+      "DA": 6,
+      "data": 0
+    },
+    {
+      "wire_word": "0xe00",
+      "opcode_MSB": "0xe",
+      "selector_D8_D11": 7,
+      "DA": 7,
+      "data": 0
+    },
+    {
+      "wire_word": "0x100",
+      "opcode_MSB": "0x1",
+      "selector_D8_D11": 8,
+      "DA": 8,
+      "data": 0
+    }
+  ],
+  "checks_passed": 12
+}

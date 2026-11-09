@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>ROHM BH2226FV-E2 : CNA 8 sorties, marque H2226</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BH2226_H2226_DAC_RF.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BH2226_H2226_DAC_RF.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/BH2226_H2226_DAC_RF.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="rohm-bh2226fv-e2-cna-8-sorties-marque-h2226">ROHM BH2226FV-E2 : CNA 8 sorties, marque H2226</h1>
 <p>Le composant est marque <strong><code>H2226</code></strong> et le boitier observe a ete precise comme <strong>SSOP-B16</strong>. Cette combinaison correspond a la reference ROHM <strong>BH2226FV-E2</strong>, un CNA <strong>8 canaux / 8 bits</strong>. L'identification de type et de boitier est donc retenue ; les 16 broches ne sont pas encore suivies jusqu'au GD32 ni aux destinations analogiques. Relever la broche 1 et le marquage complet sur la photo de reference pour figer la revision de PCB.</p>
 <h2 id="1-fonction">1. Fonction</h2>
@@ -95,7 +98,7 @@
 <p><strong>Qualifie :</strong> reference BH2226FV-E2 (marquage et SSOP-B16). <strong>Non qualifies :</strong> tension d'alimentation sur carte, huit affectations DA, usage du SO, CS/CLK/DI, GPIO du GD32 et calibrations usine.</p>
 <p><strong>Source fabricant :</strong> <a href="https://www.rohm.com/products/data-converters/da-converters/bh2226fv-product">https://www.rohm.com/products/data-converters/da-converters/bh2226fv-product</a>. La correspondance marquage / boitier provient de ROHM ; les associations GPIO/fonctions RF restent inconnues.</p>
 <h2 id="5-format-exact-du-mot-12-bits-rohm">5. Format exact du mot 12 bits ROHM</h2>
-<p>La notice ROHM distingue <strong>D0..D7</strong> (valeur 8 bits, D0 bit de poids faible) et <strong>D8..D11</strong> (sélection/commande). Valeurs 4 bits de sélection : <code>0001</code> → DA1, …, <code>1000</code> → DA8 ; <code>1001</code> → sortie du mode <em>power down</em> ; <code>0000</code> → power down ; codes <code>1100</code> à <code>1111</code> destinés aux fonctions I/O particulières. <strong>Ces derniers ne doivent pas être employés comme commandes DAC usuelles.</strong></p>
+<p>La notice ROHM distingue <strong>D0..D7</strong> (valeur 8 bits, D0 bit de poids faible) et <strong>D8..D11</strong> (sélection/commande). Valeurs de la table constructeur dans l’ordre D8,D9,D10,D11 (inverser les quatre bits pour le nibble transmis D11…D8) : <code>0001</code> → DA1, …, <code>1000</code> → DA8 ; <code>1001</code> → sortie du mode <em>power down</em> ; <code>0000</code> → power down ; codes <code>1100</code> à <code>1111</code> destinés aux fonctions I/O particulières. <strong>Ces derniers ne doivent pas être employés comme commandes DAC usuelles.</strong></p>
 <p>Pour une conversion ordinaire, le mot peut être représenté comme <code>((canal_1_à_8 &amp; 0xF) &lt;&lt; 8) | valeur_8_bits</code>. Les <strong>12 bits sont envoyés MSB-first</strong>, DATA pris en compte au front montant CLK lorsque CSB est bas, puis l'écriture est validée au retour CSB haut. <strong>La fiche précise une séquence d'initialisation obligatoire après Power On/Reset</strong> : sortie du mode de veille, sélection I/O/DAC, configuration I/O. Cette initialisation doit être qualifiée dans le firmware réel avant d'envoyer le premier réglage.</p>
 <p>Une fonction pure <code>bh2226_build_dac_word</code> est présente dans <code>firmware/hal/serial_command_encoders.c</code>. Elle ne commande <strong>aucun GPIO du poste</strong> et ne contient aucune table de calibration.</p>
 <p>Fiche constructeur PDF utilisée pour la table (2015, rev.001) : <a href="https://www.mouser.com/datasheet/2/348/bh2226fv-e-1807393.pdf">https://www.mouser.com/datasheet/2/348/bh2226fv-e-1807393.pdf</a></p>

@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
 <a href="evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
 <div class="doc-heading"><h1>NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/03_NAND_LECTURES_ECC_CARTE.md">Modifier sur GitHub</a><a download href="../../raw/docs/03_NAND_LECTURES_ECC_CARTE.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/03_NAND_LECTURES_ECC_CARTE.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="nand-toshibakioxia-geometrie-captures-ecc-et-zones-critiques">NAND Toshiba/KIOXIA, géométrie, captures, ECC et zones critiques</h1>
 <h2 id="fichiers-physiques-et-hashes-attestes">Fichiers physiques et hashes attestés</h2>
 <p>Le composant est <code>TC58CVG1S3HRAIG</code>, ID en lecture <code>98 CB</code>. Capacité <strong>2 048 blocs x 64 pages x 2 048 octets = 268 435 456 octets main (256 Mio)</strong>. Acquisition avec ECC interne actif: <strong>64 octets auxiliaires par page</strong>, soit 8 388 608 octets, non équivalents au véritable OOB raw 128 octets avec ECC désactivé. Interleave: 2 112 octets par page, total 276 824 064 octets (264 Mio), sur 131 072 pages. Un bloc main mesure 131 072 octets (128 Kio). Ne pas confondre <strong>offset NAND de fichier</strong> et adresse ARM Flash interne <code>0x080...</code>.</p>

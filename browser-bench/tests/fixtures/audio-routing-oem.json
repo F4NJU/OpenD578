@@ -1,0 +1,152 @@
+[
+  {
+    "name": "MicSpk_RX_A",
+    "source": "oem_audio_v011/MicSpk_RX_A.json",
+    "sha256": "66daa5e8c5f0e817e421917e789d5bb80166341f4bcbfac99bcc18351ee60c37",
+    "time": 1922000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 0,
+      "micPath": 0,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33203,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 39,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 230,
+    "expectedRadioMute": true,
+    "expectedMicMute": false
+  },
+  {
+    "name": "RadioSpk_confirmed",
+    "source": "oem_audio_v011/RadioSpk_confirmed.json",
+    "sha256": "0bc7d11caf4fd990b672319b3bca128b66f1ba44403a988b945403edb1af6963",
+    "time": 2320000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 1,
+      "micPath": 0,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33075,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 39,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 246,
+    "expectedRadioMute": false,
+    "expectedMicMute": true
+  },
+  {
+    "name": "Both_verified",
+    "source": "oem_audio_v011/Both_verified.json",
+    "sha256": "613a22c7ef444d3069de08f7bf97b094a0d9a67039c878cae076576dbb17f0a7",
+    "time": 3117000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 2,
+      "micPath": 1,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33075,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 39,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 102,
+    "expectedRadioMute": false,
+    "expectedMicMute": false
+  },
+  {
+    "name": "mic_MAIN_verified",
+    "source": "oem_audio_v011/mic_MAIN_verified.json",
+    "sha256": "141d8515b049e5a784a22616d33099f32b93bc6e8292ad51f6536f4dce4971dc",
+    "time": 3468000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 2,
+      "micPath": 0,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33075,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 39,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 230,
+    "expectedRadioMute": false,
+    "expectedMicMute": false
+  },
+  {
+    "name": "RX_A_mid_qualified",
+    "source": "oem_audio_v011/RX_A_mid_qualified.json",
+    "sha256": "8a4e7406752c96838649a3a2281347d4abb18ee3353c7beb6dbc56b4a6129001",
+    "time": 3648000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 2,
+      "micPath": 0,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33075,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 32679,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 230,
+    "expectedRadioMute": false,
+    "expectedMicMute": false
+  },
+  {
+    "name": "RX_B_mid",
+    "source": "oem_audio_v011/RX_B_mid.json",
+    "sha256": "69439b7c109e7665568fbf62b6a37ba7f7e813e3f09651e7deb03abef68d2888",
+    "time": 1320000000,
+    "origin": "OEM cold boot and physical-input navigation captured in v0.11",
+    "harnessOEMStateWrites": false,
+    "observedSettings": {
+      "speakerMode": 2,
+      "micPath": 0,
+      "specialMode": 0
+    },
+    "GPIOoutputs": {
+      "A": 33075,
+      "B": 48420,
+      "C": 9032,
+      "D": 65405,
+      "E": 32679,
+      "F": 0,
+      "G": 0
+    },
+    "RFPIO25": 225,
+    "expectedRadioMute": false,
+    "expectedMicMute": false
+  }
+]

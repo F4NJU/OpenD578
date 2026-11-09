@@ -1,0 +1,16 @@
+{
+  "upstream": "https://github.com/AlexAltea/unicorn.js",
+  "unicorn_js_commit": "1220477c7fb0f8fe4b500f4bd211de52f6dfe638",
+  "unicorn_commit": "8028ec436f2d9376525352dd38ed9ed6b9f6be10",
+  "emscripten": "4.0.15",
+  "runtime_sha256": "6828df8a6f7f961b918a6a942c29628a982c4e16896c9a80b6f29d589b5f2a9a",
+  "patches": [
+    "Preserve explicitly selected M-profile CPU instead of forcing Cortex-M33",
+    "WASM32 TCG_MAX_TEMPS=2048 and TCG_MAX_INSNS=32",
+    "Reject temporary-array overflow before writing",
+    "Refresh ARM handler-mode hflags after host API XPSR writes for Cortex-M4 EXC_RETURN"
+  ],
+  "cpu_model_required": 9,
+  "cpu_model_readback_required": true,
+  "optimizer_disabled": false
+}

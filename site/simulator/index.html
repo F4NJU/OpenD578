@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="OpenD578 - Banc Web D578UV PRO GD32 : firmware réel, fichiers locaux, façade et périphériques émulés. DMR reporté.">
+  <title>OpenD578 | Banc Web D578 PRO 0.15.1</title>
+  <!-- Revision web0151r2: module cache-busting and explicit worker handshake -->
+  <link rel="stylesheet" href="./assets/style.css">
+  <script src="./assets/app.mjs?build=web0151r2" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><a class="back" href="https://github.com/Telectroboy/OpenD578">← Projet GitHub</a><span class="brandmark">OD<span>578</span></span><span class="brandtext">Banc de développement <small>Banc Web 0.15.1 · expérimental</small></span></div>
+    <div class="privacy"><span class="indicator"></span> Exécution locale · Aucun fichier téléversé</div>
+  </header>
+  <main class="shell">
+    <aside class="sidebar" aria-label="Images et configuration">
+      <div class="aside-title"><span class="eyebrow">Configuration matérielle</span><h2>D578UV PRO GD32</h2><p>Images utilisateur · carte GD32F303</p></div>
+      <div class="side-section"><h3>1 · Vos quatre sauvegardes</h3>
+        <label class="file-picker">Sélectionner ensemble les fichiers <span>Flash, NAND principale, OOB et ECC</span><input type="file" id="backupSet" multiple></label>
+        <pre id="backupSelection" class="selection-summary">Flash 3 Mio · NAND 256 Mio
+OOB 8 Mio · ECC 128 Kio</pre>
+        <p class="hint">La taille permet de reconnaître chaque capture. Les noms et extensions sont libres. Aucun fichier n’est envoyé.</p>
+      </div>
+      <details class="individual-files"><summary>Choisir les fichiers séparément / images avancées</summary>
+      <div class="side-section"><h3>Images du microcontrôleur</h3>
+        <label class="file-picker">Flash complète <span>3 Mio · facultatif</span><input type="file" id="flashFile"></label>
+        <label class="file-picker">Bootloader <span>0x08000000</span><input type="file" id="bootFile"></label>
+        <label class="file-picker">Firmware application <span>BIN brut + vecteurs</span><input type="file" id="appFile"></label>
+        <label class="stack">Adresse de chargement application <input id="appAddress" type="text" value="0x08006000" spellcheck="false" aria-label="Adresse de chargement application"></label>
+      </div>
+      <div class="side-section"><h3>Sauvegardes NAND locales</h3>
+        <label class="file-picker">Cellules principales <span>256 Mio</span><input type="file" id="nandFile"></label>
+        <label class="file-picker">OOB / spare <span>8 Mio</span><input type="file" id="oobFile"></label>
+        <label class="file-picker">Statuts ECC <span>128 Kio</span><input type="file" id="eccFile"></label>
+        <p class="hint">Les fichiers sélectionnés restent sur votre appareil. Vous choisissez ce que vous publiez.</p>
+      </div>
+      </details>
+      <div class="side-buttons"><button id="guidedStart" class="primary full" disabled>2 · Charger et démarrer</button><button id="loadFiles" class="secondary full" disabled>Charger les images seulement</button><button id="loadSample" class="secondary full" disabled>Vérifier le CPU et le LCD</button></div>
+      <p id="runtimeState" class="runtime-state" role="status">Préparation du moteur Web…</p>
+      <div class="aside-footer"><p>Le banc Web n'écrit ni dans le poste ni vers un serveur. Les fichiers à partager restent sous votre contrôle.</p><a href="https://github.com/Telectroboy/OpenD578" target="_blank" rel="noopener noreferrer">Sources du projet ↗</a></div>
+    </aside>
+    <div class="main">
+      <p><a href="../index.html">Documentation</a> · <a href="../io/index.html">Tableau IO</a></p><section class="notice" role="note"><strong>Banc 0.15.1 · correction des couleurs.</strong> Les premiers surcoûts du mode normal ont été réduits ; la vitesse reste en cours d’optimisation. Le firmware est exécuté dans votre navigateur. Le démarrage OEM atteint les mémoires avec les sauvegardes testées ; la chaîne radio reste à qualifier. L’écran présente uniquement les pixels émis par le programme chargé.</section>
+      <details class="first-steps"><summary>Premier essai · fonctions utilisables et marche à suivre</summary>
+        <p>Sélectionner les quatre sauvegardes à gauche, puis <strong>Charger et démarrer</strong>. Le banc passe par le bootloader et transmet une seule impulsion Power au premier sommeil du MCU. Les délais OEM sont exécutés : l’écran peut mettre plusieurs minutes à apparaître selon l’ordinateur.</p>
+        <p>Le temps et les écritures LCD ci-dessous permettent de suivre l’exécution. <strong>Pause</strong> conserve la session ; <strong>Démarrer en continu</strong> la reprend. Les boutons de façade, le codeur, les deux volumes, les commandes du micro filaire, les entrées GPS et le client USB/CPS sont raccordés. Le firmware choisit leurs effets.</p>
+        <p><strong>À compléter :</strong> le son de bout en bout, la protection ROS et le Bluetooth. Les consignes TX ne représentent pas une puissance RF mesurée. Le DMR reste reporté. Pour vérifier le site sans sauvegarde OEM, utiliser <strong>Vérifier le CPU et le LCD</strong> : ce programme ARM indépendant dessine son propre motif de test.</p>
+        <p>Les changements du codeplug restent dans la session. Avant de recharger les images ou fermer la page, exporter le correctif NAND ci-dessous pour les conserver.</p>
+      </details>
+      <section class="scope-banner"><span class="tag">DMR reporté</span><p>Seul le DMR pourra recevoir les réponses de substitution autorisées. Les fonctions analogiques, le LCD, les mémoires, le GPS et le CPS doivent traverser leurs périphériques. Le dialogue HPI différé est identifié dans le diagnostic ; le DSP DMR n’est pas exécuté.</p></section>
+      <section class="quick-actions" aria-label="Exécution du poste">
+        <div><span class="eyebrow">Exécution locale</span><h2>Votre poste de travail D578</h2><p id="runStatus" role="status">Chargez vos images, puis initialisez le processeur.</p></div>
+        <div class="controls"><button id="startContinuous" class="primary" disabled>Démarrer en continu</button><button id="pauseContinuous" class="secondary" disabled>Pause</button><button id="powerPulse" class="secondary">Impulsion Power · 2 s du banc</button><button id="reportQuick" class="secondary">Exporter le diagnostic</button></div>
+      </section>
+      <p id="executionProgress" class="execution-progress" role="status">Temps du banc : 0.00 s · écritures LCD : 0</p>
+      <details class="session-save"><summary>Conserver ou reprendre mes modifications NAND</summary><p>Le correctif contient les pages modifiées et les empreintes SHA-256 des sauvegardes. Pour le reprendre, charger d’abord les mêmes fichiers puis importer le correctif : le banc vérifie les empreintes et redémarre le firmware. Les anciens correctifs sans empreintes restent réservés à leur banc d’origine. L’état du CPU n’est pas sauvegardé.</p><div class="controls"><button id="exportNandPatch" class="secondary">Exporter correctif NAND</button><label class="file-picker import-picker">Importer et redémarrer<input type="file" id="importPatch" accept=".json"></label></div></details>
+      <section class="runtime-preferences" aria-label="Mode d'exécution">
+        <div><strong>Mode normal</strong><p>Horloges et périphériques actifs ; débogueur et trace détaillée désactivés. Les actions sur les fichiers et les commandes de session restent explicites.</p></div>
+        <label class="debug-switch"><input type="checkbox" id="debugMode"> Activer le débogueur</label>
+      </section>
+
+      <section class="radio-stage" aria-label="D578UV PRO face avant">
+        <div class="pane-heading"><div><span class="eyebrow">D578UV PRO GD32</span><h2>Façade du poste</h2></div><span class="tag">Boutons sur GPIO / ADC, LCD sur bus 8080</span></div>
+        <div class="radio-face" id="radioFace">
+          <img src="./assets/d578_front.png" alt="Façade photographique AnyTone D578UV III PRO" draggable="false">
+          <canvas id="realLcd" width="160" height="128" aria-label="Ecran LCD pilote par le bus GPIO du GD32"></canvas>
+          <button data-volume="A" style="--x:1.8%;--y:13%;--w:12%;--h:39%" aria-label="Volume superieur gauche, tourner la molette" title="Volume A : utiliser la molette"></button>
+          <button data-volume="B" style="--x:1.8%;--y:59%;--w:12%;--h:39%" aria-label="Volume inferieur gauche, tourner la molette" title="Volume B : utiliser la molette"></button>
+          <button data-hwkey="P1" style="--x:28.1%;--y:16%;--w:8.7%;--h:17%" aria-label="P1"></button>
+          <button data-hwkey="P2" style="--x:28.1%;--y:36%;--w:8.7%;--h:16%" aria-label="P2"></button>
+          <button data-hwkey="P3" style="--x:28.1%;--y:57%;--w:8.7%;--h:16%" aria-label="P3"></button>
+          <button data-hwkey="MENU" style="--x:28.1%;--y:77%;--w:8.7%;--h:17%" aria-label="Menu"></button>
+          <button data-hwkey="P4" style="--x:73.2%;--y:16%;--w:9%;--h:17%" aria-label="P4"></button>
+          <button data-hwkey="P5" style="--x:73.2%;--y:36%;--w:9%;--h:16%" aria-label="P5"></button>
+          <button data-hwkey="P6" style="--x:73.2%;--y:57%;--w:9%;--h:16%" aria-label="P6"></button>
+          <button data-hwkey="EXIT" style="--x:73.2%;--y:77%;--w:9%;--h:17%" aria-label="Exit"></button>
+          <button data-hwkey="POWER" style="--x:17.1%;--y:63%;--w:7.5%;--h:21%" aria-label="Power"></button>
+          <button data-hwkey="DIAL_PRESS" style="--x:85.5%;--y:8%;--w:12.7%;--h:40%" aria-label="Appui sur le codeur; molette pour le faire tourner" title="Appuyer ou utiliser la molette"></button>
+        </div>
+        <div class="radio-controls">
+          <label>Potentiomètre A · ADC12 <input type="range" id="volA" min="0" max="4095" value="1800"></label>
+          <label>Potentiomètre B · ADC15 <input type="range" id="volB" min="0" max="4095" value="1800"></label>
+          <label>Appui façade <select id="keyDuration"><option value="200">Court · 200 ms</option><option value="1500">Long · 1,5 s</option></select></label><button id="dialDown" class="secondary">Codeur -</button><button id="dialUp" class="secondary">Codeur +</button>
+          <div class="lamp" id="greenLamp">RX : ?</div><div class="lamp" id="redLamp">TX : ?</div>
+          <div class="lamp" id="backlightLamp">LCD : ?</div><div class="lamp" id="whiteLamp">Touches : valeurs brutes</div>
+        </div>
+        <pre id="panelState" class="terminal compact" aria-live="polite">Les acquisitions ADC et les commandes de gain apparaîtront ici.</pre>
+        <details class="subpanel"><summary>Audio · volumes et gains reçus du firmware</summary>
+          <pre id="audioState" class="terminal compact" aria-live="polite">Aucune commande audio reçue.</pre>
+          <p class="hint">Le firmware commande séparément les deux volumes, les coupures HP poste et HP micro, et les sélections de chemin. Les liaisons logiques sont décodées ci-dessous pour la Flash V1.21 de référence. Le transport sonore complet reste à raccorder.</p>
+        </details>
+        <details class="subpanel"><summary>Fréquences RF et consignes de puissance TX</summary>
+          <pre id="rfCommandState" class="terminal compact" aria-live="polite">Aucune commande RF reçue.</pre>
+          <p class="hint">Les fréquences viennent des paires de registres écrites par l’OEM. Les codes de puissance propres au poste apparaissent après lecture de sa NAND. Les voies A/B partagent une consigne DAC ; aucune puissance en watts n’est déduite d’un code brut.</p>
+        </details>
+        <details class="subpanel"><summary>Audio · calibrations de service dans la NAND</summary>
+          <button id="serviceChord" class="secondary">Maintenir P4 + appui codeur</button>
+          <p class="hint">Après chargement des images, maintenir ces deux entrées avant Reset, démarrer puis utiliser Power au réveil. Relâcher les touches lorsque l'écran OEM apparaît. Le firmware décide de l'accès au mode test avec ses autorisations NAND.</p>
+          <pre id="calibrationState" class="terminal compact" aria-live="polite">Aucune lecture de calibration observée.</pre>
+          <p class="hint">Les valeurs apparaissent lorsque l'OEM les lit. Elles restent des codes bruts propres à la sauvegarde ; les droits du mode test et les copies sont gérés par le firmware.</p>
+        </details>
+        <p class="hint">Clavier : Tab pour choisir une touche, Espace ou Entrée pour appuyer. Power dure au moins 2 secondes du banc. Les positions A/B sont logiques ; leur ordre et leur courbe sur le poste restent à mesurer. Aucun son artificiel n’est produit.</p>
+        <p class="hint">Les touches analogiques suivent les reseaux PB0/ADC8 et PB1/ADC9. L'ecran ne recoit ses pixels qu'au front WR# du bus GPIOB/GPIOE. Sans firmware actif, il reste noir. Les clics de façade durent au moins 200 ms du temps du banc ; le codeur suit une séquence en quadrature, avec 2,5 ms entre phases. Chaque commande produit un front PC8 ; le nombre de fronts par cran réel reste à mesurer.</p>
+        <details id="gpsPanel"><summary>GPS · position et trajet d’essai sur USART1</summary>
+          <p class="soft">Source GNSS synthétique : position, vitesse et cap entrent par le fil série. Le firmware interprète ses trames et dessine son écran. Les indications ci-dessous décrivent la source, pas le fix obtenu par l’OEM.</p>
+          <div class="controls">
+            <label>Source <select id="gpsMode"><option value="absent">Absente</option><option value="fix">Position valide (A)</option><option value="no_fix">Position invalide (V)</option></select></label>
+            <label>Trajet <select id="gpsMotion"><option value="static">Position fixe</option><option value="line">Ligne droite</option><option value="square">Circuit carré puis arrêt</option></select></label>
+            <label>Latitude <input id="gpsLatitude" type="number" min="-90" max="90" step="0.000001" value="48"></label>
+            <label>Longitude <input id="gpsLongitude" type="number" min="-180" max="180" step="0.000001" value="2"></label>
+            <label>Vitesse (km/h) <input id="gpsSpeed" type="number" min="0.1" max="1000" step="0.1" value="36"></label>
+            <label>Cap ligne (°) <input id="gpsCourse" type="number" min="0" max="359.99" step="0.01" value="90"></label>
+            <label>Côté carré (m) <input id="gpsSide" type="number" min="1" max="100000" value="30"></label>
+            <label>Durée ligne (s) <input id="gpsDuration" type="number" min="0.1" max="86400" step="0.1" value="12"></label>
+            <label>Attente avant départ (s) <input id="gpsDelay" type="number" min="0" max="3600" step="0.1" value="6"></label>
+            <label>UTC initiale <input id="gpsUtc" value="2026-11-08T12:00:00Z"></label>
+            <label>Cadence <select id="gpsHz"><option value="1">1 Hz</option><option value="2">2 Hz</option><option value="4">4 Hz</option></select></label>
+            <button id="gpsApply" class="secondary">Appliquer l’entrée GNSS</button>
+            <button id="gpsPreset" class="secondary">Essai carré · 36 km/h</button>
+          </div>
+          <p class="hint">L’essai attend 6 s, parcourt quatre côtés de 30 m à 36 km/h (12 s), puis s’arrête. Le temps est celui du banc ; il avance pendant l’exécution du CPU. La source applique les commandes de cadence et de phrases NMEA reçues de l’OEM. Géométrie sphérique, sans modélisation des satellites ou de la réception RF.</p>
+          <svg id="gpsTrack" viewBox="0 0 320 180" role="img" aria-label="Trajet de la source NMEA, nord en haut" style="max-width:420px;width:100%;background:#101b24;border:1px solid #304354;border-radius:8px"><path id="gpsPath" fill="none" stroke="#70b7d7" stroke-width="2"/><circle id="gpsMarker" r="5" fill="#ffbc66"/><text x="12" y="18" fill="#bbcbd5" font-size="12">N ↑ · entrée NMEA</text></svg>
+          <pre id="gpsState" class="terminal compact" aria-live="polite">Source absente.</pre>
+          <details><summary>Débit et perturbations de test</summary>
+            <div class="controls"><label>Préfixe <select id="gpsTalker"><option>GP</option><option>GN</option><option>GL</option><option>GA</option><option>GB</option><option>BD</option></select></label><label>Baud source <select id="gpsBaud"><option>9600</option><option>4800</option><option>19200</option><option>38400</option></select></label><label>Perturbation <select id="gpsFault"><option value="none">Aucune</option><option value="checksum">Checksum erroné</option><option value="truncated">Trame coupée</option></select></label><label>Une salve sur N (0 = désactivé) <input id="gpsFaultEvery" type="number" min="0" max="1000000" value="0"></label></div>
+            <p class="hint">RMC, GGA et GSV à cadence fixe, sans attendre le firmware. Débit incompatible avec celui du MCU : arrêt explicite, car la réception bit par bit n’est pas portée. Aucune notification PMTK n’est ajoutée.</p>
+          </details>
+          <details><summary>ATGM336H-5N · changement d’état d’antenne</summary>
+            <p class="soft">Événement externe documenté par le constructeur (§2.8) : le module transmet un message GPTXT sur son UART lors d’un changement d’état d’antenne. Ce profil 5N doit correspondre à la variante installée pour qualifier le poste réel. Aucun message n’est envoyé automatiquement.</p>
+            <div class="controls"><label>Nouvel état <select id="antennaState"><option value="unknown">Choisir un état</option><option value="ok">Antenne active normale</option><option value="open">Circuit ouvert / antenne passive</option><option value="short">Court-circuit détecté</option></select></label><button id="antennaApply" class="secondary">Transmettre l’événement d’antenne</button></div>
+            <p class="hint">Entrée NMEA à 9600 baud. Le banc ne force ni le drapeau de reconnaissance ni le fix GPS. Le scénario de position reste une entrée indépendante ; la réception RF de l’antenne n’est pas calculée.</p>
+          </details>
+          <details><summary>Injection manuelle NMEA</summary>
+            <label>Trame <input id="nmeaSentence" type="text" value="$GPRMC,123000,A,4807.038,N,01131.000,E,0.0,0.0,230394,," spellcheck="false"></label>
+            <button id="gpsInject" class="secondary">Injecter sur USART1 RX</button>
+            <p class="hint">Une somme fournie est conservée, même erronée. Si elle manque, le banc la calcule. Cette injection manuelle suit le débit configuré par le MCU.</p>
+          </details>
+        </details>
+        <details><summary>Capteurs et protections · étude SWR / ROS</summary>
+          <p class="soft">Mesures brutes appliquées à l'ADC du GD32. Le firmware effectue ses conversions, son filtrage et ses décisions. Les valeurs ne sont pas étalonnées en °C, volts ou watts.</p>
+          <div class="controls"><label>ADC6 · thermique <input id="sensor6" type="number" min="0" max="4095" step="1" value="262"></label><label>ADC10 · fonction à qualifier <input id="sensor10" type="number" min="0" max="4095" step="1" value="1034"></label><label>ADC11 · alimentation <input id="sensor11" type="number" min="0" max="4095" step="1" value="2600"></label><button id="sensorApply" class="secondary">Appliquer les mesures ADC</button></div>
+          <pre id="sensorState" class="terminal compact">Charger les images pour observer les capteurs.</pre>
+          <p class="hint">SWR / ROS : mesure, seuil et réaction OEM encore à identifier. ADC10 n'est pas déclaré capteur ROS. Aucune alarme ROS, coupure TX ou réduction de puissance n'est fabriquée par le banc.</p>
+        </details>
+        <details><summary>Microphone filaire et microphone Bluetooth</summary>
+          <div class="microphones">
+            <div><img src="./assets/mic_wired.png" loading="lazy" alt="Microphone filaire AnyTone avec clavier"><p>Microphone filaire : clavier, PTT et voyants commandés par le firmware.</p>
+            <div class="mic-settings"><label><input id="micConnected" type="checkbox" checked> Câble connecté</label><label><input id="micLocked" type="checkbox"> Verrouillage Haut/Bas</label><label>Seuil d’appui long du banc (ms) <input id="micLongMs" type="number" min="200" max="10000" value="800"></label></div>
+            <div class="mic-indicators" aria-live="polite"><div>Voie A : <span id="micAGreen" class="lamp">RX ?</span> <span id="micARed" class="lamp">TX ?</span> <span id="micMainA" class="lamp">MAIN ?</span></div><div>Voie B : <span id="micBGreen" class="lamp">RX ?</span> <span id="micBRed" class="lamp">TX ?</span> <span id="micMainB" class="lamp">MAIN ?</span></div></div>
+            <div class="micro-keypad" id="wiredMicKeys" aria-label="Clavier du microphone"></div><button class="secondary" id="micPtt">PTT (maintenir)</button><button class="secondary" id="micRelease">Relâcher les commandes</button><div class="metadata" id="micState">Attente de trame retour USART0</div>
+            <p class="muted">Maintenir une touche pour un appui long. Entrée ou Espace agit sur la touche sélectionnée. Le seuil est un paramètre d’essai ; sa durée physique reste à mesurer. Le trajet audio et la commande du rétroéclairage du clavier restent à compléter.</p>
+            <details class="debug-only"><summary>Détecteurs RX · entrées brutes du banc local</summary><p>Ces registres alimentent le périphérique RF émulé. Le firmware décide du squelch et des voyants. Leur interprétation reste partielle ; cet essai ne reproduit pas une onde radio.</p><label>Banque RF <select id="micRfBank"><option value="0">0</option><option value="1">1</option></select></label><div class="mic-settings"><label>0x0C <input id="micRf12" type="number" value="0" min="0" max="65535"></label><label>0x60 <input id="micRf96" type="number" value="0" min="0" max="65535"></label><label>0x61 <input id="micRf97" type="number" value="0" min="0" max="65535"></label><label>0x65 <input id="micRf101" type="number" value="127" min="0" max="127"></label><label>0x67 <input id="micRf103" type="number" value="0" min="0" max="511"></label></div><button id="micRfApply" class="secondary">Appliquer les échantillons RF</button></details></div>
+            <div><img src="./assets/mic_bt.png" loading="lazy" alt="Microphone Bluetooth avec ecran"><p>Bluetooth : photo de reference. Pilotage non raccorde, aucune reponse simulee.</p></div>
+          </div>
+        </details>
+      </section>
+
+      <section class="status-row" aria-label="État du banc">
+        <div class="stat"><span>État CPU</span><strong id="cpuState">Non initialisé</strong></div>
+        <div class="stat"><span>PC</span><strong class="mono" id="pcStat">—</strong></div>
+        <div class="stat"><span>Observations CPU (debug)</span><strong class="mono" id="countStat">0</strong></div>
+        <div class="stat"><span>Pages NAND modifiées</span><strong class="mono" id="nandStat">0</strong></div>
+      </section>
+      <div class="tabs" role="tablist" aria-label="Panneaux du simulateur">
+        <button class="tab active" data-target="cpuPanel" role="tab" aria-selected="true">CPU / exécution</button>
+        <button class="tab" data-target="cpsPanel" role="tab" aria-selected="false">USB / CPS</button>
+        <button class="tab debug-only" data-target="memoryPanel" role="tab" aria-selected="false">Mémoire</button>
+        <button class="tab debug-only" data-target="nandPanel" role="tab" aria-selected="false">NAND</button>
+        <button class="tab debug-only" data-target="sessionPanel" role="tab" aria-selected="false">Sessions / rapports</button>
+      </div>
+      <section id="cpuPanel" class="panel active" role="tabpanel">
+        <div class="pane-heading"><div><span class="eyebrow">Exécution du firmware</span><h2>Processeur et diagnostic</h2></div><span class="tag amber">Unicorn WASM · peripheriques en cours</span></div>
+        <div class="controls">
+          <label>Vecteur de démarrage <select id="resetMode"><option value="auto">Auto (boot / Flash / application)</option><option value="boot">Bootloader / 0x08000000</option><option value="app">Application / 0x08006000 ou adresse choisie</option><option value="flash">Flash complète / 0x08000000</option></select></label>
+          <button id="resetBtn" class="secondary">Reset</button><button id="stepBtn" class="secondary debug-only">Pas à pas</button>
+          <label>Budget <input id="budget" type="number" value="1000000" min="1" max="1000000" step="1"></label>
+          <label class="debug-only">Breakpoint <input id="breakpoint" type="text" placeholder="facultatif : 0x0800..." spellcheck="false"></label>
+          <button id="runBtn" class="primary">Exécuter</button>
+        </div>
+        <div class="subpanel"><h3>État du modèle matériel</h3><pre id="startupState" class="terminal compact">RCU, SCB, USART, NAND : attente du moteur</pre></div>
+        <div class="subpanel"><h3>Dernier arrêt</h3><div id="stopReason" class="stop-card" aria-live="polite">Aucune execution.</div><details><summary>Images chargees et vecteurs de demarrage</summary><div id="segments" class="metadata">Aucune image selectionnee.</div></details></div>
+        <div class="subpanel debug-only"><h3>Registres</h3><div id="registers" class="register-grid" aria-live="polite">Charger une image et initialiser le CPU.</div><h3>État xPSR</h3><pre id="flags" class="compact">—</pre></div>
+        <div class="subpanel trace-area debug-only"><div class="subheading"><h3>Dernières entrées d’instruction observées</h3><span>200 événements maximum en mémoire</span></div><pre id="trace" class="terminal">Aucune trace.</pre></div>
+      </section>
+      <section id="cpsPanel" class="panel" role="tabpanel" hidden>
+        <div class="pane-heading"><div><span class="eyebrow">Périphérique GD32</span><h2>USB / CPS Web</h2></div><span class="tag">Réponses du firmware</span></div>
+        <p class="soft">L'hôte USB du banc envoie les requêtes au contrôleur du GD32. Le firmware prépare les réponses dans sa PMA. La lecture CPS ci-dessous emprunte ce même chemin, sans accès direct à la NAND.</p>
+        <div class="controls"><button id="usbConnect" class="primary">Connecter l’hôte USB</button><button id="usbDisconnect" class="secondary">Déconnecter USB</button></div>
+        <pre id="usbStatus" class="terminal compact">USB déconnecté. Démarrer le firmware avant la connexion.</pre>
+        <div class="controls"><label>Adresse CPS <input id="cpsAddress" type="text" value="0x00800000"></label><label>Octets <input id="cpsLength" type="number" min="16" max="4096" step="16" value="128"></label><button id="cpsRead" class="primary">Lire par le firmware</button><button id="cpsExport" class="secondary">Exporter les octets reçus</button></div>
+        <div class="subpanel"><h3>Nom du canal 1</h3>
+          <p class="soft">Le client sauvegarde le bloc de 128 Kio par CPS, change le nom et le renvoie au firmware. END clôture la programmation ; le watchdog redémarre le poste. Attendez son écran principal, puis lancez la vérification.</p>
+          <div class="controls"><label>Nouveau nom <input id="cpsChannelName" maxlength="16" value="WEB TEST CH" spellcheck="false"></label><button id="cpsRename" class="primary" disabled>Programmer le nom</button><button id="cpsVerify" class="primary" disabled>Vérifier après redémarrage</button><button id="cpsRestore" class="secondary" disabled>Restaurer le bloc d’origine</button><button id="cpsBackup" class="secondary" disabled>Exporter la sauvegarde CPS</button></div>
+          <pre id="cpsMemoryState" class="terminal compact" aria-live="polite">Aucune modification. Périmètre : canal 1, sauvegardes OEM V1.21 GD32 du projet.</pre>
+          <p class="hint">16 caractères ASCII maximum. La relecture compare les 131 072 octets après reset ; l’acquittement seul ne valide rien. Les sauvegardes choisies sur votre ordinateur restent inchangées. Exportez le patch NAND pour conserver la session.</p>
+        </div>
+        <pre id="cpsResult" class="terminal">Aucune lecture CPS.</pre>
+        <p class="hint">La connexion, les transferts et le redémarrage progressent quand le CPU tourne. La vérification replace le firmware dans son écran PC READ. Ce client intégré ne lance pas le CPS Windows.</p>
+      </section>
+      <section id="memoryPanel" class="panel" role="tabpanel" hidden>
+        <div class="pane-heading"><div><span class="eyebrow">Inspection passive</span><h2>Flash / SRAM / alias</h2></div><span class="tag">3 Mio Flash · 96 Kio SRAM</span></div>
+        <p class="soft">Accès aux octets de mémoire du modèle, indépendamment des structures internes du firmware constructeur. Les registres périphériques non modélisés déclenchent un diagnostic.</p>
+        <div class="controls"><label>Adresse <input id="memoryAddress" type="text" value="0x20000000" spellcheck="false"></label><label>Longueur <input id="memoryLength" type="number" value="64" min="1" max="256"></label><button id="readMemory" class="secondary">Lire</button></div>
+        <pre id="memoryDump" class="terminal" aria-live="polite">Cliquez sur Lire.</pre>
+        <h3>Dernières écritures SRAM observées</h3><pre id="writeLog" class="terminal">Aucune écriture.</pre>
+      </section>
+      <section id="nandPanel" class="panel" role="tabpanel" hidden>
+        <div class="pane-heading"><div><span class="eyebrow">Stockage logique</span><h2>Inspecteur NAND</h2></div><span class="tag amber">SPI GPIO / ECC capture partiels</span></div>
+        <p class="soft">Lecture différée par pages de vos fichiers locaux. La programmation est un overlay volatil qui respecte la transition 1→0 ; l'effacement de bloc est idéalisé. La NAND originale ne change jamais. Les commandes du firmware passent par PB8/PB14/PB15, avec lecture PA15.</p>
+        <div class="controls"><label>Zone <select id="nandZone"><option value="main">Main · 2048 o/page</option><option value="oob">OOB · 64 o/page</option><option value="ecc">ECC brut · 1 o/page</option></select></label><label>Page (0 à 131071) <input id="nandPage" type="number" min="0" max="131071" value="0"></label><button id="nandRead" class="secondary">Lire page</button><button id="downloadPage" class="secondary">Exporter page</button></div>
+        <div id="nandSource" class="metadata">Aucune page lue.</div><pre id="nandDump" class="terminal tall" aria-live="polite">Sélectionner une page pour l'inspecter.</pre>
+        <div class="subpanel"><h3>Modifications locales (expérimental)</h3><div class="controls"><label>Décalage dans la page <input id="nandOffset" type="number" value="0" min="0"></label><label>Octets hexadécimaux (1 à 128) <input id="nandHex" type="text" value="00" placeholder="12 34 56" spellcheck="false"></label><button id="nandProgram" class="secondary">Programmer overlay</button></div>
+        <div class="controls"><label>Bloc à effacer (0 à 2047) <input id="nandBlock" type="number" min="0" max="2047" value="0"></label><button id="nandErase" class="danger">Effacer bloc virtuel</button></div>
+        <p class="hint">Le bus NAND est raccorde aux GPIO du CPU; les captures ECC sont chargees comme statuts. L'overlay conserve les donnees originales. Timings, endurance, ECC recalcule et defauts physiques non simules.</p></div>
+      </section>
+      <section id="sessionPanel" class="panel" role="tabpanel" hidden>
+        <div class="pane-heading"><div><span class="eyebrow">Reproductibilité</span><h2>Sessions et rapports</h2></div><span class="tag">JSON · aucun serveur</span></div>
+        <p class="soft">Le rapport décrit les images et leur SHA-256 si calculé, les vecteurs, les instructions, les limites et la trace. Il ne contient pas les images d'origine. Un scénario conserve les actions du banc, et peut être rejoué après avoir rechargé les mêmes fichiers.</p>
+        <div class="controls"><label>Fichier à hacher <select id="hashRole"><option value="flash">Flash complète</option><option value="boot">Bootloader</option><option value="app">Application</option><option value="nand">NAND 256 Mio</option><option value="oob">OOB 8 Mio</option><option value="ecc">ECC</option></select></label><button id="hashBtn" class="secondary">Calculer SHA-256 localement</button></div>
+        <div id="hashProgress" class="metadata">Pour les fichiers NAND volumineux, lancer le hachage explicitement ; traitement en arrière-plan dans un Web Worker.</div>
+        <div class="controls"><button id="exportReport" class="primary">Exporter rapport JSON</button><button id="exportScenario" class="secondary">Exporter scénario</button></div>
+        <div class="controls"><label class="file-picker import-picker">Importer scénario JSON<input type="file" id="importScenario" accept=".json"></label><button id="replayScenario" class="secondary" disabled>Rejouer scénario</button></div>
+        <div class="subpanel"><h3>Images attachées et empreintes</h3><pre id="fileManifest" class="terminal">Aucune image.</pre><h3>Actions enregistrées</h3><pre id="scenarioActions" class="terminal">Aucune action.</pre></div>
+        <p class="hint caution">Avant tout partage, inspecter le JSON : les correctifs NAND peuvent contenir des octets provenant de vos sauvegardes privées. L'import de scénarios n'exécute aucun code JavaScript.</p>
+      </section>
+      <section class="event-area"><div class="subheading"><h3>Journal d'exploitation</h3><button id="clearEvents" class="textbutton">Effacer le journal</button></div><div id="events" class="event-log" aria-live="polite"><div>Prêt. Chargez vos images. Le test CPU/LCD est un programme ARM de vérification distinct du firmware constructeur.</div></div></section>
+    </div>
+  </main>
+  <footer>OpenD578 · Banc expérimental public · GPL-3.0-or-later · <a href="./LIMITES.md" target="_blank" rel="noopener noreferrer">Fonctions et limites</a> · <a href="./sources.html">Sources du moteur</a></footer>
+</body>
+</html>

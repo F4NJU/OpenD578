@@ -1,0 +1,51 @@
+00003C90 push       {r4, lr}
+00003C92 ldr        r0, [pc, #0x50] ; [00003CE4]=20000048
+00003C94 ldrb       r0, [r0]
+00003C96 cmp        r0, #0
+00003C98 beq        #0x3cd4
+00003C9A movs       r0, #2
+00003C9C bl         #0x295c
+00003CA0 ldr        r1, [pc, #0x44] ; [00003CE8]=2000004C
+00003CA2 str        r0, [r1]
+00003CA4 movs       r4, #0
+00003CA6 b          #0x3cce
+00003CA8 ldr        r0, [pc, #0x3c] ; [00003CE8]=2000004C
+00003CAA ldr        r0, [r0]
+00003CAC ldr        r1, [pc, #0x3c] ; [00003CEC]=00006C02
+00003CAE cmp        r0, r1
+00003CB0 blo        #0x3cc8
+00003CB2 ldr        r0, [pc, #0x34] ; [00003CE8]=2000004C
+00003CB4 ldr        r0, [r0]
+00003CB6 ldr        r1, [pc, #0x38] ; [00003CF0]=00004801
+00003CB8 subs       r0, r0, r1
+00003CBA ldr        r1, [pc, #0x2c] ; [00003CE8]=2000004C
+00003CBC str        r0, [r1]
+00003CBE ldr        r0, [pc, #0x34] ; [00003CF4]=20000043
+00003CC0 ldrb       r0, [r0]
+00003CC2 bl         #0x3620
+00003CC6 b          #0x3cca
+00003CC8 b          #0x3cd2
+00003CCA adds       r0, r4, #1
+00003CCC uxtb       r4, r0
+00003CCE cmp        r4, #7
+00003CD0 blt        #0x3ca8
+00003CD2 nop        
+00003CD4 ldr        r0, [pc, #0x20] ; [00003CF8]=20000042
+00003CD6 ldrb       r0, [r0]
+00003CD8 ldr        r1, [pc, #0x18] ; [00003CF4]=20000043
+00003CDA strb       r0, [r1]
+00003CDC bl         #0x3cfc
+00003CE0 pop        {r4, pc}
+00003CE2 movs       r0, r0
+00003CE4 lsls       r0, r1, #1
+00003CE6 movs       r0, #0
+00003CE8 lsls       r4, r1, #1
+00003CEA movs       r0, #0
+00003CEC ldr        r2, [r0, #0x40]
+00003CEE movs       r0, r0
+00003CF0 ldr        r0, [pc, #4] ; [00003CF8]=20000042
+00003CF2 movs       r0, r0
+00003CF4 lsls       r3, r0, #1
+00003CF6 movs       r0, #0
+00003CF8 lsls       r2, r0, #1
+00003CFA movs       r0, #0

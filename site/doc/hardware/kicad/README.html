@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../../docs/evidence/INDEX.html">Preuves</a>
@@ -19,13 +21,14 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel / CAO et brochage</div>
 <div class="doc-heading"><h1>KiCad : reconstruction de brochage, PAS le schema AnyTone original</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/hardware/kicad/README.md">Modifier sur GitHub</a><a download href="../../../raw/hardware/kicad/README.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>hardware/kicad/README.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../docs/ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="kicad-reconstruction-de-brochage-pas-le-schema-anytone-original">KiCad : reconstruction de brochage, PAS le schema AnyTone original</h1>
 <p>Fichiers <strong>nouveaux</strong>, reconstruits le 05/11/2026 a partir de la datasheet GigaDevice.
 Ils ne remplacent pas le fichier historique <code>D578_GD32_Brochage_KiCad_V0_3.zip</code>, dont les octets originaux sont indisponibles.</p>
 <ul>
 <li><code>.kicad_sym</code> : 100 broches physiques de l'encombrement GD32F303VKT6 LQFP100, regroupement de symboles par numero pour la lisibilite.</li>
 <li><code>.kicad_sch</code> : feuille <strong>sans aucun fil</strong>, une reference de brochage uniquement.</li>
-<li><code>../pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv</code> : hypothese de fonction par broche et provenance.</li>
+<li><code>../pinmaps/GD32F303VKT6_LQFP100_REFERENCE.csv</code> : fonction par broche, statut de validation et provenance ; voir le tableau IO resolu.</li>
 </ul>
 <p>Les fichiers ont ete controles lexicalement et par nombre de broches, mais <strong>pas ouverts dans KiCad dans cette session</strong> ; avant modification, les ouvrir dans la version locale de KiCad et verifier l'affichage.</p>
 <p>Datasheet : <a href="https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf">https://www.gd32mcu.com/data/documents/datasheet/GD32F303xx_Datasheet_Rev3.0.pdf</a> ; section 2.6.2 / Table 2-5.</p>

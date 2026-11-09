@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>DMR / SCT3258 : documentation de travail</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/DMR.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/DMR.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/DMR.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="dmr-sct3258-documentation-de-travail">DMR / SCT3258 : documentation de travail</h1>
 <p>Le projet vise l'acces complet au circuit baseband DMR et la possibilite de remplacer le firmware d'application. La famille <strong>SCT3258</strong> est identifiee dans la recherche sur le D578. Le banc possede un sous-ensemble <code>SCT3258_HPI</code>; cela ne prouve pas l'exhaustivite du pilote ni le pinout reel.</p>
 <p>Sujets a reconstruire : alimentation et sequence reset/clock, host-port interface (HPI), bus de donnees et lignes IRQ, image et format du firmware interne/DSP, adresses et protocole de chargement, configuration TDMA, codec AMBE, commandes d'audio, streaming TX/RX, interface codec, zone NAND/Flash de stockage des binaires et de la calibration, observabilite des evenements et procedures de recuperation.</p>

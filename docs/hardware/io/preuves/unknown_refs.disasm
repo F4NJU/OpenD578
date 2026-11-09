@@ -1,0 +1,1990 @@
+
+### PE0
+
+{'call': '0x80066c2', 'api': 'set', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+08006692 vld1.8    {d31[4]}, [sl], r3
+08006696 stc2      p0, c15, [r8, #0xc]
+0800669c bl        #0x8009fc0
+080066a0 ldr       r0, [pc, #0x238] ; 0x200042f8
+080066a2 ldrb.w    r0, [r0, #0x4f]
+080066a6 cbz       r0, #0x80066b0
+080066a8 movs      r0, #0
+080066aa bl        #0x808a320
+080066ae b         #0x80066b6
+080066b0 movs      r0, #1
+080066b2 bl        #0x808a320
+080066b6 bl        #0x8071dac
+080066ba bl        #0x80384e8
+080066be movs      r1, #1
+080066c0 ldr       r0, [pc, #0x21c] ; 0x40011800
+080066c2 bl        #0x80087ca
+080066c6 movs      r0, #0x96
+080066c8 bl        #0x8009f30
+080066cc mov.w     r1, #0x8000
+080066d0 ldr       r0, [pc, #0x20c] ; 0x40011800
+080066d2 bl        #0x80087ce
+
+{'call': '0x801b2da', 'api': 'set', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+0801b2aa uxtb      r4, r0
+0801b2ac cmp       r4, #0x18
+0801b2ae blt       #0x801b29a
+0801b2b0 nop       
+0801b2b2 cmp       r4, #0x18
+0801b2b4 blt       #0x801b2be
+0801b2b6 movs      r0, #0
+0801b2b8 ldr       r1, [pc, #0x308] ; 0x200002b4
+0801b2ba strb      r0, [r1]
+0801b2bc b         #0x801b2ce
+0801b2be movs      r0, #1
+0801b2c0 ldr       r1, [pc, #0x300] ; 0x200002b4
+0801b2c2 strb      r0, [r1]
+0801b2c4 subs      r0, r5, #0
+0801b2c6 sub.w     r1, r5, #1
+0801b2ca uxtb      r5, r1
+0801b2cc bne       #0x801b28c
+0801b2ce nop       
+0801b2d0 ldr       r0, [pc, #0x2f0] ; 0x200002b4
+0801b2d2 ldrb      r0, [r0]
+0801b2d4 cbz       r0, #0x801b31a
+0801b2d6 movs      r1, #1
+0801b2d8 ldr       r0, [pc, #0x2f0] ; 0x40011800
+0801b2da bl        #0x80087ca
+0801b2de movs      r0, #0x64
+0801b2e0 bl        #0x8009f30
+0801b2e4 movs      r0, #1
+0801b2e6 bl        #0x808a580
+0801b2ea movs      r0, #1
+
+{'call': '0x801b4fc', 'api': 'set', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+0801b4cc ldr       r1, [pc, #0x108] ; 0x80b8fcc
+0801b4ce ldrb      r1, [r1, r4]
+0801b4d0 cmp       r0, r1
+0801b4d2 beq       #0x801b4d6
+0801b4d4 b         #0x801b4dc
+0801b4d6 adds      r4, r4, #1
+0801b4d8 cmp       r4, #0x19
+0801b4da blo       #0x801b4c8
+0801b4dc nop       
+0801b4de cmp       r4, #0x19
+0801b4e0 blo       #0x801b522
+0801b4e2 bl        #0x801b45c
+0801b4e6 movs      r0, #1
+0801b4e8 ldr       r1, [pc, #0xe8] ; 0x20004cd4
+0801b4ea strb.w    r0, [r1, #0x1f7]
+0801b4ee mov       r0, r1
+0801b4f0 ldrb.w    r0, [r0, #0x1f6]
+0801b4f4 cmp       r0, #0x78
+0801b4f6 blt       #0x801b520
+0801b4f8 movs      r1, #1
+0801b4fa ldr       r0, [pc, #0xd0] ; 0x40011800
+0801b4fc bl        #0x80087ca
+0801b500 movs      r0, #0x64
+0801b502 bl        #0x8009f30
+0801b506 mov.w     r0, #-1
+0801b50a ldr       r1, [pc, #0xc4] ; 0x200000ec
+0801b50c str       r0, [r1]
+
+{'call': '0x801b544', 'api': 'set', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+0801b516 movs      r0, #0x19
+0801b518 bl        #0x80390f4
+0801b51c nop       
+0801b51e b         #0x801b51e
+0801b520 b         #0x801b534
+0801b522 movs      r0, #0
+0801b524 ldr       r1, [pc, #0xac] ; 0x20004cd4
+0801b526 strb.w    r0, [r1, #0x1f7]
+0801b52a subs      r0, r5, #0
+0801b52c sub.w     r1, r5, #1
+0801b530 uxtb      r5, r1
+0801b532 bne       #0x801b4ba
+0801b534 nop       
+0801b536 ldr       r0, [pc, #0x9c] ; 0x20004cd4
+0801b538 ldrb.w    r0, [r0, #0x1f7]
+0801b53c cmp       r0, #0
+0801b53e bne       #0x801b63c
+0801b540 movs      r1, #1
+0801b542 ldr       r0, [pc, #0x88] ; 0x40011800
+0801b544 bl        #0x80087ca
+0801b548 movs      r0, #0x64
+0801b54a bl        #0x8009f30
+0801b54e bl        #0x808a8a0
+0801b552 mov.w     r0, #-1
+0801b556 ldr       r1, [pc, #0x78] ; 0x200000ec
+
+{'call': '0x8089b82', 'api': 'clear', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+08089b52 bl        #0x80725a4
+08089b56 ldr       r0, [pc, #0x288] ; 0x20001542
+08089b58 ldrb      r0, [r0]
+08089b5a cmp       r0, #1
+08089b5c bne       #0x8089b6a
+08089b5e mov       r2, sp
+08089b60 movs      r1, #0
+08089b62 ldr       r0, [pc, #0x280] ; 0x20000a00
+08089b64 ldr       r0, [r0]
+08089b66 bl        #0x80aed66
+08089b6a bl        #0x8074870
+08089b6e ldr       r0, [pc, #0x270] ; 0x20001542
+08089b70 ldrb      r0, [r0]
+08089b72 cmp       r0, #1
+08089b74 bne       #0x8089b7e
+08089b76 ldr       r0, [pc, #0x26c] ; 0x20000a00
+08089b78 ldr       r0, [r0]
+08089b7a bl        #0x80aeec4
+08089b7e movs      r1, #1
+08089b80 ldr       r0, [pc, #0x258] ; 0x40011800
+08089b82 bl        #0x80087ce
+08089b86 movs      r0, #0xfa
+08089b88 bl        #0x8009f30
+08089b8c bl        #0x8099e34
+08089b90 movs      r0, #0xfa
+08089b92 bl        #0x8009f30
+
+{'call': '0x808a11a', 'api': 'clear', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+0808a0ec ldr       r0, [pc, #0xa0] ; 0x20001542
+0808a0ee ldrb      r0, [r0]
+0808a0f0 cmp       r0, #1
+0808a0f2 bne       #0x808a0fc
+0808a0f4 ldr       r0, [pc, #0xac] ; 0x20000a00
+0808a0f6 ldr       r0, [r0]
+0808a0f8 bl        #0x80aeec4
+0808a0fc movs      r0, #0
+0808a0fe bl        #0x808a3d6
+0808a102 bl        #0x8092e98
+0808a106 bl        #0x80387ac
+0808a10a movs      r0, #0
+0808a10c bl        #0x80725a4
+0808a110 movs      r0, #1
+0808a112 bl        #0x80725a4
+0808a116 movs      r1, #1
+0808a118 ldr       r0, [pc, #0x58] ; 0x40011800
+0808a11a bl        #0x80087ce
+0808a11e movs      r0, #0xfa
+0808a120 bl        #0x8009f30
+0808a124 bl        #0x8099e34
+0808a128 movs      r0, #0xfa
+0808a12a bl        #0x8009f30
+
+{'call': '0x808a2a8', 'api': 'clear', 'port': '0x40011800', 'mask': '0x1', 'pins': ['PE0'], 'r2': None}
+0808a278 ldr       r0, [pc, #0xe8] ; 0x40010800
+0808a27a bl        #0x80087ca
+0808a27e movs      r1, #8
+0808a280 ldr       r0, [pc, #0xe4] ; 0x40010c00
+0808a282 bl        #0x80087ce
+0808a286 movs      r1, #0x10
+0808a288 ldr       r0, [pc, #0xdc] ; 0x40010c00
+0808a28a bl        #0x80087ce
+0808a28e movs      r1, #0x10
+0808a290 ldr       r0, [pc, #0xcc] ; 0x40011000
+0808a292 bl        #0x80087ce
+0808a296 movs      r0, #0
+0808a298 ldr       r1, [pc, #0xd4] ; 0x200009f8
+0808a29a strb      r0, [r1]
+0808a29c movs      r1, #0x40
+0808a29e ldr       r0, [pc, #0xcc] ; 0x40011800
+0808a2a0 bl        #0x80087ce
+0808a2a4 movs      r1, #1
+0808a2a6 ldr       r0, [pc, #0xc4] ; 0x40011800
+0808a2a8 bl        #0x80087ce
+0808a2ac ldr       r0, [pc, #0xc4] ; 0x20000f58
+0808a2ae ldrb      r0, [r0]
+0808a2b0 cbnz      r0, #0x808a2bc
+0808a2b2 mov.w     r1, #0x8000
+0808a2b6 ldr       r0, [pc, #0xb4] ; 0x40011800
+0808a2b8 bl        #0x80087ca
+
+### PE2
+
+{'call': '0x80021b6', 'api': 'set', 'port': '0x40011800', 'mask': '0x4', 'pins': ['PE2'], 'r2': None}
+08002186 movs      r1, #1
+08002188 movs      r0, #0x40
+0800218a bl        #0x80007f6
+0800218e movs      r0, #4
+08002190 strh.w    r0, [sp]
+08002194 movs      r0, #0x10
+08002196 strb.w    r0, [sp, #3]
+0800219a movs      r0, #3
+0800219c strb.w    r0, [sp, #2]
+080021a0 mov       r1, sp
+080021a2 ldr       r0, [pc, #0x124] ; 0x40011800
+080021a4 bl        #0x80017f8
+080021a8 pop       {r3, pc}
+080021aa push      {r4, lr}
+080021ac mov       r4, r0
+080021ae cmp       r4, #1
+080021b0 bne       #0x80021bc
+080021b2 movs      r1, #4
+080021b4 ldr       r0, [pc, #0x110] ; 0x40011800
+080021b6 bl        #0x8001952
+080021ba b         #0x80021c4
+080021bc movs      r1, #4
+080021be ldr       r0, [pc, #0x108] ; 0x40011800
+080021c0 bl        #0x8001956
+080021c4 pop       {r4, pc}
+080021c6 push      {r4, lr}
+080021c8 ldr       r0, [pc, #0x100] ; 0x400210c0
+
+{'call': '0x80021c0', 'api': 'clear', 'port': '0x40011800', 'mask': '0x4', 'pins': ['PE2'], 'r2': None}
+08002190 strh.w    r0, [sp]
+08002194 movs      r0, #0x10
+08002196 strb.w    r0, [sp, #3]
+0800219a movs      r0, #3
+0800219c strb.w    r0, [sp, #2]
+080021a0 mov       r1, sp
+080021a2 ldr       r0, [pc, #0x124] ; 0x40011800
+080021a4 bl        #0x80017f8
+080021a8 pop       {r3, pc}
+080021aa push      {r4, lr}
+080021ac mov       r4, r0
+080021ae cmp       r4, #1
+080021b0 bne       #0x80021bc
+080021b2 movs      r1, #4
+080021b4 ldr       r0, [pc, #0x110] ; 0x40011800
+080021b6 bl        #0x8001952
+080021ba b         #0x80021c4
+080021bc movs      r1, #4
+080021be ldr       r0, [pc, #0x108] ; 0x40011800
+080021c0 bl        #0x8001956
+080021c4 pop       {r4, pc}
+080021c6 push      {r4, lr}
+080021c8 ldr       r0, [pc, #0x100] ; 0x400210c0
+080021ca ldr       r0, [r0]
+080021cc ldr       r1, [pc, #0x100] ; 0xfefffc
+080021ce ands      r0, r1
+080021d0 ldr       r1, [pc, #0xf8] ; 0x400210c0
+080021d2 subs      r1, #0xc0
+
+{'call': '0x809b3a2', 'api': 'set', 'port': '0x40011800', 'mask': '0x4', 'pins': ['PE2'], 'r2': None}
+0809b372 movs      r1, #1
+0809b374 movs      r0, #0x40
+0809b376 bl        #0x8008d1e
+0809b37a movs      r0, #4
+0809b37c strh.w    r0, [sp]
+0809b380 movs      r0, #0x10
+0809b382 strb.w    r0, [sp, #3]
+0809b386 movs      r0, #3
+0809b388 strb.w    r0, [sp, #2]
+0809b38c mov       r1, sp
+0809b38e ldr       r0, [pc, #0x124] ; 0x40011800
+0809b390 bl        #0x8008670
+0809b394 pop       {r3, pc}
+0809b396 push      {r4, lr}
+0809b398 mov       r4, r0
+0809b39a cmp       r4, #1
+0809b39c bne       #0x809b3a8
+0809b39e movs      r1, #4
+0809b3a0 ldr       r0, [pc, #0x110] ; 0x40011800
+0809b3a2 bl        #0x80087ca
+0809b3a6 b         #0x809b3b0
+0809b3a8 movs      r1, #4
+0809b3aa ldr       r0, [pc, #0x108] ; 0x40011800
+0809b3ac bl        #0x80087ce
+0809b3b0 pop       {r4, pc}
+0809b3b2 push      {r4, lr}
+0809b3b4 ldr       r0, [pc, #0x100] ; 0x400210c0
+
+{'call': '0x809b3ac', 'api': 'clear', 'port': '0x40011800', 'mask': '0x4', 'pins': ['PE2'], 'r2': None}
+0809b37c strh.w    r0, [sp]
+0809b380 movs      r0, #0x10
+0809b382 strb.w    r0, [sp, #3]
+0809b386 movs      r0, #3
+0809b388 strb.w    r0, [sp, #2]
+0809b38c mov       r1, sp
+0809b38e ldr       r0, [pc, #0x124] ; 0x40011800
+0809b390 bl        #0x8008670
+0809b394 pop       {r3, pc}
+0809b396 push      {r4, lr}
+0809b398 mov       r4, r0
+0809b39a cmp       r4, #1
+0809b39c bne       #0x809b3a8
+0809b39e movs      r1, #4
+0809b3a0 ldr       r0, [pc, #0x110] ; 0x40011800
+0809b3a2 bl        #0x80087ca
+0809b3a6 b         #0x809b3b0
+0809b3a8 movs      r1, #4
+0809b3aa ldr       r0, [pc, #0x108] ; 0x40011800
+0809b3ac bl        #0x80087ce
+0809b3b0 pop       {r4, pc}
+0809b3b2 push      {r4, lr}
+0809b3b4 ldr       r0, [pc, #0x100] ; 0x400210c0
+0809b3b6 ldr       r0, [r0]
+0809b3b8 ldr       r1, [pc, #0x100] ; 0xfefffc
+0809b3ba ands      r0, r1
+0809b3bc ldr       r1, [pc, #0xf8] ; 0x400210c0
+0809b3be subs      r1, #0xc0
+
+### PE5
+
+{'call': '0x80040ce', 'api': 'clear', 'port': '0x40011800', 'mask': '0x20', 'pins': ['PE5'], 'r2': None}
+0800409e umull     r2, r0, ip, r1
+080040a2 strh.w    r0, [sp]
+080040a6 movs      r0, #0x48
+080040a8 strb.w    r0, [sp, #3]
+080040ac movs      r0, #3
+080040ae strb.w    r0, [sp, #2]
+080040b2 mov       r1, sp
+080040b4 ldr       r0, [pc, #0x34] ; 0x40010800
+080040b6 bl        #0x80017f8
+080040ba movs      r1, #8
+080040bc ldr       r0, [pc, #0x34] ; 0x40011800
+080040be bl        #0x8001956
+080040c2 movs      r1, #0x10
+080040c4 ldr       r0, [pc, #0x2c] ; 0x40011800
+080040c6 bl        #0x8001956
+080040ca movs      r1, #0x20
+080040cc ldr       r0, [pc, #0x24] ; 0x40011800
+080040ce bl        #0x8001956
+080040d2 movs      r1, #8
+080040d4 ldr       r0, [pc, #0x20] ; 0x40011000
+080040d6 bl        #0x8001952
+080040da movs      r1, #0x80
+080040dc ldr       r0, [pc, #0xc] ; 0x40010800
+080040de bl        #0x8001952
+
+{'call': '0x80042b4', 'api': 'set', 'port': '0x40011800', 'mask': '0x20', 'pins': ['PE5'], 'r2': None}
+08004284 cbz       r0, #0x8004292
+08004286 movs      r0, #9
+08004288 bl        #0x8004238
+0800428c cbz       r0, #0x8004292
+0800428e movs      r0, #1
+08004290 pop       {r4, pc}
+08004292 movs      r0, #0
+08004294 b         #0x8004290
+08004296 movs      r0, r0
+08004298 lsrs      r0, r0, #0x10
+0800429a ands      r1, r0
+0800429c movs      r4, #0
+0800429e ands      r1, r0
+080042a0 nop       
+080042a2 movs      r1, r0
+080042a4 sub.w     r2, r0, #1
+080042a8 uxtb      r0, r2
+080042aa bne       #0x80042a2
+080042ac bx        lr
+080042ae push      {r4, lr}
+080042b0 movs      r1, #0x20
+080042b2 ldr       r0, [pc, #0x68] ; 0x40011800
+080042b4 bl        #0x8001952
+080042b8 pop       {r4, pc}
+080042ba push      {r4, r5, r6, lr}
+080042bc mov       r4, r0
+080042be movs      r5, #8
+080042c0 movs      r1, #8
+080042c2 ldr       r0, [pc, #0x58] ; 0x40011800
+080042c4 bl        #0x8001956
+
+{'call': '0x808a4ce', 'api': 'set', 'port': '0x40011800', 'mask': '0x20', 'pins': ['PE5'], 'r2': None}
+0808a49e push      {r3, lr}
+0808a4a0 movs      r0, #0x38
+0808a4a2 strh.w    r0, [sp]
+0808a4a6 movs      r0, #0x10
+0808a4a8 strb.w    r0, [sp, #3]
+0808a4ac movs      r0, #3
+0808a4ae strb.w    r0, [sp, #2]
+0808a4b2 mov       r1, sp
+0808a4b4 ldr       r0, [pc, #0x2a8] ; 0x40011800
+0808a4b6 bl        #0x8008670
+0808a4ba movs      r1, #8
+0808a4bc ldr       r0, [pc, #0x2a0] ; 0x40011800
+0808a4be bl        #0x80087ce
+0808a4c2 movs      r1, #0x10
+0808a4c4 ldr       r0, [pc, #0x298] ; 0x40011800
+0808a4c6 bl        #0x80087ce
+0808a4ca movs      r1, #0x20
+0808a4cc ldr       r0, [pc, #0x290] ; 0x40011800
+0808a4ce bl        #0x80087ca
+0808a4d2 movs      r0, #0
+0808a4d4 ldr       r1, [pc, #0x29c] ; 0x200010d0
+0808a4d6 strb      r0, [r1]
+0808a4d8 mov       r0, r1
+0808a4da ldrb      r0, [r0]
+0808a4dc bl        #0x808a3d6
+0808a4e0 movs      r0, #0
+
+### PE6
+
+{'call': '0x80040e6', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080040b6 bl        #0x80017f8
+080040ba movs      r1, #8
+080040bc ldr       r0, [pc, #0x34] ; 0x40011800
+080040be bl        #0x8001956
+080040c2 movs      r1, #0x10
+080040c4 ldr       r0, [pc, #0x2c] ; 0x40011800
+080040c6 bl        #0x8001956
+080040ca movs      r1, #0x20
+080040cc ldr       r0, [pc, #0x24] ; 0x40011800
+080040ce bl        #0x8001956
+080040d2 movs      r1, #8
+080040d4 ldr       r0, [pc, #0x20] ; 0x40011000
+080040d6 bl        #0x8001952
+080040da movs      r1, #0x80
+080040dc ldr       r0, [pc, #0xc] ; 0x40010800
+080040de bl        #0x8001952
+080040e2 movs      r1, #0x40
+080040e4 ldr       r0, [pc, #0xc] ; 0x40011800
+080040e6 bl        #0x8001956
+080040ea pop       {r3, pc}
+080040ec lsrs      r0, r0, #0x20
+080040ee ands      r1, r0
+080040f0 lsls      r0, r0, #8
+080040f2 movs      r0, r6
+080040f4 adds      r0, r0, r0
+080040f6 ands      r1, r0
+080040f8 asrs      r0, r0, #0x20
+
+{'call': '0x8006a66', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08006a36 cbz       r0, #0x8006a8a
+08006a38 movs      r1, #1
+08006a3a lsls      r0, r1, #0x1e
+08006a3c bl        #0x8009d70
+08006a40 ldr       r0, [pc, #0x2a8] ; 0x200004de
+08006a42 ldrb      r0, [r0]
+08006a44 cbz       r0, #0x8006a80
+08006a46 ldr       r0, [pc, #0x2a8] ; 0x20000490
+08006a48 ldrb      r0, [r0]
+08006a4a bl        #0x8095efc
+08006a4e cbnz      r0, #0x8006a58
+08006a50 ldr       r0, [pc, #0x2a0] ; 0x20010c5c
+08006a52 ldrb.w    r0, [r0, #0x49]
+08006a56 cbz       r0, #0x8006a80
+08006a58 movs      r1, #1
+08006a5a ldr       r0, [pc, #0x29c] ; 0x40011400
+08006a5c bl        #0x8008796
+08006a60 cbnz      r0, #0x8006a80
+08006a62 movs      r1, #0x40
+08006a64 ldr       r0, [pc, #0x294] ; 0x40011800
+08006a66 bl        #0x80087ce
+08006a6a ldr       r0, [pc, #0x288] ; 0x20010c5c
+08006a6c ldrb.w    r0, [r0, #0x4a]
+08006a70 cbnz      r0, #0x8006a7a
+08006a72 ldr       r0, [pc, #0x280] ; 0x20010c5c
+08006a74 ldrb.w    r0, [r0, #0x49]
+08006a78 cbz       r0, #0x8006a80
+
+{'call': '0x8070382', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08070354 ldr       r0, [pc, #0x278] ; 0x200004de
+08070356 ldrb      r0, [r0]
+08070358 cbz       r0, #0x807035c
+0807035a movs      r5, #1
+0807035c movs      r1, #0
+0807035e mov       r0, r1
+08070360 bl        #0x808be9c
+08070364 movs      r0, #0
+08070366 ldr       r1, [pc, #0x268] ; 0x200004de
+08070368 strb      r0, [r1]
+0807036a movs      r0, #1
+0807036c bl        #0x808a55a
+08070370 movs      r0, #0
+08070372 ldr       r1, [pc, #0x264] ; 0x20000931
+08070374 strb      r0, [r1]
+08070376 ldr       r1, [pc, #0x264] ; 0x20000090
+08070378 strb      r0, [r1]
+0807037a ldr       r1, [pc, #0x264] ; 0x200009d9
+0807037c strb      r0, [r1]
+0807037e movs      r1, #0x40
+08070380 ldr       r0, [pc, #0x260] ; 0x40011800
+08070382 bl        #0x80087ce
+08070386 movs      r0, #0
+08070388 bl        #0x808a2c4
+0807038c movs      r0, #0
+0807038e ldr       r1, [pc, #0x258] ; 0x200009d2
+08070390 strb      r0, [r1]
+08070392 bl        #0x806eace
+
+{'call': '0x8070e3c', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08070e0e bl        #0x8070796
+08070e12 ldr       r0, [pc, #0xd8] ; 0x20000234
+08070e14 ldr       r0, [r0]
+08070e16 ldr       r1, [pc, #0xac] ; 0x1c9c380
+08070e18 cmp       r0, r1
+08070e1a bls       #0x8070e26
+08070e1c movs      r1, #0
+08070e1e movs      r0, #1
+08070e20 bl        #0x8070784
+08070e24 b         #0x8070e2e
+08070e26 movs      r1, #0
+08070e28 mov       r0, r1
+08070e2a bl        #0x8070784
+08070e2e movs      r0, #2
+08070e30 bl        #0x80af780
+08070e34 ldr       r0, [pc, #0x88] ; 0x200006d0
+08070e36 str       r4, [r0]
+08070e38 movs      r1, #0x40
+08070e3a ldr       r0, [pc, #0xc8] ; 0x40011800
+08070e3c bl        #0x80087ca
+08070e40 movs      r0, #1
+08070e42 bl        #0x808a5c6
+08070e46 bl        #0x804fe68
+08070e4a movs      r0, #0
+08070e4c bl        #0x808a60c
+
+{'call': '0x80718c6', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08071896 cmp       r0, r1
+08071898 bne       #0x80718a4
+0807189a mov.w     r0, #0x50000
+0807189e bl        #0x80384c6
+080718a2 b         #0x80718ba
+080718a4 ldr       r0, [pc, #0x37c] ; 0x2058c4
+080718a6 bl        #0x80384c6
+080718aa b         #0x80718ba
+080718ac ldr       r0, [pc, #0x360] ; 0x200000e5
+080718ae ldrb      r0, [r0]
+080718b0 cmp       r0, #0xd
+080718b2 bge       #0x80718ba
+080718b4 movs      r0, #0x24
+080718b6 bl        #0x80384c6
+080718ba ldr       r0, [pc, #0x36c] ; 0x20010c5c
+080718bc ldrb.w    r0, [r0, #0x49]
+080718c0 cbz       r0, #0x80718cc
+080718c2 movs      r1, #0x40
+080718c4 ldr       r0, [pc, #0x364] ; 0x40011800
+080718c6 bl        #0x80087ce
+080718ca b         #0x8071922
+080718cc ldr       r0, [pc, #0x360] ; 0x20013860
+080718ce ldrb      r0, [r0, #1]
+080718d0 cbz       r0, #0x80718e2
+080718d2 movs      r0, #2
+080718d4 bl        #0x80af780
+080718d8 movs      r1, #0x40
+
+{'call': '0x80718dc', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080718ac ldr       r0, [pc, #0x360] ; 0x200000e5
+080718ae ldrb      r0, [r0]
+080718b0 cmp       r0, #0xd
+080718b2 bge       #0x80718ba
+080718b4 movs      r0, #0x24
+080718b6 bl        #0x80384c6
+080718ba ldr       r0, [pc, #0x36c] ; 0x20010c5c
+080718bc ldrb.w    r0, [r0, #0x49]
+080718c0 cbz       r0, #0x80718cc
+080718c2 movs      r1, #0x40
+080718c4 ldr       r0, [pc, #0x364] ; 0x40011800
+080718c6 bl        #0x80087ce
+080718ca b         #0x8071922
+080718cc ldr       r0, [pc, #0x360] ; 0x20013860
+080718ce ldrb      r0, [r0, #1]
+080718d0 cbz       r0, #0x80718e2
+080718d2 movs      r0, #2
+080718d4 bl        #0x80af780
+080718d8 movs      r1, #0x40
+080718da ldr       r0, [pc, #0x350] ; 0x40011800
+080718dc bl        #0x80087ca
+080718e0 b         #0x8071922
+080718e2 ldr       r0, [pc, #0x34c] ; 0x20013860
+080718e4 ldrb      r0, [r0, #4]
+080718e6 cmp       r0, #0xd
+080718e8 bne       #0x8071902
+080718ea cbz       r4, #0x8071902
+080718ec movs      r0, #2
+
+{'call': '0x80718f6', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080718c6 bl        #0x80087ce
+080718ca b         #0x8071922
+080718cc ldr       r0, [pc, #0x360] ; 0x20013860
+080718ce ldrb      r0, [r0, #1]
+080718d0 cbz       r0, #0x80718e2
+080718d2 movs      r0, #2
+080718d4 bl        #0x80af780
+080718d8 movs      r1, #0x40
+080718da ldr       r0, [pc, #0x350] ; 0x40011800
+080718dc bl        #0x80087ca
+080718e0 b         #0x8071922
+080718e2 ldr       r0, [pc, #0x34c] ; 0x20013860
+080718e4 ldrb      r0, [r0, #4]
+080718e6 cmp       r0, #0xd
+080718e8 bne       #0x8071902
+080718ea cbz       r4, #0x8071902
+080718ec movs      r0, #2
+080718ee bl        #0x80af780
+080718f2 movs      r1, #0x40
+080718f4 ldr       r0, [pc, #0x334] ; 0x40011800
+080718f6 bl        #0x80087ca
+080718fa movs      r0, #2
+080718fc bl        #0x80af780
+08071900 b         #0x8071922
+08071902 movs      r1, #1
+08071904 ldr       r0, [pc, #0x32c] ; 0x40011400
+08071906 bl        #0x8008796
+
+{'call': '0x8071912', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080718e2 ldr       r0, [pc, #0x34c] ; 0x20013860
+080718e4 ldrb      r0, [r0, #4]
+080718e6 cmp       r0, #0xd
+080718e8 bne       #0x8071902
+080718ea cbz       r4, #0x8071902
+080718ec movs      r0, #2
+080718ee bl        #0x80af780
+080718f2 movs      r1, #0x40
+080718f4 ldr       r0, [pc, #0x334] ; 0x40011800
+080718f6 bl        #0x80087ca
+080718fa movs      r0, #2
+080718fc bl        #0x80af780
+08071900 b         #0x8071922
+08071902 movs      r1, #1
+08071904 ldr       r0, [pc, #0x32c] ; 0x40011400
+08071906 bl        #0x8008796
+0807190a ands      r0, r4
+0807190c cbz       r0, #0x8071918
+0807190e movs      r1, #0x40
+08071910 ldr       r0, [pc, #0x318] ; 0x40011800
+08071912 bl        #0x80087ca
+08071916 b         #0x8071922
+08071918 cbnz      r4, #0x8071922
+0807191a movs      r1, #0x40
+0807191c ldr       r0, [pc, #0x30c] ; 0x40011800
+0807191e bl        #0x80087ca
+08071922 ldr       r0, [pc, #0x2dc] ; 0x200042f8
+
+{'call': '0x807191e', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080718ee bl        #0x80af780
+080718f2 movs      r1, #0x40
+080718f4 ldr       r0, [pc, #0x334] ; 0x40011800
+080718f6 bl        #0x80087ca
+080718fa movs      r0, #2
+080718fc bl        #0x80af780
+08071900 b         #0x8071922
+08071902 movs      r1, #1
+08071904 ldr       r0, [pc, #0x32c] ; 0x40011400
+08071906 bl        #0x8008796
+0807190a ands      r0, r4
+0807190c cbz       r0, #0x8071918
+0807190e movs      r1, #0x40
+08071910 ldr       r0, [pc, #0x318] ; 0x40011800
+08071912 bl        #0x80087ca
+08071916 b         #0x8071922
+08071918 cbnz      r4, #0x8071922
+0807191a movs      r1, #0x40
+0807191c ldr       r0, [pc, #0x30c] ; 0x40011800
+0807191e bl        #0x80087ca
+08071922 ldr       r0, [pc, #0x2dc] ; 0x200042f8
+08071924 ldrb.w    r0, [r0, #0x21]
+08071928 cbz       r0, #0x8071930
+0807192a bl        #0x8059a0c
+0807192e cbz       r0, #0x8071954
+08071930 ldr       r0, [pc, #0x304] ; 0x20000477
+
+{'call': '0x8079f84', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08079f54 movs      r0, #0
+08079f56 bl        #0x808a580
+08079f5a movs      r0, #0
+08079f5c bl        #0x8072456
+08079f60 movs      r1, #1
+08079f62 movs      r0, #0
+08079f64 bl        #0x806ce52
+08079f68 movs      r1, #1
+08079f6a movs      r0, #0
+08079f6c bl        #0x806ce2e
+08079f70 movs      r1, #1
+08079f72 movs      r0, #0
+08079f74 bl        #0x806ce40
+08079f78 movs      r1, #1
+08079f7a movs      r0, #0
+08079f7c bl        #0x806ce1c
+08079f80 movs      r1, #0x40
+08079f82 ldr       r0, [pc, #0x250] ; 0x40011800
+08079f84 bl        #0x80087ce
+08079f88 movs      r0, #0xff
+08079f8a bl        #0x808a8f4
+08079f8e movs      r0, #1
+08079f90 bl        #0x8090adc
+08079f94 movs      r0, #0
+
+{'call': '0x8089b38', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08089b08 cmp       r0, #0
+08089b0a bne       #0x8089bb4
+08089b0c ldr       r0, [pc, #0x2c8] ; 0x200011be
+08089b0e ldrb      r0, [r0]
+08089b10 cmp       r0, #0
+08089b12 bne       #0x8089bb4
+08089b14 ldr       r1, [pc, #0x2ac] ; 0x200010c8
+08089b16 str       r0, [r1]
+08089b18 bl        #0x8088622
+08089b1c movs      r0, #0xa
+08089b1e bl        #0x8009f30
+08089b22 movs      r0, #0
+08089b24 bl        #0x808a8f4
+08089b28 bl        #0x80924b8
+08089b2c bl        #0x807ad2e
+08089b30 bl        #0x8012bec
+08089b34 movs      r1, #0x40
+08089b36 ldr       r0, [pc, #0x2a4] ; 0x40011800
+08089b38 bl        #0x80087ce
+08089b3c movs      r0, #0
+08089b3e bl        #0x808a3d6
+08089b42 bl        #0x8092e98
+08089b46 bl        #0x80387ac
+08089b4a movs      r0, #0
+
+{'call': '0x808a0d0', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0808a0a0 bne       #0x808a0cc
+0808a0a2 ldr       r0, [pc, #0xf4] ; 0x2000e938
+0808a0a4 ldrb      r0, [r0, #3]
+0808a0a6 cmp       r0, #1
+0808a0a8 bne       #0x808a0cc
+0808a0aa ldr       r1, [pc, #0xec] ; 0x2000e938
+0808a0ac ldrb      r0, [r1, #4]
+0808a0ae bl        #0x80607fa
+0808a0b2 cbz       r0, #0x808a0cc
+0808a0b4 bl        #0x8095e58
+0808a0b8 cbz       r0, #0x808a0cc
+0808a0ba ldr       r0, [pc, #0xe0] ; 0x20000288
+0808a0bc ldrb      r0, [r0]
+0808a0be cbnz      r0, #0x808a0cc
+0808a0c0 ldr       r0, [pc, #0xdc] ; 0x2000015c
+0808a0c2 ldrb      r0, [r0]
+0808a0c4 cmp       r0, #0x17
+0808a0c6 beq       #0x808a0cc
+0808a0c8 bl        #0x8012b9c
+0808a0cc movs      r1, #0x40
+0808a0ce ldr       r0, [pc, #0xa4] ; 0x40011800
+0808a0d0 bl        #0x80087ce
+0808a0d4 ldr       r0, [pc, #0xb8] ; 0x20001542
+0808a0d6 ldrb      r0, [r0]
+0808a0d8 cmp       r0, #1
+0808a0da bne       #0x808a0e8
+0808a0dc mov       r2, sp
+0808a0de movs      r1, #0
+0808a0e0 ldr       r0, [pc, #0xc0] ; 0x20000a00
+0808a0e2 ldr       r0, [r0]
+
+{'call': '0x808a2a0', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0808a270 ldr       r0, [pc, #0xf0] ; 0x40010800
+0808a272 bl        #0x80087ca
+0808a276 movs      r1, #0x80
+0808a278 ldr       r0, [pc, #0xe8] ; 0x40010800
+0808a27a bl        #0x80087ca
+0808a27e movs      r1, #8
+0808a280 ldr       r0, [pc, #0xe4] ; 0x40010c00
+0808a282 bl        #0x80087ce
+0808a286 movs      r1, #0x10
+0808a288 ldr       r0, [pc, #0xdc] ; 0x40010c00
+0808a28a bl        #0x80087ce
+0808a28e movs      r1, #0x10
+0808a290 ldr       r0, [pc, #0xcc] ; 0x40011000
+0808a292 bl        #0x80087ce
+0808a296 movs      r0, #0
+0808a298 ldr       r1, [pc, #0xd4] ; 0x200009f8
+0808a29a strb      r0, [r1]
+0808a29c movs      r1, #0x40
+0808a29e ldr       r0, [pc, #0xcc] ; 0x40011800
+0808a2a0 bl        #0x80087ce
+0808a2a4 movs      r1, #1
+0808a2a6 ldr       r0, [pc, #0xc4] ; 0x40011800
+0808a2a8 bl        #0x80087ce
+0808a2ac ldr       r0, [pc, #0xc4] ; 0x20000f58
+0808a2ae ldrb      r0, [r0]
+0808a2b0 cbnz      r0, #0x808a2bc
+
+{'call': '0x808cb2e', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0808cafe ldrb      r0, [r0, #1]
+0808cb00 cbz       r0, #0x808cb0a
+0808cb02 ldr       r0, [pc, #0x220] ; 0x20013860
+0808cb04 ldrb      r0, [r0, #1]
+0808cb06 cmp       r0, #3
+0808cb08 bne       #0x808cbf6
+0808cb0a ldr       r0, [pc, #0x21c] ; 0x20010c5c
+0808cb0c ldrb.w    r0, [r0, #0x49]
+0808cb10 cbz       r0, #0x808cb76
+0808cb12 ldr       r0, [pc, #0x218] ; 0x20000894
+0808cb14 ldrb      r0, [r0]
+0808cb16 cbnz      r0, #0x808cb5c
+0808cb18 movs      r1, #1
+0808cb1a ldr       r0, [pc, #0x1ec] ; 0x40011400
+0808cb1c bl        #0x8008796
+0808cb20 cbz       r0, #0x808cb5e
+0808cb22 ldr       r0, [pc, #0x20c] ; 0x200008be
+0808cb24 ldrh      r0, [r0]
+0808cb26 bl        #0x808b73c
+0808cb2a movs      r1, #0x40
+0808cb2c ldr       r0, [pc, #0x204] ; 0x40011800
+0808cb2e bl        #0x80087ca
+0808cb32 ldr       r0, [pc, #0x204] ; 0x200006d8
+0808cb34 ldr       r0, [r0]
+0808cb36 ldr       r1, [pc, #0x204] ; 0x1c9c380
+0808cb38 cmp       r0, r1
+0808cb3a blo       #0x808cb44
+0808cb3c ldr       r0, [pc, #0x200] ; 0x200006e4
+0808cb3e ldr       r0, [r0]
+0808cb40 cmp       r0, r1
+
+{'call': '0x808cb96', 'api': 'set', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0808cb66 lsls      r0, r1, #0x1e
+0808cb68 bl        #0x80097bc
+0808cb6c mov.w     r0, #0x12c
+0808cb70 ldr       r1, [pc, #0x1d0] ; 0x20001312
+0808cb72 strh      r0, [r1]
+0808cb74 b         #0x808cbf6
+0808cb76 b         #0x808cb78
+0808cb78 movs      r1, #1
+0808cb7a ldr       r0, [pc, #0x18c] ; 0x40011400
+0808cb7c bl        #0x8008796
+0808cb80 cbz       r0, #0x808cbba
+0808cb82 ldr       r0, [pc, #0x1c4] ; 0x200012f0
+0808cb84 bl        #0x80a8b40
+0808cb88 cbnz      r0, #0x808cbb2
+0808cb8a ldr       r0, [pc, #0x1a4] ; 0x200008be
+0808cb8c ldrh      r0, [r0]
+0808cb8e bl        #0x808b73c
+0808cb92 movs      r1, #0x40
+0808cb94 ldr       r0, [pc, #0x19c] ; 0x40011800
+0808cb96 bl        #0x80087ca
+0808cb9a ldr       r0, [pc, #0x18c] ; 0x20010c5c
+0808cb9c ldrb.w    r0, [r0, #0x4a]
+0808cba0 cbnz      r0, #0x808cbaa
+0808cba2 ldr       r0, [pc, #0x184] ; 0x20010c5c
+0808cba4 ldrb.w    r0, [r0, #0x49]
+0808cba8 cbz       r0, #0x808cbf6
+
+{'call': '0x809314c', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0809311c movs      r1, #0
+0809311e ldr       r0, [pc, #0x300] ; 0x40001000
+08093120 bl        #0x80097bc
+08093124 movs      r1, #0
+08093126 ldr       r0, [pc, #0x2fc] ; 0x40001400
+08093128 bl        #0x80097bc
+0809312c movs      r0, #0
+0809312e ldr       r1, [pc, #0x2f8] ; 0x200010c8
+08093130 str       r0, [r1]
+08093132 bl        #0x808a580
+08093136 movs      r0, #0
+08093138 bl        #0x808a5c6
+0809313c movs      r0, #0
+0809313e bl        #0x808a60c
+08093142 movs      r0, #0
+08093144 bl        #0x8072456
+08093148 movs      r1, #0x40
+0809314a ldr       r0, [pc, #0x2e0] ; 0x40011800
+0809314c bl        #0x80087ce
+08093150 bl        #0x80924b8
+08093154 movs      r1, #0
+08093156 ldr       r0, [pc, #0x2d8] ; 0x40004400
+08093158 bl        #0x8006f16
+0809315c movs      r0, #1
+0809315e ldr       r1, [pc, #0x2d4] ; 0x2000136c
+
+{'call': '0x8093692', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+08093662 ldrh.w    fp, [r5, #0xd10]
+08093666 push      {r4, lr}
+08093668 mov       r4, r0
+0809366a cbz       r4, #0x8093676
+0809366c movs      r1, #0x80
+0809366e ldr       r0, [pc, #0x22c] ; 0x40011000
+08093670 bl        #0x80087ca
+08093674 b         #0x809367e
+08093676 movs      r1, #0x80
+08093678 ldr       r0, [pc, #0x220] ; 0x40011000
+0809367a bl        #0x80087ce
+0809367e pop       {r4, pc}
+08093680 push      {r4, lr}
+08093682 mov       r4, r0
+08093684 ldr       r0, [pc, #0x218] ; 0x20010c5c
+08093686 ldrb.w    r0, [r0, #0x49]
+0809368a cbz       r0, #0x80936bc
+0809368c cbz       r4, #0x80936bc
+0809368e movs      r1, #0x40
+08093690 ldr       r0, [pc, #0x210] ; 0x40011800
+08093692 bl        #0x80087ce
+08093696 movs      r0, #0x15
+08093698 bl        #0x8071d98
+0809369c movs      r0, #0
+0809369e bl        #0x808a2c4
+080936a2 ldr       r0, [pc, #0x204] ; 0x200001a6
+080936a4 ldrb      r0, [r0]
+
+{'call': '0x80936e8', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080936b8 bl        #0x8092928
+080936bc pop       {r4, pc}
+080936be push      {r4, lr}
+080936c0 ldr       r0, [pc, #0x1e8] ; 0x20001312
+080936c2 ldrh      r0, [r0]
+080936c4 cbz       r0, #0x80936f8
+080936c6 ldr       r0, [pc, #0x1a4] ; 0x200004de
+080936c8 ldrb      r0, [r0]
+080936ca cbz       r0, #0x80936f8
+080936cc ldr       r0, [pc, #0x1d0] ; 0x20010c5c
+080936ce ldrb.w    r0, [r0, #0x49]
+080936d2 cbz       r0, #0x80936f8
+080936d4 ldr       r0, [pc, #0x1d4] ; 0x20001312
+080936d6 ldrh      r0, [r0]
+080936d8 subs      r0, r0, #1
+080936da ldr       r1, [pc, #0x1d0] ; 0x20001312
+080936dc strh      r0, [r1]
+080936de mov       r0, r1
+080936e0 ldrh      r0, [r0]
+080936e2 cbnz      r0, #0x80936f8
+080936e4 movs      r1, #0x40
+080936e6 ldr       r0, [pc, #0x1bc] ; 0x40011800
+080936e8 bl        #0x80087ce
+080936ec movs      r0, #0x15
+080936ee bl        #0x8071d98
+080936f2 movs      r0, #0
+080936f4 bl        #0x808a2c4
+080936f8 pop       {r4, pc}
+080936fa push      {r4, lr}
+
+{'call': '0x80937f2', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+080937c4 movs      r0, #0
+080937c6 ldr       r1, [pc, #0xfc] ; 0x200009c8
+080937c8 strh      r0, [r1]
+080937ca ldr       r0, [pc, #0xe4] ; 0x20001542
+080937cc ldrb      r0, [r0]
+080937ce cmp       r0, #1
+080937d0 bne       #0x80937da
+080937d2 ldr       r0, [pc, #0xe0] ; 0x20000a00
+080937d4 ldr       r0, [r0]
+080937d6 bl        #0x80aeec4
+080937da pop       {r3, r4, r5, pc}
+080937dc push      {r3, r4, r5, lr}
+080937de mov       r4, r0
+080937e0 ldr       r0, [pc, #0xbc] ; 0x20010c5c
+080937e2 ldrb.w    r0, [r0, #0x49]
+080937e6 cmp       r0, #0
+080937e8 beq       #0x80938d6
+080937ea cmp       r4, #0
+080937ec bne       #0x80938ce
+080937ee movs      r1, #0x40
+080937f0 ldr       r0, [pc, #0xb0] ; 0x40011800
+080937f2 bl        #0x80087ce
+080937f6 ldr       r0, [pc, #0x74] ; 0x200004de
+080937f8 ldrb      r0, [r0]
+080937fa cbz       r0, #0x8093856
+080937fc ldr       r0, [pc, #0xb0] ; 0x20001542
+080937fe ldrb      r0, [r0]
+08093800 cmp       r0, #1
+08093802 bne       #0x8093810
+08093804 mov       r2, sp
+
+{'call': '0x809a122', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0809a0f2 vhadd.u32 d2, d7, d0
+0809a0f6 ldr       r1, [pc, #0xcc] ; 0x200004de
+0809a0f8 strb      r0, [r1]
+0809a0fa ldr       r1, [pc, #0xcc] ; 0x200010c8
+0809a0fc str       r0, [r1]
+0809a0fe b         #0x809a106
+0809a100 movs      r0, #5
+0809a102 bl        #0x80af780
+0809a106 ldr       r0, [pc, #0xc4] ; 0x20000808
+0809a108 ldrb      r0, [r0]
+0809a10a cmp       r0, #0
+0809a10c bne       #0x809a100
+0809a10e bl        #0x808a580
+0809a112 movs      r0, #0
+0809a114 bl        #0x808a60c
+0809a118 movs      r0, #0
+0809a11a bl        #0x808a5c6
+0809a11e movs      r1, #0x40
+0809a120 ldr       r0, [pc, #0xac] ; 0x40011800
+0809a122 bl        #0x80087ce
+0809a126 movs      r0, #1
+0809a128 bl        #0x808a2c4
+0809a12c movs      r0, #0xff
+0809a12e bl        #0x808a8f4
+0809a132 bl        #0x8074870
+
+{'call': '0x809b160', 'api': 'clear', 'port': '0x40011800', 'mask': '0x40', 'pins': ['PE6'], 'r2': None}
+0809b130 movs      r0, #0
+0809b132 bl        #0x808a580
+0809b136 movs      r0, #0
+0809b138 bl        #0x8072456
+0809b13c movs      r1, #1
+0809b13e movs      r0, #0
+0809b140 bl        #0x806ce52
+0809b144 movs      r1, #1
+0809b146 movs      r0, #0
+0809b148 bl        #0x806ce2e
+0809b14c movs      r1, #1
+0809b14e movs      r0, #0
+0809b150 bl        #0x806ce40
+0809b154 movs      r1, #1
+0809b156 movs      r0, #0
+0809b158 bl        #0x806ce1c
+0809b15c movs      r1, #0x40
+0809b15e ldr       r0, [pc, #0x190] ; 0x40011800
+0809b160 bl        #0x80087ce
+0809b164 movs      r0, #0xff
+0809b166 bl        #0x808a8f4
+0809b16a movs      r0, #1
+0809b16c bl        #0x8090adc
+0809b170 movs      r0, #0
+
+### PE15
+
+{'call': '0x80066d2', 'api': 'clear', 'port': '0x40011800', 'mask': '0x8000', 'pins': ['PE15'], 'r2': None}
+080066a2 ldrb.w    r0, [r0, #0x4f]
+080066a6 cbz       r0, #0x80066b0
+080066a8 movs      r0, #0
+080066aa bl        #0x808a320
+080066ae b         #0x80066b6
+080066b0 movs      r0, #1
+080066b2 bl        #0x808a320
+080066b6 bl        #0x8071dac
+080066ba bl        #0x80384e8
+080066be movs      r1, #1
+080066c0 ldr       r0, [pc, #0x21c] ; 0x40011800
+080066c2 bl        #0x80087ca
+080066c6 movs      r0, #0x96
+080066c8 bl        #0x8009f30
+080066cc mov.w     r1, #0x8000
+080066d0 ldr       r0, [pc, #0x20c] ; 0x40011800
+080066d2 bl        #0x80087ce
+080066d6 bl        #0x80723de
+080066da bl        #0x8071dac
+080066de bl        #0x808a8a0
+080066e2 movs      r0, #0x10
+
+{'call': '0x8089f6a', 'api': 'clear', 'port': '0x40011800', 'mask': '0x8000', 'pins': ['PE15'], 'r2': None}
+08089f3c ldr       r0, [pc, #0x22c] ; 0x20004214
+08089f3e ldrb.w    r0, [r0, #0xdd]
+08089f42 cmp       r0, #0
+08089f44 beq       #0x8089fe4
+08089f46 bl        #0x8089c0a
+08089f4a bl        #0x8089bb6
+08089f4e bl        #0x8089d3e
+08089f52 ldr       r0, [pc, #0x21c] ; 0x200042f8
+08089f54 ldrb.w    r0, [r0, #0x4f]
+08089f58 cmp       r0, #0
+08089f5a beq       #0x8089fdc
+08089f5c ldr       r0, [pc, #0x20c] ; 0x20004214
+08089f5e ldrb.w    r0, [r0, #0xa4]
+08089f62 cbz       r0, #0x8089f9a
+08089f64 mov.w     r1, #0x8000
+08089f68 ldr       r0, [pc, #0x208] ; 0x40011800
+08089f6a bl        #0x80087ce
+08089f6e movs      r0, #0x96
+08089f70 bl        #0x8009f30
+08089f74 movs      r0, #1
+08089f76 bl        #0x808a470
+08089f7a mov.w     r0, #0x12c
+
+{'call': '0x808a2b8', 'api': 'set', 'port': '0x40011800', 'mask': '0x8000', 'pins': ['PE15'], 'r2': None}
+0808a288 ldr       r0, [pc, #0xdc] ; 0x40010c00
+0808a28a bl        #0x80087ce
+0808a28e movs      r1, #0x10
+0808a290 ldr       r0, [pc, #0xcc] ; 0x40011000
+0808a292 bl        #0x80087ce
+0808a296 movs      r0, #0
+0808a298 ldr       r1, [pc, #0xd4] ; 0x200009f8
+0808a29a strb      r0, [r1]
+0808a29c movs      r1, #0x40
+0808a29e ldr       r0, [pc, #0xcc] ; 0x40011800
+0808a2a0 bl        #0x80087ce
+0808a2a4 movs      r1, #1
+0808a2a6 ldr       r0, [pc, #0xc4] ; 0x40011800
+0808a2a8 bl        #0x80087ce
+0808a2ac ldr       r0, [pc, #0xc4] ; 0x20000f58
+0808a2ae ldrb      r0, [r0]
+0808a2b0 cbnz      r0, #0x808a2bc
+0808a2b2 mov.w     r1, #0x8000
+0808a2b6 ldr       r0, [pc, #0xb4] ; 0x40011800
+0808a2b8 bl        #0x80087ca
+0808a2bc movs      r0, #0
+0808a2be ldr       r1, [pc, #0xb8] ; 0x20000a35
+0808a2c0 strb      r0, [r1]
+0808a2c2 pop       {r3, pc}
+0808a2c4 push      {r4, lr}
+0808a2c6 mov       r4, r0
+0808a2c8 cbnz      r4, #0x808a2d4
+0808a2ca movs      r1, #0x10
+
+### PC3
+
+{'call': '0x80040d6', 'api': 'set', 'port': '0x40011000', 'mask': '0x8', 'pins': ['PC3'], 'r2': None}
+080040a6 movs      r0, #0x48
+080040a8 strb.w    r0, [sp, #3]
+080040ac movs      r0, #3
+080040ae strb.w    r0, [sp, #2]
+080040b2 mov       r1, sp
+080040b4 ldr       r0, [pc, #0x34] ; 0x40010800
+080040b6 bl        #0x80017f8
+080040ba movs      r1, #8
+080040bc ldr       r0, [pc, #0x34] ; 0x40011800
+080040be bl        #0x8001956
+080040c2 movs      r1, #0x10
+080040c4 ldr       r0, [pc, #0x2c] ; 0x40011800
+080040c6 bl        #0x8001956
+080040ca movs      r1, #0x20
+080040cc ldr       r0, [pc, #0x24] ; 0x40011800
+080040ce bl        #0x8001956
+080040d2 movs      r1, #8
+080040d4 ldr       r0, [pc, #0x20] ; 0x40011000
+080040d6 bl        #0x8001952
+080040da movs      r1, #0x80
+080040dc ldr       r0, [pc, #0xc] ; 0x40010800
+080040de bl        #0x8001952
+080040e2 movs      r1, #0x40
+080040e4 ldr       r0, [pc, #0xc] ; 0x40011800
+080040e6 bl        #0x8001956
+
+{'call': '0x808a1c8', 'api': 'set', 'port': '0x40011000', 'mask': '0x8', 'pins': ['PC3'], 'r2': None}
+0808a198 ldmdb     r8!, {sp}
+0808a19c lsls      r0, r1, #0xa
+0808a19e movs      r0, #0
+0808a1a0 lsls      r4, r3, #5
+0808a1a2 movs      r0, #0
+0808a1a4 lsrs      r0, r0, #8
+0808a1a6 movs      r0, #0
+0808a1a8 push      {r3, lr}
+0808a1aa movs      r0, #8
+0808a1ac strh.w    r0, [sp]
+0808a1b0 movs      r0, #0x10
+0808a1b2 strb.w    r0, [sp, #3]
+0808a1b6 movs      r0, #3
+0808a1b8 strb.w    r0, [sp, #2]
+0808a1bc mov       r1, sp
+0808a1be ldr       r0, [pc, #0x1a0] ; 0x40011000
+0808a1c0 bl        #0x8008670
+0808a1c4 movs      r1, #8
+0808a1c6 ldr       r0, [pc, #0x198] ; 0x40011000
+0808a1c8 bl        #0x80087ca
+0808a1cc pop       {r3, pc}
+0808a1ce push      {r3, lr}
+0808a1d0 movs      r0, #0x80
+0808a1d2 strh.w    r0, [sp]
+0808a1d6 movs      r0, #0x10
+0808a1d8 strb.w    r0, [sp, #3]
+
+### PC4
+
+{'call': '0x808a292', 'api': 'clear', 'port': '0x40011000', 'mask': '0x10', 'pins': ['PC4'], 'r2': None}
+0808a262 strb.w    r0, [sp, #2]
+0808a266 mov       r1, sp
+0808a268 ldr       r0, [pc, #0xf4] ; 0x40011000
+0808a26a bl        #0x8008670
+0808a26e movs      r1, #2
+0808a270 ldr       r0, [pc, #0xf0] ; 0x40010800
+0808a272 bl        #0x80087ca
+0808a276 movs      r1, #0x80
+0808a278 ldr       r0, [pc, #0xe8] ; 0x40010800
+0808a27a bl        #0x80087ca
+0808a27e movs      r1, #8
+0808a280 ldr       r0, [pc, #0xe4] ; 0x40010c00
+0808a282 bl        #0x80087ce
+0808a286 movs      r1, #0x10
+0808a288 ldr       r0, [pc, #0xdc] ; 0x40010c00
+0808a28a bl        #0x80087ce
+0808a28e movs      r1, #0x10
+0808a290 ldr       r0, [pc, #0xcc] ; 0x40011000
+0808a292 bl        #0x80087ce
+0808a296 movs      r0, #0
+0808a298 ldr       r1, [pc, #0xd4] ; 0x200009f8
+0808a29a strb      r0, [r1]
+0808a29c movs      r1, #0x40
+0808a29e ldr       r0, [pc, #0xcc] ; 0x40011800
+0808a2a0 bl        #0x80087ce
+0808a2a4 movs      r1, #1
+
+{'call': '0x808a2ce', 'api': 'clear', 'port': '0x40011000', 'mask': '0x10', 'pins': ['PC4'], 'r2': None}
+0808a29e ldr       r0, [pc, #0xcc] ; 0x40011800
+0808a2a0 bl        #0x80087ce
+0808a2a4 movs      r1, #1
+0808a2a6 ldr       r0, [pc, #0xc4] ; 0x40011800
+0808a2a8 bl        #0x80087ce
+0808a2ac ldr       r0, [pc, #0xc4] ; 0x20000f58
+0808a2ae ldrb      r0, [r0]
+0808a2b0 cbnz      r0, #0x808a2bc
+0808a2b2 mov.w     r1, #0x8000
+0808a2b6 ldr       r0, [pc, #0xb4] ; 0x40011800
+0808a2b8 bl        #0x80087ca
+0808a2bc movs      r0, #0
+0808a2be ldr       r1, [pc, #0xb8] ; 0x20000a35
+0808a2c0 strb      r0, [r1]
+0808a2c2 pop       {r3, pc}
+0808a2c4 push      {r4, lr}
+0808a2c6 mov       r4, r0
+0808a2c8 cbnz      r4, #0x808a2d4
+0808a2ca movs      r1, #0x10
+0808a2cc ldr       r0, [pc, #0x90] ; 0x40011000
+0808a2ce bl        #0x80087ce
+0808a2d2 b         #0x808a2dc
+0808a2d4 movs      r1, #0x10
+0808a2d6 ldr       r0, [pc, #0x88] ; 0x40011000
+0808a2d8 bl        #0x80087ca
+0808a2dc pop       {r4, pc}
+0808a2de push      {r3, lr}
+0808a2e0 movs      r0, #0x10
+
+{'call': '0x808a2d8', 'api': 'set', 'port': '0x40011000', 'mask': '0x10', 'pins': ['PC4'], 'r2': None}
+0808a2a8 bl        #0x80087ce
+0808a2ac ldr       r0, [pc, #0xc4] ; 0x20000f58
+0808a2ae ldrb      r0, [r0]
+0808a2b0 cbnz      r0, #0x808a2bc
+0808a2b2 mov.w     r1, #0x8000
+0808a2b6 ldr       r0, [pc, #0xb4] ; 0x40011800
+0808a2b8 bl        #0x80087ca
+0808a2bc movs      r0, #0
+0808a2be ldr       r1, [pc, #0xb8] ; 0x20000a35
+0808a2c0 strb      r0, [r1]
+0808a2c2 pop       {r3, pc}
+0808a2c4 push      {r4, lr}
+0808a2c6 mov       r4, r0
+0808a2c8 cbnz      r4, #0x808a2d4
+0808a2ca movs      r1, #0x10
+0808a2cc ldr       r0, [pc, #0x90] ; 0x40011000
+0808a2ce bl        #0x80087ce
+0808a2d2 b         #0x808a2dc
+0808a2d4 movs      r1, #0x10
+0808a2d6 ldr       r0, [pc, #0x88] ; 0x40011000
+0808a2d8 bl        #0x80087ca
+0808a2dc pop       {r4, pc}
+0808a2de push      {r3, lr}
+0808a2e0 movs      r0, #0x10
+0808a2e2 strh.w    r0, [sp]
+0808a2e6 movs      r0, #0x48
+0808a2e8 strb.w    r0, [sp, #3]
+
+### PC6
+
+{'call': '0x8092efa', 'api': 'clear', 'port': '0x40011000', 'mask': '0x40', 'pins': ['PC6'], 'r2': None}
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+08092ee0 bl        #0x80087ce
+08092ee4 mov.w     r1, #0x1000
+08092ee8 ldr       r0, [pc, #0xd4] ; 0x40011000
+08092eea bl        #0x80087ce
+08092eee movs      r1, #0x80
+08092ef0 ldr       r0, [pc, #0xcc] ; 0x40011000
+08092ef2 bl        #0x80087ce
+08092ef6 movs      r1, #0x40
+08092ef8 ldr       r0, [pc, #0xc4] ; 0x40011000
+08092efa bl        #0x80087ce
+08092efe movs      r0, #0
+08092f00 ldr       r1, [pc, #0x94] ; 0x20001294
+08092f02 strb      r0, [r1]
+08092f04 pop       {r4, pc}
+08092f06 push      {r3, lr}
+08092f08 mov.w     r0, #0x100
+
+{'call': '0x80930be', 'api': 'set', 'port': '0x40011000', 'mask': '0x40', 'pins': ['PC6'], 'r2': None}
+08093090 movs      r1, #0x10
+08093092 ldr       r0, [pc, #0x348] ; 0x40011400
+08093094 bl        #0x80087ca
+08093098 movs      r1, #2
+0809309a ldr       r0, [pc, #0x340] ; 0x40011400
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+080930b6 bl        #0x80087ce
+080930ba movs      r1, #0x40
+080930bc ldr       r0, [pc, #0x350] ; 0x40011000
+080930be bl        #0x80087ca
+080930c2 movs      r0, #0x64
+080930c4 bl        #0x8009f30
+080930c8 movs      r1, #0x40
+080930ca ldr       r0, [pc, #0x310] ; 0x40011400
+080930cc bl        #0x80087ca
+080930d0 movs      r0, #0x64
+
+### PC7
+
+{'call': '0x8092ef2', 'api': 'clear', 'port': '0x40011000', 'mask': '0x80', 'pins': ['PC7'], 'r2': None}
+08092ec2 bl        #0x80087ce
+08092ec6 movs      r1, #2
+08092ec8 ldr       r0, [pc, #0xf0] ; 0x4001140c
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+08092ee0 bl        #0x80087ce
+08092ee4 mov.w     r1, #0x1000
+08092ee8 ldr       r0, [pc, #0xd4] ; 0x40011000
+08092eea bl        #0x80087ce
+08092eee movs      r1, #0x80
+08092ef0 ldr       r0, [pc, #0xcc] ; 0x40011000
+08092ef2 bl        #0x80087ce
+08092ef6 movs      r1, #0x40
+08092ef8 ldr       r0, [pc, #0xc4] ; 0x40011000
+08092efa bl        #0x80087ce
+08092efe movs      r0, #0
+08092f00 ldr       r1, [pc, #0x94] ; 0x20001294
+08092f02 strb      r0, [r1]
+08092f04 pop       {r4, pc}
+
+{'call': '0x80930b6', 'api': 'clear', 'port': '0x40011000', 'mask': '0x80', 'pins': ['PC7'], 'r2': None}
+08093086 umull     r2, r1, r1, r8
+0809308a ldr       r0, [pc, #0x350] ; 0x40011400
+0809308c bl        #0x80087ca
+08093090 movs      r1, #0x10
+08093092 ldr       r0, [pc, #0x348] ; 0x40011400
+08093094 bl        #0x80087ca
+08093098 movs      r1, #2
+0809309a ldr       r0, [pc, #0x340] ; 0x40011400
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+080930b6 bl        #0x80087ce
+080930ba movs      r1, #0x40
+080930bc ldr       r0, [pc, #0x350] ; 0x40011000
+080930be bl        #0x80087ca
+080930c2 movs      r0, #0x64
+080930c4 bl        #0x8009f30
+080930c8 movs      r1, #0x40
+
+{'call': '0x8093670', 'api': 'set', 'port': '0x40011000', 'mask': '0x80', 'pins': ['PC7'], 'r2': None}
+08093640 blt       #0x8093630
+08093642 ldr       r0, [pc, #0x240] ; 0x20001290
+08093644 ldrh      r0, [r0]
+08093646 bl        #0x8096ae8
+0809364a pop       {r4, r5, r6, pc}
+0809364c push      {r4, lr}
+0809364e mov       r4, r0
+08093650 cbz       r4, #0x809365c
+08093652 movs      r1, #2
+08093654 ldr       r0, [pc, #0x208] ; 0x40011400
+08093656 bl        #0x80087ca
+0809365a b         #0x8093664
+0809365c movs      r1, #2
+0809365e ldr       r0, [pc, #0x200] ; 0x40011400
+08093660 bl        #0x80087ce
+08093664 pop       {r4, pc}
+08093666 push      {r4, lr}
+08093668 mov       r4, r0
+0809366a cbz       r4, #0x8093676
+0809366c movs      r1, #0x80
+0809366e ldr       r0, [pc, #0x22c] ; 0x40011000
+08093670 bl        #0x80087ca
+08093674 b         #0x809367e
+08093676 movs      r1, #0x80
+08093678 ldr       r0, [pc, #0x220] ; 0x40011000
+0809367a bl        #0x80087ce
+0809367e pop       {r4, pc}
+08093680 push      {r4, lr}
+08093682 mov       r4, r0
+
+{'call': '0x809367a', 'api': 'clear', 'port': '0x40011000', 'mask': '0x80', 'pins': ['PC7'], 'r2': None}
+0809364a pop       {r4, r5, r6, pc}
+0809364c push      {r4, lr}
+0809364e mov       r4, r0
+08093650 cbz       r4, #0x809365c
+08093652 movs      r1, #2
+08093654 ldr       r0, [pc, #0x208] ; 0x40011400
+08093656 bl        #0x80087ca
+0809365a b         #0x8093664
+0809365c movs      r1, #2
+0809365e ldr       r0, [pc, #0x200] ; 0x40011400
+08093660 bl        #0x80087ce
+08093664 pop       {r4, pc}
+08093666 push      {r4, lr}
+08093668 mov       r4, r0
+0809366a cbz       r4, #0x8093676
+0809366c movs      r1, #0x80
+0809366e ldr       r0, [pc, #0x22c] ; 0x40011000
+08093670 bl        #0x80087ca
+08093674 b         #0x809367e
+08093676 movs      r1, #0x80
+08093678 ldr       r0, [pc, #0x220] ; 0x40011000
+0809367a bl        #0x80087ce
+0809367e pop       {r4, pc}
+08093680 push      {r4, lr}
+08093682 mov       r4, r0
+08093684 ldr       r0, [pc, #0x218] ; 0x20010c5c
+08093686 ldrb.w    r0, [r0, #0x49]
+0809368a cbz       r0, #0x80936bc
+0809368c cbz       r4, #0x80936bc
+
+### PC12
+
+{'call': '0x8092eea', 'api': 'clear', 'port': '0x40011000', 'mask': '0x1000', 'pins': ['PC12'], 'r2': None}
+08092eba stc2      p1, c2, [sb], {0x10}
+08092ebe ldr       r0, [pc, #0xfc] ; 0x4001140c
+08092ec0 subs      r0, #0xc
+08092ec2 bl        #0x80087ce
+08092ec6 movs      r1, #2
+08092ec8 ldr       r0, [pc, #0xf0] ; 0x4001140c
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+08092ee0 bl        #0x80087ce
+08092ee4 mov.w     r1, #0x1000
+08092ee8 ldr       r0, [pc, #0xd4] ; 0x40011000
+08092eea bl        #0x80087ce
+08092eee movs      r1, #0x80
+08092ef0 ldr       r0, [pc, #0xcc] ; 0x40011000
+08092ef2 bl        #0x80087ce
+08092ef6 movs      r1, #0x40
+08092ef8 ldr       r0, [pc, #0xc4] ; 0x40011000
+08092efa bl        #0x80087ce
+
+{'call': '0x80930ae', 'api': 'clear', 'port': '0x40011000', 'mask': '0x1000', 'pins': ['PC12'], 'r2': None}
+0809307e umull     r2, r1, r5, r4
+08093082 ldr       r0, [pc, #0x358] ; 0x40011400
+08093084 bl        #0x80087ca
+08093088 movs      r1, #8
+0809308a ldr       r0, [pc, #0x350] ; 0x40011400
+0809308c bl        #0x80087ca
+08093090 movs      r1, #0x10
+08093092 ldr       r0, [pc, #0x348] ; 0x40011400
+08093094 bl        #0x80087ca
+08093098 movs      r1, #2
+0809309a ldr       r0, [pc, #0x340] ; 0x40011400
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+080930b6 bl        #0x80087ce
+080930ba movs      r1, #0x40
+080930bc ldr       r0, [pc, #0x350] ; 0x40011000
+080930be bl        #0x80087ca
+
+### PC14
+
+### PC15
+
+### PD0
+
+{'call': '0x8006a5c', 'api': 'read', 'port': '0x40011400', 'mask': '0x1', 'pins': ['PD0'], 'r2': None}
+08006a2c push      {r4, lr}
+08006a2e movs      r1, #1
+08006a30 lsls      r0, r1, #0x1e
+08006a32 bl        #0x8009d4e
+08006a36 cbz       r0, #0x8006a8a
+08006a38 movs      r1, #1
+08006a3a lsls      r0, r1, #0x1e
+08006a3c bl        #0x8009d70
+08006a40 ldr       r0, [pc, #0x2a8] ; 0x200004de
+08006a42 ldrb      r0, [r0]
+08006a44 cbz       r0, #0x8006a80
+08006a46 ldr       r0, [pc, #0x2a8] ; 0x20000490
+08006a48 ldrb      r0, [r0]
+08006a4a bl        #0x8095efc
+08006a4e cbnz      r0, #0x8006a58
+08006a50 ldr       r0, [pc, #0x2a0] ; 0x20010c5c
+08006a52 ldrb.w    r0, [r0, #0x49]
+08006a56 cbz       r0, #0x8006a80
+08006a58 movs      r1, #1
+08006a5a ldr       r0, [pc, #0x29c] ; 0x40011400
+08006a5c bl        #0x8008796
+08006a60 cbnz      r0, #0x8006a80
+08006a62 movs      r1, #0x40
+08006a64 ldr       r0, [pc, #0x294] ; 0x40011800
+08006a66 bl        #0x80087ce
+08006a6a ldr       r0, [pc, #0x288] ; 0x20010c5c
+08006a6c ldrb.w    r0, [r0, #0x4a]
+
+{'call': '0x8071906', 'api': 'read', 'port': '0x40011400', 'mask': '0x1', 'pins': ['PD0'], 'r2': None}
+080718d6 vrhadd.u16 q9, q2, q0
+080718da ldr       r0, [pc, #0x350] ; 0x40011800
+080718dc bl        #0x80087ca
+080718e0 b         #0x8071922
+080718e2 ldr       r0, [pc, #0x34c] ; 0x20013860
+080718e4 ldrb      r0, [r0, #4]
+080718e6 cmp       r0, #0xd
+080718e8 bne       #0x8071902
+080718ea cbz       r4, #0x8071902
+080718ec movs      r0, #2
+080718ee bl        #0x80af780
+080718f2 movs      r1, #0x40
+080718f4 ldr       r0, [pc, #0x334] ; 0x40011800
+080718f6 bl        #0x80087ca
+080718fa movs      r0, #2
+080718fc bl        #0x80af780
+08071900 b         #0x8071922
+08071902 movs      r1, #1
+08071904 ldr       r0, [pc, #0x32c] ; 0x40011400
+08071906 bl        #0x8008796
+0807190a ands      r0, r4
+0807190c cbz       r0, #0x8071918
+0807190e movs      r1, #0x40
+08071910 ldr       r0, [pc, #0x318] ; 0x40011800
+08071912 bl        #0x80087ca
+08071916 b         #0x8071922
+08071918 cbnz      r4, #0x8071922
+
+{'call': '0x808cb1c', 'api': 'read', 'port': '0x40011400', 'mask': '0x1', 'pins': ['PD0'], 'r2': None}
+0808caec beq       #0x808cb74
+0808caee ldr       r0, [pc, #0x230] ; 0x20000720
+0808caf0 ldr       r0, [r0]
+0808caf2 ldrb      r0, [r0, #8]
+0808caf4 and       r0, r0, #3
+0808caf8 cmp       r0, #0
+0808cafa beq       #0x808cbf6
+0808cafc ldr       r0, [pc, #0x224] ; 0x20013860
+0808cafe ldrb      r0, [r0, #1]
+0808cb00 cbz       r0, #0x808cb0a
+0808cb02 ldr       r0, [pc, #0x220] ; 0x20013860
+0808cb04 ldrb      r0, [r0, #1]
+0808cb06 cmp       r0, #3
+0808cb08 bne       #0x808cbf6
+0808cb0a ldr       r0, [pc, #0x21c] ; 0x20010c5c
+0808cb0c ldrb.w    r0, [r0, #0x49]
+0808cb10 cbz       r0, #0x808cb76
+0808cb12 ldr       r0, [pc, #0x218] ; 0x20000894
+0808cb14 ldrb      r0, [r0]
+0808cb16 cbnz      r0, #0x808cb5c
+0808cb18 movs      r1, #1
+0808cb1a ldr       r0, [pc, #0x1ec] ; 0x40011400
+0808cb1c bl        #0x8008796
+0808cb20 cbz       r0, #0x808cb5e
+0808cb22 ldr       r0, [pc, #0x20c] ; 0x200008be
+0808cb24 ldrh      r0, [r0]
+0808cb26 bl        #0x808b73c
+0808cb2a movs      r1, #0x40
+0808cb2c ldr       r0, [pc, #0x204] ; 0x40011800
+
+{'call': '0x808cb7c', 'api': 'read', 'port': '0x40011400', 'mask': '0x1', 'pins': ['PD0'], 'r2': None}
+0808cb4c bhs       #0x808cb56
+0808cb4e ldr       r0, [pc, #0x1f0] ; 0x200006e4
+0808cb50 ldr       r0, [r0]
+0808cb52 cmp       r0, r1
+0808cb54 bhs       #0x808cb6c
+0808cb56 movs      r0, #1
+0808cb58 bl        #0x808a2c4
+0808cb5c b         #0x808cb6c
+0808cb5e movs      r0, #0
+0808cb60 bl        #0x808b73c
+0808cb64 movs      r1, #1
+0808cb66 lsls      r0, r1, #0x1e
+0808cb68 bl        #0x80097bc
+0808cb6c mov.w     r0, #0x12c
+0808cb70 ldr       r1, [pc, #0x1d0] ; 0x20001312
+0808cb72 strh      r0, [r1]
+0808cb74 b         #0x808cbf6
+0808cb76 b         #0x808cb78
+0808cb78 movs      r1, #1
+0808cb7a ldr       r0, [pc, #0x18c] ; 0x40011400
+0808cb7c bl        #0x8008796
+0808cb80 cbz       r0, #0x808cbba
+0808cb82 ldr       r0, [pc, #0x1c4] ; 0x200012f0
+0808cb84 bl        #0x80a8b40
+0808cb88 cbnz      r0, #0x808cbb2
+0808cb8a ldr       r0, [pc, #0x1a4] ; 0x200008be
+0808cb8c ldrh      r0, [r0]
+
+### PD1
+
+{'call': '0x8092ecc', 'api': 'clear', 'port': '0x40011400', 'mask': '0x2', 'pins': ['PD1'], 'r2': None}
+08092e9e mov.w     r1, #0x100
+08092ea2 ldr       r0, [pc, #0x120] ; 0x40010800
+08092ea4 bl        #0x80087ce
+08092ea8 movs      r1, #4
+08092eaa ldr       r0, [pc, #0x110] ; 0x4001140c
+08092eac subs      r0, #0xc
+08092eae bl        #0x80087ce
+08092eb2 movs      r1, #8
+08092eb4 ldr       r0, [pc, #0x104] ; 0x4001140c
+08092eb6 subs      r0, #0xc
+08092eb8 bl        #0x80087ce
+08092ebc movs      r1, #0x10
+08092ebe ldr       r0, [pc, #0xfc] ; 0x4001140c
+08092ec0 subs      r0, #0xc
+08092ec2 bl        #0x80087ce
+08092ec6 movs      r1, #2
+08092ec8 ldr       r0, [pc, #0xf0] ; 0x4001140c
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+
+{'call': '0x809309c', 'api': 'clear', 'port': '0x40011400', 'mask': '0x2', 'pins': ['PD1'], 'r2': None}
+0809306c push      {r4, lr}
+0809306e ldr       r0, [pc, #0x3a4] ; 0x20000f32
+08093070 ldrb      r0, [r0]
+08093072 cbz       r0, #0x8093076
+08093074 pop       {r4, pc}
+08093076 mov.w     r1, #0x100
+0809307a ldr       r0, [pc, #0x39c] ; 0x40010800
+0809307c bl        #0x80087ca
+08093080 movs      r1, #4
+08093082 ldr       r0, [pc, #0x358] ; 0x40011400
+08093084 bl        #0x80087ca
+08093088 movs      r1, #8
+0809308a ldr       r0, [pc, #0x350] ; 0x40011400
+0809308c bl        #0x80087ca
+08093090 movs      r1, #0x10
+08093092 ldr       r0, [pc, #0x348] ; 0x40011400
+08093094 bl        #0x80087ca
+08093098 movs      r1, #2
+0809309a ldr       r0, [pc, #0x340] ; 0x40011400
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+
+{'call': '0x8093656', 'api': 'set', 'port': '0x40011400', 'mask': '0x2', 'pins': ['PD1'], 'r2': None}
+08093626 ldr       r0, [pc, #0x26c] ; 0x200012d1
+08093628 ldrb      r0, [r0]
+0809362a cbz       r0, #0x809364a
+0809362c movs      r4, #0
+0809362e b         #0x809363a
+08093630 ldrb      r0, [r5, r4]
+08093632 ldr       r1, [pc, #0x264] ; 0x2000ea68
+08093634 strb      r0, [r1, r4]
+08093636 adds      r0, r4, #1
+08093638 uxth      r4, r0
+0809363a ldr       r0, [pc, #0x248] ; 0x20001290
+0809363c ldrh      r0, [r0]
+0809363e cmp       r4, r0
+08093640 blt       #0x8093630
+08093642 ldr       r0, [pc, #0x240] ; 0x20001290
+08093644 ldrh      r0, [r0]
+08093646 bl        #0x8096ae8
+0809364a pop       {r4, r5, r6, pc}
+0809364c push      {r4, lr}
+0809364e mov       r4, r0
+08093650 cbz       r4, #0x809365c
+08093652 movs      r1, #2
+08093654 ldr       r0, [pc, #0x208] ; 0x40011400
+08093656 bl        #0x80087ca
+0809365a b         #0x8093664
+0809365c movs      r1, #2
+0809365e ldr       r0, [pc, #0x200] ; 0x40011400
+08093660 bl        #0x80087ce
+08093664 pop       {r4, pc}
+08093666 push      {r4, lr}
+08093668 mov       r4, r0
+
+{'call': '0x8093660', 'api': 'clear', 'port': '0x40011400', 'mask': '0x2', 'pins': ['PD1'], 'r2': None}
+08093630 ldrb      r0, [r5, r4]
+08093632 ldr       r1, [pc, #0x264] ; 0x2000ea68
+08093634 strb      r0, [r1, r4]
+08093636 adds      r0, r4, #1
+08093638 uxth      r4, r0
+0809363a ldr       r0, [pc, #0x248] ; 0x20001290
+0809363c ldrh      r0, [r0]
+0809363e cmp       r4, r0
+08093640 blt       #0x8093630
+08093642 ldr       r0, [pc, #0x240] ; 0x20001290
+08093644 ldrh      r0, [r0]
+08093646 bl        #0x8096ae8
+0809364a pop       {r4, r5, r6, pc}
+0809364c push      {r4, lr}
+0809364e mov       r4, r0
+08093650 cbz       r4, #0x809365c
+08093652 movs      r1, #2
+08093654 ldr       r0, [pc, #0x208] ; 0x40011400
+08093656 bl        #0x80087ca
+0809365a b         #0x8093664
+0809365c movs      r1, #2
+0809365e ldr       r0, [pc, #0x200] ; 0x40011400
+08093660 bl        #0x80087ce
+08093664 pop       {r4, pc}
+08093666 push      {r4, lr}
+08093668 mov       r4, r0
+0809366a cbz       r4, #0x8093676
+0809366c movs      r1, #0x80
+0809366e ldr       r0, [pc, #0x22c] ; 0x40011000
+08093670 bl        #0x80087ca
+
+### PD6
+
+{'call': '0x8092ee0', 'api': 'clear', 'port': '0x40011400', 'mask': '0x40', 'pins': ['PD6'], 'r2': None}
+08092eb0 stc2      p1, c2, [lr], {8}
+08092eb4 ldr       r0, [pc, #0x104] ; 0x4001140c
+08092eb6 subs      r0, #0xc
+08092eb8 bl        #0x80087ce
+08092ebc movs      r1, #0x10
+08092ebe ldr       r0, [pc, #0xfc] ; 0x4001140c
+08092ec0 subs      r0, #0xc
+08092ec2 bl        #0x80087ce
+08092ec6 movs      r1, #2
+08092ec8 ldr       r0, [pc, #0xf0] ; 0x4001140c
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+08092ee0 bl        #0x80087ce
+08092ee4 mov.w     r1, #0x1000
+08092ee8 ldr       r0, [pc, #0xd4] ; 0x40011000
+08092eea bl        #0x80087ce
+08092eee movs      r1, #0x80
+08092ef0 ldr       r0, [pc, #0xcc] ; 0x40011000
+
+{'call': '0x80930cc', 'api': 'set', 'port': '0x40011400', 'mask': '0x40', 'pins': ['PD6'], 'r2': None}
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+080930b6 bl        #0x80087ce
+080930ba movs      r1, #0x40
+080930bc ldr       r0, [pc, #0x350] ; 0x40011000
+080930be bl        #0x80087ca
+080930c2 movs      r0, #0x64
+080930c4 bl        #0x8009f30
+080930c8 movs      r1, #0x40
+080930ca ldr       r0, [pc, #0x310] ; 0x40011400
+080930cc bl        #0x80087ca
+080930d0 movs      r0, #0x64
+080930d2 bl        #0x8009f30
+080930d6 movs      r1, #0x40
+080930d8 ldr       r0, [pc, #0x300] ; 0x40011400
+080930da bl        #0x80087ce
+
+{'call': '0x80930da', 'api': 'clear', 'port': '0x40011400', 'mask': '0x40', 'pins': ['PD6'], 'r2': None}
+080930aa str       r0, [r0, r6]
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+080930b6 bl        #0x80087ce
+080930ba movs      r1, #0x40
+080930bc ldr       r0, [pc, #0x350] ; 0x40011000
+080930be bl        #0x80087ca
+080930c2 movs      r0, #0x64
+080930c4 bl        #0x8009f30
+080930c8 movs      r1, #0x40
+080930ca ldr       r0, [pc, #0x310] ; 0x40011400
+080930cc bl        #0x80087ca
+080930d0 movs      r0, #0x64
+080930d2 bl        #0x8009f30
+080930d6 movs      r1, #0x40
+080930d8 ldr       r0, [pc, #0x300] ; 0x40011400
+080930da bl        #0x80087ce
+080930de mov.w     r0, #0x1f4
+080930e2 bl        #0x8009f30
+080930e6 nop       
+080930e8 b         #0x8093074
+080930ea push      {r4, lr}
+080930ec movs      r1, #0x40
+
+{'call': '0x80930f0', 'api': 'set', 'port': '0x40011400', 'mask': '0x40', 'pins': ['PD6'], 'r2': None}
+080930c2 movs      r0, #0x64
+080930c4 bl        #0x8009f30
+080930c8 movs      r1, #0x40
+080930ca ldr       r0, [pc, #0x310] ; 0x40011400
+080930cc bl        #0x80087ca
+080930d0 movs      r0, #0x64
+080930d2 bl        #0x8009f30
+080930d6 movs      r1, #0x40
+080930d8 ldr       r0, [pc, #0x300] ; 0x40011400
+080930da bl        #0x80087ce
+080930de mov.w     r0, #0x1f4
+080930e2 bl        #0x8009f30
+080930e6 nop       
+080930e8 b         #0x8093074
+080930ea push      {r4, lr}
+080930ec movs      r1, #0x40
+080930ee ldr       r0, [pc, #0x2ec] ; 0x40011400
+080930f0 bl        #0x80087ca
+080930f4 bl        #0x809304c
+080930f8 pop       {r4, pc}
+080930fa push      {r4, lr}
+080930fc movs      r1, #0x20
+080930fe ldr       r0, [pc, #0x2dc] ; 0x40011400
+08093100 bl        #0x8008796
+
+### PD7
+
+{'call': '0x8092ed6', 'api': 'clear', 'port': '0x40011400', 'mask': '0x80', 'pins': ['PD7'], 'r2': None}
+08092ea6 ldc2      p1, c2, [r3], {4}
+08092eaa ldr       r0, [pc, #0x110] ; 0x4001140c
+08092eac subs      r0, #0xc
+08092eae bl        #0x80087ce
+08092eb2 movs      r1, #8
+08092eb4 ldr       r0, [pc, #0x104] ; 0x4001140c
+08092eb6 subs      r0, #0xc
+08092eb8 bl        #0x80087ce
+08092ebc movs      r1, #0x10
+08092ebe ldr       r0, [pc, #0xfc] ; 0x4001140c
+08092ec0 subs      r0, #0xc
+08092ec2 bl        #0x80087ce
+08092ec6 movs      r1, #2
+08092ec8 ldr       r0, [pc, #0xf0] ; 0x4001140c
+08092eca subs      r0, #0xc
+08092ecc bl        #0x80087ce
+08092ed0 movs      r1, #0x80
+08092ed2 ldr       r0, [pc, #0xe8] ; 0x4001140c
+08092ed4 subs      r0, #0xc
+08092ed6 bl        #0x80087ce
+08092eda movs      r1, #0x40
+08092edc ldr       r0, [pc, #0xdc] ; 0x4001140c
+08092ede subs      r0, #0xc
+08092ee0 bl        #0x80087ce
+08092ee4 mov.w     r1, #0x1000
+08092ee8 ldr       r0, [pc, #0xd4] ; 0x40011000
+
+{'call': '0x80930a4', 'api': 'clear', 'port': '0x40011400', 'mask': '0x80', 'pins': ['PD7'], 'r2': None}
+08093074 pop       {r4, pc}
+08093076 mov.w     r1, #0x100
+0809307a ldr       r0, [pc, #0x39c] ; 0x40010800
+0809307c bl        #0x80087ca
+08093080 movs      r1, #4
+08093082 ldr       r0, [pc, #0x358] ; 0x40011400
+08093084 bl        #0x80087ca
+08093088 movs      r1, #8
+0809308a ldr       r0, [pc, #0x350] ; 0x40011400
+0809308c bl        #0x80087ca
+08093090 movs      r1, #0x10
+08093092 ldr       r0, [pc, #0x348] ; 0x40011400
+08093094 bl        #0x80087ca
+08093098 movs      r1, #2
+0809309a ldr       r0, [pc, #0x340] ; 0x40011400
+0809309c bl        #0x80087ce
+080930a0 movs      r1, #0x80
+080930a2 ldr       r0, [pc, #0x338] ; 0x40011400
+080930a4 bl        #0x80087ce
+080930a8 mov.w     r1, #0x1000
+080930ac ldr       r0, [pc, #0x360] ; 0x40011000
+080930ae bl        #0x80087ce
+080930b2 movs      r1, #0x80
+080930b4 ldr       r0, [pc, #0x358] ; 0x40011000
+
+{'call': '0x8093a68', 'api': 'set', 'port': '0x40011400', 'mask': '0x80', 'pins': ['PD7'], 'r2': None}
+08093a38 ldrb      r0, [r0]
+08093a3a cbz       r0, #0x8093a42
+08093a3c movs      r0, #1
+08093a3e bl        #0x808a2c4
+08093a42 nop       
+08093a44 b         #0x80938d4
+08093a46 push      {r4, r5, r6, lr}
+08093a48 mov       r5, r0
+08093a4a mov       r4, r1
+08093a4c cbnz      r5, #0x8093a56
+08093a4e mov       r0, r4
+08093a50 bl        #0x8093680
+08093a54 b         #0x8093a5c
+08093a56 mov       r0, r4
+08093a58 bl        #0x80937dc
+08093a5c pop       {r4, r5, r6, pc}
+08093a5e push      {r4, lr}
+08093a60 mov       r4, r0
+08093a62 cbz       r4, #0x8093a6e
+08093a64 movs      r1, #0x80
+08093a66 ldr       r0, [pc, #0x298] ; 0x40011400
+08093a68 bl        #0x80087ca
+08093a6c b         #0x8093a76
+08093a6e movs      r1, #0x80
+08093a70 ldr       r0, [pc, #0x28c] ; 0x40011400
+08093a72 bl        #0x80087ce
+08093a76 pop       {r4, pc}
+08093a78 ldr       r0, [pc, #0x288] ; 0x20004214
+
+{'call': '0x8093a72', 'api': 'clear', 'port': '0x40011400', 'mask': '0x80', 'pins': ['PD7'], 'r2': None}
+08093a42 nop       
+08093a44 b         #0x80938d4
+08093a46 push      {r4, r5, r6, lr}
+08093a48 mov       r5, r0
+08093a4a mov       r4, r1
+08093a4c cbnz      r5, #0x8093a56
+08093a4e mov       r0, r4
+08093a50 bl        #0x8093680
+08093a54 b         #0x8093a5c
+08093a56 mov       r0, r4
+08093a58 bl        #0x80937dc
+08093a5c pop       {r4, r5, r6, pc}
+08093a5e push      {r4, lr}
+08093a60 mov       r4, r0
+08093a62 cbz       r4, #0x8093a6e
+08093a64 movs      r1, #0x80
+08093a66 ldr       r0, [pc, #0x298] ; 0x40011400
+08093a68 bl        #0x80087ca
+08093a6c b         #0x8093a76
+08093a6e movs      r1, #0x80
+08093a70 ldr       r0, [pc, #0x28c] ; 0x40011400
+08093a72 bl        #0x80087ce
+08093a76 pop       {r4, pc}
+08093a78 ldr       r0, [pc, #0x288] ; 0x20004214
+08093a7a ldrb.w    r0, [r0, #0x23]
+08093a7e ldr       r1, [pc, #0x288] ; 0x20000492
+08093a80 ldrb      r1, [r1]
+08093a82 cmp       r0, r1
+08093a84 bne       #0x8093a8c
+
+### PA8
+
+{'call': '0x8092ea4', 'api': 'clear', 'port': '0x40010800', 'mask': '0x100', 'pins': ['PA8'], 'r2': None}
+08092e74 str       r0, [r1]
+08092e76 bx        lr
+08092e78 push      {r3, lr}
+08092e7a mov.w     r0, #0x1000
+08092e7e strh.w    r0, [sp]
+08092e82 movs      r0, #0x10
+08092e84 strb.w    r0, [sp, #3]
+08092e88 movs      r0, #3
+08092e8a strb.w    r0, [sp, #2]
+08092e8e mov       r1, sp
+08092e90 ldr       r0, [pc, #0x12c] ; 0x40011000
+08092e92 bl        #0x8008670
+08092e96 pop       {r3, pc}
+08092e98 push      {r4, lr}
+08092e9a bl        #0x8092e78
+08092e9e mov.w     r1, #0x100
+08092ea2 ldr       r0, [pc, #0x120] ; 0x40010800
+08092ea4 bl        #0x80087ce
+08092ea8 movs      r1, #4
+08092eaa ldr       r0, [pc, #0x110] ; 0x4001140c
+08092eac subs      r0, #0xc
+08092eae bl        #0x80087ce
+08092eb2 movs      r1, #8
+08092eb4 ldr       r0, [pc, #0x104] ; 0x4001140c
+08092eb6 subs      r0, #0xc
+
+{'call': '0x809307c', 'api': 'set', 'port': '0x40010800', 'mask': '0x100', 'pins': ['PA8'], 'r2': None}
+0809304c push      {r3, lr}
+0809304e mov.w     r0, #0x1000
+08093052 strh.w    r0, [sp]
+08093056 movs      r0, #0x28
+08093058 strb.w    r0, [sp, #3]
+0809305c movs      r0, #3
+0809305e strb.w    r0, [sp, #2]
+08093062 mov       r1, sp
+08093064 ldr       r0, [pc, #0x3a8] ; 0x40011000
+08093066 bl        #0x8008670
+0809306a pop       {r3, pc}
+0809306c push      {r4, lr}
+0809306e ldr       r0, [pc, #0x3a4] ; 0x20000f32
+08093070 ldrb      r0, [r0]
+08093072 cbz       r0, #0x8093076
+08093074 pop       {r4, pc}
+08093076 mov.w     r1, #0x100
+0809307a ldr       r0, [pc, #0x39c] ; 0x40010800
+0809307c bl        #0x80087ca
+08093080 movs      r1, #4
+08093082 ldr       r0, [pc, #0x358] ; 0x40011400
+08093084 bl        #0x80087ca
+08093088 movs      r1, #8
+0809308a ldr       r0, [pc, #0x350] ; 0x40011400
+0809308c bl        #0x80087ca
+
+### PB9
+
+### PC0

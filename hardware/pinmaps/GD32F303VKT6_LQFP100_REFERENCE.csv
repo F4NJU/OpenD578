@@ -1,101 +1,101 @@
 physical_pin,gd32_pin,board_signal_candidate,claim_level,provenance
-1,PE2,Not traced,unmapped,No board signal claimed
-2,PE3,Radio LED / keypad LED bus candidate,oem_or_emulator_candidate,OEM trace; physical target TBD
-3,PE4,Radio LED / keypad LED bus candidate,oem_or_emulator_candidate,OEM trace; physical target TBD
-4,PE5,Not traced,unmapped,No board signal claimed
-5,PE6,Not traced,unmapped,No board signal claimed
+1,PE2,Connexion / déconnexion logique du périphérique USB,Validé par firmware,Validé par firmware; N4; Le code ne distingue pas un pull-up commuté directement d’un étage de commande
+2,PE3,"DATA : état des sorties, dont rouge et vert du voyant poste",Validé par firmware,Validé par firmware; N5; S2; Référence du driver non déterminée
+3,PE4,CLOCK : décalage des huit bits,Validé par firmware,Validé par firmware; N5; S2; Référence du driver non déterminée
+4,PE5,Libération de la commande commune de reset/activation du driver,Partiel : séquence validée,Partiel : séquence validée; N5; RESET# ou ENABLE : équivalents pour la séquence retrouvée ; référence du driver non déterminée
+5,PE6,Porte TX matérielle commandée par PTT et temporisation SCT,Validé par firmware,Validé par firmware; N6; L’étage de commande exact n’est pas nommé dans le firmware
 6,VBAT,RTC backup supply candidate,datasheet_and_external,datasheet only; external D578 backup location; continuity TBD
-7,PC13,RF CS bank2 candidate / RTC tamp alternate,oem_or_emulator_candidate,RF GPIO model; multiple roles; continuity TBD
-8,PC14,RTC low-speed crystal candidate,oem_or_emulator_candidate,datasheet AF only; no PCB oscillator identified
-9,PC15,RTC low-speed crystal candidate,oem_or_emulator_candidate,datasheet AF only; no PCB oscillator identified
+7,PC13,CS# / sélection active basse — Sélection de la banque logique 2,Validé par firmware,Validé par firmware; S6; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel
+8,PC14,OSC32_IN : entrée de l’oscillateur de sauvegarde,Validé par firmware,Validé par firmware; N9; S1;
+9,PC15,OSC32_OUT : sortie de l’oscillateur de sauvegarde,Validé par firmware,Validé par firmware; N9; S1;
 10,VSS_5,Not traced,unmapped,No board signal claimed
 11,VDD_5,Not traced,unmapped,No board signal claimed
-12,OSC_IN,Not traced,unmapped,No board signal claimed
-13,OSC_OUT,Not traced,unmapped,No board signal claimed
-14,NRST,Not traced,unmapped,No board signal claimed
-15,PC0,Not traced,unmapped,No board signal claimed
-16,PC1,Not traced,unmapped,No board signal claimed
-17,PC2,Volume ADC12 candidate,oem_or_emulator_candidate,OEM ADC trace/model
-18,PC3,Not traced,unmapped,No board signal claimed
+12,OSC_IN,Borne du quartz — Oscillateur principal,Fonction MCU / connaissance projet,Fonction MCU / connaissance projet; S1; S13;
+13,OSC_OUT,Borne du quartz — Oscillateur principal,Fonction MCU / connaissance projet,Fonction MCU / connaissance projet; S1; S13;
+14,NRST,NRST — Réinitialisation / connect under reset,Fonction MCU / connaissance projet,Fonction MCU / connaissance projet; S1; S13;
+15,PC0,Acquisition audio pour échantillonnage 8 bits et détection de passages de seuils,Validé par firmware,Validé par firmware; N10; Le CI ou l’AOP qui fournit le signal n’est pas nommé par ces lectures
+16,PC1,Point milieu du réseau de conditionnement — Mesure d’alimentation et détection de tension basse,Validé par firmware,Validé par firmware; S1; S8; S11;
+17,PC2,Curseur — Acquisition du réglage de volume,Validé par firmware,Validé par firmware; S1; S2;
+18,PC3,Sortie établie à 1 très tôt par bootloader et application,Non résolu : fonction distante,"Non résolu : fonction distante; N7; Impossible de choisir entre enable, maintien ou autre entrée fixe à partir de ces seules écritures"
 19,VSSA,Not traced,unmapped,No board signal claimed
-20,VREF-,Not traced,unmapped,No board signal claimed
-21,VREF+,Not traced,unmapped,No board signal claimed
+20,VREF-,Définit la borne basse de conversion ADC/DAC,Référence ADC/DAC du MCU,Référence ADC/DAC du MCU; S1; Le firmware ne permet pas d’identifier la source analogique externe de référence
+21,VREF+,Définit la borne haute de conversion ADC/DAC,Référence ADC/DAC du MCU,Référence ADC/DAC du MCU; S1; Le firmware ne permet pas d’identifier la source analogique externe de référence
 22,VDDA,Not traced,unmapped,No board signal claimed
-23,PA0,POWER button,oem_or_emulator_candidate,user board observation plus OEM GPIO model
-24,PA1,Rotary encoder push,oem_or_emulator_candidate,OEM trace/model; continuity TBD
-25,PA2,Not traced,unmapped,No board signal claimed
-26,PA3,Not traced,unmapped,No board signal claimed
+23,PA0,Contact actif bas — Demande marche/arrêt ; ne coupe pas directement l’alimentation,Validé par firmware,Validé par firmware; S2; S8;
+24,PA1,Contact actif bas — Validation / appui du bouton rotatif,Validé par firmware,Validé par firmware; S2;
+25,PA2,RXD du module — Envoi des commandes au GPS,Validé par firmware,Validé par firmware; S1; S8; S9;
+26,PA3,TXD du module — Réception NMEA et événements GPS,Validé par firmware,Validé par firmware; S1; S8; S9;
 27,VSS_4,Not traced,unmapped,No board signal claimed
 28,VDD_4,Not traced,unmapped,No board signal claimed
-29,PA4,Not traced,unmapped,No board signal claimed
-30,PA5,Not traced,unmapped,No board signal claimed
-31,PA6,Not traced,unmapped,No board signal claimed
-32,PA7,Radio speaker gate GPIO,oem_or_emulator_candidate,OEM Speaker Mode trace; continuity TBD
-33,PC4,Not traced,unmapped,No board signal claimed
-34,PC5,Volume ADC15 candidate,oem_or_emulator_candidate,OEM ADC trace/model
-35,PB0,Front key resistor ladder candidate ADC8,oem_or_emulator_candidate,OEM ADC trace/model
-36,PB1,Front key resistor ladder candidate ADC9,oem_or_emulator_candidate,OEM ADC trace/model
-37,PB2,RF CS bank1 candidate,oem_or_emulator_candidate,RF GPIO model; board chip unknown
-38,PE7,LCD D0 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-39,PE8,LCD D1 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-40,PE9,LCD D2 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-41,PE10,LCD D3 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-42,PE11,LCD D4 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-43,PE12,LCD D5 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-44,PE13,LCD D6 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-45,PE14,LCD D7 candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-46,PE15,Not traced,unmapped,No board signal claimed
-47,PB10,LCD WR# candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-48,PB11,LCD D/C candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
+29,PA4,Entrée de consigne analogique — Consigne numérique DAC observée en TX VHF/UHF ; destination analogique à tracer,Validé par firmware,Validé par firmware; S1; S8; S11; Consigne TX validée ; pas d’affectation directe à une grille de PA ni de conversion watts inventée
+30,PA5,CSB : sélection et validation des huit sorties DAC,Validé par firmware,Validé par firmware; N1; S7;
+31,PA6,Sortie du capteur / réseau de conditionnement — Mesure utilisée par la commande du ventilateur,Validé par firmware,Validé par firmware; S1; S8; S11;
+32,PA7,"Commande mute, haut=coupure — Ouvre/coupe la sortie audio du poste",Validé par firmware,Validé par firmware; S2; S10; Commande mute validée ; référence de l’étage qui reçoit cette commande non déterminée
+33,PC4,"Porte auxiliaire, synchronisée avec les états TX/SCT et la condition de bande",Partiel : commande TX/RF validée,Partiel : commande TX/RF validée; N6; Fonction terminale PA/commutateur/voie exacte non départagée
+34,PC5,Curseur — Acquisition du réglage de volume,Validé par firmware,Validé par firmware; S1; S2;
+35,PB0,Nœud commun du réseau P1/P2/P3/MENU — Identification analogique des quatre touches,Validé par firmware,Validé par firmware; S1; S2;
+36,PB1,Nœud commun du réseau P4/P5/P6/EXIT — Identification analogique des quatre touches,Validé par firmware,Validé par firmware; S1; S2;
+37,PB2,CS# / sélection active basse — Sélection de la banque logique 1,Validé par firmware,Validé par firmware; S6; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel
+38,PE7,D0 — Bit 0 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+39,PE8,D1 — Bit 1 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+40,PE9,D2 — Bit 2 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+41,PE10,D3 — Bit 3 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+42,PE11,D4 — Bit 4 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+43,PE12,D5 — Bit 5 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+44,PE13,D6 — Bit 6 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+45,PE14,D7 — Bit 7 de l’octet commande/paramètre/pixel,Validé par firmware,Validé par firmware; S15;
+46,PE15,Ligne auxiliaire positionnée dans la séquence d’initialisation et de veille,Non résolu : fonction distante,Non résolu : fonction distante; N7; La séquence est retrouvée ; destination et signification électrique non résolues
+47,PB10,"WR# — Strobe d’écriture, octet pris au front montant",Validé par firmware,Validé par firmware; S15;
+48,PB11,"D/C ou A0 — 0=commande, 1=donnée",Validé par firmware,Validé par firmware; S15;
 49,VSS_1,Not traced,unmapped,No board signal claimed
 50,VDD_1,Not traced,unmapped,No board signal claimed
-51,PB12,LCD RESET# candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-52,PB13,LCD CS# candidate,oem_or_emulator_candidate,OEM 8080 GPIO trace; LCD pad continuity TBD
-53,PB14,SPI NAND SO0 candidate,oem_or_emulator_candidate,OEM bit-bang + bench; continuity TBD
-54,PB15,SPI NAND CLK candidate,oem_or_emulator_candidate,OEM bit-bang + bench; continuity TBD
-55,PD8,SCT3258 HPI data bit 0,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-56,PD9,SCT3258 HPI data bit 1,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-57,PD10,SCT3258 HPI data bit 2,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-58,PD11,SCT3258 HPI data bit 3,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-59,PD12,SCT3258 HPI data bit 4,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-60,PD13,SCT3258 HPI data bit 5,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-61,PD14,SCT3258 HPI data bit 6,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-62,PD15,SCT3258 HPI data bit 7,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-63,PC6,Not traced,unmapped,No board signal claimed
-64,PC7,Not traced,unmapped,No board signal claimed
-65,PC8,Encoder phase A candidate,oem_or_emulator_candidate,OEM trace/model; continuity TBD
-66,PC9,Encoder phase B candidate,oem_or_emulator_candidate,OEM trace/model; continuity TBD
-67,PA8,Not traced,unmapped,No board signal claimed
-68,PA9,USART0 TX microphone,oem_or_emulator_candidate,OEM trace/model; connector continuity TBD
-69,PA10,USART0 RX microphone,oem_or_emulator_candidate,OEM trace/model; connector continuity TBD
-70,PA11,USB DM alternate function,oem_or_emulator_candidate,datasheet; board route inferred from USB CDC
-71,PA12,USB DP alternate function,oem_or_emulator_candidate,datasheet; board route inferred from USB CDC
-72,PA13,SWDIO,physical,physical SWD access confirmed
+51,PB12,RESET# — Réinitialisation matérielle active basse,Validé par firmware,Validé par firmware; S15;
+52,PB13,CS# — Sélection active basse de l’écran,Validé par firmware,Validé par firmware; S15;
+53,PB14,SI/SO0 — Commandes/adresses vers NAND et donnée de poids 0 en lecture dual,Validé par firmware,Validé par firmware; S3; S5;
+54,PB15,SCK — Horloge du bus NAND,Validé par firmware,Validé par firmware; S3; S5;
+55,PD8,HPI DATA0 — Bit 0 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+56,PD9,HPI DATA1 — Bit 1 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+57,PD10,HPI DATA2 — Bit 2 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+58,PD11,HPI DATA3 — Bit 3 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+59,PD12,HPI DATA4 — Bit 4 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+60,PD13,HPI DATA5 — Bit 5 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+61,PD14,HPI DATA6 — Bit 6 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+62,PD15,HPI DATA7 — Bit 7 des octets échangés avec le SCT,Validé par firmware,Validé par firmware; S16;
+63,PC6,Commande d’activation maintenue pendant chargement et exécution,Partiel : activation SCT validée,Partiel : activation SCT validée; N8; Signal terminal exact non départagé
+64,PC7,Ligne de mode/validation du protocole SCT,Partiel : commande SCT validée,Partiel : commande SCT validée; N8; Nom matériel et rôle exact de cette commande non distingués
+65,PC8,"Phase/contact A, déclenchement — Front d’interruption de rotation",Validé par firmware,Validé par firmware; S2;
+66,PC9,"Phase/contact B, direction — Direction lue au changement de phase",Validé par firmware,Validé par firmware; S2;
+67,PA8,Validation du sous-ensemble au démarrage ; désactivation à l’arrêt,Partiel : activation SCT validée,"Partiel : activation SCT validée; N8; Signal terminal exact (alimentation, buffer, enable) non départagé"
+68,PA9,"Réception série du microphone — Envoi commandes, états et voyants vers le micro",Validé par firmware,Validé par firmware; S8; S12;
+69,PA10,"Émission série du microphone — Réception clavier, PTT et acquittements du micro",Validé par firmware,Validé par firmware; S8; S12;
+70,PA11,USB D− — Données USB CDC/CPS,Validé par firmware,Validé par firmware; S1; S12;
+71,PA12,USB D+ — Données USB CDC/CPS,Validé par firmware,Validé par firmware; S1; S12;
+72,PA13,SWDIO ; DATA U2429 — Débogage ou données de volume 11 bits,Validé par firmware,Validé par firmware; S4; S8; S10; S13; Partage temporel : SWJ libéré par OEM ; volume ensuite. Liaison retenue validée.
 73,NC,Not traced,unmapped,No board signal claimed
 74,VSS_2,Not traced,unmapped,No board signal claimed
 75,VDD_2,Not traced,unmapped,No board signal claimed
-76,PA14,SWCLK,physical,physical SWD access confirmed
-77,PA15,SPI NAND SO1 candidate,oem_or_emulator_candidate,OEM bit-bang + bench; continuity TBD
-78,PC10,UART3 TX possible Bluetooth,oem_or_emulator_candidate,datasheet alternate function; exact OEM mux not confirmed here
-79,PC11,UART3 RX possible Bluetooth,oem_or_emulator_candidate,datasheet alternate function; exact OEM mux not confirmed here
-80,PC12,Not traced,unmapped,No board signal claimed
-81,PD0,Not traced,unmapped,No board signal claimed
-82,PD1,Not traced,unmapped,No board signal claimed
-83,PD2,SCT3258 HCSN,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-84,PD3,SCT3258 HWRN,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-85,PD4,SCT3258 HRDN,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-86,PD5,SCT3258 HOBIB candidate,oem_or_emulator_candidate,OEM GPIO HPI simulation; continuity TBD
-87,PD6,Not traced,unmapped,No board signal claimed
-88,PD7,Not traced,unmapped,No board signal claimed
-89,PB3,RF CLK / shared GPIO candidate,oem_or_emulator_candidate,RF GPIO model; conflicting other role; continuity TBD
-90,PB4,RF DATA / shared GPIO candidate,oem_or_emulator_candidate,RF GPIO model; conflicting other role; continuity TBD
-91,PB5,RF CS bank0 candidate,oem_or_emulator_candidate,RF GPIO model; board chip unknown
-92,PB6,RDA5802 I2C SCL candidate,oem_or_emulator_candidate,FM I2C simulation; continuity TBD
-93,PB7,RDA5802 I2C SDA candidate,oem_or_emulator_candidate,FM I2C simulation; continuity TBD
-94,BOOT0,Not traced,unmapped,No board signal claimed
-95,PB8,SPI NAND CS# candidate,oem_or_emulator_candidate,OEM bit-bang + bench; continuity TBD
-96,PB9,Not traced,unmapped,No board signal claimed
-97,PE0,Not traced,unmapped,No board signal claimed
-98,PE1,RF CS bank3 candidate,oem_or_emulator_candidate,RF GPIO model; board chip unknown
+76,PA14,SWCLK ; CLOCK U2429 — Horloge du debug ou du contrôleur de volume,Validé par firmware,Validé par firmware; S4; S8; S10; S13; Partage temporel : SWJ libéré par OEM ; volume ensuite. Liaison retenue validée.
+77,PA15,"SO/SO1 — Données sortantes de la NAND, simple/dual output",Validé par firmware,Validé par firmware; S3; S5;
+78,PC10,RX de la carte : commandes AT / échanges Bluetooth et BT+APRS,Validé par firmware,Validé par firmware; N3; N14; S6; Liaison série validée. Prélèvement RF/audio en amont de BHT et référence de son MCU non encore attribués ; lire APRS_RX_PLUS.md
+79,PC11,TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:,Validé par firmware,Validé par firmware; N3; N14; S6; Liaison série validée. Prélèvement RF/audio en amont de BHT et référence de son MCU non encore attribués ; lire APRS_RX_PLUS.md
+80,PC12,"Strap imposé bas pendant reset/chargement, puis libéré",Partiel : strap SCT validé,Partiel : strap SCT validé; N8; Choix exact du mode SCT associé au strap non nommé
+81,PD0,"État de synchronisation lu pour autoriser/couper PE6, PC4 et DAC0",Validé par firmware,Validé par firmware; N6; N8; Association nominale à PIO3/TDMA non nécessaire au contrat GPIO ; pas de numéro PIO attribué
+82,PD1,Impulsion de sollicitation avant attente de réponse du protocole SCT,Partiel : requête SCT validée,Partiel : requête SCT validée; N8; Nom terminal IRQ/PIO exact non donné
+83,PD2,HCSN — Sélection / écriture / lecture / handshake HPI,Validé par firmware,Validé par firmware; S16;
+84,PD3,HWRN — Sélection / écriture / lecture / handshake HPI,Validé par firmware,Validé par firmware; S16;
+85,PD4,HRDN — Sélection / écriture / lecture / handshake HPI,Validé par firmware,Validé par firmware; S16;
+86,PD5,HOBIB / indication de disponibilité HPI,Validé par firmware,Validé par firmware; N8; S16;
+87,PD6,Commande de reset/maintien du cœur et libération après bootstrap,Validé par firmware,Validé par firmware; N8; Reset/maintien déduit de la séquence ; ne démontre pas un inverseur discret
+88,PD7,Impulsion dans une séquence de réinitialisation logique du protocole,Partiel : requête SCT validée,Partiel : requête SCT validée; N8; Action interne exacte côté SCT non établie
+89,PB3,CLK du BH2226 et SCLK RF,Validé par firmware,Validé par firmware; N1; S6; S7;
+90,PB4,DI du BH2226 ; SDIO RF,Validé par firmware,Validé par firmware; N1; S6; S7;
+91,PB5,CS# / sélection active basse — Sélection de la banque logique 0,Validé par firmware,Validé par firmware; S6; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel
+92,PB6,SDA : données et acquittement des deux chemins de pilote,Validé par firmware,"Validé par firmware; N2; N13; S6; Les deux pilotes sont compilés dans PRO et PLUS ; présence des esclaves dépend de l’équipement, pas du seul nom du firmware"
+93,PB7,SCL : horloge des deux chemins de pilote,Validé par firmware,Validé par firmware; N2; N13; S6; Référence exacte du CI observé KT0905R/KT09S5R à réconcilier avec le pilote compatible KT0937-D8
+94,BOOT0,Niveau BOOT0 — Sélection du mode de démarrage,Fonction MCU / connaissance projet,Fonction MCU / connaissance projet; S1; Le binaire n’identifie pas le réseau de polarisation
+95,PB8,CS# — Sélection active basse de la NAND,Validé par firmware,Validé par firmware; S3; S5;
+96,PB9,Sortie PWM : rapport cyclique alimenté par les échantillons audio ; utilisée aussi dans le chemin APRS OEM,Validé par firmware,Validé par firmware; N12; S1; Étage filtre/mixeur analogique terminal non identifié ; aucune lecture du niveau GPIO PB9 identifiée
+97,PE0,Commande de maintien logique du poste en marche,Validé par firmware,Validé par firmware; N7; Type de transistor ou de latch non déductible ; n’implique pas coupure du MCU alimenté par SWD
+98,PE1,CS# / sélection active basse — Sélection de la banque logique 3,Validé par firmware,Validé par firmware; S6; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel
 99,VSS_3,Not traced,unmapped,No board signal claimed
 100,VDD_3,Not traced,unmapped,No board signal claimed

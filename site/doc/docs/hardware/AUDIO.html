@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>Audio externe, ADC et DAC</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/AUDIO.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/AUDIO.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/AUDIO.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="audio-externe-adc-et-dac">Audio externe, ADC et DAC</h1>
 <p>Ne pas confondre <strong>ADC0 du GD32F303</strong> (<code>0x40012400</code>, donnees <code>0x4001244C</code>) et le <strong>codec ADC/DAC audio TLV320AIC3204</strong>, dont la presence et le raccordement exacts sur cette revision restent a confirmer sur la carte.</p>
 <p>Le circuit TLV320AIC3204 comporte des fonctions d'acquisition/restitution analogique et une interface audio numerique, mais son mode de controle effectivement utilise par OpenD578 n'est pas qualifie ici. Il faut identifier les pistes de controle (I2C/SPI), BCLK/WCLK/DIN/DOUT, sorties et entrees analogiques, alimentation et MCLK, ainsi que les parametres et offsets stockes dans les memoires.</p>

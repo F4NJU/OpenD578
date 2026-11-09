@@ -157,14 +157,15 @@
       "w": 290,
       "h": 120,
       "subtitle": "CPU / GPIO / ADC / bus",
-      "description": "MCU principal Cortex-M4, Flash 3 Mio, SRAM 96 Kio; application V1.21 a 0x08006000.",
+      "description": "GD32F303VKT6 : 86 signaux utiles documentes dans le tableau IO. Comparaison PRO V1.21 / PLUS V2.08 : 570 signatures directes GPIO communes ; les inconnues PC3 et PE15 restent ouvertes.",
       "confidence": "identified",
       "docs": [
         "docs/02_CPU_FLASH_BOOT_USB_SWD.md",
         "docs/04_RAM_ROUTINES_UI_RF_ET_BROCHAGE.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
         "docs/external/radiofoundry/GPIO_868_VS_578.md",
-        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md"
+        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -231,13 +232,14 @@
       "w": 266,
       "h": 72,
       "subtitle": "ATGM336H; UART NMEA",
-      "description": "Module GNSS ATGM336H present et fonctionnel. Interface serie NMEA et injection GPS fonctionnelles dans le banc; ports GPIO exacts non etablis dans les traces actuellement archivees.",
+      "description": "GNSS ATGM336H : USART1 sans remap, PA2 TX et PA3 RX du GD32. Liaison validee par firmware ; NMEA, commandes CASIC et essais documentes au banc. Cela ne valide pas toute la navigation OEM.",
       "confidence": "identified",
       "docs": [
         "docs/hardware/COMPOSANTS.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
         "docs/hardware/PLAN_INVESTIGATION_BROCHAGES.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -308,14 +310,16 @@
       "w": 266,
       "h": 72,
       "subtitle": "D868BT-SP, firmware ET12, UART3",
-      "description": "Carte D868BT-SP et module ET12. Interface UART3 et commandes AT+VER? / AGHF observees dans le modele; telecommandes Bluetooth BT01 et PTT prises en charge par le poste.",
+      "description": "Module Bluetooth : UART3 PC10 TX / PC11 RX, 115200 bit/s, valide par firmware. PLUS : carte intermediaire BT+APRS BHT_BOARD sur ce meme lien. Le PRO contient aussi le parseur +APRS:, sans que cela prouve la presence de la carte.",
       "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
         "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/io/APRS_RX_PLUS.md"
       ]
     },
     {
@@ -412,10 +416,11 @@
       "w": 266,
       "h": 72,
       "subtitle": "11 bits, DATA/CLOCK, VCC 5 V",
-      "description": "UTC U2429G, controleur volume stereo 0 a -83 dB; CLOCK/DATA 11 bits. Commande physique OEM par GPIO a retrouver, composant identifie.",
+      "description": "UTC U2429G : commande serie sur PA13/PA14 apres liberation SWJ ; attenuations et latch decodes sur les sorties OEM. Les gains physiques de toute la chaine audio restent distincts.",
       "confidence": "identified",
       "docs": [
-        "docs/hardware/VOLUME_U2429G.md"
+        "docs/hardware/VOLUME_U2429G.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -474,10 +479,11 @@
       "w": 266,
       "h": 72,
       "subtitle": "H2226, SSOP-B16, 8 x DAC 8 bits",
-      "description": "ROHM BH2226FV-E2, marquage H2226 et SSOP-B16 confirms par observation du boitier. CNA huit sorties; bus serie 3 fils defini par datasheet, affectation analogique sur PCB a attribuer.",
+      "description": "BH2226FV : PA5 CSB, PB3 CLK, PB4 DI. Code serie 0x8 = DA1 (retro eclairage LCD), pas DA8. Affectations analogiques restantes indiquees dans le tableau IO.",
       "confidence": "identified",
       "docs": [
-        "docs/hardware/BH2226_H2226_DAC_RF.md"
+        "docs/hardware/BH2226_H2226_DAC_RF.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -887,7 +893,7 @@
         },
         {
           "from_pin": "PB12",
-          "to_pin": "RESET# candidat",
+          "to_pin": "RESET#",
           "note": "",
           "status": "oem_trace"
         },
@@ -1037,7 +1043,7 @@
           "status": "oem_trace"
         },
         {
-          "from_pin": "Bus lumiere canal 8",
+          "from_pin": "BH2226 code serie 0x8 / DA1",
           "to_pin": "Luminosite ecran 0..255 observes",
           "note": "",
           "status": "oem_trace"
@@ -1189,25 +1195,25 @@
       "pins": [
         {
           "from_pin": "PB8",
-          "to_pin": "CS# candidat",
+          "to_pin": "CS#",
           "note": "",
           "status": "oem_trace"
         },
         {
           "from_pin": "PB15",
-          "to_pin": "SCK candidat",
+          "to_pin": "SCK",
           "note": "",
           "status": "oem_trace"
         },
         {
           "from_pin": "PB14",
-          "to_pin": "MOSI / SO0 candidat",
+          "to_pin": "MOSI / SO0",
           "note": "",
           "status": "oem_trace"
         },
         {
           "from_pin": "PA15",
-          "to_pin": "MISO / SO1 candidat",
+          "to_pin": "MISO / SO1",
           "note": "",
           "status": "oem_trace"
         }
@@ -1225,20 +1231,28 @@
       "target": "gps",
       "label": "Donnees GNSS",
       "bus": "UART GNSS / NMEA",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [
         {
-          "from_pin": "UART GD32 (instance a identifier)",
-          "to_pin": "ATGM336H TX/RX NMEA",
-          "status": "emulator"
+          "from_pin": "PA2",
+          "to_pin": "RXD du module — Envoi des commandes au GPS",
+          "status": "oem_trace",
+          "note": "S1; S8; S9"
+        },
+        {
+          "from_pin": "PA3",
+          "to_pin": "TXD du module — Réception NMEA et événements GPS",
+          "status": "oem_trace",
+          "note": "S1; S8; S9"
         }
       ],
       "docs": [
         "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
         "docs/hardware/GPS.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ],
-      "details": "GPS ATGM336H fonctionnel; banque d'octets UART/NMEA et acquisition verifies par banc OEM. Affectation des broches du GD32 non prouvee par les elements publics actuels. Ce n'est pas une fonction non cartographiee : protocole et sequences sont documentes."
+      "details": "Liaison validee par analyse OEM : PA2 : RXD du module — Envoi des commandes au GPS; PA3 : TXD du module — Réception NMEA et événements GPS"
     },
     {
       "id": "mcu-dmr",
@@ -1305,13 +1319,13 @@
       "pins": [
         {
           "from_pin": "PA7",
-          "to_pin": "Commande coupure HP poste candidate",
+          "to_pin": "Commande coupure HP postee",
           "note": "",
           "status": "oem_trace"
         },
         {
           "from_pin": "RF bank1/page0/reg0x25 bit4",
-          "to_pin": "Commande coupure HP micro candidate",
+          "to_pin": "Commande coupure HP microe",
           "note": "",
           "status": "oem_trace"
         }
@@ -1387,20 +1401,29 @@
       "target": "bluetooth",
       "label": "UART3 modele vers ET12",
       "bus": "UART3 / AT commandes ET12",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [
         {
-          "from_pin": "UART3 TX/RX du GD32",
-          "to_pin": "UART ET12 (broches physiques a relever)",
-          "status": "emulator"
+          "from_pin": "PC10",
+          "to_pin": "RX de la carte : commandes AT / échanges Bluetooth et BT+APRS",
+          "status": "oem_trace",
+          "note": "N3; N14; S6"
+        },
+        {
+          "from_pin": "PC11",
+          "to_pin": "TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:",
+          "status": "oem_trace",
+          "note": "N3; N14; S6"
         }
       ],
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/io/APRS_RX_PLUS.md"
       ],
-      "details": "UART3 pris en charge dans le banc OEM, dialogues AT+VER?/AGHF; fonction Bluetooth OEM operationnelle. Numero de GPIO du connecteur D868BT-SP non etabli."
+      "details": "Liaison validee par analyse OEM : PC10 : RX de la carte : commandes AT / échanges Bluetooth et BT+APRS; PC11 : TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:"
     },
     {
       "id": "power-mcu",
@@ -1545,25 +1568,26 @@
       "target": "rda5802n",
       "label": "Commande du tuner FM",
       "bus": "I2C compatible RDA5807, 0x10",
-      "status": "emulator",
+      "status": "oem_trace",
       "pins": [
         {
           "from_pin": "PB6",
-          "to_pin": "SDA du modèle, pin RDA inconnu",
-          "status": "emulator",
-          "note": ""
+          "to_pin": "SDA : données et acquittement des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
         },
         {
           "from_pin": "PB7",
-          "to_pin": "SCL du modèle, pin RDA inconnu",
-          "status": "emulator",
-          "note": ""
+          "to_pin": "SCL : horloge des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
         }
       ],
-      "details": "Le decodeur I2C du modele lie PB6 SDA et PB7 SCL a l'interface FM compatible RDA5807, adresse 7 bits 0x10. Le poste possede physiquement un RDA5802N; attribution PB6/PB7 validee par modele, pas par continuite.",
+      "details": "Liaison validee par analyse OEM : PB6 : SDA : données et acquittement des deux chemins de pilote; PB7 : SCL : horloge des deux chemins de pilote",
       "docs": [
         "docs/hardware/RDA5802N_RECEPTION_FM.md",
-        "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
+        "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -1586,11 +1610,25 @@
       "target": "u2429",
       "label": "Réglage atténuateur U2429",
       "bus": "DATA/CLOCK 11 bits",
-      "status": "unknown",
-      "pins": [],
-      "details": "Le U2429 exige une liaison DATA pin 4 / CLOCK pin 5 et VIH>=0,8 VCC ; GPIO et translation à rechercher.",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PA13",
+          "to_pin": "SWDIO ; DATA U2429 — Débogage ou données de volume 11 bits",
+          "status": "oem_trace",
+          "note": "S4; S8; S10; S13"
+        },
+        {
+          "from_pin": "PA14",
+          "to_pin": "SWCLK ; CLOCK U2429 — Horloge du debug ou du contrôleur de volume",
+          "status": "oem_trace",
+          "note": "S4; S8; S10; S13"
+        }
+      ],
+      "details": "Liaison validee par analyse OEM : PA13 : SWDIO ; DATA U2429 — Débogage ou données de volume 11 bits; PA14 : SWCLK ; CLOCK U2429 — Horloge du debug ou du contrôleur de volume",
       "docs": [
-        "docs/hardware/VOLUME_U2429G.md"
+        "docs/hardware/VOLUME_U2429G.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -1675,11 +1713,31 @@
       "target": "bh2226",
       "label": "Commande du CNA H2226",
       "bus": "CSB/CLK/DI, 12 bits",
-      "status": "unknown",
-      "pins": [],
-      "details": "La datasheet donne CSB pin 12, CLK pin 13, DI pin 14 ; aucune GPIO GD32 n’a été reliée par mesure.",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PA5",
+          "to_pin": "CSB : sélection et validation des huit sorties DAC",
+          "status": "oem_trace",
+          "note": "N1; S7"
+        },
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "status": "oem_trace",
+          "note": "N1; S6; S7"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "status": "oem_trace",
+          "note": "N1; S6; S7"
+        }
+      ],
+      "details": "Liaison validee par analyse OEM : PA5 : CSB : sélection et validation des huit sorties DAC; PB3 : CLK du BH2226 et SCLK RF; PB4 : DI du BH2226 ; SDIO RF",
       "docs": [
-        "docs/hardware/BH2226_H2226_DAC_RF.md"
+        "docs/hardware/BH2226_H2226_DAC_RF.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {

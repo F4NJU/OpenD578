@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Revue générale du site — 9 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="evidence/INDEX.html">Preuves</a>
+<a href="external/INDEX.html">Sources externes</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../f1dmg.html">F1DMG</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Recherche et banc</div>
+<div class="doc-heading"><h1>Revue générale du site — 9 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/AUDIT_SITE_20261109.md">Modifier sur GitHub</a><a download href="../../raw/docs/AUDIT_SITE_20261109.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/AUDIT_SITE_20261109.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="revue-generale-du-site-9-novembre-2026">Revue générale du site — 9 novembre 2026</h1>
+<p>Base : dépôt Telectroboy/OpenD578, HEAD cdef47dcba37f1e886bc301e330e65d7f3a3e79f ; l’archive fournie correspond à ce commit, avec différences de fins de lignes normalisées. Le SHA exact de base est conservé dans le patch fourni.</p>
+<h2 id="changements">Changements</h2>
+<ul>
+<li>Intégration additive du banc Web 0.15.1, de ses sources WebAssembly et licences, du guide et de 117 tests ; copie automatique vers simulator/ lors de la construction GitHub Pages.</li>
+<li>Tableau IO courant, HTML filtrable et export CSV/JSON, preuves N1–N14, comparaison PLUS et rapport APRS RX ; copie vers io/ et navigation sur les pages régénérées.</li>
+<li>Modèles PRO/PLUS corrigés : GPS, U2429, BH2226, UART3 et BHT_BOARD ; fiches et liaisons régénérées.</li>
+<li>Générateur de brochage alimenté par la table résolue : un rebuild ne réintroduit plus PB6/PB7 inversés ou les anciens états inconnus.</li>
+<li>Encodeurs C corrigés : nibble de sélection BH2226, D0/D1 U2429. Tests de référence et étape CI ajoutés.</li>
+<li>Les documents historiques restent datés ; chaque page documentaire renvoie vers le bilan confirmé. Les sources externes n’ont pas été réécrites en preuves OEM.</li>
+</ul>
+<h2 id="validation">Validation</h2>
+<ul>
+<li>117 tests du banc Web réussis, dont les couleurs LCD et la journalisation MMIO.</li>
+<li>36 tests Python des outils réussis ; couverture documentaire 129 affirmations RadioFoundry et 21 approfondissements sur 60 thèmes historiques.</li>
+<li>Deux modèles : 74 composants, 86 connexions, documents et photos référencés vérifiés.</li>
+<li>Site reconstruit et liens locaux de toutes les pages HTML vérifiés ; inventaire détaillé généré dans audit_pages_20261109.csv.</li>
+<li>Encodeurs C et routines RF QA4818N compilés avec avertissements traités en erreurs et exécutés ; mini CPS Node réussi.</li>
+</ul>
+<p>Ce contrôle porte sur la cohérence technique du site et les régressions logicielles. Il n’inclut pas une nouvelle campagne RF sur poste, un démarrage OEM long complet dans le navigateur, ni une vérification visuelle manuelle de chaque écran. Les limites audio PCM, ROS, modèle KT et amont RF/audio BHT sont conservées dans ETAT_CONFIRME_20261109.md.</p>
+<h2 id="publication">Publication</h2>
+<p>La lecture du dépôt distant a réussi. GitHub n’a pas pu être modifié depuis la session : le connecteur GitHub renvoie Unknown tool et git push ne trouve pas d’authentification HTTPS. Aucun déploiement distant n’est revendiqué. Le paquet inclut le dépôt complet et un patch à appliquer à la base contrôlée, sans effacer le travail local du mainteneur.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

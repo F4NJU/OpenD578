@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createRequire} from 'node:module';
+import {WasmMachine} from '../assets/wasm-machine.mjs';
+test('ARM software reset then watchdog WFI reset restart boot vectors and retain SRAM/BKP and flags',async()=>{
+ const lib=await createRequire(import.meta.url)('../vendor/unicorn_arm.js')(),m=new WasmMachine({factory:async()=>lib});
+ try{await m.attach({boot:new File([fs.readFileSync(new URL('../samples/system_reset_demo.bin',import.meta.url))],'system_reset_demo.bin')});m.reset('boot');m.gpsScenario({mode:'no_fix',latitude:48,longitude:2,utc:'2026-11-07T12:00:00Z',hertz:1});
+ for(let i=0;i<8;i++){const s=m.run(1000);assert(!s.cpu.stop||s.cpu.stop.category==='waiting',JSON.stringify(s.cpu.stop));if(m.core.resetGeneration===2&&s.cpu.stop?.category==='waiting')break;}
+ const v=new DataView(m.core.memory(0x20000100,24).buffer);assert.equal(v.getUint32(0,true),0xD578AABB);assert.equal(v.getUint32(4,true),3);assert.equal(v.getUint32(8,true)&0xfc000000,0x1c000000);assert.equal(v.getUint32(12,true),0x2468);assert.equal(v.getUint32(16,true)&0xfc000000,0x3c000000);assert.equal(v.getUint32(20,true),0x2468);
+ assert.deepEqual(m.core.resetEvents.map(e=>e.source),['software','watchdog']);assert(m.core.resetEvents.every(e=>e.vector===0x08000000));assert(!m.core.hardware.watchdog.running);assert.equal(m.core.hardware.gps.config.mode,'no_fix');
+ }finally{m.core?.close();}
+});
+
+test('external key releases, Power pulse and quadrature sequence survive real ARM software/watchdog resets and settle while WFI sleeps',async()=>{const lib=await createRequire(import.meta.url)('../vendor/unicorn_arm.js')(),m=new WasmMachine({factory:async()=>lib});try{await m.attach({boot:new File([fs.readFileSync(new URL('../samples/system_reset_demo.bin',import.meta.url))],'system_reset_demo.bin')});m.reset('boot');m.panelKey('P1',true);m.panelKey('P1',false);m.powerPulse();m.rotate('up');let s;for(let i=0;i<8;i++){s=m.run(1000);if(s.cpu.stop)break;}assert.equal(s.cpu.stop?.category,'waiting',JSON.stringify(s.cpu.stop));assert.deepEqual(m.core.resetEvents.map(e=>e.source),['software','watchdog']);assert.deepEqual([...m.board.keys],[]);assert.equal(m.board.adc.get(8),4095);assert.equal(m.board.input.A&1,1);assert.equal(m.board.input.C&0x300,0);assert.equal(m.core.hardware.encoderEvents.length,0);assert.equal(m.core.hardware.keyRelease.size,0);assert.equal(m.core.hardware.powerReleaseAt,Infinity);assert(m.core.time>=240000000);}finally{m.core?.close();}});

@@ -6,11 +6,14 @@
 int main(void)
 {
     uint16_t word=0;
-    assert(bh2226_build_dac_word(1,0x80,&word) && word==0x180);
-    assert(bh2226_build_dac_word(8,0xFF,&word) && word==0x8FF);
+    assert(bh2226_build_dac_word(1,0x80,&word) && word==0x880);
+    assert(bh2226_build_dac_word(8,0xFF,&word) && word==0x1FF);
     assert(!bh2226_build_dac_word(0,0,&word));
     assert(!bh2226_build_dac_word(9,0,&word));
     assert(!bh2226_build_dac_word(1,0,NULL));
+    const uint16_t channel_words[8]={0x800,0x400,0xC00,0x200,0xA00,0x600,0xE00,0x100};
+    for (unsigned i=0; i<8; ++i)
+        assert(bh2226_build_dac_word((uint8_t)(i+1),0,&word) && word==channel_words[i]);
     uint8_t bits[11];
     assert(u2429_build_volume_bits(true,false,0,bits));
     assert(bits[0]==0 && bits[1]==0);
@@ -22,6 +25,7 @@ int main(void)
     assert(bits[0]==1 && bits[1]==1 && bits[2]==1 && bits[3]==0 && bits[4]==0 && bits[5]==0 && bits[6]==0);
     assert(bits[7]==1 && bits[8]==1);
     assert(u2429_build_volume_bits(false,false,83,bits));
+    assert(bits[0]==0 && bits[1]==1);
     assert(bits[2]==1 && bits[3]==0 && bits[4]==0 && bits[5]==0 && bits[6]==0);
     assert(bits[7]==0 && bits[8]==0 && bits[9]==1 && bits[10]==1);
     assert(!u2429_build_volume_bits(true,false,84,bits));

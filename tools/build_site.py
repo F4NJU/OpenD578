@@ -27,7 +27,7 @@ from validate_hardware_model import check
 ROOT=Path(__file__).resolve().parents[1]
 SITE=ROOT/'site'
 GITHUB='https://github.com/Telectroboy/OpenD578'
-SOURCES=('docs','firmware','hardware')
+SOURCES=('docs','firmware','hardware','browser-bench')
 BASIC=['README.md','README_FR.md','README_SITE.md','CONTRIBUTING.md','PROVENANCE.md']
 
 
@@ -140,7 +140,7 @@ def category(rel:str):
 
 
 def nav(dest:Path,active:str=''):
-    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('f1dmg.html','F1DMG'),('sources.html','Code source')]
+    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('io/index.html','Tableau IO'),('simulator/index.html','Simulateur'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('f1dmg.html','F1DMG'),('sources.html','Code source')]
     out=['<nav class="nav" aria-label="Navigation">']
     for name,label in links:
         clazz=' class="active"' if name==active else ''
@@ -200,6 +200,7 @@ def build_docs(files):
         page=f'''<div class="breadcrumb"><a href="{x(relative(target,SITE/'docs.html'))}">Documents</a> / {x(category(rel_text))}</div>
 <div class="doc-heading"><h1>{x(title_of(src))}</h1><div class="doc-actions"><a href="{x(source_link(rel_text))}">Modifier sur GitHub</a><a download href="{x(relative(target,raw))}">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>{x(rel_text)}</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="{x(relative(target,SITE/'doc/docs/ETAT_CONFIRME_20261109.html'))}">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body">{rendered}</article>'''
         write(target,shell(title_of(src),target,page,'docs.html'))
         clean=re.sub(r'[`*_>#\[\]()]',' ',data)
@@ -366,8 +367,8 @@ def photos_page(models):
 
 def build_source_index():
     dest=SITE/'sources.html'
-    groups=['bench','tools','firmware']
-    exts={'.py','.c','.h','.js','.css','.json','.yml','.yaml','.sh','.cmd'}
+    groups=['bench','tools','firmware','browser-bench']
+    exts={'.py','.c','.h','.js','.css','.json','.yml','.yaml','.sh','.cmd','.mjs'}
     items=[]
     for group in groups:
         for f in sorted((ROOT/group).rglob('*')):
@@ -428,6 +429,15 @@ def main():
     build_assets(models,docs)
     from f1dmg_site import build_f1dmg_site
     build_f1dmg_site(ROOT,SITE,shell,x)
+    # Browser bench lives in source; site/ is regenerated on each build.
+    browser_source = ROOT/'browser-bench'
+    if browser_source.is_dir():
+        shutil.copytree(browser_source, SITE/'simulator',
+                        ignore=shutil.ignore_patterns('tests', '__pycache__'),
+                        dirs_exist_ok=True)
+    io_source = ROOT/'docs/hardware/io'
+    shutil.copytree(io_source, SITE/'io', dirs_exist_ok=True)
+    shutil.copy2(io_source/'TABLEAU_IO_D578.html', SITE/'io/index.html')
     (SITE/'.nojekyll').touch()
     print(f'Built {len(docs)} Markdown pages, {sum(len(m["nodes"]) for m in models)} components, {sum(len(m["edges"]) for m in models)} connections at {SITE}')
     return 0

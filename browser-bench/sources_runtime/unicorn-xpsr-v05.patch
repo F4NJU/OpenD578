@@ -1,0 +1,13 @@
+diff --git a/qemu/target/arm/unicorn_arm.c b/qemu/target/arm/unicorn_arm.c
+index 31d9447..679d8ef 100644
+--- a/qemu/target/arm/unicorn_arm.c
++++ b/qemu/target/arm/unicorn_arm.c
+@@ -154,6 +154,8 @@ static void v7m_msr_xpsr(CPUARMState *env, uint32_t mask, uint32_t reg,
+     }
+ 
+     xpsr_write(env, val, xpsrmask);
++    /* Host-driven exception entry changes IPSR: refresh cached handler mode. */
++    arm_rebuild_hflags(env);
+ }
+ 
+ static uc_err read_cp_reg(CPUARMState *env, uc_arm_cp_reg *cp)

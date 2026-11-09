@@ -1,0 +1,9 @@
+import {audioControlStatus} from './audio-routing.mjs?build=web0151r2';
+import {qaAudioStatus} from './calibration-status.mjs?build=web0151r2';
+/* Observe physical inputs, ADC/DMA conversions and completed output-bus writes.
+ * No OEM addresses or derived firmware variables. No audio synthesis. */
+export function panelStatus(board,hardware,flashSha=null){
+ const volume=(name,channel,bank)=>({name,ADCchannel:channel,inputRaw:board.adc.get(channel),acquiredRaw:hardware?.adc?.lastTransferred?.[channel]??null,lastAcquiredAt:hardware?.adc?.lastTransferTime?.[channel]??null,receiverGainRaw:hardware?.rf.written.has(`${bank}:0:68`)?hardware.rf.regs.get(`${bank}:0:68`):null,receiverBank:bank,gainUnits:'raw register 0x44, physical transfer function unqualified'});
+ const pa7=board.mode('A',7),radioMute=pa7&3?!!(board.out.A&128):null,rf=hardware?.rf.written.has('1:0:37')?hardware.rf.regs.get('1:0:37'):null;
+ return {heldKeys:[...board.keys],analogKeys:{ADC8:board.adc.get(8),ADC9:board.adc.get(9)},encoder:{PC8:(board.input.C>>>8)&1,PC9:(board.input.C>>>9)&1,externalInterruptPending:!!(board.regs.get(0x40010414)&256)},volumes:[volume('A',12,0),volume('B',15,1)],lighting:{LEDword:board.ledRaw,green:board.ledRaw===null?null:board.green,red:board.ledRaw===null?null:board.red,LCDraw:board.lcdBacklightKnown?board.lcdBacklight:null,unassignedChannels:Object.fromEntries([...board.lightRaw].filter(([a])=>a!==8))},audio:{logicalControl:audioControlStatus(board,hardware?.rf,flashSha),QA:qaAudioStatus(hardware?.rf),attenuator:board.volumeChip.status(),codecControl:hardware?.sct?.codec.status()??null,SCTcorrections:hardware?.sct?.audio.status()??null,radioSpeakerMuteCandidate:radioMute,microphoneSpeakerMuteCandidate:rf===null?null:!!(rf&16),RFPIO25:rf,PCMEmulated:false,physicalVolumePotOrderQualified:false},directFirmwareStateWrite:false};
+}

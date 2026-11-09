@@ -5,7 +5,7 @@
   "status": "reference_incomplete",
   "mcu": "GD32F303 observe sur le PLUS (suffixe exact a photographier)",
   "updated": "2026-11-06",
-  "diagram_note": "GD32F303 central sur PLUS. Les fonctions de facade sont operationnelles. Les numeros GPIO PRO restent une reference comparative jusqu'a analyse de la branche OEM PLUS.",
+  "diagram_note": "Comparaison firmware PLUS V2.08 / PRO V1.21 integree. Liaisons resolues validees par firmware ; presence des composants et inconnues distinguees. APRS RX par BHT_BOARD / UART3.",
   "groups": [
     {
       "id": "facade",
@@ -49,10 +49,11 @@
       "w": 266,
       "h": 72,
       "subtitle": "référence exacte non résolue",
-      "description": "Marquage du CI incertain ; pas de pilote ni de registres attribuables.",
-      "confidence": "candidate",
+      "description": "Tuner AM/FM : pilote compatible KT0937-D8, I2C 7 bits 0x35 sur PB6 SDA / PB7 SCL ; identifiant assemble 0x4B54. Marquage observe KT0905R/KT09S5R non reconcilie. Ce tuner ne constitue pas la carte BT+APRS.",
+      "confidence": "partial",
       "docs": [
-        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md"
+        "docs/hardware/CARTE_PLUS_AM_KT_NON_IDENTIFIE.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -154,29 +155,32 @@
       "w": 290,
       "h": 120,
       "subtitle": "meme famille GD32 que PRO",
-      "description": "GD32F303 de la carte CPU PLUS : meme famille que le PRO, confirme par observation de l'utilisateur. Poste OEM entierement operationnel. GPIO par version a qualifier avant toute reutilisation des numerotations V1.21.",
+      "description": "GD32F303VKT6 : 86 signaux utiles documentes dans le tableau IO. Comparaison PRO V1.21 / PLUS V2.08 : 570 signatures directes GPIO communes ; les inconnues PC3 et PE15 restent ouvertes.",
       "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
         "docs/hardware/VERSIONS.md",
         "docs/external/radiofoundry/GPIO_868_VS_578.md",
-        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md"
+        "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "bt_support_plus",
-      "label": "Carte support Bluetooth",
+      "label": "Carte BT+APRS / BHT_BOARD",
       "group": "peripheriques",
       "x": 984,
       "y": 380,
       "w": 266,
       "h": 72,
       "subtitle": "D868BT-SP ? revision a relever",
-      "description": "Support Bluetooth present sur PLUS selon documentation ; reference D868BT-SP sur carte relevee mais variante exacte a attribuer.",
-      "confidence": "partial",
+      "description": "Carte auxiliaire BT+APRS : decode NRZI et bourrage ; transmet +APRS: et AX.25 au GD32 sur PC11 UART3_RX, 115200 bit/s. PC10 UART3_TX partage les echanges Bluetooth. Entree RF/audio exacte encore non attribuee.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
-        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md"
+        "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/io/APRS_RX_PLUS.md"
       ]
     },
     {
@@ -318,11 +322,12 @@
       "w": 266,
       "h": 72,
       "subtitle": "Reference de la famille, PCB a verifier",
-      "description": "GPS familial et la sauvegarde GNSS sont documentes sur D578 anciens ; identification precise du module et du rail sur cette revision PLUS a relever.",
-      "confidence": "candidate",
+      "description": "GNSS ATGM336H : USART1 sans remap, PA2 TX et PA3 RX du GD32. Liaison validee par firmware ; NMEA, commandes CASIC et essais documentes au banc. Cela ne valide pas toute la navigation OEM.",
+      "confidence": "identified",
       "docs": [
         "docs/hardware/SAUVEGARDE_RTC_GPS_XH414HG.md",
-        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md"
+        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -561,15 +566,30 @@
       "id": "plus-gd32-bluetooth",
       "source": "mcu_plus",
       "target": "bt_support_plus",
-      "label": "Controle Bluetooth PLUS",
+      "label": "UART3 partage Bluetooth / APRS RX",
       "bus": "UART candidat ; exact non verifie",
-      "status": "hypothesis",
-      "pins": [],
-      "details": "Le PLUS utilise un GD32F303 et un module Bluetooth documente ET12. L UART3 du simulateur PRO n est pas transpose comme brochage physique du PLUS.",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PC10",
+          "to_pin": "RX de la carte : commandes AT / échanges Bluetooth et BT+APRS",
+          "status": "oem_trace",
+          "note": "N3; N14; S6"
+        },
+        {
+          "from_pin": "PC11",
+          "to_pin": "TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:",
+          "status": "oem_trace",
+          "note": "N3; N14; S6"
+        }
+      ],
+      "details": "Liaison validee par analyse OEM : PC10 : RX de la carte : commandes AT / échanges Bluetooth et BT+APRS; PC11 : TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
-        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md"
+        "docs/firmware/BLUETOOTH_PILOTES_BT01_PTT.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/io/APRS_RX_PLUS.md"
       ]
     },
     {
@@ -714,11 +734,25 @@
       "target": "mcu_plus",
       "label": "GNSS -> GD32 PLUS ?",
       "bus": "UART candidat",
-      "status": "unknown",
-      "pins": [],
-      "details": "Aucun numero de GPIO ni de pin module GPS ne doit etre assigne a ce modele PLUS sans trace.",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PA2",
+          "to_pin": "RXD du module — Envoi des commandes au GPS",
+          "status": "oem_trace",
+          "note": "S1; S8; S9"
+        },
+        {
+          "from_pin": "PA3",
+          "to_pin": "TXD du module — Réception NMEA et événements GPS",
+          "status": "oem_trace",
+          "note": "S1; S8; S9"
+        }
+      ],
+      "details": "Liaison validee par analyse OEM : PA2 : RXD du module — Envoi des commandes au GPS; PA3 : TXD du module — Réception NMEA et événements GPS",
       "docs": [
-        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md"
+        "docs/peripherals/02_GPS_ATGM336H_UART_NMEA_RAM_PARAMETRES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {

@@ -1,0 +1,10 @@
+Exécuter depuis la racine du projet contenant les sauvegardes :
+  PYTHONPATH=deps python3 comparaison_plus/analyse.py
+  PYTHONPATH=deps python3 comparaison_plus/verify_comparison.py
+
+Capstone 5 et Unicorn 2 requis (ou adapter PYTHONPATH à leur installation).
+Les sauvegardes attendues sont indiquées dans analyse.py :
+  inputs/Firmware D578/full_flash_pass1(1).bin
+  native_v05/firmwares/D578UV2_GD_V2.08_20240619.CDD
+
+Aucun binaire ni fichier NAND ajouté ici. Les scripts lisent ces fichiers et écrivent seulement leurs rapports à côté des scripts. Les commandes de désassemblage sont documentées dans analyse.py (dump PRO/PLUS début fin).

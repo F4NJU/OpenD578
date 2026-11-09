@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Runtime ARM WebAssembly du banc OpenD578 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../../docs/evidence/INDEX.html">Preuves</a>
+<a href="../../docs/external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Projet</div>
+<div class="doc-heading"><h1>Runtime ARM WebAssembly du banc OpenD578</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/browser-bench/vendor/README.md">Modifier sur GitHub</a><a download href="../../../raw/browser-bench/vendor/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>browser-bench/vendor/README.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../docs/ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="runtime-arm-webassembly-du-banc-opend578">Runtime ARM WebAssembly du banc OpenD578</h1>
+<p><code>unicorn_arm.js</code> contient le JavaScript d’initialisation et le WASM incorporé. Le banc n’a pas besoin de npm ou d’un CDN pour fonctionner.</p>
+<p>Ce runtime est recompilé à partir d’Unicorn.js et d’Unicorn. Les références, l’empreinte et les correctifs sont dans <code>../../sources_runtime/</code>.</p>
+<p>La sélection Cortex-M4 est relue avant tout mappage mémoire. La construction préserve le modèle demandé au lieu de le remplacer par Cortex-M33. Les blocs de traduction sont limités à 32 instructions et le tableau des temporaires WASM32 à 2 048 entrées, avec contrôle avant débordement. Ces paramètres concernent le traducteur ; ils ne remplacent aucune instruction du firmware.</p>
+<p>Les sources correspondantes sont fournies dans l’archive source et les avis de licence sont conservés.</p>
+<p>Amont : <a href="https://github.com/AlexAltea/unicorn.js">https://github.com/AlexAltea/unicorn.js</a></p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/BLUETOOTH_D868BT_SP_ET12.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/BLUETOOTH_D868BT_SP_ET12.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="carte-bluetooth-d868bt-sp-module-radio-blinde-et-firmware-et12">Carte Bluetooth D868BT-SP, module radio blinde et firmware ET12</h1>
 <p><strong>Perimetre :</strong> AnyTone D578UV PRO GD32 V1.21 en priorite ; observations de variantes PLUS et comparaisons D878. <strong>Etat :</strong> interface logicielle partiellement caracterisee, identification physique du module blinde et brochage non verifies. Date : 5 novembre 2026.</p>
 <h2 id="1-inventaire-de-trois-niveaux-distincts">1. Inventaire de trois niveaux distincts</h2>
@@ -62,7 +65,7 @@
    +-- Chemin audio analogique (mapping exact au module : INCONNU)
    +-- Controle radio/PTT (aucun GPIO PTT Bluetooth materiel attribue)
 </code></pre>
-<p>Les fleches UART3 et module sont fonctionnelles, <strong>pas des pistes PCB identifiees</strong>. Ne pas presenter les pins PC10/PC11 ou d'autres pins comme des connexions confirmees a ce stade. Le manuel Bluetooth constructeur et son guide BT01 prouvent les fonctions, pas le cable interne.</p>
+<p>La liaison est désormais validée par analyse OEM : PC10=UART3_TX vers RX, PC11=UART3_RX depuis TX, 115200 bit/s. PLUS : carte BT+APRS BHT_BOARD sur ce lien partagé ; voir <a href="io/APRS_RX_PLUS.html">APRS RX</a>. La référence du SoC Bluetooth reste inconnue.</p>
 <h2 id="3-dialogue-firmware-connu-sur-uart3-perimetre-exact">3. Dialogue firmware connu sur UART3 : perimetre exact</h2>
 <p>Le simulateur local <code>bench/uart_serial.py</code> emule <strong>UART3</strong> avec un pair facultatif ET12. Il comprend <strong>seulement</strong> le jeu de commandes AT ci-dessous. La qualite de preuve est limitee au modele existant et a la reference binaire dont les reponses ont ete extraites ; aucune capture sur le vrai PCB n'a encore ete comparee.</p>
 <table>

@@ -1,0 +1,16 @@
+OpenD578 — Tableau IO GD32 révision 5, 9 novembre 2026
+
+Ouvrir TABLEAU_IO_D578.html pour rechercher et filtrer les 86 signaux utiles.
+TABLEAU_IO_D578.csv : Excel/LibreOffice, séparateur point-virgule, UTF-8 BOM.
+ANALYSE_INCONNUES.md : résultats, nouvelles preuves N1–N14, limites et corrections.
+TABLEAU_IO_D578.md et .json : intégration dans documentation ou GitHub.
+
+Une liaison résolue par firmware est retenue validée pour le projet, sans nouvelle exigence de continuité. Les fonctions non déduites ne sont pas inventées.
+La colonne numéro de patte distante, les alimentations, masses et NC sont supprimés ; VREF+ et VREF- sont conservées.
+Ce livrable documentaire ne modifie pas le banc ni le site publié.
+
+Correction révision 5 : PB9 est la sortie PWM audio TIMER3_CH3 ; PC3 et PE15 seules restent sans fonction distante résolue. Voir N12.
+
+Révision 4 : comparaison PLUS V2.08, 570 signatures GPIO communes et 36 exécutions isolées. Complément important : pilote radio I2C 0x35 compatible KT sur PB6/PB7, distinct du RDA 0x10. Lire COMPARAISON_PRO_PLUS.md.
+
+Révision 5 : APRS_RX_PLUS.md identifie la carte BT+APRS BHT_BOARD et son lien UART3 PC10/PC11. Trames +APRS: binaires AX.25 ; 13 essais OEM isolés. La liaison RF/audio en amont de BHT reste à attribuer.

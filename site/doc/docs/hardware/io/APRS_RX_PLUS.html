@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>N14 — Réception APRS analogique du D578UV PLUS - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a href="../../../../io/index.html">Tableau IO</a>
+<a href="../../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../evidence/INDEX.html">Preuves</a>
+<a href="../../external/INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>N14 — Réception APRS analogique du D578UV PLUS</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/APRS_RX_PLUS.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/hardware/io/APRS_RX_PLUS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/io/APRS_RX_PLUS.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="n14-reception-aprs-analogique-du-d578uv-plus">N14 — Réception APRS analogique du D578UV PLUS</h1>
+<p>Jean-Philippe (F4EGM) — 9 novembre 2026 — révision 5.</p>
+<p>La réception APRS analogique utilise la <strong>carte auxiliaire BT+APRS, firmware BHT_BOARD</strong>. Le GD32 reçoit ses trames sur <strong>PC11 / UART3_RX</strong>, et communique dans l’autre sens sur <strong>PC10 / UART3_TX</strong>, à <strong>115200 bit/s</strong>. Cette liaison transporte aussi les échanges Bluetooth. Le tuner AM/FM compatible KT sur PB6/PB7 n’est pas le correspondant série identifié ici.</p>
+<h2 id="chaine-et-niveau-de-resolution">Chaîne et niveau de résolution</h2>
+<table>
+<thead>
+<tr>
+  <th>Liaison ou traitement</th>
+  <th>Fonction établie</th>
+  <th>État</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Récepteur RF → entrée du sous-ensemble BT+APRS</td>
+  <td>Fournit le signal nécessaire à la réception analogique</td>
+  <td>Prélèvement, conditionnement et entrée exacte non encore attribués</td>
+</tr>
+<tr>
+  <td>BHT_BOARD, traitement des bits</td>
+  <td>Reconstruction, décodage NRZI, retrait du zéro inséré après cinq 1, reconstruction des octets et reconnaissance de délimiteurs</td>
+  <td>Instructions H analysées ; ne prouve pas à elle seule tout le démodulateur AFSK ni la vérification FCS</td>
+</tr>
+<tr>
+  <td>BHT → PC11, UART3_RX GD32</td>
+  <td>Préfixe ASCII <code>+APRS:</code> puis octets binaires AX.25, délimités par <code>0x7E</code></td>
+  <td>Validé par les deux firmwares, émission H exécutée isolément</td>
+</tr>
+<tr>
+  <td>PC10, UART3_TX GD32 → BHT</td>
+  <td>Commandes / échanges du lien partagé avec le Bluetooth</td>
+  <td>Configuration et routines UART validées ; pas d’affirmation que chaque commande AT appartient à APRS</td>
+</tr>
+<tr>
+  <td>GD32 → traitement APRS</td>
+  <td>Adresse AX.25 destination/source, SSID, puis contenu APRS</td>
+  <td>Parseur et consommateurs retrouvés ; début de décodage des adresses visible directement</td>
+</tr>
+<tr>
+  <td>GD32 → affichage</td>
+  <td>Gestion du message reçu dans le traitement APRS OEM</td>
+  <td>Chemin retrouvé ; démarrage complet et pixels LCD non validés dans ces essais</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Aucune nouvelle entrée GPIO GD32 propre à APRS RX n’est nécessaire pour cette arrivée de données</strong> : l’interface déjà présente pour le Bluetooth est partagée. Le tableau principal conserve 86 signaux ; les lignes PC10 et PC11 sont complétées, sans ajouter une broche imaginaire.</p>
+<h2 id="preuves-dans-plus-gd32-v208">Preuves dans PLUS GD32 V2.08</h2>
+<ul>
+<li><code>0x08077824</code> : initialisation UART3 et PC10/PC11 ; base UART <code>0x40004C00</code>. Les appelants passent 115200.</li>
+<li><code>0x08077DEC</code> : interruption UART3 RX ; réception des octets, buffer <code>0x2000B0F0</code>, longueur <code>0x20000ED2</code>, appel du dispatch <code>0x0807C200</code>.</li>
+<li><code>0x0807C18E</code> : assemblage du flux ; le contrôle du préfixe est déclenché à six octets.</li>
+<li><code>0x0807C634</code> : comparaison exacte de six caractères avec <code>+APRS:</code> stocké à <code>0x080F50F0</code> ; indicateur <code>0x20000F79</code>.</li>
+<li><code>0x0807C664</code> : états de réception recherchant <code>0x03</code>, puis <code>0xF0</code>, puis <code>0x7E</code>. À la fin, copie vers <code>0x2000CC4B</code>. Ces valeurs correspondent au contrôle UI, PID sans couche 3 et délimiteur AX.25 ; ce n’est pas une ligne APRS texte TNC2.</li>
+<li>Même routine : au moins une configuration VFO (pointeurs <code>0x2000070C</code> et <code>0x20000710</code>) doit avoir le bit 5 de l’octet <code>+0x21</code> activé ; les deux modes <code>+8 &amp; 3</code> ne doivent pas être simultanément non nuls ; la temporisation <code>0x20000F7C</code> doit être nulle. L’indicateur de travail devient <code>0x20000F7A=1</code>.</li>
+<li><code>0x0807F566</code> : consommateur de cet indicateur ; recherche du premier <code>0x7E</code>, contrôle par <code>0x0807D942</code>, décodage des deux adresses à six caractères décalés d’un bit et des SSID ; poursuite du traitement du contenu. La plage se prolonge jusqu’à la gestion de fin <code>0x080802EE</code>.</li>
+</ul>
+<p>Le parseur de préfixe et la réception binaire existent <strong>aussi dans PRO V1.21</strong>, à <code>0x0807C5E0</code> et <code>0x0807C610</code>. Les 12 essais appariés ci-dessous passent dans les deux applications. La présence de code commun ne démontre donc ni présence de la carte BT+APRS dans le PRO, ni activation de toutes ses fonctions. Charger simplement le firmware PLUS dans un PRO n’est pas une solution démontrée.</p>
+<h2 id="preuves-dans-la-carte-btaprs">Preuves dans la carte BT+APRS</h2>
+<p>Le paquet constructeur distribué avec PLUS V2.08 contient deux variantes :</p>
+<table>
+<thead>
+<tr>
+  <th>Image auxiliaire</th>
+  <th style="text-align:right">Taille</th>
+  <th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>BHT_BOARD_H_V2.00_20230417.CDD</td>
+  <td style="text-align:right">12364</td>
+  <td>a61ef5f36b2f32e0d6b564321ce962533168c2ca9135535c1c0623b4959d1c8d</td>
+</tr>
+<tr>
+  <td>BHT_BOARD_V2.00_M_20230923.CDD</td>
+  <td style="text-align:right">11316</td>
+  <td>038ed4128ee9b118847f3eb1f99a3083c7db0560bce5b1acfc766f4e32edc1d4</td>
+</tr>
+</tbody>
+</table>
+<p>Les instructions constructeur distinguent ancien et nouveau silicium de carte BT+APRS : M correspond à l’ancien, H au nouveau. Elles attribuent explicitement à BHT_BOARD l’amélioration du décodage APRS analogique. La référence exacte du MCU n’est pas déduite du seul nom H/M.</p>
+<p>Dans H, image ARM Thumb chargée à <code>0x2000</code> :</p>
+<ul>
+<li><code>0x000041D0</code> : compare les niveaux successifs (NRZI : transition → 0, niveau inchangé → 1), compte les 1 consécutifs et élimine le zéro de bourrage ; assemble les bits dans <code>0x200003D2</code>.</li>
+<li><code>0x000026F0…0x0000282E</code> : traitement des octets reconstruits et fin de trame ; appel de l’émetteur à <code>0x00002820</code>.</li>
+<li><code>0x00003EF0</code> : émission des six octets de <code>+APRS:</code> (chaîne à <code>0x00004F4C</code>), puis du bloc binaire.</li>
+<li><code>0x00004844</code> : émission du préfixe ; <code>0x00004818</code> : émission du bloc avec dernier octet établi à <code>0x7E</code> ; les deux appellent le pilote série <code>0x00004A7E</code> avec index UART 1.</li>
+<li><code>0x00003B80</code> : débit UART 1 construit par <code>0xE1 &lt;&lt; 9</code>, soit 115200.</li>
+<li>M contient également <code>+APRS:</code> à <code>0x00004B50</code>. Son traitement complet n’a pas fait l’objet des essais d’exécution H.</li>
+</ul>
+<p>La capture temporisée des transitions est visible dans <code>0x00003C90</code> et la reconstruction des bits en amont. <strong>Le code analysé ne permet pas encore de nommer avec assurance la sortie RF/audio, le comparateur ou démodulateur éventuel et l’entrée physique correspondante de BHT.</strong> On ne substitue donc pas PC0/ADC10, le tuner KT, PE15 ou PC3 à cette inconnue. La détection de fin de trame ne constitue pas une preuve d’un contrôle CRC/FCS complet.</p>
+<h2 id="verifications-reproductibles">Vérifications reproductibles</h2>
+<p><code>aprs_rx_plus/test_oem_aprs.py</code>, avec Unicorn 2 et Capstone 5 :</p>
+<ul>
+<li>5 cas par application : autorisation VFO A, autorisation VFO B, réception désactivée, deux modes non analogiques, temporisation active ; les octets sont introduits dans le buffer d’entrée du parseur natif et son état de longueur. Le firmware décide seul de la copie et de l’indicateur final.</li>
+<li>1 préfixe erroné par application, rejeté par la routine OEM.</li>
+<li>1 exécution de l’émetteur BHT H : les deux boucles OEM produisent <code>+APRS:</code> et le contenu binaire, avec terminaison <code>0x7E</code>. Seule la primitive d’écriture UART est interceptée pour relever les octets.</li>
+</ul>
+<p><strong>13/13 essais réussis.</strong> Ce sont des essais de routines isolées avec stimuli synthétiques, pas une réception RF réelle, pas un démodulateur AFSK validé, pas un démarrage intégral ni une validation des écrans. Aucun résultat LCD ou indicateur final n’est forcé.</p>
+<p>Pour le banc fidèle, il faut raccorder la sortie du véritable modèle BHT à UART3. Injecter une trame déjà décodée sur ce port reste utile pour tester le parseur et l’IHM, mais ne valide pas la chaîne complète de réception analogique.</p>
+<h2 id="sources-primaires-et-provenance">Sources primaires et provenance</h2>
+<ul>
+<li><a href="https://powerwerx.com/help/firmware-anytone-d578uvplus">Paquet constructeur PLUS V2.08, distribué par Powerwerx</a>. Archive <code>Anytone-578Plus-DMR-Firmware-v2.08.zip</code>, SHA-256 <code>1351734dcedef6cb575944fa9c51239f24c9fd5232cb3ea79651d3241bcb7477</code>.</li>
+<li><a href="https://device.report/m/6bee54bf562d735096cafc8e78e4faf4895d6bd8f20f6f8271337518f0da5198">Instructions constructeur BT+APRS V2.00, copie consultable</a>.</li>
+<li>Firmware MCU PRO/PLUS : mêmes images et empreintes que N13 / COMPARAISON_PRO_PLUS.md.</li>
+<li>Désassemblages annotés, script et résultats JSON joints dans <code>aprs_rx_plus/</code>. Les adresses sont des preuves pour les versions indiquées, pas une API du futur firmware libre.</li>
+</ul>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

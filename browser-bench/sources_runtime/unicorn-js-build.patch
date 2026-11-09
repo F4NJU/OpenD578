@@ -1,0 +1,13 @@
+diff --git a/build.py b/build.py
+index 709da60..aaa772f 100644
+--- a/build.py
++++ b/build.py
+@@ -202,7 +202,7 @@ def compileUnicorn(archs=[]):
+     ], check=True)
+ 
+     # Build the static library
+-    jobs = os.cpu_count() or 1
++    jobs = min(4, os.cpu_count() or 1)
+     cmd = ['emmake', 'cmake', '--build', UNICORN_BUILD_DIR, '--target', 'unicorn_archive', f'-j{jobs}']
+     subprocess.run(cmd, check=True)
+ 

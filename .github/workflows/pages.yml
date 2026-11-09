@@ -46,6 +46,12 @@ jobs:
         run: python -m unittest discover -s tools -p test_cps_trace_audit.py -v
       - name: Validate CPS browser protocol
         run: node bench/web/test_mini_cps.cjs
+      - name: Validate browser bench (offline, no npm dependencies)
+        run: node --test browser-bench/tests/*.test.mjs
+      - name: Validate serial encoders
+        run: |
+          cc -std=c11 -Wall -Wextra -Werror firmware/hal/serial_command_encoders.c firmware/tests/test_serial_command_encoders.c -o /tmp/test_serial
+          /tmp/test_serial
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site

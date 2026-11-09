@@ -1,0 +1,91 @@
+{
+  "scope": "Isolated OEM execution; input bytes and RAM configuration are test stimuli.\nNo RF/audio emulation, full boot or LCD validation is claimed.\n",
+  "tests": [
+    {
+      "image": "PLUS",
+      "case": "VFO_A",
+      "ready": 1,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PLUS",
+      "case": "VFO_B",
+      "ready": 1,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PLUS",
+      "case": "disabled",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PLUS",
+      "case": "both_nonanalog",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PLUS",
+      "case": "cooldown",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PLUS",
+      "case": "wrong_prefix",
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "VFO_A",
+      "ready": 1,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "VFO_B",
+      "ready": 1,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "disabled",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "both_nonanalog",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "cooldown",
+      "ready": 0,
+      "bytes_copied": 50,
+      "passed": true
+    },
+    {
+      "image": "PRO",
+      "case": "wrong_prefix",
+      "passed": true
+    },
+    {
+      "image": "BHT_H",
+      "case": "native_prefix_payload_UART1",
+      "hex": "2b415052533a7e82a003f0544553547e",
+      "passed": true
+    }
+  ]
+}

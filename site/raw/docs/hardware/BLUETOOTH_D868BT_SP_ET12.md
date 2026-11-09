@@ -28,7 +28,7 @@ MCU GD32F303 (D578 PRO / PLUS, selon relevés)
    +-- Controle radio/PTT (aucun GPIO PTT Bluetooth materiel attribue)
 ```
 
-Les fleches UART3 et module sont fonctionnelles, **pas des pistes PCB identifiees**. Ne pas presenter les pins PC10/PC11 ou d'autres pins comme des connexions confirmees a ce stade. Le manuel Bluetooth constructeur et son guide BT01 prouvent les fonctions, pas le cable interne.
+La liaison est désormais validée par analyse OEM : PC10=UART3_TX vers RX, PC11=UART3_RX depuis TX, 115200 bit/s. PLUS : carte BT+APRS BHT_BOARD sur ce lien partagé ; voir [APRS RX](io/APRS_RX_PLUS.md). La référence du SoC Bluetooth reste inconnue.
 
 ## 3. Dialogue firmware connu sur UART3 : perimetre exact
 

@@ -1,0 +1,36 @@
+00004A7E push       {r3, r4, r5, r6, r7, lr}
+00004A80 mov        r7, r0
+00004A82 mov        r5, r1
+00004A84 movs       r6, #0
+00004A86 mov        r0, r7
+00004A88 bl         #0x47b8
+00004A8C mov        r6, r0
+00004A8E cmp        r6, #0
+00004A90 bne        #0x4a96
+00004A92 movs       r0, #4
+00004A94 pop        {r3, r4, r5, r6, r7, pc}
+00004A96 movs       r1, #2
+00004A98 mov        r0, r7
+00004A9A bl         #0x4860
+00004A9E ldr        r0, [r6, #4]
+00004AA0 str        r5, [r0]
+00004AA2 b          #0x4ab6
+00004AA4 adds       r0, r4, #1
+00004AA6 uxth       r4, r0
+00004AA8 movs       r0, #0x7d
+00004AAA lsls       r0, r0, #3
+00004AAC cmp        r4, r0
+00004AAE ble        #0x4ab6
+00004AB0 adds       r0, r4, #1
+00004AB2 uxth       r4, r0
+00004AB4 b          #0x4ac2
+00004AB6 movs       r1, #2
+00004AB8 mov        r0, r7
+00004ABA bl         #0x4936
+00004ABE cmp        r0, #0
+00004AC0 beq        #0x4aa4
+00004AC2 nop        
+00004AC4 movs       r1, #2
+00004AC6 mov        r0, r7
+00004AC8 bl         #0x4860
+00004ACC movs       r0, #0

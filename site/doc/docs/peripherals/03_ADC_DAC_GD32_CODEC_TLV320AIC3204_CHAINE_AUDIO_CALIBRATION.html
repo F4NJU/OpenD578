@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
 <div class="doc-heading"><h1>03 - ADC/DAC : GD32 ADC0, BH2226FV, TLV320AIC3204 et chemin audio</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/peripherals/03_ADC_DAC_GD32_CODEC_TLV320AIC3204_CHAINE_AUDIO_CALIBRATION.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="03---adcdac-gd32-adc0-bh2226fv-tlv320aic3204-et-chemin-audio">03 - ADC/DAC : GD32 ADC0, BH2226FV, TLV320AIC3204 et chemin audio</h1>
 <blockquote>
 <p><strong>RECONSTITUTION du 05/11/2026.</strong> Aucun des octets du document historique de meme nom n'est pretendu recuperer. On separe ici des circuits bien distincts, leurs bus, les acces OEM releves et les inconnues.</p>
@@ -78,7 +81,7 @@
 <li>Au redemarrage, valider la calibration locale et ne pas ecraser les valeurs usine dans NAND/Flash si leur format n'est pas compris.</li>
 </ol>
 <h2 id="3-bh2226fv-sorties-dac-et-plages-de-tension">3. BH2226FV, sorties DAC et plages de tension</h2>
-<p>Le BH2226FV-E2 est un composant 8 bits x 8 canaux, <strong>SSOP-B16</strong>, alimentation specifiee <strong>2,7 a 5,5 V</strong>, interface serie 3 fils. Un mot ordinaire contient une selection de canal et une valeur 8 bits, <strong>12 bits au total</strong> ; la table de commandes initiales doit etre lue dans la notice ROHM (power down, DAC/I/O). Une encodeur logiciel pur existe dans <code>firmware/hal/serial_command_encoders.c</code> et ses tests, <strong>sans acces GPIO</strong>.</p>
+<p>Le BH2226FV-E2 est un composant 8 bits x 8 canaux, <strong>SSOP-B16</strong>, alimentation specifiee <strong>2,7 a 5,5 V</strong>, interface serie 3 fils. Un mot ordinaire contient une selection de canal et une valeur 8 bits, <strong>12 bits au total</strong> ; la table de commandes initiales doit etre lue dans la notice ROHM (power down, DAC/I/O). Un encodeur logiciel pur existe dans <code>firmware/hal/serial_command_encoders.c</code> et ses tests, <strong>sans acces GPIO</strong>.</p>
 <table>
 <thead>
 <tr>
@@ -91,7 +94,7 @@
 <tr>
   <td>1</td>
   <td>DA1</td>
-  <td><strong>Non tracee</strong></td>
+  <td>Rétroéclairage LCD ; nibble fil 0x8, N1</td>
 </tr>
 <tr>
   <td>2</td>
@@ -170,6 +173,7 @@
 <li>RadioFoundry, chemin codec via SCT : <a href="https://radiofoundry.org/docs/spec/hardware-anytone">https://radiofoundry.org/docs/spec/hardware-anytone</a>.</li>
 <li>UTC U2429G : <a href="https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf">https://www.unisonic.com.tw/uploadfiles/836/part_no_pdf/U2429.pdf</a>.</li>
 </ul>
+<p>Mise à jour du 9 novembre 2026 : BH2226 PA5 CSB/PB3 CLK/PB4 DI ; U2429 DATA PA13/CLOCK PA14, après libération SWJ. U2429 D0 choisit le canal, D1 choisit individuel/commun. Voir <a href="AUDIO_LIAISONS_LOGIQUES_OEM_V013.html">contrats audio OEM V0.13</a> et <a href="../hardware/io/TABLEAU_IO_D578.html">tableau IO</a>.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>

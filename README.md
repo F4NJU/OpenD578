@@ -121,3 +121,7 @@ this repository. See [PROVENANCE.md](PROVENANCE.md).
 
 Project initiated by **F4EGM**. Original OpenD578 code is licensed under
 GPL-3.0-or-later; dependencies retain their own licenses.
+
+## Mise à jour du 9 novembre 2026
+
+Le [bilan confirmé](docs/ETAT_CONFIRME_20261109.md) regroupe le [tableau IO](docs/hardware/io/TABLEAU_IO_D578.md), la comparaison PLUS et l’identification APRS RX. Le [simulateur Web](browser-bench/README.md) est intégré à GitHub Pages sous `simulator/`. Les résultats établis et les fonctions encore ouvertes sont distingués.

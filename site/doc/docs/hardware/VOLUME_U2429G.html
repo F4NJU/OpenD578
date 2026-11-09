@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../index.html">Vue eclatee</a>
 <a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../docs.html">Documents</a>
 <a href="../../../cps.html">CPS / USB</a>
 <a href="../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
 <div class="doc-heading"><h1>UTC U2429G : atténuateur audio stéréo à commande série</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VOLUME_U2429G.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/VOLUME_U2429G.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/hardware/VOLUME_U2429G.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="utc-u2429g-attenuateur-audio-stereo-a-commande-serie">UTC U2429G : atténuateur audio stéréo à commande série</h1>
 <p>Le <code>U2429G</code> fabriqué par UTC (Unisonic Technologies) est un <strong>contrôleur de volume analogique à deux canaux</strong>. Il conserve des entrées/sorties analogiques ; le GD32 règle leur atténuation par deux signaux <strong>CLOCK et DATA</strong>. Il ne s'agit <strong>pas d'un périphérique I²C</strong> (pas de SDA/SCL ni d'adresse 7 bits).</p>
 <h2 id="1-pinout-constructeur-soic8-dip8-vue-dessus">1. Pinout constructeur (SOIC8 / DIP8, vue dessus)</h2>
@@ -100,12 +103,12 @@
 </thead>
 <tbody>
 <tr>
-  <td>D0</td>
+  <td>D1</td>
   <td><code>0</code> = deux canaux réglés en même temps ; <code>1</code> = un seul canal</td>
 </tr>
 <tr>
-  <td>D1</td>
-  <td><code>0</code> = canal 1 ; <code>1</code> = canal 2 (utile si D0=1)</td>
+  <td>D0</td>
+  <td><code>0</code> = canal 1 ; <code>1</code> = canal 2 (utile si D1=1)</td>
 </tr>
 <tr>
   <td>D2..D6</td>
@@ -123,6 +126,7 @@
 </table>
 <p>Pour une atténuation entière <code>A</code> de 0 à 83 dB, le codage extrait de la table constructeur est <code>coarse = 21 - floor(A/4)</code> et <code>fine = 3 - (A % 4)</code>. Exemple : A=0 donne <code>D2..D6=10101</code>, <code>D7..D8=11</code> ; A=83 donne <code>10000</code> et <code>00</code>. Les bits sont affichés dans l'ordre <strong>D2 vers D6 / D7 vers D8</strong>, pas dans l'ordre traditionnel d'un nombre écrit sur 5 bits.</p>
 <p>Un encodeur C <strong>sans GPIO</strong>, compilable sur ordinateur, est livré dans <code>firmware/hal/serial_command_encoders.c</code> avec tests dans <code>firmware/tests/test_serial_command_encoders.c</code>. <strong>Il ne prouve pas l’accès au U2429 du D578</strong> et ne permet pas de forcer ses lignes.</p>
+<p>Correction du 9 novembre : DATA PA13, CLOCK PA14 validés par analyse OEM après libération SWJ. D0 choisit le canal, D1 individuel/commun ; les anciennes inversions sont corrigées dans le code C et les tests. Le transport analogique complet reste distinct de cette commande validée. Voir <a href="io/TABLEAU_IO_D578.html">tableau IO</a>.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>

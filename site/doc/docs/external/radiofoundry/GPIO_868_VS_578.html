@@ -7,6 +7,8 @@
 <body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../../../index.html">Vue eclatee</a>
 <a href="../../../../facade.html">Facade</a>
+<a href="../../../../io/index.html">Tableau IO</a>
+<a href="../../../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../../../docs.html">Documents</a>
 <a href="../../../../cps.html">CPS / USB</a>
 <a href="../../evidence/INDEX.html">Preuves</a>
@@ -19,6 +21,7 @@
 <main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Sources externes et archives</div>
 <div class="doc-heading"><h1>GPIO : comparer le D868 RadioFoundry et notre D578 GD32</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/external/radiofoundry/GPIO_868_VS_578.md">Modifier sur GitHub</a><a download href="../../../../raw/docs/external/radiofoundry/GPIO_868_VS_578.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>docs/external/radiofoundry/GPIO_868_VS_578.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
 <article class="markdown-body"><h1 id="gpio-comparer-le-d868-radiofoundry-et-notre-d578-gd32">GPIO : comparer le D868 RadioFoundry et notre D578 GD32</h1>
 <p><strong>Origines indépendantes :</strong> <a href="https://radiofoundry.org/docs/spec/hardware-anytone">RadioFoundry §4.1 à 4.3</a> documente surtout le firmware D868 ; <a href="../../FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">notre fiche façade D578</a>, <a href="../../LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">LCD V11.8</a>, <a href="../../peripherals/01_NAND_SPI_CABLAGE_PILOTE_FORMATS_MEMOIRE.html">NAND</a> et <a href="../../hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">QA4818N</a> documentent le D578 V1.21.</p>
 <p>Les correspondances ci-dessous ne sont pas une nouvelle déduction : nous réutilisons les GPIO déjà identifiés par le firmware OEM. Lorsque les pins ne concordent pas avec le D868, la preuve <strong>D578</strong> prévaut sur la transposition.</p>
