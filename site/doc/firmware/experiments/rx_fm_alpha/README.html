@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 — réception FM alpha - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a href="../../../../io/index.html">Tableau IO</a>
+<a href="../../../../audio/index.html">Audio RX/TX</a>
+<a href="../../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../../docs/evidence/INDEX.html">Preuves</a>
+<a href="../../../docs/external/INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>OpenD578 — réception FM alpha</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/firmware/experiments/rx_fm_alpha/README.md">Modifier sur GitHub</a><a download href="../../../../raw/firmware/experiments/rx_fm_alpha/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>firmware/experiments/rx_fm_alpha/README.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../../docs/ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="opend578-reception-fm-alpha">OpenD578 — réception FM alpha</h1>
+<p>Jean-Philippe (F4EGM), 9 novembre 2026.</p>
+<p>Ce programme ARM indépendant initialise les quatre banques RF et commande deux voies de réception FM. Il acquiert les touches et volumes par ADC/DMA, lit les détecteurs RF par SDIO, décide du squelch, commande les volumes U2429, les sorties HP et le voyant vert, puis dessine son écran par le bus LCD. Il n'appelle aucune fonction OEM et n'utilise aucune variable SRAM de l'application constructeur.</p>
+<p><strong>Livraison : programme de commandes RX vérifié dans le banc, pas encore une réception FM validée sur le poste.</strong> L'émulateur ne démodule pas un signal RF. Les entrées de détecteurs et WAV restent des sources d'essai explicites. Le binaire brut n'est pas un paquet CPS à installer.</p>
+<h2 id="essayer">Essayer</h2>
+<p>Dans le simulateur Web, cliquer sur <strong>Essayer la réception FM alpha</strong>. Aucune sauvegarde OEM n'est nécessaire. Les fréquences initiales sont A = 145,500 MHz et B = 435,000 MHz.</p>
+<table>
+<thead>
+<tr>
+  <th>Commande de façade</th>
+  <th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>P1</td>
+  <td>Sélectionne A ou B pour le codeur et les réglages</td>
+</tr>
+<tr>
+  <td>Codeur</td>
+  <td>Pas de 12,5 kHz sur la voie sélectionnée</td>
+</tr>
+<tr>
+  <td>P2</td>
+  <td>Bascule le moniteur : ouvre l'audio sans demander de porteuse</td>
+</tr>
+<tr>
+  <td>P3</td>
+  <td>Bascule la voie sélectionnée entre 145,500 et 435,000 MHz</td>
+</tr>
+<tr>
+  <td>P4</td>
+  <td>HP Radio → Both → Mic → Radio</td>
+</tr>
+<tr>
+  <td>P5</td>
+  <td>Large / étroit sur la voie sélectionnée</td>
+</tr>
+<tr>
+  <td>P6</td>
+  <td>Seuil brut 120 → 140 → 80 → 100 → 120</td>
+</tr>
+<tr>
+  <td>MENU / EXIT</td>
+  <td>Coupe / restaure l'audio</td>
+</tr>
+<tr>
+  <td>Potentiomètres A / B</td>
+  <td>Volumes indépendants ; une voie au squelch fermé reste coupée</td>
+</tr>
+</tbody>
+</table>
+<p>La limite du codeur est 136–174 MHz ou 400–480 MHz dans ce profil d'essai. Les touches Power et du microphone ne sont pas interprétées par cette expérience ; le protocole OEM du microphone reste disponible avec le firmware OEM dans le même banc. Le programme ne possède aucun traitement TX.</p>
+<p>Pour vérifier le squelch : dans les entrées RF brutes du banc, choisir la banque 0 ou 1, mettre le registre <code>0x0C</code> à <strong>2</strong>, puis appliquer. Après trois lectures, la voie s'ouvre. Pour la fermer, appliquer <code>0x0C=0</code>, <code>0x65=127</code>, <code>0x67=0</code>. Le voyant vert suit l'ouverture logique ; le rouge reste éteint.</p>
+<p>Pour écouter les changements de volume, charger un WAV dans la section <strong>Audio · traversée de l'atténuateur U2429</strong>, puis utiliser P2 ou les détecteurs ci-dessus. IN1 et IN2 sont les ports du composant : cela vérifie les commandes et l'atténuation, sans présenter le WAV comme une réception démodulée ni les sorties du composant comme un modèle complet des HP.</p>
+<h2 id="commandes-rf-portees">Commandes RF portées</h2>
+<table>
+<thead>
+<tr>
+  <th>Fonction</th>
+  <th>Référence d'analyse OEM</th>
+  <th>Réécriture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Reset et paramètres des quatre banques</td>
+  <td><code>0x080723E6</code>, sous-routines incluses</td>
+  <td><code>d578_rx_reset</code>, 225 opérations, dont 4 attentes de 20 ms et 2 lectures</td>
+</tr>
+<tr>
+  <td>Mode réception analogique et filtres</td>
+  <td><code>0x0806E84A</code>, branche 0</td>
+  <td><code>d578_rx_fm_mode</code> ; 0x44 = 0x43EC, 0x7E = 0x342E dans ce profil</td>
+</tr>
+<tr>
+  <td>Préparation et activation RX</td>
+  <td><code>0x0806E5B2</code>, <code>0x0806E4BA</code>, <code>0x0806DD92</code>, <code>0x0806D06A</code></td>
+  <td><code>d578_rx_begin</code> et <code>d578_rx_start</code></td>
+</tr>
+<tr>
+  <td>Plan de fréquence et gamme synthèse</td>
+  <td><code>0x0806E3F0</code>, <code>0x0806E134</code></td>
+  <td><code>d578_rx_tune</code> ; deux banques par voie</td>
+</tr>
+<tr>
+  <td>Seuil brut de détection</td>
+  <td><code>0x0806D1CC</code></td>
+  <td><code>d578_rx_threshold</code>, reg. 0x4F puis 0x78</td>
+</tr>
+<tr>
+  <td>Décision de squelch analogique</td>
+  <td><code>0x0808F932</code></td>
+  <td><code>d578_rx_squelch_update</code></td>
+</tr>
+<tr>
+  <td>Volumes et modes des HP</td>
+  <td>Routines déjà comparées, voir le contrat audio</td>
+  <td><code>firmware/hal/audio_control.c</code>, raccordé au GPIO</td>
+</tr>
+</tbody>
+</table>
+<p>La voie A commande les banques 0 et 2 ; la voie B commande les banques 1 et 3. La banque 0 reçoit une fréquence intermédiaire de 38,85 MHz ; la banque 1, 38,55 MHz. Pour les plages VHF de l'expérience, les banques 2/3 reçoivent respectivement F + 38,85 / F + 38,55 MHz. En UHF, elles reçoivent F − 38,85 / F − 38,55 MHz. Toutes les fréquences utilisent les mots 0x38 bas / 0x39 haut, en unités de 10 Hz. Les quatre registres de gamme associés sont aussi écrits ; la paire de fréquence seule ne suffit pas.</p>
+<p>Ces rôles sont établis au niveau des commandes OEM. Ils n'attribuent pas un numéro de boîtier sur une photographie et ne constituent pas une mesure de verrouillage PLL.</p>
+<p>La routine de squelch utilise le bit 1 de 0x0C. Elle ouvre après trois lectures favorables. À la fermeture, elle examine aussi <code>0x65 &amp; 127</code> et <code>0x67 &amp; 511</code>, avec seuil de bruit 43 et seuil brut fourni. Particularité conservée : un bon échantillon de repli ne remet pas à zéro un compteur de fermeture déjà commencé. Ce sont des nombres de lectures, pas une temporisation OEM transposée en millisecondes. L'alpha choisit une cadence de lecture de 10 ms.</p>
+<h2 id="parametres-propres-au-poste">Paramètres propres au poste</h2>
+<p><strong>Le seuil initial 120 est un paramètre d'essai affiché à l'écran. Il ne provient pas de la NAND et n'est pas une calibration usine inventée.</strong> Le chargement indépendant des courbes et trims propres au poste reste à raccorder. Le profil garde un choix explicite d'indice de gain RX 0 et désactive les contextes auxiliaires ; il ne prétend pas reproduire tous les modes de double veille de l'OEM. Les codes QA ne sont pas convertis en dB acoustiques.</p>
+<p>L'horloge est initialisée par le programme : HXTAL 12 MHz, PLL ×10, HCLK 120 MHz, APB1 60 MHz, APB2 120 MHz ; ADC /8 = 15 MHz. Les champs PLL et la latence Flash reprennent la séquence comprise dans <code>0x08006260</code>, avec des attentes bornées. Le LCD reçoit un reset et des attentes après reset/sortie de veille. Les entrées analogiques utilisent le temps d'échantillonnage long. Le banc vérifie les états de registres ; il ne mesure pas les fréquences ni les fronts sur une carte.</p>
+<p>Les sorties PE6/PC4 restent basses ; PA4 reste en entrée analogique. Les essais surveillent leurs commandes pendant l'exécution, y compris avec une demande PTT du microphone. Aucun accès NAND ou écriture Flash n'est ajouté. La libération de SWJ pour PA13/PA14, nécessaire aux volumes, reste une contrainte de la procédure de développement matériel.</p>
+<h2 id="verifications-reproductibles">Vérifications reproductibles</h2>
+<pre><code class="language-bash">python3 tools/build_rx_fm_alpha.py --zig /chemin/vers/zig
+cc -std=c11 -Wall -Wextra -Werror -pedantic firmware/rf/rx_fm.c firmware/tests/test_rx_fm.c -o /tmp/test_rx_fm
+/tmp/test_rx_fm
+node --test browser-bench/tests/rx-fm-alpha.test.mjs
+python3 tools/verify_rx_fm_oem.py /chemin/full_flash_pass1.bin --output /tmp/rx_fm_differential.json
+node tools/verify_rx_fm_alpha.mjs
+</code></pre>
+<p><strong>Résultat : 20 585 comparaisons sans différence</strong> (18 884 fréquences, 1 152 états de squelch, 512 seuils, 32 préparations/activations, quatre profils de filtre et une initialisation).</p>
+<p>Le test différentiel exige Python Unicorn et le compilateur C. La Flash de référence doit avoir le SHA-256 <code>e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e</code>. Il exécute des routines isolées avec des entrées de test déclarées, pas un démarrage complet OEM. Le test Node exécute le nouveau binaire ARM : commandes de bus, fréquences, codeur des deux voies, filtres, squelch, modes HP, volumes, LED et inhibition TX.</p>
+<p>Les résultats sont dans <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/rx_fm_alpha/differential.json">la preuve différentielle</a> et <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/rx_fm_alpha/boot.json">le rapport ARM</a>. <code>build.json</code> donne la taille et l'empreinte du binaire fourni. Les tables contiennent des paramètres de registres ; aucun morceau de programme OEM n'est embarqué.</p>
+<p><img src="../../../../raw/docs/evidence/rx_fm_alpha/screen.png" alt="Écran émis par le programme ARM RX FM" /></p>
+<h2 id="validation-materielle-restante">Validation matérielle restante</h2>
+<p>La prochaine étape est de raccorder le chargement des trims et courbes NAND, puis de préparer une image de test matériel et sa procédure de récupération. La sensibilité, le verrouillage RF, l'audio aux HP et le comportement des prises externes doivent être vérifiés sur le poste. CTCSS/DCS, scan, mémoire CPS et microphone complet ne sont pas intégrés dans cette expérience autonome ; leurs travaux précédents restent dans le banc OEM. DMR et émission restent différés.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

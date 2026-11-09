@@ -1,6 +1,6 @@
 /* Passive reference-OEM frequency command pairs. QA address meanings are
  * recovered from OEM 0806E100/0806E380 and actual V1.21 traces, not AT1846S. */
-import {REFERENCE_FLASH_SHA} from './calibration-status.mjs?build=web0151r5';
+import {REFERENCE_FLASH_SHA} from './calibration-status.mjs?build=web0160r1';
 export class RfFrequencyCommands {
  constructor(){this.pending=[null,null,null,null];this.committed=[null,null,null,null];this.pairs=0;}
  observe(f){

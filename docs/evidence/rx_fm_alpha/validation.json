@@ -1,0 +1,13 @@
+{
+  "referenceBaseCommit": "3a1205a4738d32a2f94bd9453a77df5edbe247ff",
+  "browserVersion": "0.16.0",
+  "browserTests": 127,
+  "pythonTests": 38,
+  "htmlPages": 374,
+  "OEMisolatedComparisons": 20585,
+  "mismatches": 0,
+  "hardwareReceptionQualified": false,
+  "DMR": "deferred",
+  "RFdemodulatedInBrowser": false,
+  "scope": "RX command firmware and component-level audio stimulus; NAND trims not loaded by the independent alpha"
+}

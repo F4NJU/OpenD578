@@ -2,7 +2,7 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Banc Web OpenD578 0.15.1 - OpenD578</title>
+<title>Banc Web OpenD578 0.16.0 - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
@@ -20,10 +20,10 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../docs.html">Documents</a> / Projet</div>
-<div class="doc-heading"><h1>Banc Web OpenD578 0.15.1</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/browser-bench/README.md">Modifier sur GitHub</a><a download href="../../raw/browser-bench/README.md">Telecharger .md</a></div></div>
+<div class="doc-heading"><h1>Banc Web OpenD578 0.16.0</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/browser-bench/README.md">Modifier sur GitHub</a><a download href="../../raw/browser-bench/README.md">Telecharger .md</a></div></div>
 <p class="muted small">Source unique : <code>browser-bench/README.md</code></p>
 <aside class="notice">État de référence au 9 novembre 2026 : <a href="../docs/ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
-<article class="markdown-body"><h1 id="banc-web-opend578-0151">Banc Web OpenD578 0.15.1</h1>
+<article class="markdown-body"><h1 id="banc-web-opend578-0160">Banc Web OpenD578 0.16.0</h1>
 <p>Ouvrir depuis le site GitHub Pages : /simulator/. Pour travailler localement, servir la racine avec <code>python3 -m http.server 8000 --bind 127.0.0.1</code>, puis ouvrir /browser-bench/.</p>
 <p>Le moteur ARM WebAssembly et ses sources sont fournis. Charger les sauvegardes demandées par le guide intégré ; les données restent dans le navigateur. L’écran affiche les pixels produits par le firmware chargé. Le DMR reste différé.</p>
 <p>Cette intégration reprend le correctif des couleurs BGR et les optimisations vérifiées de journalisation MMIO et d’ADC. Les mesures disponibles montrent environ 1,10× sur une exécution OEM bornée et 3,31× sur le microbenchmark ADC ; cela ne résout pas à lui seul la lenteur signalée et ne prouve pas le temps réel.</p>
@@ -34,6 +34,8 @@
 <p>Le panneau de traversée U2429 applique ses commandes série aux échantillons d’un WAV à leurs instants virtuels. Écoute et export OUT1/OUT2 sont disponibles. Aucun canal n’est attribué arbitrairement à un HP. 125 tests Web réussis. Le schéma et les limites sont dans le menu Audio RX/TX et docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md.</p>
 <h2 id="programme-audio-alpha-independant">Programme audio alpha indépendant</h2>
 <p>Le bouton dédié charge un programme Cortex-M4 fourni sans sauvegardes OEM. Les réglages A/B, P1/P4, MENU/EXIT et le LCD sont produits par ce programme. Le test suit les trames série jusqu’aux échantillons U2429. Total : 126 tests Web réussis. La RF n’est pas initialisée ; ce n’est pas une radio FM utilisable ni une image CPS qualifiée pour le poste.</p>
+<h2 id="programme-rx-fm-alpha">Programme RX FM alpha</h2>
+<p>Le bouton <strong>Essayer la réception FM alpha</strong> démarre un programme ARM indépendant, sans sauvegarde OEM. Deux voies, fréquence au codeur, squelch, volumes et modes HP sont raccordés. <a href="../firmware/experiments/rx_fm_alpha/README.html">Commandes et limites</a>. Le banc ne démodule pas la RF ; le WAV U2429 reste une source externe d’essai.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>

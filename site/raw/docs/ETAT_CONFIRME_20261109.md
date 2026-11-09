@@ -58,3 +58,7 @@ Les deux vues MCU couvrent les 80 GPIO et les fiches MCU affichent 86 signaux. L
 ## Critère fonctionnel et programme indépendant
 
 Le critère retenu avec Jean-Philippe est désormais la validation fonctionnelle des commandes et réactions ; la fidélité acoustique détaillée est réservée aux essais sur poste. Un premier [programme audio alpha](../firmware/experiments/audio_alpha/README.md) est compilé et exécuté dans le banc : ADC/DMA, deux volumes, coupures et LCD autonome. Il n’initialise pas la RF et n’est pas un paquet de mise à jour constructeur qualifié pour le matériel. 126 tests Web réussis.
+
+## Première expérience RX FM indépendante
+
+[Le programme RX FM alpha](../firmware/experiments/rx_fm_alpha/README.md) initialise les quatre banques et raccorde deux fréquences, le codeur, les filtres FM, le squelch, les volumes, les modes HP et le voyant vert. Les commandes sont comparées aux routines OEM et exécutées sur le bus GPIO du banc. La lecture indépendante des calibrations NAND et la réception/écoute sur matériel restent à faire.

@@ -1,0 +1,100 @@
+{
+  "program": "rx_fm_alpha",
+  "build": {
+    "target": "thumb Cortex-M4 soft-float",
+    "compiler": "0.14.1",
+    "loadAddress": "0x08006000",
+    "scope": "bench receive-control firmware; RF commands initialized; no hardware RF/audio qualification",
+    "binaryBytes": 11734,
+    "binarySHA256": "70d28e8578a61e1245386fe9b6f7a6991d7af3bc413456d9d64613c64574bb44"
+  },
+  "scope": "independent RX commands in ARM bench, externally supplied detector samples; no RF demodulation or hardware qualification",
+  "virtualUnits": 122908494,
+  "RCU": {
+    "rcuControl": 50528387,
+    "rcuConfig": 2212874,
+    "vtor": 134242304,
+    "systickControl": 65543,
+    "nvicEnable": [
+      8388608,
+      0,
+      0
+    ],
+    "nvicPending": [
+      0,
+      0,
+      0
+    ],
+    "tickSamples": 0
+  },
+  "volumeChannels": [
+    {
+      "channel": 1,
+      "known": true,
+      "code": 117,
+      "mute": false,
+      "attenuationDb": 0,
+      "gain": 1
+    },
+    {
+      "channel": 2,
+      "known": true,
+      "code": 16,
+      "mute": false,
+      "attenuationDb": 23,
+      "gain": 0.0707945784384138
+    }
+  ],
+  "lcdWrites": 30720,
+  "adcTransfers": 1451677,
+  "RFtransactions": 446,
+  "frequencyWords": [
+    {
+      "word": 3885000,
+      "frequencyHz": 38850000,
+      "low": 18376,
+      "high": 59,
+      "firstSequence": 262,
+      "lastSequence": 263,
+      "firstTime": 43942339,
+      "lastTime": 43960035
+    },
+    {
+      "word": 3855000,
+      "frequencyHz": 38550000,
+      "low": 53912,
+      "high": 58,
+      "firstSequence": 310,
+      "lastSequence": 311,
+      "firstTime": 44792304,
+      "lastTime": 44810001
+    },
+    {
+      "word": 18435000,
+      "frequencyHz": 184350000,
+      "low": 19384,
+      "high": 281,
+      "firstSequence": 256,
+      "lastSequence": 257,
+      "firstTime": 43836135,
+      "lastTime": 43853832
+    },
+    {
+      "word": 39645000,
+      "frequencyHz": 396450000,
+      "low": 61256,
+      "high": 604,
+      "firstSequence": 304,
+      "lastSequence": 305,
+      "firstTime": 44686101,
+      "lastTime": 44703797
+    }
+  ],
+  "txGateHighObservations": 0,
+  "gates": {
+    "PE6": false,
+    "PC4": false,
+    "DAC0": 0
+  },
+  "LEDword": 78
+}

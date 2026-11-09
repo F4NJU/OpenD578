@@ -1,4 +1,4 @@
-# Banc Web OpenD578 0.15.1
+# Banc Web OpenD578 0.16.0
 
 Ouvrir depuis le site GitHub Pages : /simulator/. Pour travailler localement, servir la racine avec `python3 -m http.server 8000 --bind 127.0.0.1`, puis ouvrir /browser-bench/.
 
@@ -19,3 +19,7 @@ Le panneau de traversée U2429 applique ses commandes série aux échantillons d
 ## Programme audio alpha indépendant
 
 Le bouton dédié charge un programme Cortex-M4 fourni sans sauvegardes OEM. Les réglages A/B, P1/P4, MENU/EXIT et le LCD sont produits par ce programme. Le test suit les trames série jusqu’aux échantillons U2429. Total : 126 tests Web réussis. La RF n’est pas initialisée ; ce n’est pas une radio FM utilisable ni une image CPS qualifiée pour le poste.
+
+## Programme RX FM alpha
+
+Le bouton **Essayer la réception FM alpha** démarre un programme ARM indépendant, sans sauvegarde OEM. Deux voies, fréquence au codeur, squelch, volumes et modes HP sont raccordés. [Commandes et limites](../firmware/experiments/rx_fm_alpha/README.md). Le banc ne démodule pas la RF ; le WAV U2429 reste une source externe d’essai.

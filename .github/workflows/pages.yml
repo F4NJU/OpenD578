@@ -54,6 +54,10 @@ jobs:
         run: |
           cc -std=c11 -Wall -Wextra -Werror firmware/rf/qa4818n_oem_frequency.c firmware/tests/test_qa4818n_oem_frequency.c -o /tmp/test_oem_rf
           /tmp/test_oem_rf
+      - name: Validate independent FM RX commands
+        run: |
+          cc -std=c11 -Wall -Wextra -Werror -pedantic firmware/rf/rx_fm.c firmware/tests/test_rx_fm.c -o /tmp/test_rx_fm
+          /tmp/test_rx_fm
       - name: Validate audio command contracts
         run: |
           cc -std=c11 -Wall -Wextra -Werror -pedantic firmware/hal/audio_control.c firmware/tests/test_audio_control.c -o /tmp/test_audio_control

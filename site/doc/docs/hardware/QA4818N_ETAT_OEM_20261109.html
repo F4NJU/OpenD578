@@ -124,6 +124,9 @@
 </table>
 <p>Les commandes micro, volume et routage sont comparées aux routines OEM isolées sur 62 402 cas sans différence. Voir <a href="../peripherals/AUDIO_LIAISONS_LOGIQUES_OEM_V013.html">audio</a>, <a href="../peripherals/07_CALIBRATIONS_AUDIO_OEM_V121.html">calibrations</a> et <a href="io/TABLEAU_IO_D578.html">tableau IO</a>.</p>
 <p>La famille de quatre circuits QA4818N vient de la documentation du D578 et des observations du projet ; les commandes identifient les banques logiques. Le rôle LO/FI, le numéro de boîtier et l’horloge individuelle ne sont pas attribués automatiquement au numéro de banque. Aucune nouvelle continuité n’est demandée pour valider les bus déjà résolus.</p>
+<h2 id="portage-rx-fm-independant-web-0160">Portage RX FM indépendant — Web 0.16.0</h2>
+<p>La routine OEM <code>0x0806E3F0</code> établit deux paires de banques : voie A = 0/2, voie B = 1/3. Les commandes intermédiaires des banques 0/1 valent respectivement <strong>38,85 MHz et 38,55 MHz</strong>. Dans les plages du programme de test, les banques 2/3 reçoivent F + FI en VHF et F − FI en UHF, avec quatre commandes supplémentaires de gamme synthèse. Cela résout le plan logiciel de réception ; le placement des boîtiers sur la carte ne découle pas de leur numéro logique.</p>
+<p><a href="../../firmware/experiments/rx_fm_alpha/README.html">Réécriture C, preuves et limites du programme RX FM</a>. Le mode analogique est distingué de l’autre branche : la séquence RX retenue écrit notamment 0x44=0x43EC et 0x47=0x6140, comme dans les captures OEM FM existantes.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>

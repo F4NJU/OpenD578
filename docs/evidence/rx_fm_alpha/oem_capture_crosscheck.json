@@ -1,0 +1,21 @@
+{
+  "source": "previous OEM cold-boot campaign, main_calibrated.json",
+  "sourceSHA256": "41ffb52e18090a51592e7d4ff7bf3c05408acab1e32c28d2ac067e078b7aa012",
+  "harness_OEM_state_writes": false,
+  "virtualTime": 1500000000,
+  "observedRFregisters": {
+    "0:0:68": "0x43ec",
+    "1:0:68": "0x43ec",
+    "1:0:3": "0xbff5",
+    "0:0:3": "0xbff5",
+    "0:0:115": "0x564a",
+    "0:0:126": "0x342e",
+    "0:0:58": "0xe0",
+    "0:0:71": "0x6140",
+    "1:0:115": "0x564a",
+    "1:0:126": "0x342e",
+    "1:0:58": "0xe0",
+    "1:0:71": "0x6140"
+  },
+  "scope": "existing OEM capture cross-check of analog receive branch; no new hardware measurement"
+}

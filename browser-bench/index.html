@@ -6,14 +6,14 @@
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="dark">
   <meta name="description" content="OpenD578 - Banc Web D578UV PRO GD32 : firmware réel, fichiers locaux, façade et périphériques émulés. DMR reporté.">
-  <title>OpenD578 | Banc Web D578 PRO 0.15.1</title>
-  <!-- Revision web0151r5: module cache-busting and explicit worker handshake -->
+  <title>OpenD578 | Banc Web D578 PRO 0.16.0</title>
+  <!-- Revision web0160r1: module cache-busting and explicit worker handshake -->
   <link rel="stylesheet" href="./assets/style.css">
-  <script src="./assets/app.mjs?build=web0151r5" type="module"></script>
+  <script src="./assets/app.mjs?build=web0160r1" type="module"></script>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><a class="back" href="https://github.com/Telectroboy/OpenD578">← Projet GitHub</a><span class="brandmark">OD<span>578</span></span><span class="brandtext">Banc de développement <small>Banc Web 0.15.1 · expérimental</small></span></div>
+    <div class="brand"><a class="back" href="https://github.com/Telectroboy/OpenD578">← Projet GitHub</a><span class="brandmark">OD<span>578</span></span><span class="brandtext">Banc de développement <small>Banc Web 0.16.0 · expérimental</small></span></div>
     <div class="privacy"><span class="indicator"></span> Exécution locale · Aucun fichier téléversé</div>
   </header>
   <main class="shell">
@@ -39,12 +39,12 @@ OOB 8 Mio · ECC 128 Kio</pre>
         <p class="hint">Les fichiers sélectionnés restent sur votre appareil. Vous choisissez ce que vous publiez.</p>
       </div>
       </details>
-      <div class="side-buttons"><button id="guidedStart" class="primary full" disabled>2 · Charger et démarrer</button><button id="loadFiles" class="secondary full" disabled>Charger les images seulement</button><button id="loadSample" class="secondary full" disabled>Vérifier le CPU et le LCD</button><button id="loadAudioAlpha" class="secondary full" disabled>Essayer le programme audio alpha</button></div>
+      <div class="side-buttons"><button id="guidedStart" class="primary full" disabled>2 · Charger et démarrer</button><button id="loadFiles" class="secondary full" disabled>Charger les images seulement</button><button id="loadSample" class="secondary full" disabled>Vérifier le CPU et le LCD</button><button id="loadAudioAlpha" class="secondary full" disabled>Essayer le programme audio alpha</button><button id="loadRxFmAlpha" class="secondary full" disabled>Essayer la réception FM alpha</button></div>
       <p id="runtimeState" class="runtime-state" role="status">Préparation du moteur Web…</p>
       <div class="aside-footer"><p>Le banc Web n'écrit ni dans le poste ni vers un serveur. Les fichiers à partager restent sous votre contrôle.</p><a href="https://github.com/Telectroboy/OpenD578" target="_blank" rel="noopener noreferrer">Sources du projet ↗</a></div>
     </aside>
     <div class="main">
-      <p><a href="../index.html">Documentation</a> · <a href="../io/index.html">Tableau IO</a></p><section class="notice" role="note"><strong>Banc 0.15.1 · correction des couleurs.</strong> Les premiers surcoûts du mode normal ont été réduits ; la vitesse reste en cours d’optimisation. Le firmware est exécuté dans votre navigateur. Le démarrage OEM atteint les mémoires avec les sauvegardes testées ; la chaîne radio reste à qualifier. L’écran présente uniquement les pixels émis par le programme chargé.</section>
+      <p><a href="../index.html">Documentation</a> · <a href="../io/index.html">Tableau IO</a></p><section class="notice" role="note"><strong>Banc 0.16.0 · programme RX FM indépendant.</strong> Les premiers surcoûts du mode normal ont été réduits ; la vitesse reste en cours d’optimisation. Le firmware est exécuté dans votre navigateur. Le démarrage OEM atteint les mémoires avec les sauvegardes testées ; la chaîne radio reste à qualifier. L’écran présente uniquement les pixels émis par le programme chargé.</section>
       <details class="first-steps"><summary>Premier essai · fonctions utilisables et marche à suivre</summary>
         <p>Sélectionner les quatre sauvegardes à gauche, puis <strong>Charger et démarrer</strong>. Le banc passe par le bootloader et transmet une seule impulsion Power au premier sommeil du MCU. Les délais OEM sont exécutés : l’écran peut mettre plusieurs minutes à apparaître selon l’ordinateur.</p>
         <p>Le temps et les écritures LCD ci-dessous permettent de suivre l’exécution. <strong>Pause</strong> conserve la session ; <strong>Démarrer en continu</strong> la reprend. Les boutons de façade, le codeur, les deux volumes, les commandes du micro filaire, les entrées GPS et le client USB/CPS sont raccordés. Le firmware choisit leurs effets.</p>

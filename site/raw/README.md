@@ -129,3 +129,5 @@ Le [bilan confirmé](docs/ETAT_CONFIRME_20261109.md) regroupe le [tableau IO](do
 Le menu **Audio RX/TX** donne le schéma bloc et les réglages. Les vues MCU PRO/PLUS, leurs connexions et les banques QA ont été reprises le 9 novembre ; voir [les raccordements audio](docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md) et [l’état QA courant](docs/hardware/QA4818N_ETAT_OEM_20261109.md).
 
 Un premier [programme ARM audio indépendant](firmware/experiments/audio_alpha/README.md), d’environ 5 Kio, est fourni avec ses sources et ses tests. Dans le banc : **Essayer le programme audio alpha**. Il valide potentiomètres, volumes, coupures et affichage sans firmware OEM ; la RF n’est pas initialisée.
+
+La version Web 0.16.0 ajoute un [programme RX FM indépendant](firmware/experiments/rx_fm_alpha/README.md) : initialisation des quatre banques, deux fréquences VHF/UHF, codeur, filtres, squelch, volumes et modes HP. Bouton **Essayer la réception FM alpha**. Les commandes sont vérifiées dans le banc ; la réception et l’écoute sur poste restent à valider.

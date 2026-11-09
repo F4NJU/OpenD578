@@ -1,8 +1,8 @@
 /* Worker runtime: all CPU execution stays on the visitor's machine. */
-import {WasmMachine} from './wasm-machine.mjs?build=web0151r5';
-import {parseAddress} from './memory.mjs?build=web0151r5';
-import {bindPatchSources,validatePatchSources} from './session-patch.mjs?build=web0151r5';
-const WORKER_REVISION='web0151r5';
+import {WasmMachine} from './wasm-machine.mjs?build=web0160r1';
+import {parseAddress} from './memory.mjs?build=web0160r1';
+import {bindPatchSources,validatePatchSources} from './session-patch.mjs?build=web0160r1';
+const WORKER_REVISION='web0160r1';
 let machine = new WasmMachine({factory:()=>self.__wasmFactory()});
 let commandQueue=Promise.resolve();
 self.onmessage=event=>{commandQueue=commandQueue.then(()=>dispatch(event)).catch(error=>self.postMessage({id:event.data?.id,ok:false,error:String(error)}));};
