@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1980" viewBox="0 0 1500 1980" role="img" aria-labelledby="title desc"><title id="title">OpenD578 — audio RX, TX et réglages</title><desc id="desc">Trait vert : trajet PCM raccordé dans le banc. Bleu : commande firmware validée. Orange pointillé : trajet fonctionnel avec raccordement ou réponse encore non déterminés.</desc><defs>
+<marker id="ctrl" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#215da8"/></marker>
+<marker id="pcm" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#087e64"/></marker>
+<marker id="open" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#ae6100"/></marker>
+</defs><style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#183040}.title{font-size:29px;font-weight:bold}.sub{font-size:16px}.section{font-size:22px;font-weight:bold}.box{fill:white;stroke:#7894a2;stroke-width:1.6}.label{font-size:17px;font-weight:bold}.small{font-size:15px}.open{stroke:#ae6100;stroke-dasharray:8 6}.bg{fill:#f4f8fb}</style><rect width="1500" height="1980" fill="white"/>
+<text x="35" y="44" class="title">OpenD578 — schéma bloc audio RX / TX et réglages</text>
+<text x="35" y="75" class="sub">Jean-Philippe (F4EGM) · PRO GD32 V1.21 · état du 9 novembre 2026</text>
+<polyline points="40,107 110,107" fill="none" stroke="#087e64" stroke-width="2.5" marker-end="url(#pcm)"/>
+<text x="124" y="113" class="small">PCM raccordé aux bornes indiquées</text>
+<polyline points="610,107 680,107" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<text x="694" y="113" class="small">Commande OEM validée</text>
+<polyline points="1040,107 1110,107" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<text x="1124" y="113" class="small">Raccordement / loi ouverts</text>
+<rect x="24" y="140" width="1452" height="40" rx="6" class="bg"/>
+<text x="40" y="168" class="section">1 · Réception FM : de l’antenne aux sorties audio</text>
+<rect x="40" y="205" width="260" height="98" rx="9" class="box"/>
+<text x="54" y="233" class="label" style="font-size:17.0px">Antenne</text>
+<text x="54" y="259" class="small" style="font-size:15.0px">Signal VHF / UHF</text>
+<text x="54" y="282" class="small" style="font-size:15.0px">Entrée RF du poste</text>
+<rect x="330" y="205" width="260" height="98" rx="9" class="box"/>
+<text x="344" y="233" class="label" style="font-size:17.0px">Préselection RF</text>
+<text x="344" y="259" class="small" style="font-size:15.0px">Filtres / commutation</text>
+<text x="344" y="282" class="small" style="font-size:15.0px">Bandes VHF et UHF</text>
+<rect x="620" y="205" width="260" height="121" rx="9" class="box"/>
+<text x="634" y="233" class="label" style="font-size:17.0px">Synthèse et réception</text>
+<text x="634" y="259" class="small" style="font-size:15.0px">4 banques RF commandées</text>
+<text x="634" y="282" class="small" style="font-size:15.0px">LO / FI non attribués</text>
+<text x="634" y="305" class="small" style="font-size:15.0px">au seul numéro de banque</text>
+<rect x="910" y="205" width="260" height="98" rx="9" class="box"/>
+<text x="924" y="233" class="label" style="font-size:17.0px">Audio RX A / B</text>
+<text x="924" y="259" class="small" style="font-size:15.0px">Gains RF : registre 0x44</text>
+<text x="924" y="282" class="small" style="font-size:15.0px">Loi en dB encore ouverte</text>
+<rect x="1200" y="205" width="260" height="121" rx="9" class="box"/>
+<text x="1214" y="233" class="label" style="font-size:17.0px">U2429, 2 canaux</text>
+<text x="1214" y="259" class="small" style="font-size:15.0px">IN1 → OUT1 / IN2 → OUT2</text>
+<text x="1214" y="282" class="small" style="font-size:15.0px">0 à −83 dB ou coupure</text>
+<text x="1214" y="305" class="small" style="font-size:15.0px">Sources A/B : à attribuer</text>
+<polyline points="300,255 330,255" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="590,255 620,255" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="880,255 910,255" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="1170,255 1200,255" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<rect x="610" y="390" width="300" height="121" rx="9" class="box"/>
+<text x="624" y="418" class="label" style="font-size:17.0px">Routage / amplificateurs</text>
+<text x="624" y="444" class="small" style="font-size:15.0px">Ordre des étages non fixé</text>
+<text x="624" y="467" class="small" style="font-size:15.0px">MC34119 / YD1517 PRO</text>
+<text x="624" y="490" class="small" style="font-size:15.0px">PA1517 PLUS : selon variante</text>
+<rect x="40" y="390" width="350" height="98" rx="9" class="box"/>
+<text x="54" y="418" class="label" style="font-size:17.0px">HP du poste</text>
+<text x="54" y="444" class="small" style="font-size:15.0px">Mute commandé par PA7</text>
+<text x="54" y="467" class="small" style="font-size:15.0px">1 coupe / 0 ouvre</text>
+<rect x="1020" y="390" width="390" height="98" rx="9" class="box"/>
+<text x="1034" y="418" class="label" style="font-size:17.0px">HP du microphone</text>
+<text x="1034" y="444" class="small" style="font-size:15.0px">Mute : banque 1 / 0x25 bit 4</text>
+<text x="1034" y="467" class="small" style="font-size:15.0px">1 coupe / 0 ouvre</text>
+<rect x="1020" y="540" width="390" height="98" rx="9" class="box"/>
+<text x="1034" y="568" class="label" style="font-size:17.0px">Prises HP externes</text>
+<text x="1034" y="594" class="small" style="font-size:15.0px">Affectation A/B et contacts</text>
+<text x="1034" y="617" class="small" style="font-size:15.0px">des prises : non résolus</text>
+<polyline points="1330,326 1330,368 760,368 760,390" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="610,445 390,445" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="910,445 1020,445" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="910,455 970,455 970,588 1020,588" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<rect x="40" y="545" width="500" height="121" rx="9" class="box"/>
+<text x="54" y="573" class="label" style="font-size:17.0px">Commandes de sélection OEM</text>
+<text x="54" y="599" class="small" style="font-size:15.0px">Mic Spk / Radio Spk / Both → coupures séparées</text>
+<text x="54" y="622" class="small" style="font-size:15.0px">PIO 0x25 bit 7 : préférence MAIN / SUB</text>
+<text x="54" y="645" class="small" style="font-size:15.0px">PIO bit 2 : porte contextuelle ; pas un sélecteur A/B</text>
+<rect x="24" y="700" width="1452" height="40" rx="6" class="bg"/>
+<text x="40" y="728" class="section">2 · Émission FM : du microphone à l’antenne</text>
+<rect x="40" y="760" width="260" height="98" rx="9" class="box"/>
+<text x="54" y="788" class="label" style="font-size:17.0px">Microphone filaire</text>
+<text x="54" y="814" class="small" style="font-size:15.0px">Signal audio de la capsule</text>
+<text x="54" y="837" class="small" style="font-size:13.9px">Trajet analogique terminal ouvert</text>
+<rect x="330" y="760" width="260" height="121" rx="9" class="box"/>
+<text x="344" y="788" class="label" style="font-size:17.0px">Entrée micro RF</text>
+<text x="344" y="814" class="small" style="font-size:15.0px">0x18 : sélecteur Level 1…6</text>
+<text x="344" y="837" class="small" style="font-size:15.0px">Page 1 / 0x17 : MIC ajusté</text>
+<text x="344" y="860" class="small" style="font-size:15.0px">Gain en dB non attribué</text>
+<rect x="620" y="760" width="260" height="121" rx="9" class="box"/>
+<text x="634" y="788" class="label" style="font-size:17.0px">Modulation FM</text>
+<text x="634" y="814" class="small" style="font-size:15.0px">0x40 : MODV1 / MODU</text>
+<text x="634" y="837" class="small" style="font-size:15.0px">0x51 : champ CTCW</text>
+<text x="634" y="860" class="small" style="font-size:15.0px">Filtrage / limiteur ouverts</text>
+<rect x="910" y="760" width="260" height="121" rx="9" class="box"/>
+<text x="924" y="788" class="label" style="font-size:17.0px">Chaîne TX VHF / UHF</text>
+<text x="924" y="814" class="small" style="font-size:15.0px">Consigne PA4 / DAC0</text>
+<text x="924" y="837" class="small" style="font-size:15.0px">Portes PE6 et PC4</text>
+<text x="924" y="860" class="small" style="font-size:15.0px">Synchronisation PD0</text>
+<rect x="1200" y="760" width="260" height="121" rx="9" class="box"/>
+<text x="1214" y="788" class="label" style="font-size:17.0px">PA et antenne</text>
+<text x="1214" y="814" class="small" style="font-size:15.0px">2 × AFT05MP075N</text>
+<text x="1214" y="837" class="small" style="font-size:14.7px">Consigne ≠ puissance mesurée</text>
+<text x="1214" y="860" class="small" style="font-size:15.0px">ROS : réaction non identifiée</text>
+<polyline points="300,815 330,815" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="590,815 620,815" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="880,815 910,815" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<polyline points="1170,815 1200,815" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<rect x="40" y="940" width="430" height="121" rx="9" class="box"/>
+<text x="54" y="968" class="label" style="font-size:17.0px">NAND : calibration propre au poste</text>
+<text x="54" y="994" class="small" style="font-size:15.0px">MIC +0x19 ; MODU +0x05 ; MODV1 +0x45</text>
+<text x="54" y="1017" class="small" style="font-size:15.0px">CTCW +0x06 ; DCSW +0x07</text>
+<text x="54" y="1040" class="small" style="font-size:15.0px">Copies 0x02F60000 / 0x02F80000</text>
+<rect x="570" y="940" width="400" height="121" rx="9" class="box"/>
+<text x="584" y="968" class="label" style="font-size:17.0px">Réglage utilisateur AnaMic</text>
+<text x="584" y="994" class="small" style="font-size:15.0px">Level 1…6 → sélecteurs 2…7</text>
+<text x="584" y="1017" class="small" style="font-size:15.0px">MIC ajusté : +1, −2, 0, 0, +1, +1</text>
+<text x="584" y="1040" class="small" style="font-size:15.0px">Application vérifiée lors du TX</text>
+<polyline points="255,940 255,916 460,916 460,881" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="470,1000 520,1000 520,915 750,915 750,881" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="570,985 505,985 505,900 450,900 450,881" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<rect x="1040" y="940" width="420" height="121" rx="9" class="box"/>
+<text x="1054" y="968" class="label" style="font-size:17.0px">Tonalités / APRS TX</text>
+<text x="1054" y="994" class="small" style="font-size:15.0px">PB9 : TIMER3_CH3, PWM audio</text>
+<text x="1054" y="1017" class="small" style="font-size:15.0px">Échantillons produits par l’OEM</text>
+<text x="1054" y="1040" class="small" style="font-size:15.0px">Point de mélange analogique non attribué</text>
+<polyline points="1250,940 1250,920 780,920 780,881" fill="none" stroke="#ae6100" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#open)"/>
+<rect x="24" y="1100" width="1452" height="40" rx="6" class="bg"/>
+<text x="40" y="1128" class="section">3 · Volumes : commandes et trajet raccordé dans le banc</text>
+<rect x="40" y="1160" width="260" height="98" rx="9" class="box"/>
+<text x="54" y="1188" class="label" style="font-size:17.0px">Potentiomètres A / B</text>
+<text x="54" y="1214" class="small" style="font-size:15.0px">PC2 ADC12 / PC5 ADC15</text>
+<text x="54" y="1237" class="small" style="font-size:14.5px">Acquisitions décidées par l’OEM</text>
+<rect x="330" y="1160" width="260" height="121" rx="9" class="box"/>
+<text x="344" y="1188" class="label" style="font-size:17.0px">GD32 : quantification</text>
+<text x="344" y="1214" class="small" style="font-size:15.0px">0…4095 → niveaux 0…32</text>
+<text x="344" y="1237" class="small" style="font-size:14.4px">Tables OEM : code d’atténuation</text>
+<text x="344" y="1260" class="small" style="font-size:15.0px">Niveau 0 : coupure</text>
+<rect x="620" y="1160" width="260" height="121" rx="9" class="box"/>
+<text x="634" y="1188" class="label" style="font-size:17.0px">Bus série U2429</text>
+<text x="634" y="1214" class="small" style="font-size:15.0px">PA13 DATA / PA14 CLOCK</text>
+<text x="634" y="1237" class="small" style="font-size:14.9px">11 bits, D0 canal / D1 commun</text>
+<text x="634" y="1260" class="small" style="font-size:15.0px">Latch de fin de mot</text>
+<rect x="910" y="1160" width="260" height="121" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="924" y="1188" class="label" style="font-size:17.0px">Transfert U2429</text>
+<text x="924" y="1214" class="small" style="font-size:15.0px">Gain = 10^(−atténuation/20)</text>
+<text x="924" y="1237" class="small" style="font-size:15.0px">PCM varie à chaque latch</text>
+<text x="924" y="1260" class="small" style="font-size:15.0px">Aucune loi RF en dB inventée</text>
+<rect x="1200" y="1160" width="260" height="121" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="1214" y="1188" class="label" style="font-size:17.0px">OUT1 / OUT2 du modèle</text>
+<text x="1214" y="1214" class="small" style="font-size:15.0px">Écoute et export WAV</text>
+<text x="1214" y="1237" class="small" style="font-size:14.2px">Ports du composant uniquement</text>
+<text x="1214" y="1260" class="small" style="font-size:15.0px">Pas encore des sorties HP</text>
+<polyline points="300,1215 330,1215" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="590,1215 620,1215" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="880,1215 910,1215" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="1170,1215 1200,1215" fill="none" stroke="#087e64" stroke-width="2.5" marker-end="url(#pcm)"/>
+<text x="910" y="1330" class="small">Source WAV explicitement raccordée à IN1 / IN2. Temps virtuel du banc.</text>
+<rect x="24" y="1380" width="1452" height="40" rx="6" class="bg"/>
+<text x="40" y="1408" class="section">4 · Codec / SCT et acquisition GD32 : chemins distincts</text>
+<rect x="40" y="1440" width="430" height="121" rx="9" class="box"/>
+<text x="54" y="1468" class="label" style="font-size:17.0px">GD32 → HPI → SCT3258</text>
+<text x="54" y="1494" class="small" style="font-size:15.0px">Demandes de commande et acquittements</text>
+<text x="54" y="1517" class="small" style="font-size:15.0px">Paramètres codec / coefficients / gains</text>
+<text x="54" y="1540" class="small" style="font-size:15.0px">L’exécution DSP complète reste ouverte</text>
+<rect x="570" y="1440" width="410" height="144" rx="9" class="box"/>
+<text x="584" y="1468" class="label" style="font-size:17.0px">TLV320AIC3204</text>
+<text x="584" y="1494" class="small" style="font-size:15.0px">PGA micro : demi-dB, registres page 1</text>
+<text x="584" y="1517" class="small" style="font-size:15.0px">Gains numériques ADC / DAC</text>
+<text x="584" y="1540" class="small" style="font-size:15.0px">Drivers HPL/HPR/LOL/LOR, mutes</text>
+<text x="584" y="1563" class="small" style="font-size:15.0px">AGC : champs connus, dynamique ouverte</text>
+<rect x="1050" y="1440" width="410" height="121" rx="9" class="box"/>
+<text x="1064" y="1468" class="label" style="font-size:17.0px">Corrections SCT documentées</text>
+<text x="1064" y="1494" class="small" style="font-size:15.0px">3 sections IIR RX + 3 sections TX, 24 kHz</text>
+<text x="1064" y="1517" class="small" style="font-size:15.0px">Coefficients signés Q14 ; Q11/Q12 gains</text>
+<text x="1064" y="1540" class="small" style="font-size:15.0px">Ordre et route FM effectifs à établir</text>
+<polyline points="470,1500 570,1500" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<polyline points="470,1520 510,1520 510,1428 1255,1428 1255,1440" fill="none" stroke="#215da8" stroke-width="2.5" marker-end="url(#ctrl)"/>
+<text x="40" y="1640" class="sub">Ces commandes ne prouvent pas que toute la voix FM traverse le GD32 en PCM. Les routes I²S / RF / codec ne sont pas refermées ici.</text>
+<rect x="40" y="1690" width="310" height="98" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="54" y="1718" class="label" style="font-size:17.0px">WAV de test RX</text>
+<text x="54" y="1744" class="small" style="font-size:15.0px">Codes ADC12 explicitement choisis</text>
+<text x="54" y="1767" class="small" style="font-size:15.0px">Polarisation / amplitude de scénario</text>
+<rect x="400" y="1690" width="310" height="98" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="414" y="1718" class="label" style="font-size:17.0px">PC0 / ADC0_IN10</text>
+<text x="414" y="1744" class="small" style="font-size:15.0px">Acquisition audio RX / signalisation</text>
+<text x="414" y="1767" class="small" style="font-size:14.6px">Source temporelle, sans file de reprise</text>
+<rect x="760" y="1690" width="310" height="98" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="774" y="1718" class="label" style="font-size:17.0px">DMA configuré par le CPU</text>
+<text x="774" y="1744" class="small" style="font-size:15.0px">Destination SRAM et rangs par l’OEM</text>
+<text x="774" y="1767" class="small" style="font-size:14.8px">Pas d’écriture directe d’un buffer OEM</text>
+<rect x="1120" y="1690" width="310" height="98" rx="9" class="box" style="stroke:#087e64;stroke-width:2.5"/>
+<text x="1134" y="1718" class="label" style="font-size:17.0px">Décodeurs du programme</text>
+<text x="1134" y="1744" class="small" style="font-size:15.0px">Échantillons réellement acquis</text>
+<text x="1134" y="1767" class="small" style="font-size:15.0px">Capture JSON exportable</text>
+<polyline points="350,1740 400,1740" fill="none" stroke="#087e64" stroke-width="2.5" marker-end="url(#pcm)"/>
+<polyline points="710,1740 760,1740" fill="none" stroke="#087e64" stroke-width="2.5" marker-end="url(#pcm)"/>
+<polyline points="1070,1740 1120,1740" fill="none" stroke="#087e64" stroke-width="2.5" marker-end="url(#pcm)"/>
+<text x="40" y="1850" class="sub">Liaisons de commande établies par firmware retenues validées. Pointillés : information manquante rendue visible, pas remplacée par un mixeur fictif.</text>
+<text x="40" y="1880" class="sub">Les HP externes, la loi des gains RF, la réponse des filtres / limiteurs et le ROS restent à caractériser. DMR différé.</text>
+<text x="40" y="1930" class="small">Références : tableau IO N1–N14 · audio OEM V0.13 · calibrations V0.12 · fréquences OEM 0x38/0x39 · sources et tests du dépôt.</text>
+</svg>

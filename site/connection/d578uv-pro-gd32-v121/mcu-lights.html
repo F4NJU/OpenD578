@@ -2,12 +2,13 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Etat LED et eclairages - OpenD578</title>
+<title>GPIO / LED / eclairages - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
 <a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
 <a href="../../simulator/index.html">Simulateur</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
@@ -19,11 +20,11 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-lights</div>
-<h1>Etat LED et eclairages</h1>
+<h1>GPIO / LED / eclairages</h1>
 <p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/lights.html">LED / eclairages</a></p>
-<dl class="facts"><dt>Bus</dt><dd>GPIO serie</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
-<p>Deux bus distincts executes en firmware OEM. PE3 donnees et PE4 clock (8 bits LSB d&#x27;abord) pour LED rouge/vert. PA5 latch, PB3 CLK, PB4 DATA (12 bits MSB d&#x27;abord) pour eclairages touches et retroeclairage LCD canal 8. Les affectations des canaux secondaires restent a indexer.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PE3</code></td><td>Donnees voyant bicolore</td><td>oem_trace</td></tr><tr><td><code>PE4</code></td><td>Horloge voyant bicolore</td><td>oem_trace</td></tr><tr><td><code>PA5</code></td><td>Validation bus eclairage</td><td>oem_trace</td></tr><tr><td><code>PB3</code></td><td>Horloge bus eclairage</td><td>oem_trace</td></tr><tr><td><code>PB4</code></td><td>Donnees bus eclairage</td><td>oem_trace</td></tr><tr><td><code>BH2226 code serie 0x8 / DA1</code></td><td>Luminosite ecran 0..255 observes</td><td>oem_trace</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li><li><a href="../../doc/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">OpenD578 : câblage, protocole et pilotage du LCD</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li></ul></main>
+<dl class="facts"><dt>Bus</dt><dd>GPIO de commande du registre série / Série GPIO 8 bits</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PE3</code></td><td>DATA : état des sorties, dont rouge et vert du voyant poste</td><td>oem_trace</td></tr><tr><td><code>PE4</code></td><td>CLOCK : décalage des huit bits</td><td>oem_trace</td></tr><tr><td><code>PE5</code></td><td>Libération de la commande commune de reset/activation du driver</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li><li><a href="../../doc/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.html">OpenD578 : câblage, protocole et pilotage du LCD</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/LCD_CABLAGE_PILOTAGE_ET_INTEGRATION_V11_8.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

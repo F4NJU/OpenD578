@@ -1,5 +1,9 @@
 # Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI
 
+**Correction du 9 novembre 2026 :** lire d’abord [l’état OEM actuel](QA4818N_ETAT_OEM_20261109.md). Les liaisons PB3/PB4 et les quatre CS sont validées par firmware. La fréquence OEM utilise **0x38/0x39**, et non les exemples AT1846S 0x29/0x2A conservés ci-dessous comme historique. Les anciens appels à requalifier physiquement ces bus sont remplacés par cette correction.
+
+## Archive du 6 novembre — ne pas confondre avec le contrat courant
+
 **Observation de la carte étudiée :** quatre boîtiers à 32 broches, deux visibles et deux sous blindages, marquages effacés. L'un est proche d'un oscillateur marqué `26.00` (26 MHz, hypothèse à confirmer par mesure).
 
 **Identification par comparaison :** l'étude VK7ZJA d'un D578 nomme **quatre QA4818N**. Cette correspondance est solide à l'échelle de la famille, mais **les quatre circuits individuels de la révision PRO GD32 V1.21 ne sont pas identifiés électriquement**. Il ne faut pas transformer la position photographique en fonction A/B sans suivi de pistes.

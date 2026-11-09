@@ -28,3 +28,11 @@ La lecture du dépôt distant a réussi. GitHub n’a pas pu être modifié depu
 ## Complément audio
 
 334 pages après ajout du dossier audio ; source WAV externe sur PC0/ADC10 et export des acquisitions. Commandes C audio intégrées, comparaison OEM de 62 402 cas sans différence. Le flux voix FM complet reste ouvert ; voir le nouveau dossier 08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md.
+
+## Reprise : schéma audio et vue éclatée
+
+Base du nouveau patch : commit GitHub 7b1ee4194b161e6f73b2264adbc4712fc5ecd91f, contrôlé en lecture. Différence avec le paquet précédent : seulement quatre fichiers CSV en fins de lignes. Les modifications de ces CSV sont préservées. Vues PRO/PLUS : 80 GPIO couverts, 86 signaux affichés sur les fiches MCU ; anciens IDs conservés. Banque QA et CS explicites ; fréquence OEM 0x38/0x39 distinguée des anciens exemples AT1846S. Nouveau transfert PCM horodaté U2429, écoute/export WAV, sans attribution de sorties HP inventée. Schéma bloc SVG relu après rendu. 125 tests Web, 38 tests Python, tests C audio et nouveau plan de fréquence OEM réussis. Site reconstruit : 372 pages, liens locaux vérifiés.
+
+## Programme audio alpha fonctionnel
+
+Ajout d’un programme ARM autonome, de sa construction ELF/BIN, de son bouton de chargement et d’un test traversant ADC/DMA, code C, GPIO, U2429, PCM et LCD. 126 tests Web, 38 tests Python ; 373 pages et liens locaux contrôlés. Aucun appel OEM et aucune initialisation RF dans ce programme. Le contrôle fonctionnel prime désormais sur la fidélité acoustique détaillée.

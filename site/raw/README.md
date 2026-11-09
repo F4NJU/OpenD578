@@ -125,3 +125,7 @@ GPL-3.0-or-later; dependencies retain their own licenses.
 ## Mise à jour du 9 novembre 2026
 
 Le [bilan confirmé](docs/ETAT_CONFIRME_20261109.md) regroupe le [tableau IO](docs/hardware/io/TABLEAU_IO_D578.md), la comparaison PLUS et l’identification APRS RX. Le [simulateur Web](browser-bench/README.md) est intégré à GitHub Pages sous `simulator/`. Les résultats établis et les fonctions encore ouvertes sont distingués.
+
+Le menu **Audio RX/TX** donne le schéma bloc et les réglages. Les vues MCU PRO/PLUS, leurs connexions et les banques QA ont été reprises le 9 novembre ; voir [les raccordements audio](docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md) et [l’état QA courant](docs/hardware/QA4818N_ETAT_OEM_20261109.md).
+
+Un premier [programme ARM audio indépendant](firmware/experiments/audio_alpha/README.md), d’environ 5 Kio, est fourni avec ses sources et ses tests. Dans le banc : **Essayer le programme audio alpha**. Il valide potentiomètres, volumes, coupures et affichage sans firmware OEM ; la RF n’est pas initialisée.

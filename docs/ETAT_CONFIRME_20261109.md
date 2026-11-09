@@ -50,3 +50,11 @@ Le passage général du site vérifie la génération, les modèles, la navigati
 ## Complément audio du même jour
 
 Les sources C de commande audio et leur test différentiel sont maintenant intégrés. Une entrée WAV sur PC0/ADC10 traverse le modèle ADC/DMA piloté par l’ARM ; le banc totalise 120 tests réussis. Voir [audio FM, transport et validation](peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md). Ce complément ne revendique pas encore une conversation FM micro→RF→HP de bout en bout.
+
+## Vue éclatée, QA et audio raccordé
+
+Les deux vues MCU couvrent les 80 GPIO et les fiches MCU affichent 86 signaux. Les banques QA sont nommées par sélection, avec les fréquences OEM 0x38/0x39. Le transfert U2429 applique les commandes série aux échantillons horodatés ; écoute et export WAV à ses bornes. Le menu Audio RX/TX donne le schéma bloc complet et les raccordements encore ouverts. Voir [schéma et réglages](peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md).
+
+## Critère fonctionnel et programme indépendant
+
+Le critère retenu avec Jean-Philippe est désormais la validation fonctionnelle des commandes et réactions ; la fidélité acoustique détaillée est réservée aux essais sur poste. Un premier [programme audio alpha](../firmware/experiments/audio_alpha/README.md) est compilé et exécuté dans le banc : ADC/DMA, deux volumes, coupures et LCD autonome. Il n’initialise pas la RF et n’est pas un paquet de mise à jour constructeur qualifié pour le matériel. 126 tests Web réussis.

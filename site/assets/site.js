@@ -167,10 +167,10 @@
         sub.textContent=s.length>37?s.slice(0,34)+'...':s;
         g.append(sub);
         const stat=svgEl('text',{x:n.x+n.w-10,y:n.y+n.h-9,'text-anchor':'end',class:'node-status'});
-        stat.textContent={identified:'fonction ou composant établi',partial:'liaisons à préciser',candidate:'référence candidate'}[n.confidence]; g.append(stat);
+        stat.textContent={identified:'fonction ou composant établi',partial:'fonction partielle / précision ouverte',candidate:'référence candidate'}[n.confidence]; g.append(stat);
         attachKey(g,()=>open('node',n.id)); nodesLayer.append(g);
       });
-      const note=svgEl('text',{x:20,y:diagramHeight-15,fill:'#666','font-size':12}); note.textContent='Fonction OEM validée ≠ piste du PCB mesurée. Cliquer sur un trajet pour les broches et traces.'; svg.append(note);
+      const note=svgEl('text',{x:20,y:diagramHeight-15,fill:'#666','font-size':12}); note.textContent='Liaisons établies par firmware retenues validées. Cliquer pour les signaux, preuves et précisions ouvertes.'; svg.append(note);
     }
     function references(dest,items) {
       const ul=document.createElement('ul');

@@ -19,6 +19,7 @@ export class U2429 {
    const mute=coarse===0,attenuationDb=mute?null:4*(21-coarse)+3-fine;
    const state={code,mute,attenuationDb,gain:mute?0:dbGain(-attenuationDb)};
    const targets=bits[1]?[bits[0]]:[0,1]; // D0 channel, D1 individual=1/common=0.
+   this.onBeforeLatch?.(time);
    for(const channel of targets)this.channels[channel]={...state};
    this.accepted++;this.frames.push({sequence:this.accepted,time,word,code,targets:targets.map(i=>i+1),mute,attenuationDb});
    if(this.frames.length>256)this.frames.shift();

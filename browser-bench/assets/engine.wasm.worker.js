@@ -11,7 +11,7 @@ self.__wasmFactory = async () => {
   }
   return self.__wasmInstance;
 };
-import('./engine.wasm.worker.mjs?build=web0151r3').then(()=>{
+import('./engine.wasm.worker.mjs?build=web0151r5').then(()=>{
   if(typeof WebAssembly!=='object'||typeof FileReaderSync!=='function')throw new Error('Ce navigateur ne fournit pas WebAssembly et FileReaderSync dans le Worker. Utiliser un navigateur de bureau récent.');
-  self.postMessage({type:'ready',build:'web0151r3'});
+  self.postMessage({type:'ready',build:'web0151r5'});
 }).catch(error=>self.postMessage({type:'startup-error',error:error.message}));

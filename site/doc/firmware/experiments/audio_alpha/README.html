@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>OpenD578 — programme audio alpha indépendant - OpenD578</title>
+<link rel="stylesheet" href="../../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../../index.html">Vue eclatee</a>
+<a href="../../../../facade.html">Facade</a>
+<a href="../../../../io/index.html">Tableau IO</a>
+<a href="../../../../audio/index.html">Audio RX/TX</a>
+<a href="../../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../../docs.html">Documents</a>
+<a href="../../../../cps.html">CPS / USB</a>
+<a href="../../../docs/evidence/INDEX.html">Preuves</a>
+<a href="../../../docs/external/INDEX.html">Sources externes</a>
+<a href="../../../../firmware.html">Firmware</a>
+<a href="../../../../photos.html">Photos</a>
+<a href="../../../../f1dmg.html">F1DMG</a>
+<a href="../../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../../docs.html">Documents</a> / Firmware alternatif</div>
+<div class="doc-heading"><h1>OpenD578 — programme audio alpha indépendant</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/firmware/experiments/audio_alpha/README.md">Modifier sur GitHub</a><a download href="../../../../raw/firmware/experiments/audio_alpha/README.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>firmware/experiments/audio_alpha/README.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../../../docs/ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="opend578-programme-audio-alpha-independant">OpenD578 — programme audio alpha indépendant</h1>
+<p>Jean-Philippe (F4EGM), 9 novembre 2026.</p>
+<p>Ce programme C exécute les premiers contrats audio OpenD578 sur Cortex-M4. Il utilise les GPIO et périphériques du GD32 ; il n’appelle aucune routine OEM et ne fabrique pas son écran depuis JavaScript. Son binaire démarre à <code>0x08006000</code>, SRAM 96 Kio, pile à <code>0x20018000</code>.</p>
+<p><strong>Périmètre livré : programme de contrôle qualifié dans le banc ARM. Ce n’est pas un firmware radio complet, ni une image de mise à jour constructeur qualifiée pour le poste.</strong> La chaîne RF n’est pas initialisée et aucune réception FM n’est annoncée. Les tests d’écoute sur matériel viendront avec la phase de portage correspondante.</p>
+<h2 id="essai-dans-le-navigateur">Essai dans le navigateur</h2>
+<p>Le bouton <strong>Essayer le programme audio alpha</strong> charge le binaire fourni sans sauvegarde OEM. L’ARM lit les entrées, génère les mots série et dessine le texte par les strobes du bus LCD.</p>
+<table>
+<thead>
+<tr>
+  <th>Commande</th>
+  <th>Réaction du programme</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Potentiomètre A, PC2 / ADC12</td>
+  <td>Niveau 0…32 → U2429 canal 1</td>
+</tr>
+<tr>
+  <td>Potentiomètre B, PC5 / ADC15</td>
+  <td>Niveau 0…32 → U2429 canal 2</td>
+</tr>
+<tr>
+  <td>P1</td>
+  <td>Bascule la coupure du canal 1</td>
+</tr>
+<tr>
+  <td>P4</td>
+  <td>Bascule la coupure du canal 2</td>
+</tr>
+<tr>
+  <td>MENU</td>
+  <td>Coupe les deux volumes et positionne PA7 à 1</td>
+</tr>
+<tr>
+  <td>EXIT</td>
+  <td>Rouvre les deux volumes et positionne PA7 à 0</td>
+</tr>
+</tbody>
+</table>
+<p>Le LCD affiche les niveaux et les atténuations nominales. <code>DB CUT</code> désigne la coupure ; les autres valeurs sont les atténuations nominales du U2429. Les niveaux et codes sont produits par <code>firmware/hal/audio_control.c</code>, déjà comparé aux fonctions OEM isolées sur 62 402 cas.</p>
+<p>Pour écouter l’action des commandes dans le banc : après démarrage, ouvrir <strong>Audio · traversée de l’atténuateur U2429</strong>, charger un WAV sur les ports choisis, exécuter le CPU et agir sur les volumes. L’export contient les sorties du composant. Le fichier WAV est une source externe d’essai, pas une réception RF simulée.</p>
+<h2 id="ce-que-lexperience-etablit">Ce que l’expérience établit</h2>
+<p>ADC/DMA → quantification C → mots GPIO PA13/PA14 → latch U2429 → variation des échantillons ; touches → coupures ; programme → bus LCD → pixels. Le test ARM vérifie que les autres canaux sont conservés, qu’un appui maintenu ne répète pas la bascule et que EXIT restaure le niveau des potentiomètres.</p>
+<p>La sélection HP micro par RF 0x25 bit 4 n’est pas exécutée dans cette version ; elle nécessite le contexte d’initialisation RF. Les broches des volumes partagent PA13/PA14 avec SWD : ce programme les libère pour les utiliser comme le fait l’OEM. Cela devra être intégré à la procédure de mise au point matérielle ; ne pas traiter ce binaire de banc comme un paquet CPS prêt à installer.</p>
+<p>L’alpha maintient PE6 et PC4 bas, PA4 en entrée analogique et les quatre sélections RF inactives. Elle n’écrit ni registres RF, ni NAND, ni contrôleur Flash. Ces propriétés sont vérifiées pour le scénario exécuté dans le banc ; aucune validation électrique sur poste n’est revendiquée.</p>
+<h2 id="construction">Construction</h2>
+<pre><code class="language-bash">python3 tools/build_audio_alpha.py --zig /chemin/zig
+node --test browser-bench/tests/audio-alpha.test.mjs
+</code></pre>
+<p>Build vérifié avec Zig 0.14.1, Cortex-M4 Thumb, soft-float. Le script produit <code>audio_alpha.elf</code>, <code>audio_alpha.bin</code>, puis copie les binaires dans les exemples du banc. <code>build.json</code> donne la taille et le SHA-256.</p>
+<p>La version actuelle est volontairement courte : pas de RTOS, pas de décodage DMR, pas de copie de firmware OEM. L’étape suivante est le contexte d’initialisation RX, puis le test de sélection des HP sur matériel. Le modèle acoustique précis n’est pas un prérequis à cette progression fonctionnelle.</p>
+<h2 id="ecran-produit-par-le-programme">Écran produit par le programme</h2>
+<p><img src="../../../../raw/docs/evidence/audio_alpha/screen.png" alt="Écran audio alpha produit par l’ARM" /></p>
+<p>Le rendu vient des pixels émis sur GPIO dans le scénario de contrôle ; ce n’est pas une photographie du poste réel. <code>tools/verify_audio_alpha.mjs</code> reconstruit les données RGBA et le rapport de démarrage.</p>
+<p>Le programme attend les interruptions SysTick entre acquisitions de contrôle, au lieu de tourner en attente active. La cadence utilise le temps virtuel 120 M unités/s du banc ; le rechargement SysTick devra être adapté au profil d’horloge retenu lors du portage matériel.</p>
+<p>Après l’écran initial, seuls les bandeaux modifiés sont redessinés : un changement de volume actualise 2560 pixels au lieu de 20 480 pour un écran complet. Cette propriété est vérifiée dans le test ARM.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../../assets/models.js" defer></script><script src="../../../../assets/search-data.js" defer></script><script src="../../../../assets/site.js" defer></script>
+</body></html>

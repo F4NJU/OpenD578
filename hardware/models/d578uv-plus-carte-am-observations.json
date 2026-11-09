@@ -4,8 +4,8 @@
   "version": "Variante PLUS - carte RF additionnelle",
   "status": "reference_incomplete",
   "mcu": "GD32F303 observe sur le PLUS (suffixe exact a photographier)",
-  "updated": "2026-11-06",
-  "diagram_note": "Comparaison firmware PLUS V2.08 / PRO V1.21 integree. Liaisons resolues validees par firmware ; presence des composants et inconnues distinguees. APRS RX par BHT_BOARD / UART3.",
+  "updated": "2026-11-09",
+  "diagram_note": "Liaisons firmware confirmées intégrées. Banques RF identifiées par CS ; rôle LO/FI et position physique non attribués sans preuve. Les flèches de commande ne sont pas des trajets audio.",
   "groups": [
     {
       "id": "facade",
@@ -162,7 +162,8 @@
         "docs/hardware/VERSIONS.md",
         "docs/external/radiofoundry/GPIO_868_VS_578.md",
         "docs/external/radiofoundry/FIRMWARE_MISE_A_JOUR.md",
-        "docs/hardware/io/TABLEAU_IO_D578.md"
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
       ]
     },
     {
@@ -180,7 +181,8 @@
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
         "docs/hardware/io/TABLEAU_IO_D578.md",
-        "docs/hardware/io/APRS_RX_PLUS.md"
+        "docs/hardware/io/APRS_RX_PLUS.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
       ]
     },
     {
@@ -466,6 +468,194 @@
         "docs/hardware/AUDIT_FONCTIONS_PARTIELLES.md",
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md"
       ]
+    },
+    {
+      "id": "mcu_support",
+      "label": "Horloges / VREF / boot",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1660,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Groupe documentaire des signaux, sans invention de circuit distant.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ]
+    },
+    {
+      "id": "mcu_unknown",
+      "label": "PC3 / PE15 non attribués",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1760,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Groupe documentaire des signaux, sans invention de circuit distant.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ]
+    },
+    {
+      "id": "rf_spi",
+      "label": "Bus RF 4 banques",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1060,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
+      ]
+    },
+    {
+      "id": "dmr",
+      "label": "Interface SCT3258",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1160,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ]
+    },
+    {
+      "id": "u2429",
+      "label": "U2429, commande volume",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1260,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
+      ]
+    },
+    {
+      "id": "bh2226",
+      "label": "BH2226, CNA 8 sorties",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1360,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
+      ]
+    },
+    {
+      "id": "adc0",
+      "label": "ADC0 / mesures",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1460,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ]
+    },
+    {
+      "id": "audio",
+      "label": "Commandes audio",
+      "group": "peripheriques",
+      "x": 984,
+      "y": 1560,
+      "w": 266,
+      "h": 72,
+      "subtitle": "Contrat firmware / bloc fonctionnel",
+      "description": "Contrat GPIO confirmé par comparaison PRO V1.21 / PLUS V2.08 ; présence et trajet analogique distincts de la commande.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md"
+      ]
+    },
+    {
+      "id": "qa_lo_a",
+      "label": "RF banque 0 / famille QA4818N",
+      "group": "radio",
+      "x": 1298,
+      "y": 1720,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PB5 CS actif bas · PB3 CLK / PB4 SDIO",
+      "description": "Banque logique 0, validée par firmware. Le nom historique qa_lo_a est conservé pour les liens ; il ne prouve pas un rôle LO/FI ni une position de boîtier. Fréquences OEM par 0x38/0x39 (unités 10 Hz), et non par la paire de comparaison AT1846S 0x29/0x2A. Référence exacte du silicium gratté non encodée par le logiciel.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md"
+      ]
+    },
+    {
+      "id": "qa_lo_b",
+      "label": "RF banque 1 / famille QA4818N",
+      "group": "radio",
+      "x": 1298,
+      "y": 1820,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PB2 CS actif bas · PB3 CLK / PB4 SDIO",
+      "description": "Banque logique 1, validée par firmware. Le nom historique qa_lo_b est conservé pour les liens ; il ne prouve pas un rôle LO/FI ni une position de boîtier. Fréquences OEM par 0x38/0x39 (unités 10 Hz), et non par la paire de comparaison AT1846S 0x29/0x2A. Référence exacte du silicium gratté non encodée par le logiciel.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md"
+      ]
+    },
+    {
+      "id": "qa_if_a",
+      "label": "RF banque 2 / famille QA4818N",
+      "group": "radio",
+      "x": 1298,
+      "y": 1920,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PC13 CS actif bas · PB3 CLK / PB4 SDIO",
+      "description": "Banque logique 2, validée par firmware. Le nom historique qa_if_a est conservé pour les liens ; il ne prouve pas un rôle LO/FI ni une position de boîtier. Fréquences OEM par 0x38/0x39 (unités 10 Hz), et non par la paire de comparaison AT1846S 0x29/0x2A. Référence exacte du silicium gratté non encodée par le logiciel.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md"
+      ]
+    },
+    {
+      "id": "qa_if_b",
+      "label": "RF banque 3 / famille QA4818N",
+      "group": "radio",
+      "x": 1298,
+      "y": 2020,
+      "w": 266,
+      "h": 72,
+      "subtitle": "PE1 CS actif bas · PB3 CLK / PB4 SDIO",
+      "description": "Banque logique 3, validée par firmware. Le nom historique qa_if_b est conservé pour les liens ; il ne prouve pas un rôle LO/FI ni une position de boîtier. Fréquences OEM par 0x38/0x39 (unités 10 Hz), et non par la paire de comparaison AT1846S 0x29/0x2A. Référence exacte du silicium gratté non encodée par le logiciel.",
+      "confidence": "partial",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md",
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md"
+      ]
     }
   ],
   "edges": [
@@ -566,24 +756,24 @@
       "id": "plus-gd32-bluetooth",
       "source": "mcu_plus",
       "target": "bt_support_plus",
-      "label": "UART3 partage Bluetooth / APRS RX",
-      "bus": "UART candidat ; exact non verifie",
+      "label": "GPIO / Carte BT+APRS / BHT_BOARD",
+      "bus": "UART3 partagé Bluetooth / APRS RX",
       "status": "oem_trace",
       "pins": [
         {
           "from_pin": "PC10",
           "to_pin": "RX de la carte : commandes AT / échanges Bluetooth et BT+APRS",
-          "status": "oem_trace",
-          "note": "N3; N14; S6"
+          "note": "N3; N14; S6 ; Liaison série validée. Prélèvement RF/audio en amont de BHT et référence de son MCU non encore attribués ; lire APRS_RX_PLUS.md",
+          "status": "oem_trace"
         },
         {
           "from_pin": "PC11",
           "to_pin": "TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:",
-          "status": "oem_trace",
-          "note": "N3; N14; S6"
+          "note": "N3; N14; S6 ; Liaison série validée. Prélèvement RF/audio en amont de BHT et référence de son MCU non encore attribués ; lire APRS_RX_PLUS.md",
+          "status": "oem_trace"
         }
       ],
-      "details": "Liaison validee par analyse OEM : PC10 : RX de la carte : commandes AT / échanges Bluetooth et BT+APRS; PC11 : TX de la carte : réponses Bluetooth et trames APRS RX préfixées +APRS:",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
       "docs": [
         "docs/hardware/BLUETOOTH_D868BT_SP_ET12.md",
         "docs/hardware/BLUETOOTH_PRO_PLUS_D878_COMPARAISON.md",
@@ -693,13 +883,39 @@
       "id": "plus-mcu-nand",
       "source": "mcu_plus",
       "target": "nand_plus",
-      "label": "Stockage codeplug PLUS",
-      "bus": "NAND série à qualifier",
-      "status": "hypothesis",
-      "pins": [],
-      "details": "L architecture de stockage PLUS est à confirmer : copie du schéma PRO interdite sans capture du PLUS.",
+      "label": "GPIO / NAND / codeplug PLUS",
+      "bus": "SPI logiciel NAND",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PB8",
+          "to_pin": "CS# — Sélection active basse de la NAND",
+          "note": "S3; S5 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB14",
+          "to_pin": "SI/SO0 — Commandes/adresses vers NAND et donnée de poids 0 en lecture dual",
+          "note": "S3; S5 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB15",
+          "to_pin": "SCK — Horloge du bus NAND",
+          "note": "S3; S5 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA15",
+          "to_pin": "SO/SO1 — Données sortantes de la NAND, simple/dual output",
+          "note": "S3; S5 ; ",
+          "status": "oem_trace"
+        }
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
       "docs": [
-        "docs/cps/CODEPLUG_CANAL_OEM_V121.md"
+        "docs/cps/CODEPLUG_CANAL_OEM_V121.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
@@ -772,84 +988,914 @@
       "id": "plus-mcu-lcd_plus",
       "source": "mcu_plus",
       "target": "lcd_plus",
-      "label": "Commandes LCD de facade",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / LCD de facade",
+      "bus": "GPIO, parallèle 8080 8 bits",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PE7",
+          "to_pin": "D0 — Bit 0 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE8",
+          "to_pin": "D1 — Bit 1 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE9",
+          "to_pin": "D2 — Bit 2 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE10",
+          "to_pin": "D3 — Bit 3 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE11",
+          "to_pin": "D4 — Bit 4 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE12",
+          "to_pin": "D5 — Bit 5 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE13",
+          "to_pin": "D6 — Bit 6 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE14",
+          "to_pin": "D7 — Bit 7 de l’octet commande/paramètre/pixel",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB10",
+          "to_pin": "WR# — Strobe d’écriture, octet pris au front montant",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB11",
+          "to_pin": "D/C ou A0 — 0=commande, 1=donnée",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB12",
+          "to_pin": "RESET# — Réinitialisation matérielle active basse",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB13",
+          "to_pin": "CS# — Sélection active basse de l’écran",
+          "note": "S15 ; ",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "plus-mcu-keys_plus",
       "source": "mcu_plus",
       "target": "keys_plus",
-      "label": "Commandes Boutons facade",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / Boutons facade",
+      "bus": "ADC0_IN8, réseau résistif / ADC0_IN9, réseau résistif / GPIO + réveil EXTI0",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PA0",
+          "to_pin": "Contact actif bas — Demande marche/arrêt ; ne coupe pas directement l’alimentation",
+          "note": "S2; S8 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB0",
+          "to_pin": "Nœud commun du réseau P1/P2/P3/MENU — Identification analogique des quatre touches",
+          "note": "S1; S2 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB1",
+          "to_pin": "Nœud commun du réseau P4/P5/P6/EXIT — Identification analogique des quatre touches",
+          "note": "S1; S2 ; ",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "plus-mcu-encoder_plus",
       "source": "mcu_plus",
       "target": "encoder_plus",
-      "label": "Commandes Codeur et poussoir",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / Codeur et poussoir",
+      "bus": "GPIO / GPIO + EXTI8",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PA1",
+          "to_pin": "Contact actif bas — Validation / appui du bouton rotatif",
+          "note": "S2 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC8",
+          "to_pin": "Phase/contact A, déclenchement — Front d’interruption de rotation",
+          "note": "S2 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC9",
+          "to_pin": "Phase/contact B, direction — Direction lue au changement de phase",
+          "note": "S2 ; ",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "plus-mcu-volumes_plus",
       "source": "mcu_plus",
       "target": "volumes_plus",
-      "label": "Commandes Volumes A/B",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / Volumes A/B",
+      "bus": "ADC0_IN12 / ADC0_IN15",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PC2",
+          "to_pin": "Curseur — Acquisition du réglage de volume",
+          "note": "S1; S2 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC5",
+          "to_pin": "Curseur — Acquisition du réglage de volume",
+          "note": "S1; S2 ; ",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "plus-mcu-lights_plus",
       "source": "mcu_plus",
       "target": "lights_plus",
-      "label": "Commandes LED et eclairages",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / LED et eclairages",
+      "bus": "GPIO de commande du registre série / Série GPIO 8 bits",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PE3",
+          "to_pin": "DATA : état des sorties, dont rouge et vert du voyant poste",
+          "note": "N5; S2 ; Référence du driver non déterminée",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE4",
+          "to_pin": "CLOCK : décalage des huit bits",
+          "note": "N5; S2 ; Référence du driver non déterminée",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE5",
+          "to_pin": "Libération de la commande commune de reset/activation du driver",
+          "note": "N5 ; RESET# ou ENABLE : équivalents pour la séquence retrouvée ; référence du driver non déterminée",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
       ]
     },
     {
       "id": "plus-mcu-micro_plus",
       "source": "mcu_plus",
       "target": "micro_plus",
-      "label": "Commandes Microphone filaire",
-      "bus": "GPIO/ADC/UART selon fonction et version",
-      "status": "hypothesis",
-      "details": "La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n'a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.",
-      "pins": [],
+      "label": "GPIO / Microphone filaire",
+      "bus": "USART0 RX / USART0 TX",
+      "status": "oem_trace",
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.",
+      "pins": [
+        {
+          "from_pin": "PA9",
+          "to_pin": "Réception série du microphone — Envoi commandes, états et voyants vers le micro",
+          "note": "S8; S12 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA10",
+          "to_pin": "Émission série du microphone — Réception clavier, PTT et acquittements du micro",
+          "note": "S8; S12 ; ",
+          "status": "oem_trace"
+        }
+      ],
       "docs": [
         "docs/hardware/VALIDATION_FONCTIONS_OEM.md",
-        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md"
+        "docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ]
+    },
+    {
+      "id": "rfspi-qa_lo_a",
+      "source": "rf_spi",
+      "target": "qa_lo_a",
+      "label": "Sélection RF banque 0 : PB5",
+      "bus": "Série GPIO 8+16 bits, MSB-first",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB5",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 0",
+          "note": "S6 ; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel",
+          "status": "oem_trace"
+        }
+      ],
+      "docs": [
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "CS banque 0=PB5, CLK PB3, SDIO PB4, validés par instructions OEM. Correspondance logique ; aucune position physique ni fonction LO/FI déduite du numéro de banque."
+    },
+    {
+      "id": "rfspi-qa_lo_b",
+      "source": "rf_spi",
+      "target": "qa_lo_b",
+      "label": "Sélection RF banque 1 : PB2",
+      "bus": "Série GPIO 8+16 bits, MSB-first",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB2",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 1",
+          "note": "S6 ; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel",
+          "status": "oem_trace"
+        }
+      ],
+      "docs": [
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "CS banque 1=PB2, CLK PB3, SDIO PB4, validés par instructions OEM. Correspondance logique ; aucune position physique ni fonction LO/FI déduite du numéro de banque."
+    },
+    {
+      "id": "rfspi-qa_if_a",
+      "source": "rf_spi",
+      "target": "qa_if_a",
+      "label": "Sélection RF banque 2 : PC13",
+      "bus": "Série GPIO 8+16 bits, MSB-first",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC13",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 2",
+          "note": "S6 ; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel",
+          "status": "oem_trace"
+        }
+      ],
+      "docs": [
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "CS banque 2=PC13, CLK PB3, SDIO PB4, validés par instructions OEM. Correspondance logique ; aucune position physique ni fonction LO/FI déduite du numéro de banque."
+    },
+    {
+      "id": "rfspi-qa_if_b",
+      "source": "rf_spi",
+      "target": "qa_if_b",
+      "label": "Sélection RF banque 3 : PE1",
+      "bus": "Série GPIO 8+16 bits, MSB-first",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE1",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 3",
+          "note": "S6 ; Banque identifiée fonctionnellement ; la référence exacte du silicium gratté n’est pas encodée par le logiciel",
+          "status": "oem_trace"
+        }
+      ],
+      "docs": [
+        "docs/hardware/QA4818N_ETAT_OEM_20261109.md",
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "CS banque 3=PE1, CLK PB3, SDIO PB4, validés par instructions OEM. Correspondance logique ; aucune position physique ni fonction LO/FI déduite du numéro de banque."
+    },
+    {
+      "id": "mcu_plus-confirmed-gps_plus",
+      "source": "mcu_plus",
+      "target": "gps_plus",
+      "label": "GPIO / GPS ATGM336H PLUS ?",
+      "bus": "USART1 RX, AF sans remap observé / USART1 TX, AF sans remap observé",
+      "pins": [
+        {
+          "from_pin": "PA2",
+          "to_pin": "RXD du module — Envoi des commandes au GPS",
+          "note": "S1; S8; S9 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA3",
+          "to_pin": "TXD du module — Réception NMEA et événements GPS",
+          "note": "S1; S8; S9 ; ",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-usb_cdc_plus",
+      "source": "mcu_plus",
+      "target": "usb_cdc_plus",
+      "label": "GPIO / USB CDC et CPS PLUS",
+      "bus": "GPIO USB / USB FS différentiel",
+      "pins": [
+        {
+          "from_pin": "PA11",
+          "to_pin": "USB D− — Données USB CDC/CPS",
+          "note": "S1; S12 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA12",
+          "to_pin": "USB D+ — Données USB CDC/CPS",
+          "note": "S1; S12 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE2",
+          "to_pin": "Connexion / déconnexion logique du périphérique USB",
+          "note": "N4 ; Le code ne distingue pas un pull-up commuté directement d’un étage de commande",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-u2429",
+      "source": "mcu_plus",
+      "target": "u2429",
+      "label": "GPIO / U2429, commande volume",
+      "bus": "SWCLK au debug ; série GPIO au fonctionnement / SWDIO au debug ; série GPIO au fonctionnement",
+      "pins": [
+        {
+          "from_pin": "PA13",
+          "to_pin": "SWDIO ; DATA U2429 — Débogage ou données de volume 11 bits",
+          "note": "S4; S8; S10; S13 ; Partage temporel : SWJ libéré par OEM ; volume ensuite. Liaison retenue validée.",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA14",
+          "to_pin": "SWCLK ; CLOCK U2429 — Horloge du debug ou du contrôleur de volume",
+          "note": "S4; S8; S10; S13 ; Partage temporel : SWJ libéré par OEM ; volume ensuite. Liaison retenue validée.",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-bh2226",
+      "source": "mcu_plus",
+      "target": "bh2226",
+      "label": "GPIO / BH2226, CNA 8 sorties",
+      "bus": "Série GPIO 12 bits / Série GPIO partagée",
+      "pins": [
+        {
+          "from_pin": "PA5",
+          "to_pin": "CSB : sélection et validation des huit sorties DAC",
+          "note": "N1; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "note": "N1; S6; S7 ; ",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-dmr",
+      "source": "mcu_plus",
+      "target": "dmr",
+      "label": "GPIO / Interface SCT3258",
+      "bus": "GPIO HPI / GPIO de commande SCT / GPIO de démarrage SCT / GPIO de requête SCT / GPIO de strap au démarrage / GPIO de synchronisation SCT / GPIO reset / exécution SCT / GPIO, HPI parallèle asynchrone / GPIO, bus HPI parallèle 8 bits",
+      "pins": [
+        {
+          "from_pin": "PD0",
+          "to_pin": "État de synchronisation lu pour autoriser/couper PE6, PC4 et DAC0",
+          "note": "N6; N8 ; Association nominale à PIO3/TDMA non nécessaire au contrat GPIO ; pas de numéro PIO attribué",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD1",
+          "to_pin": "Impulsion de sollicitation avant attente de réponse du protocole SCT",
+          "note": "N8 ; Nom terminal IRQ/PIO exact non donné",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD2",
+          "to_pin": "HCSN — Sélection / écriture / lecture / handshake HPI",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD3",
+          "to_pin": "HWRN — Sélection / écriture / lecture / handshake HPI",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD4",
+          "to_pin": "HRDN — Sélection / écriture / lecture / handshake HPI",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD5",
+          "to_pin": "HOBIB / indication de disponibilité HPI",
+          "note": "N8; S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD6",
+          "to_pin": "Commande de reset/maintien du cœur et libération après bootstrap",
+          "note": "N8 ; Reset/maintien déduit de la séquence ; ne démontre pas un inverseur discret",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD7",
+          "to_pin": "Impulsion dans une séquence de réinitialisation logique du protocole",
+          "note": "N8 ; Action interne exacte côté SCT non établie",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD8",
+          "to_pin": "HPI DATA0 — Bit 0 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD9",
+          "to_pin": "HPI DATA1 — Bit 1 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD10",
+          "to_pin": "HPI DATA2 — Bit 2 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD11",
+          "to_pin": "HPI DATA3 — Bit 3 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD12",
+          "to_pin": "HPI DATA4 — Bit 4 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD13",
+          "to_pin": "HPI DATA5 — Bit 5 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD14",
+          "to_pin": "HPI DATA6 — Bit 6 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PD15",
+          "to_pin": "HPI DATA7 — Bit 7 des octets échangés avec le SCT",
+          "note": "S16 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA8",
+          "to_pin": "Validation du sous-ensemble au démarrage ; désactivation à l’arrêt",
+          "note": "N8 ; Signal terminal exact (alimentation, buffer, enable) non départagé",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC6",
+          "to_pin": "Commande d’activation maintenue pendant chargement et exécution",
+          "note": "N8 ; Signal terminal exact non départagé",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC7",
+          "to_pin": "Ligne de mode/validation du protocole SCT",
+          "note": "N8 ; Nom matériel et rôle exact de cette commande non distingués",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC12",
+          "to_pin": "Strap imposé bas pendant reset/chargement, puis libéré",
+          "note": "N8 ; Choix exact du mode SCT associé au strap non nommé",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-rf_spi",
+      "source": "mcu_plus",
+      "target": "rf_spi",
+      "label": "GPIO / Bus RF 4 banques",
+      "bus": "GPIO de commande RF auxiliaire / GPIO de commande TX",
+      "pins": [
+        {
+          "from_pin": "PB3",
+          "to_pin": "CLK du BH2226 et SCLK RF",
+          "status": "oem_trace",
+          "note": "N1; S6; S7"
+        },
+        {
+          "from_pin": "PB4",
+          "to_pin": "DI du BH2226 ; SDIO RF",
+          "status": "oem_trace",
+          "note": "N1; S6; S7"
+        },
+        {
+          "from_pin": "PB5",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 0",
+          "status": "oem_trace",
+          "note": "S6"
+        },
+        {
+          "from_pin": "PB2",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 1",
+          "status": "oem_trace",
+          "note": "S6"
+        },
+        {
+          "from_pin": "PC13",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 2",
+          "status": "oem_trace",
+          "note": "S6"
+        },
+        {
+          "from_pin": "PE1",
+          "to_pin": "CS# / sélection active basse — Sélection de la banque logique 3",
+          "status": "oem_trace",
+          "note": "S6"
+        },
+        {
+          "from_pin": "PE6",
+          "to_pin": "Porte TX matérielle commandée par PTT et temporisation SCT",
+          "status": "oem_trace",
+          "note": "N6"
+        },
+        {
+          "from_pin": "PC4",
+          "to_pin": "Porte auxiliaire, synchronisée avec les états TX/SCT et la condition de bande",
+          "status": "oem_trace",
+          "note": "N6"
+        },
+        {
+          "from_pin": "PA4",
+          "to_pin": "Entrée de consigne analogique — Consigne numérique DAC observée en TX VHF/UHF ; destination analogique à tracer",
+          "status": "oem_trace",
+          "note": "S1; S8; S11"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-audio",
+      "source": "mcu_plus",
+      "target": "audio",
+      "label": "GPIO / Commandes audio",
+      "bus": "GPIO, commande de coupure / TIMER3_CH3, sortie PWM audio",
+      "pins": [
+        {
+          "from_pin": "PA7",
+          "to_pin": "Commande mute, haut=coupure — Ouvre/coupe la sortie audio du poste",
+          "note": "S2; S10 ; Commande mute validée ; référence de l’étage qui reçoit cette commande non déterminée",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PB9",
+          "to_pin": "Sortie PWM : rapport cyclique alimenté par les échantillons audio ; utilisée aussi dans le chemin APRS OEM",
+          "note": "N12; S1 ; Étage filtre/mixeur analogique terminal non identifié ; aucune lecture du niveau GPIO PB9 identifiée",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-adc0",
+      "source": "mcu_plus",
+      "target": "adc0",
+      "label": "GPIO / ADC0 / mesures",
+      "bus": "ADC0_IN10 / DMA / ADC0_IN11 / ADC0_IN6",
+      "pins": [
+        {
+          "from_pin": "PC0",
+          "to_pin": "Acquisition audio pour échantillonnage 8 bits et détection de passages de seuils",
+          "note": "N10 ; Le CI ou l’AOP qui fournit le signal n’est pas nommé par ces lectures",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC1",
+          "to_pin": "Point milieu du réseau de conditionnement — Mesure d’alimentation et détection de tension basse",
+          "note": "S1; S8; S11 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PA6",
+          "to_pin": "Sortie du capteur / réseau de conditionnement — Mesure utilisée par la commande du ventilateur",
+          "note": "S1; S8; S11 ; ",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-mcu_support",
+      "source": "mcu_plus",
+      "target": "mcu_support",
+      "label": "GPIO / Horloges / VREF / boot",
+      "bus": "Alimentation / référence / Oscillateur HXTAL / Oscillateur LXTAL RTC / Reset matériel / Strap de démarrage",
+      "pins": [
+        {
+          "from_pin": "OSC_IN",
+          "to_pin": "Borne du quartz — Oscillateur principal",
+          "note": "S1; S13 ; ",
+          "status": "datasheet"
+        },
+        {
+          "from_pin": "OSC_OUT",
+          "to_pin": "Borne du quartz — Oscillateur principal",
+          "note": "S1; S13 ; ",
+          "status": "datasheet"
+        },
+        {
+          "from_pin": "PC14",
+          "to_pin": "OSC32_IN : entrée de l’oscillateur de sauvegarde",
+          "note": "N9; S1 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PC15",
+          "to_pin": "OSC32_OUT : sortie de l’oscillateur de sauvegarde",
+          "note": "N9; S1 ; ",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "VREF+",
+          "to_pin": "Définit la borne haute de conversion ADC/DAC",
+          "note": "S1 ; Le firmware ne permet pas d’identifier la source analogique externe de référence",
+          "status": "datasheet"
+        },
+        {
+          "from_pin": "VREF-",
+          "to_pin": "Définit la borne basse de conversion ADC/DAC",
+          "note": "S1 ; Le firmware ne permet pas d’identifier la source analogique externe de référence",
+          "status": "datasheet"
+        },
+        {
+          "from_pin": "NRST",
+          "to_pin": "NRST — Réinitialisation / connect under reset",
+          "note": "S1; S13 ; ",
+          "status": "datasheet"
+        },
+        {
+          "from_pin": "BOOT0",
+          "to_pin": "Niveau BOOT0 — Sélection du mode de démarrage",
+          "note": "S1 ; Le binaire n’identifie pas le réseau de polarisation",
+          "status": "datasheet"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal."
+    },
+    {
+      "id": "mcu_plus-confirmed-mcu_unknown",
+      "source": "mcu_plus",
+      "target": "mcu_unknown",
+      "label": "GPIO / PC3 / PE15 non attribués",
+      "bus": "GPIO de sortie fixe / GPIO de séquence marche / veille",
+      "pins": [
+        {
+          "from_pin": "PC3",
+          "to_pin": "Sortie établie à 1 très tôt par bootloader et application",
+          "note": "N7 ; Impossible de choisir entre enable, maintien ou autre entrée fixe à partir de ces seules écritures",
+          "status": "oem_trace"
+        },
+        {
+          "from_pin": "PE15",
+          "to_pin": "Ligne auxiliaire positionnée dans la séquence d’initialisation et de veille",
+          "note": "N7 ; La séquence est retrouvée ; destination et signification électrique non résolues",
+          "status": "oem_trace"
+        }
+      ],
+      "status": "oem_trace",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "Commandes et fonctions reprises du tableau IO courant. Séquences connues, destination de PC3/PE15 non résolue."
+    },
+    {
+      "id": "mcu_plus-power-retain-pe0",
+      "source": "mcu_plus",
+      "target": "mcu_support",
+      "label": "Maintien logique PE0",
+      "bus": "GPIO marche / veille",
+      "status": "oem_trace",
+      "pins": [
+        {
+          "from_pin": "PE0",
+          "to_pin": "Commande de maintien logique du poste en marche",
+          "note": "N7 ; Type de transistor ou de latch non déductible ; n’implique pas coupure du MCU alimenté par SWD",
+          "status": "oem_trace"
+        }
+      ],
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "details": "PE0 haut en marche, bas dans la séquence d’arrêt. Type de latch/transistor non déterminé."
+    },
+    {
+      "id": "mcu_plus-confirmed-rda_plus",
+      "source": "mcu_plus",
+      "target": "rda_plus",
+      "label": "Commande rda_plus",
+      "bus": "GPIO / commandes firmware",
+      "status": "oem_trace",
+      "details": "Liaison fonctionnelle validée par instructions OEM ; correspondants I2C selon équipement.",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "pins": [
+        {
+          "from_pin": "PB6",
+          "to_pin": "SDA : données et acquittement des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
+        },
+        {
+          "from_pin": "PB7",
+          "to_pin": "SCL : horloge des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
+        }
+      ]
+    },
+    {
+      "id": "mcu_plus-confirmed-kt_ambig",
+      "source": "mcu_plus",
+      "target": "kt_ambig",
+      "label": "Commande kt_ambig",
+      "bus": "GPIO / commandes firmware",
+      "status": "oem_trace",
+      "details": "Liaison fonctionnelle validée par instructions OEM ; correspondants I2C selon équipement.",
+      "docs": [
+        "docs/hardware/io/TABLEAU_IO_D578.md"
+      ],
+      "pins": [
+        {
+          "from_pin": "PB6",
+          "to_pin": "SDA : données et acquittement des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
+        },
+        {
+          "from_pin": "PB7",
+          "to_pin": "SCL : horloge des deux chemins de pilote",
+          "status": "oem_trace",
+          "note": "N2; N13; S6"
+        }
       ]
     }
   ],

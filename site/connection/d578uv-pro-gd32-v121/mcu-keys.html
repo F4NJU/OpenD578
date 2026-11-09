@@ -2,12 +2,13 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Touches analogiques + Power - OpenD578</title>
+<title>GPIO / Touches facade - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
 <a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
 <a href="../../simulator/index.html">Simulateur</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
@@ -19,11 +20,11 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu-keys</div>
-<h1>Touches analogiques + Power</h1>
+<h1>GPIO / Touches facade</h1>
 <p><a href="../../component/d578uv-pro-gd32-v121/mcu.html">GD32F303VKT6</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/keys.html">Touches facade</a></p>
-<dl class="facts"><dt>Bus</dt><dd>GPIO / ADC</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
-<p>8 touches via deux reseaux resistifs ADC PB0 canal 8 et PB1 canal 9; PA0 Power actif bas et PA1 appui codeur. Seuils et detection OEM etudies dans la notice complete.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PB0 / ADC8</code></td><td>P1,P2,P3,MENU</td><td>oem_trace</td></tr><tr><td><code>PB1 / ADC9</code></td><td>P4,P5,P6,EXIT</td><td>oem_trace</td></tr><tr><td><code>PA0</code></td><td>Power, actif bas</td><td>oem_trace</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li></ul></main>
+<dl class="facts"><dt>Bus</dt><dd>ADC0_IN8, réseau résistif / ADC0_IN9, réseau résistif / GPIO + réveil EXTI0</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PA0</code></td><td>Contact actif bas — Demande marche/arrêt ; ne coupe pas directement l’alimentation</td><td>oem_trace</td></tr><tr><td><code>PB0</code></td><td>Nœud commun du réseau P1/P2/P3/MENU — Identification analogique des quatre touches</td><td>oem_trace</td></tr><tr><td><code>PB1</code></td><td>Nœud commun du réseau P4/P5/P6/EXIT — Identification analogique des quatre touches</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

@@ -14,7 +14,7 @@ export class AudioPcmInput {
  status(){const c=this.config;return {connected:!!c,pin:'PC0',ADCchannel:10,sampleRate:c?.sampleRate??null,length:c?.codes.length??0,start:c?.start??null,idleCode:c?.idleCode??null,converted:this.converted,captured:this.observed.length,captureTruncated:this.converted>this.observed.length,source:'external 12-bit ADC stimulus',timing:'120M virtual units/s; ADC model 64 units/conversion; not cycle accurate',FMvoiceRouteQualified:false};}
 }
 // Strict PCM16 WAV import. Codes are an explicit stimulus mapping, not volts.
-export function wavToAdcCodes(buffer,{bias=2048,amplitude=1024}={}){
+export function decodePcm16Wav(buffer){
  const v=new DataView(buffer),txt=(o,n)=>String.fromCharCode(...new Uint8Array(buffer,o,n));
  if(buffer.byteLength<44||txt(0,4)!=='RIFF'||txt(8,4)!=='WAVE'||v.getUint32(4,true)+8!==buffer.byteLength)throw Error('WAV RIFF invalide');
  let format=null,data=null;
@@ -25,8 +25,14 @@ export function wavToAdcCodes(buffer,{bias=2048,amplitude=1024}={}){
  const f=format;
  if(!f||!data||f.type!==1||f.bits!==16||![1,2].includes(f.channels)||f.align!==2*f.channels||f.byteRate!==f.sampleRate*f.align||data.length%f.align)throw Error('WAV PCM16 mono/stéréo requis');
  if(!Number.isInteger(f.sampleRate)||f.sampleRate<8000||f.sampleRate>192000||!data.length||data.length/f.align>12*f.sampleRate)throw Error('WAV : 8–192 kHz, 12 secondes maximum');
+ const channels=Array.from({length:f.channels},()=>new Float32Array(data.length/f.align));
+ for(let i=0;i<channels[0].length;i++)for(let c=0;c<f.channels;c++)channels[c][i]=v.getInt16(data.start+i*f.align+2*c,true)/32768;
+ return {channels,sampleRate:f.sampleRate};
+}
+export function wavToAdcCodes(buffer,{bias=2048,amplitude=1024}={}){
+ const {channels,sampleRate}=decodePcm16Wav(buffer);
  if(!Number.isInteger(bias)||!Number.isInteger(amplitude)||amplitude<0||bias-amplitude<0||bias+amplitude>4095)throw Error('Polarisation/amplitude hors ADC12');
- const codes=new Uint16Array(data.length/f.align);
- for(let i=0;i<codes.length;i++){let sum=0;for(let c=0;c<f.channels;c++)sum+=v.getInt16(data.start+i*f.align+2*c,true);codes[i]=Math.round(bias+amplitude*sum/f.channels/32768);}
- return {codes,sampleRate:f.sampleRate,idleCode:bias};
+ const codes=new Uint16Array(channels[0].length);
+ for(let i=0;i<codes.length;i++){let sum=0;for(const c of channels)sum+=c[i];codes[i]=Math.round(bias+amplitude*sum/channels.length);}
+ return {codes,sampleRate,idleCode:bias};
 }

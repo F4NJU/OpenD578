@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Audio RX/TX — schéma bloc et raccordements du banc - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../audio/index.html">Audio RX/TX</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>Audio RX/TX — schéma bloc et raccordements du banc</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="audio-rxtx-schema-bloc-et-raccordements-du-banc">Audio RX/TX — schéma bloc et raccordements du banc</h1>
+<p>Jean-Philippe (F4EGM) — 9 novembre 2026 — PRO GD32 V1.21.</p>
+<p>Le menu <strong>Audio RX/TX</strong> ouvre un schéma SVG zoomable. Il montre l’ensemble fonctionnel, de l’antenne aux HP et du microphone à l’antenne, sans masquer les raccordements encore ouverts. Les traits bleus sont les commandes OEM établies ; les traits verts sont les transferts PCM effectivement raccordés dans ce banc ; les pointillés orange gardent visibles les trajets dont le raccordement exact ou la réponse est encore indéterminé.</p>
+<h2 id="raccordement-ajoute-u2429-avec-les-commandes-reellement-recues">Raccordement ajouté : U2429 avec les commandes réellement reçues</h2>
+<p>Le fichier WAV d’essai entre explicitement aux bornes IN1/IN2 du modèle U2429. Les échantillons sortent sur OUT1/OUT2, atténués suivant les mots série que le firmware émet sur <strong>PA13 DATA / PA14 CLOCK</strong>. Les commandes sont validées par le décodeur du latch, pas par la position du curseur de volume de la page.</p>
+<p>Le traitement conserve l’horodatage : les échantillons antérieurs à une nouvelle commande utilisent l’ancien gain, les suivants le nouveau. Une commande invalide conserve le gain précédent. La coupure U2429 produit un gain nul. Une entrée sans commande de gain connue est refusée, sans inventer de volume initial. Les deux canaux restent indépendants, sauf commande commune OEM.</p>
+<p>Dans le panneau <strong>Audio · traversée de l’atténuateur U2429</strong>, choisir un WAV PCM16 de 12 secondes maximum. Un WAV mono est affecté au port choisi ; un WAV stéréo fournit gauche à IN1 et droite à IN2. Démarrer le firmware et lui laisser régler le volume avant cet essai. Exécuter le CPU pour faire progresser le temps virtuel. Le bouton <strong>Écouter / exporter OUT</strong> restitue uniquement les échantillons déjà traités.</p>
+<p>Ce fichier est la sortie nominale du composant : <strong>ce n’est pas encore le son du haut-parleur du poste</strong>. L’ordre des amplificateurs et l’affectation permanente des sources à ces entrées ne sont pas inventés. Le temps reprend 120 millions d’unités virtuelles par seconde, sans prétendre au cycle matériel. Les transitoires RC, le bruit et la réponse des amplis ne sont pas modélisés par cette simple atténuation.</p>
+<h2 id="reception-de-a-a-z">Réception, de A à Z</h2>
+<ol>
+<li>Le signal d’antenne traverse la présélection et les chaînes RF de réception. Les banques sont sélectionnées par PB5/PB2/PC13/PE1, avec PB3 horloge et PB4 SDIO. Leurs rôles LO/FI ne sont pas attribués par leur seul numéro.</li>
+<li>Les réglages de réception incluent le registre de gain/volume 0x44 ; sa loi en dB reste inconnue. La démodulation FM et le trajet qui fournit les sorties audio A/B ne sont pas remplacés par une copie de l’entrée micro.</li>
+<li>Les potentiomètres PC2/ADC12 et PC5/ADC15 sont acquis par l’OEM. Sa quantification fournit un niveau 0 à 32, puis les codes de volume série. Le niveau 0 correspond à la coupure.</li>
+<li>Le U2429 règle séparément les deux atténuations nominales de 0 à −83 dB. Pour un gain en tension : <code>G = 10^(−A/20)</code>. Une atténuation de 20 dB multiplie l’amplitude par 0,1.</li>
+<li>Les commandes HP sont distinctes : PA7=1 coupe le HP poste ; banque 1 / page 0 / 0x25 bit 4=1 coupe le HP micro. Les modes Mic/Radio/Both produisent ces combinaisons, avec les conditions et maintiens OEM.</li>
+<li>Les amplificateurs MC34119, YD1517 (PRO) ou PA1517 (PLUS), les deux HP et les prises externes forment la fin fonctionnelle du trajet. Leur matrice exacte reste visible en pointillés sur le schéma. Elle n’est pas assimilée aux canaux 1 et 2 du volume sans preuve.</li>
+</ol>
+<h2 id="emission-du-micro-a-lantenne">Émission, du micro à l’antenne</h2>
+<p>Le réglage AnaMic combine deux commandes : sélecteur RF 0x18 et ajustement du code MIC propre au poste, chargé depuis la NAND. En Level 1 à 6, les ajustements sont respectivement <code>+1, −2, 0, 0, +1, +1</code> et les sélecteurs 2 à 7. Le mot page 1 / 0x17 est <code>0x0200 | (MIC_appliqué &lt;&lt; 3)</code>, avec les comportements de débordement OEM conservés dans les tests. Ce sont des codes, pas des dB.</p>
+<p>Les paramètres MODV1/MODU retrouvés commandent le champ de modulation de 0x40, selon la bande du scénario étudié. CTCW se retrouve dans 0x51. Les filtres, limiteurs et transferts physiques ne sont pas déduits du seul code numérique. La consigne TX PA4/DAC0 et les portes PE6/PC4/PD0 sont séparées du gain micro ; une consigne DAC ne donne pas des watts.</p>
+<p>Les tonalités et l’APRS TX disposent aussi de la sortie PB9/TIMER3_CH3 en PWM. Le point de mélange analogique avec la modulation n’est pas fermé arbitrairement. Le ROS reste un critère de protection encore ouvert.</p>
+<h2 id="codec-corrections-egalisation-et-signalisation">Codec, corrections, égalisation et signalisation</h2>
+<p>Les demandes au TLV320AIC3204 passent par le HPI du SCT. Les champs connus incluent PGA micro (pas de 0,5 dB), gains numériques ADC/DAC, gains des sorties HPL/HPR/LOL/LOR et champs AGC. Le SCT reçoit trois sections de correction RX et trois TX à 24 kHz, coefficients signés Q14, et des gains Q11/Q12. La fonction nominale des filtres est déjà disponible isolément ; l’ordre du trajet audio effectif, les saturations et l’état interne DSP ne sont pas établis pour toutes les routes.</p>
+<p>Le banc n’applique donc pas automatiquement ces filtres à la voix FM simplement parce qu’ils sont reçus au démarrage. Les transitions micro FM VHF/UHF analysées ne changent pas le flux de demandes SCT enregistré.</p>
+<p>La branche <strong>PC0/ADC10 → ADC → DMA → SRAM → décodeurs OEM</strong> est un chemin distinct, raccordé à la source WAV de signalisation RX du banc. Le GD32 ne doit pas être présenté comme le processeur PCM universel de toute la voix FM.</p>
+<h2 id="vue-eclatee-et-qa-corrections-associees">Vue éclatée et QA : corrections associées</h2>
+<p>Les deux modèles PRO/PLUS reprennent désormais les 80 GPIO de la table courante dans les connexions du MCU. Sa fiche affiche les 86 signaux utiles, avec références et limites. Les IDs historiques des composants et connexions sont conservés pour les photos et anciens liens.</p>
+<p>Les quatre pages QA sont nommées par <strong>banque logique et CS</strong>. Les anciens noms LO A/B et FI 1/2 restent seulement des IDs historiques. La commande de fréquence OEM est <strong>0x38 bas puis 0x39 haut</strong>, en unités de 10 Hz, et non les exemples AT1846S historiques 0x29/0x2A. Un nouvel encodeur C indépendant est intégré dans <code>firmware/rf/qa4818n_oem_frequency.c</code>, avec tests ; il ne pilote pas le poste.</p>
+<p>Voir <a href="../hardware/QA4818N_ETAT_OEM_20261109.html">état QA courant</a>, <a href="../hardware/io/TABLEAU_IO_D578.html">tableau IO</a>, <a href="AUDIO_LIAISONS_LOGIQUES_OEM_V013.html">contrats audio</a> et <a href="07_CALIBRATIONS_AUDIO_OEM_V121.html">calibrations</a>.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

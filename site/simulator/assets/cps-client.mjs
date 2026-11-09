@@ -1,6 +1,6 @@
 /* Host-side AnyTone programming client with write/readback verification. This module has only a CDC byte transport;
  * it has no CPU, Flash, SRAM, NAND or codeplug backing-storage reference. */
-import {hex} from './usb-device.mjs?build=web0151r3';
+import {hex} from './usb-device.mjs?build=web0151r5';
 export function readCommand(address){if(!Number.isInteger(address)||address<0||address>0xffffffff)throw Error('Adresse CPS invalide');return new Uint8Array([82,address>>>24,(address>>>16)&255,(address>>>8)&255,address&255,16]);}
 export function checkRead(response,address){if(response.length!==24||response[0]!==87||response[1]!==(address>>>24)||response[2]!==((address>>>16)&255)||response[3]!==((address>>>8)&255)||response[4]!==(address&255)||response[5]!==16||response[23]!==6)throw Error('Réponse CPS de lecture invalide');let sum=0;for(const b of response.slice(1,22))sum=(sum+b)&255;if(sum!==response[22])throw Error('Checksum de lecture CPS invalide');return response.slice(6,22);}
 export function writeCommand(address,data){if(!(data instanceof Uint8Array)||data.length!==16)throw Error('Écriture CPS : exactement 16 octets');const request=new Uint8Array(24);request.set(readCommand(address));request[0]=87;request.set(data,6);request[22]=request.slice(1,22).reduce((a,b)=>(a+b)&255,0);request[23]=6;return request;}

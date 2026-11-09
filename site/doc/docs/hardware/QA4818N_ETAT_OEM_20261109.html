@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Banques RF / QA4818N — état OEM au 9 novembre 2026 - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../audio/index.html">Audio RX/TX</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Materiel</div>
+<div class="doc-heading"><h1>Banques RF / QA4818N — état OEM au 9 novembre 2026</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_ETAT_OEM_20261109.md">Modifier sur GitHub</a><a download href="../../../raw/docs/hardware/QA4818N_ETAT_OEM_20261109.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/hardware/QA4818N_ETAT_OEM_20261109.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="banques-rf-qa4818n-etat-oem-au-9-novembre-2026">Banques RF / QA4818N — état OEM au 9 novembre 2026</h1>
+<p>Jean-Philippe (F4EGM). Cette page remplace les anciennes réserves et extrapolations des fiches du 6 novembre pour les liaisons résolues par firmware. Les identifiants historiques LO/FI sont conservés pour les liens et photos ; ils ne constituent plus les noms fonctionnels attribués aux banques.</p>
+<table>
+<thead>
+<tr>
+  <th>Banque logique</th>
+  <th>CS actif bas</th>
+  <th>Horloge</th>
+  <th>Données</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0</td>
+  <td>PB5</td>
+  <td>PB3</td>
+  <td>PB4 SDIO</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>PB2</td>
+  <td>PB3</td>
+  <td>PB4 SDIO</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>PC13</td>
+  <td>PB3</td>
+  <td>PB4 SDIO</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>PE1</td>
+  <td>PB3</td>
+  <td>PB4 SDIO</td>
+</tr>
+</tbody>
+</table>
+<p>Ces liaisons sont validées par analyse OEM. Le partage PB3/PB4 avec le BH2226 est résolu par les sélections distinctes : PA5 CSB du CNA, quatre autres sélections pour le RF. Il n’est plus présenté comme un conflit de GPIO à vérifier.</p>
+<h2 id="frequences-correction-essentielle">Fréquences : correction essentielle</h2>
+<p>Le banc courant observe les routines OEM <code>0x0806E100</code> et <code>0x0806E380</code> : <strong>page 0, écriture 0x38 mot bas puis 0x39 mot haut</strong>, valeur en unités de <strong>10 Hz</strong>. Pour le profil de Flash de référence, <code>F_Hz = ((reg39 &lt;&lt; 16) | reg38) × 10</code>. Une paire incomplète ne donne pas une nouvelle fréquence.</p>
+<p>La paire <strong>0x29/0x2A</strong> de l’ancien encodeur C et des exemples AT1846S reste une comparaison historique. Elle ne doit pas être présentée comme la commande OEM QA validée ni être utilisée à sa place. Les anciens tests de cet encodeur vérifient leur formule propre, pas le contrat OEM 0x38/0x39.</p>
+<h2 id="commandes-audio-et-puissance-retrouvees">Commandes audio et puissance retrouvées</h2>
+<table>
+<thead>
+<tr>
+  <th>Commande</th>
+  <th>Signification établie</th>
+  <th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0x44</td>
+  <td>Code de gain/volume associé aux banques RX logiques du banc</td>
+  <td>Loi en dB non qualifiée</td>
+</tr>
+<tr>
+  <td>Banque 0, 0x18</td>
+  <td>Sélecteur micro FM standard, six niveaux</td>
+  <td>Code brut, pas un gain en dB</td>
+</tr>
+<tr>
+  <td>Banque 0, page 1, 0x17</td>
+  <td>Code MIC usine ajusté au niveau utilisateur</td>
+  <td>Encodage et ordre vérifiés ; réponse analogique ouverte</td>
+</tr>
+<tr>
+  <td>0x40</td>
+  <td>Champ de modulation VHF/UHF : MODV1 ou MODU dans les cas capturés</td>
+  <td>Ne pas convertir le code en déviation sans loi établie</td>
+</tr>
+<tr>
+  <td>0x51</td>
+  <td>Champ CTCW de sous-audio retrouvé</td>
+  <td>Forme d’onde complète à qualifier</td>
+</tr>
+<tr>
+  <td>Banque 1, 0x25 bit 4</td>
+  <td>Coupure HP micro : 1 coupe</td>
+  <td>Ne nomme pas l’amplificateur physique</td>
+</tr>
+<tr>
+  <td>Banque 1, 0x25 bits 7 et 2</td>
+  <td>Préférence MAIN/SUB et porte contextuelle</td>
+  <td>Ne suffisent pas à nommer la source A/B audible</td>
+</tr>
+<tr>
+  <td>PA4 DAC0</td>
+  <td>Consigne TX ; calibrations par bande et niveaux issues de NAND</td>
+  <td>Code de commande, pas des watts</td>
+</tr>
+<tr>
+  <td>PE6 / PC4 / PD0</td>
+  <td>Portes TX et synchronisation avec SCT</td>
+  <td>Fonction terminale de PC4 partielle</td>
+</tr>
+</tbody>
+</table>
+<p>Les commandes micro, volume et routage sont comparées aux routines OEM isolées sur 62 402 cas sans différence. Voir <a href="../peripherals/AUDIO_LIAISONS_LOGIQUES_OEM_V013.html">audio</a>, <a href="../peripherals/07_CALIBRATIONS_AUDIO_OEM_V121.html">calibrations</a> et <a href="io/TABLEAU_IO_D578.html">tableau IO</a>.</p>
+<p>La famille de quatre circuits QA4818N vient de la documentation du D578 et des observations du projet ; les commandes identifient les banques logiques. Le rôle LO/FI, le numéro de boîtier et l’horloge individuelle ne sont pas attribués automatiquement au numéro de banque. Aucune nouvelle continuité n’est demandée pour valider les bus déjà résolus.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

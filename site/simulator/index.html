@@ -7,9 +7,9 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="OpenD578 - Banc Web D578UV PRO GD32 : firmware réel, fichiers locaux, façade et périphériques émulés. DMR reporté.">
   <title>OpenD578 | Banc Web D578 PRO 0.15.1</title>
-  <!-- Revision web0151r3: module cache-busting and explicit worker handshake -->
+  <!-- Revision web0151r5: module cache-busting and explicit worker handshake -->
   <link rel="stylesheet" href="./assets/style.css">
-  <script src="./assets/app.mjs?build=web0151r3" type="module"></script>
+  <script src="./assets/app.mjs?build=web0151r5" type="module"></script>
 </head>
 <body>
   <header class="topbar">
@@ -39,7 +39,7 @@ OOB 8 Mio · ECC 128 Kio</pre>
         <p class="hint">Les fichiers sélectionnés restent sur votre appareil. Vous choisissez ce que vous publiez.</p>
       </div>
       </details>
-      <div class="side-buttons"><button id="guidedStart" class="primary full" disabled>2 · Charger et démarrer</button><button id="loadFiles" class="secondary full" disabled>Charger les images seulement</button><button id="loadSample" class="secondary full" disabled>Vérifier le CPU et le LCD</button></div>
+      <div class="side-buttons"><button id="guidedStart" class="primary full" disabled>2 · Charger et démarrer</button><button id="loadFiles" class="secondary full" disabled>Charger les images seulement</button><button id="loadSample" class="secondary full" disabled>Vérifier le CPU et le LCD</button><button id="loadAudioAlpha" class="secondary full" disabled>Essayer le programme audio alpha</button></div>
       <p id="runtimeState" class="runtime-state" role="status">Préparation du moteur Web…</p>
       <div class="aside-footer"><p>Le banc Web n'écrit ni dans le poste ni vers un serveur. Les fichiers à partager restent sous votre contrôle.</p><a href="https://github.com/Telectroboy/OpenD578" target="_blank" rel="noopener noreferrer">Sources du projet ↗</a></div>
     </aside>
@@ -93,6 +93,7 @@ OOB 8 Mio · ECC 128 Kio</pre>
           <pre id="audioState" class="terminal compact" aria-live="polite">Aucune commande audio reçue.</pre>
           <p class="hint">Le firmware commande séparément les deux volumes, les coupures HP poste et HP micro, et les sélections de chemin. Les liaisons logiques sont décodées ci-dessous pour la Flash V1.21 de référence. Le transport sonore complet reste à raccorder.</p>
         </details>
+        <details class="subpanel"><summary>Audio · traversée de l’atténuateur U2429</summary><p class="hint">Essai aux bornes du composant : WAV mono vers l’entrée choisie ; stéréo gauche→IN1, droite→IN2. Le gain suit les commandes GPIO du firmware pendant l’exécution. Les sorties sont OUT1/OUT2 du modèle nominal ; leur affectation aux HP n’est pas inventée.</p><div class="controls"><input id="volumeWav" type="file" accept=".wav"><label>Port si mono <select id="volumePort"><option value="1">U2429 IN1</option><option value="2">U2429 IN2</option></select></label><button id="volumePcmLoad" class="secondary">Raccorder au composant</button><button id="volumePcmStop" class="secondary">Déconnecter</button><button id="volumePcmExport" class="secondary">Écouter / exporter OUT</button></div><pre id="volumePcmState" class="terminal compact">Aucune source U2429.</pre><audio id="volumePcmPlayer" controls></audio><p><a href="../audio/index.html">Schéma bloc audio et réglages A à Z</a></p></details>
         <details class="subpanel"><summary>Audio de réception PC0 · entrée ADC10</summary>
           <p class="hint">WAV PCM16 mono/stéréo, 8–192 kHz, 12 s maximum. La source alimente l’entrée PC0 : le firmware acquiert les échantillons par son ADC/DMA. Ce point sert aux décodeurs de signalisation ; il ne remplace pas l’entrée microphone ni le trajet voix FM. Polarisation et amplitude sont des codes ADC de scénario, pas des volts mesurés. Le temps est celui du banc.</p>
           <div class="controls"><input type="file" id="audioWav" accept=".wav"><label>Polarisation ADC <input id="audioBias" type="number" min="0" max="4095" value="2048"></label><label>Amplitude ADC <input id="audioAmplitude" type="number" min="0" max="2047" value="1024"></label><button id="audioLoad" class="secondary">Appliquer sur PC0</button><button id="audioStop" class="secondary">Déconnecter la source</button><button id="audioCapture" class="secondary">Exporter les acquisitions</button></div>

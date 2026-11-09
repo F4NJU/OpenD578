@@ -1,6 +1,6 @@
-import {CAsicControl} from './gps-casic.mjs?build=web0151r3';
+import {CAsicControl} from './gps-casic.mjs?build=web0151r5';
 /* Independent NMEA line source. Never reads or writes MCU firmware state. */
-import {compileMotion,motionAt} from './gps-route.mjs?build=web0151r3';
+import {compileMotion,motionAt} from './gps-route.mjs?build=web0151r5';
 export const VIRTUAL_HZ=120000000;
 export function nmea(body){if(typeof body!=='string'||!/^[\x20-\x7e]+$/.test(body)||/[$*\r\n]/.test(body))throw Error('Corps NMEA invalide');let sum=0;for(const c of body)sum^=c.charCodeAt(0);return '$'+body+'*'+sum.toString(16).toUpperCase().padStart(2,'0')+'\r\n';}
 function coordinate(value,lat){const limit=lat?90:180;if(!Number.isFinite(value)||Math.abs(value)>limit)throw Error('Coordonnée GNSS hors plage');let d=Math.floor(Math.abs(value)),min=Math.round((Math.abs(value)-d)*60*1e4)/1e4;if(min>=60){d++;min=0;}return [String(d).padStart(lat?2:3,'0')+min.toFixed(4).padStart(7,'0'),lat?(value>=0?'N':'S'):(value>=0?'E':'W')];}

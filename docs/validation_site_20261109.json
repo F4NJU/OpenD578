@@ -1,12 +1,12 @@
 {
-  "base_commit": "cdef47dcba37f1e886bc301e330e65d7f3a3e79f",
-  "html_pages": 334,
+  "base_commit": "7b1ee4194b161e6f73b2264adbc4712fc5ecd91f",
+  "html_pages": 373,
   "models": 2,
-  "components": 74,
-  "connections": 86,
-  "web_tests_passed": 120,
+  "components": 88,
+  "connections": 107,
+  "web_tests_passed": 126,
   "web_tests_failed": 0,
-  "python_tests_passed": 36,
+  "python_tests_passed": 38,
   "c_serial_encoders": "passed",
   "c_qa4818n": "passed",
   "mini_cps": "passed",
@@ -15,5 +15,16 @@
   "c_audio_control": "passed",
   "oem_audio_differential_cases": 62402,
   "oem_audio_differential_mismatches": 0,
-  "full_FM_voice_path": false
+  "full_FM_voice_path": false,
+  "c_qa4818n_oem": "passed",
+  "U2429_stream": true,
+  "audio_alpha": "ARM control firmware validated in bench; RF not initialized",
+  "audio_alpha_binary": {
+    "target": "thumb Cortex-M4 soft-float",
+    "compiler": "0.14.1",
+    "loadAddress": "0x08006000",
+    "scope": "bench control firmware; RF not initialized; hardware not qualified",
+    "binaryBytes": 5248,
+    "binarySHA256": "4e0ea4f7ca983367015fe05cf36ae6b01a6930c5157976daf08dd1d29619d3da"
+  }
 }

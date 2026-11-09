@@ -1,0 +1,8 @@
+{
+  "target": "thumb Cortex-M4 soft-float",
+  "compiler": "0.14.1",
+  "loadAddress": "0x08006000",
+  "scope": "bench control firmware; RF not initialized; hardware not qualified",
+  "binaryBytes": 5248,
+  "binarySHA256": "4e0ea4f7ca983367015fe05cf36ae6b01a6930c5157976daf08dd1d29619d3da"
+}

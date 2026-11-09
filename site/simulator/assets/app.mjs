@@ -1,20 +1,21 @@
-import {wavToAdcCodes} from './audio-pcm-input.mjs?build=web0151r3';
-import {rfCommandText} from './rf-commands.mjs?build=web0151r3';
-import {audioControlText} from './audio-routing.mjs?build=web0151r3';
-import {calibrationStatusText} from './calibration-status.mjs?build=web0151r3';
-import {audioStatusText} from './audio-devices.mjs?build=web0151r3';
-import {microphoneView} from './microphone-view.mjs?build=web0151r3';
-import {antennaFrame} from './antenna-input.mjs?build=web0151r3';
+import {pcm16Wav} from './audio-volume-stream.mjs?build=web0151r5';
+import {wavToAdcCodes,decodePcm16Wav} from './audio-pcm-input.mjs?build=web0151r5';
+import {rfCommandText} from './rf-commands.mjs?build=web0151r5';
+import {audioControlText} from './audio-routing.mjs?build=web0151r5';
+import {calibrationStatusText} from './calibration-status.mjs?build=web0151r5';
+import {audioStatusText} from './audio-devices.mjs?build=web0151r5';
+import {microphoneView} from './microphone-view.mjs?build=web0151r5';
+import {antennaFrame} from './antenna-input.mjs?build=web0151r5';
 /* OpenD578 local Web UI. All firmware and memory contents stay on the client.
  * Copyright (C) 2026 OpenD578 contributors. GPL-3.0-or-later.
  */
-import { hex, parseAddress } from './memory.mjs?build=web0151r3';
-import {landscapePixels} from './lcd-panel.mjs?build=web0151r3';
-import {ExecutionLoop} from './execution-loop.mjs?build=web0151r3';
-import {selectBackupSet,backupDescription} from './backup-set.mjs?build=web0151r3';
-import {GuidedBoot} from './guided-boot.mjs?build=web0151r3';
+import { hex, parseAddress } from './memory.mjs?build=web0151r5';
+import {landscapePixels} from './lcd-panel.mjs?build=web0151r5';
+import {ExecutionLoop} from './execution-loop.mjs?build=web0151r5';
+import {selectBackupSet,backupDescription} from './backup-set.mjs?build=web0151r5';
+import {GuidedBoot} from './guided-boot.mjs?build=web0151r5';
 const $ = id => document.getElementById(id);
-const worker = new Worker(new URL('./engine.wasm.worker.js?build=web0151r3', import.meta.url));
+const worker = new Worker(new URL('./engine.wasm.worker.js?build=web0151r5', import.meta.url));
 let readyResolve,readyReject,busyLoading=false,selectedBackupArgs=null;
 const runtimeReady=new Promise((resolve,reject)=>{readyResolve=resolve;readyReject=reject;});
 const readyTimeout=setTimeout(()=>readyReject(new Error('Le moteur Web ne répond pas. Vérifier le chargement des fichiers du site, puis recharger la page.')),15000);
@@ -31,7 +32,7 @@ const guidedBoot=new GuidedBoot({run:budget=>act('run',{budget,breakpoint:null})
 const loop=new ExecutionLoop({
  run:budget=>guidedBoot.run(budget),
  onState:s=>{if(s.cpu?.stop)log('Arrêt du moteur : '+s.cpu.stop.reason,true);},
- onRunning:running=>{document.body.classList.toggle('continuous-running',running);$('guidedStart').disabled=running||busyLoading;$('loadSample').disabled=running||busyLoading;$('loadFiles').disabled=running||busyLoading;$('pauseContinuous').disabled=!running;$('startContinuous').disabled=running||!status?.started||!!status?.cpu?.stop&&!['waiting','control'].includes(status.cpu.stop.category);$('runStatus').textContent=running?'Processeur en cours d’exécution. Les commandes restent accessibles.':status?.cpu?.stop?'Arrêt : '+status.cpu.stop.reason:status?.started?'Processeur en pause.':'Chargez vos images, puis initialisez le processeur.';}
+ onRunning:running=>{document.body.classList.toggle('continuous-running',running);$('guidedStart').disabled=running||busyLoading;$('loadSample').disabled=running||busyLoading;$('loadAudioAlpha').disabled=running||busyLoading;$('loadFiles').disabled=running||busyLoading;$('pauseContinuous').disabled=!running;$('startContinuous').disabled=running||!status?.started||!!status?.cpu?.stop&&!['waiting','control'].includes(status.cpu.stop.category);$('runStatus').textContent=running?'Processeur en cours d’exécution. Les commandes restent accessibles.':status?.cpu?.stop?'Arrêt : '+status.cpu.stop.reason:status?.started?'Processeur en pause.':'Chargez vos images, puis initialisez le processeur.';}
 });
 const TRACKED = new Set(['reset','step','run','readMemory','readNand','programNand','eraseNand','boardKey','boardRotate','boardVolume','micKey','gpsInject','powerPulse','panelKey','usbConnect','usbDisconnect','cpsRead','cpsWrite','cpsRename','cpsVerify','cpsRestore','gpsScenario','sensorInputs','micConfigure','micReleaseAll','rfInputs']);
 
@@ -131,6 +132,7 @@ function refresh(s) {
   const virtualSeconds=(s.cpu?.hardware?.virtualUnits??0)/120000000;
   const elapsed=launchWallTime===null?null:(performance.now()-launchWallTime)/1000;
   $('executionProgress').textContent=`Temps du banc : ${virtualSeconds.toFixed(2)} s`+(elapsed!==null?` · temps écoulé : ${elapsed.toFixed(1)} s · vitesse moyenne : ${((virtualSeconds-launchVirtualTime/120000000)/Math.max(elapsed,0.001)).toFixed(3)}×`:'')+` · écritures LCD : ${(s.board?.lcd?.writes??0).toLocaleString('fr-FR')}`;
+  if(s.VOLUME_PCM){const v=s.VOLUME_PCM;$('volumePcmState').textContent=v.connected?`${v.ports.join(' / ')} · ${v.processed}/${v.total} échantillons · ${v.gainChanges} commandes pendant le clip`:'Aucune source U2429.';}
   if(s.AUDIO_INPUT){const a=s.AUDIO_INPUT;$('audioInputState').textContent=a.connected?`PC0 / ADC10 : ${a.length} échantillons source à ${a.sampleRate} Hz · ${a.converted} conversions · ${a.captured} acquisitions conservées${a.captureTruncated?' (capture bornée)':''}\nLe trajet voix FM reste distinct de cette entrée.`:'Aucune source PCM externe.';}
   if(s.RF_COMMANDS)$('rfCommandState').textContent=rfCommandText(s.RF_COMMANDS);if(s.SENSORS){const p=s.SENSORS;$('sensorState').textContent=`ADC6 : ${p.adc[6]} · ADC10 : ${p.adc[10]} · ADC11 : ${p.adc[11]}\nSorties DAC0 / DAC1 : ${p.dac0??'—'} / ${p.dac1??'—'} bruts\nRF banque 0 / page 0 / registre 0x25 : ${p.fanRegister===null?'non écrit':hex(p.fanRegister)} · bit ventilateur : ${p.fanBit===null?'inconnu':p.fanBit?'1':'0'}\nSWR / ROS : raccordement non qualifié`;}
   const edit=s.USB?.memory;const busy=edit&&['backup','writing','waiting_reset','restarting','verifying','awaiting_verification'].includes(edit.state);
@@ -256,10 +258,10 @@ $('guidedStart').addEventListener('click',safe(async()=>{
  const args=fileInputs();
  if(args.boot||args.app)throw new Error('Le démarrage guidé utilise la Flash complète et les trois fichiers NAND. Pour des images séparées, utiliser Charger les images puis les commandes CPU.');
  selectBackupSet([args.flash,args.nand,args.oob,args.ecc].filter(Boolean));
- busyLoading=true;$('guidedStart').disabled=true;$('loadFiles').disabled=true;$('loadSample').disabled=true;
+ busyLoading=true;$('guidedStart').disabled=true;$('loadFiles').disabled=true;$('loadSample').disabled=true;$('loadAudioAlpha').disabled=true;
  $('runtimeState').textContent='Chargement local des sauvegardes et du moteur ARM…';
  try{await loadImages(args,'Sauvegardes locales');await act('reset',{mode:'boot'});guidedBoot.arm();$('runtimeState').textContent='Démarrage OEM en cours. Power sera transmis au premier sommeil du processeur.';beginContinuous();}
- finally{busyLoading=false;$('guidedStart').disabled=loop.running;$('loadFiles').disabled=loop.running;$('loadSample').disabled=loop.running;}
+ finally{busyLoading=false;$('guidedStart').disabled=loop.running;$('loadFiles').disabled=loop.running;$('loadSample').disabled=loop.running;$('loadAudioAlpha').disabled=loop.running;}
 }));
 $('loadSample').addEventListener('click',safe(async()=>{
   const res=await fetch('./samples/board_hw_demo.bin',{cache:'no-store'});
@@ -396,7 +398,7 @@ $('clearEvents').addEventListener('click',()=>$('events').replaceChildren());
 
 (async()=>{
   setDebugUi(false);
-  try { const v=await send('version'); if(v.build!=='web0151r3')throw new Error(`Worker different de la page: ${v.build??'inconnu'} (attendu web0151r3). Recharger avec Ctrl+Maj+R.`); refresh(await send('status'));$('runtimeState').textContent='Moteur Web prêt. Sélectionner les quatre sauvegardes, puis Charger et démarrer.';for(const id of ['guidedStart','loadFiles','loadSample'])$(id).disabled=false; log('Version Web '+v.build+' / moteur '+v.engine+' prête.'); }
+  try { const v=await send('version'); if(v.build!=='web0151r5')throw new Error(`Worker different de la page: ${v.build??'inconnu'} (attendu web0151r5). Recharger avec Ctrl+Maj+R.`); refresh(await send('status'));$('runtimeState').textContent='Moteur Web prêt. Sélectionner les quatre sauvegardes, puis Charger et démarrer.';for(const id of ['guidedStart','loadFiles','loadSample','loadAudioAlpha'])$(id).disabled=false; log('Version Web '+v.build+' / moteur '+v.engine+' prête.'); }
   catch(error) { $('runtimeState').textContent='Démarrage impossible : '+error.message;$('runtimeState').classList.add('error');log('Demarrage impossible : '+error.message,true); }
 })();
 
@@ -496,7 +498,7 @@ $('pauseContinuous').addEventListener('click',safe(async()=>{guidedBoot.cancel()
 $('reportQuick').addEventListener('click',safe(async()=>{
  await loop.pause();const report=await send('report',{includeTrace:!!status?.debugEnabled});
  report.scenarioTruncated=scenarioTruncated;
- saveJson(report,'opend578-diagnostic-web0151r3.json');log('Diagnostic exporté.');
+ saveJson(report,'opend578-diagnostic-web0151r5.json');log('Diagnostic exporté.');
 }));
 
 $('powerPulse').addEventListener('click',safe(async()=>{guidedBoot.cancel();await act('powerPulse');if(!loop.running)beginContinuous();log('PA0 maintenu à 0 pendant 2 secondes du temps du banc, puis relâché automatiquement.');}));
@@ -528,3 +530,13 @@ $('serviceChord').addEventListener('click',safe(async()=>{const keys=status?.FAC
 $('audioLoad').addEventListener('click',safe(async()=>{const file=$('audioWav').files[0];if(!file)throw Error('Choisir un WAV PCM16');if(file.size>10000000)throw Error('WAV trop volumineux');const config=wavToAdcCodes(await file.arrayBuffer(),{bias:Number($('audioBias').value),amplitude:Number($('audioAmplitude').value)});refresh(await act('audioInput',{config}));log('Source externe appliquée sur PC0 / ADC10 ; aucune écriture directe SRAM.');}));
 $('audioStop').addEventListener('click',safe(async()=>refresh(await act('audioInput',{config:null}))));
 $('audioCapture').addEventListener('click',safe(async()=>{const data=await act('audioInputCapture');const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='OpenD578_ADC10_acquisitions.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}));
+
+let volumeAudioUrl=null;
+$('volumePcmLoad').addEventListener('click',safe(async()=>{const f=$('volumeWav').files[0];if(!f||f.size>10000000)throw Error('Choisir un WAV PCM16, 12 secondes maximum');const w=decodePcm16Wav(await f.arrayBuffer());const channels=w.channels.map((samples,i)=>({port:w.channels.length===1?Number($('volumePort').value):i+1,samples}));refresh(await act('volumePcmInput',{config:{channels,sampleRate:w.sampleRate}}));}));
+$('volumePcmStop').addEventListener('click',safe(async()=>refresh(await act('volumePcmInput',{config:null}))));
+$('volumePcmExport').addEventListener('click',safe(async()=>{const c=await act('volumePcmCapture');const wav=pcm16Wav(c.channels.map(x=>x.samples),c.sampleRate);if(volumeAudioUrl)URL.revokeObjectURL(volumeAudioUrl);volumeAudioUrl=URL.createObjectURL(new Blob([wav],{type:'audio/wav'}));$('volumePcmPlayer').src=volumeAudioUrl;const a=document.createElement('a');a.href=volumeAudioUrl;a.download='OpenD578_U2429_OUT'+c.channels.map(x=>x.port).join('_')+'.wav';a.click();}));
+
+$('loadAudioAlpha').addEventListener('click',safe(async()=>{
+ if(busyLoading||loop.running)return;busyLoading=true;$('loadAudioAlpha').disabled=true;
+ try{const res=await fetch('./samples/audio_alpha.bin',{cache:'no-store'});if(!res.ok)throw Error('Programme audio alpha introuvable');const file=new File([await res.arrayBuffer()],'audio_alpha.bin',{type:'application/octet-stream'});await loadImages({flash:null,boot:null,app:file,nand:null,oob:null,ecc:null,appAddress:0x08006000},'Programme audio indépendant, RF non initialisée');await act('reset',{mode:'app'});guidedBoot.cancel();log('Audio alpha : potentiomètres A/B, P1 mute A, P4 mute B, MENU coupe, EXIT rouvre. Pas de réception RF.');beginContinuous();}finally{busyLoading=false;$('loadAudioAlpha').disabled=loop.running;}
+}));

@@ -86,6 +86,8 @@ class PageMarkdown(mistune.HTMLRenderer):
             return relative(self.output,target)+(('#'+u.fragment) if u.fragment else '')
         if image and rel.suffix.lower() in ('.png','.jpg','.jpeg','.webp','.svg','.gif'):
             target=SITE/'raw'/rel
+            target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(source,target)
             return relative(self.output,target)
         return GITHUB+'/blob/main/'+quote(rel.as_posix())
 
@@ -140,7 +142,7 @@ def category(rel:str):
 
 
 def nav(dest:Path,active:str=''):
-    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('io/index.html','Tableau IO'),('simulator/index.html','Simulateur'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('f1dmg.html','F1DMG'),('sources.html','Code source')]
+    links=[('index.html','Vue eclatee'),('facade.html','Facade'),('io/index.html','Tableau IO'),('audio/index.html','Audio RX/TX'),('simulator/index.html','Simulateur'),('docs.html','Documents'),('cps.html','CPS / USB'),('doc/docs/evidence/INDEX.html','Preuves'),('doc/docs/external/INDEX.html','Sources externes'),('firmware.html','Firmware'),('photos.html','Photos'),('f1dmg.html','F1DMG'),('sources.html','Code source')]
     out=['<nav class="nav" aria-label="Navigation">']
     for name,label in links:
         clazz=' class="active"' if name==active else ''
@@ -225,6 +227,12 @@ def hardware_pages(models):
             body=f'''<div class="breadcrumb"><a href="{x(relative(target,SITE/'index.html'))}">Vue eclatee</a> / {x(model['title'])}</div>
 <h1>{x(n['label'])}</h1><p>{x(n['description'])}</p><dl class="facts"><dt>Groupe</dt><dd>{x(n['group'])}</dd><dt>Statut</dt><dd>{x(n['confidence'])}</dd><dt>Variante</dt><dd>{x(model['title'])}</dd></dl>
 <h2>Connexions</h2><ul class="link-list">{''.join(edges) or '<li>Pas de liaison documentee</li>'}</ul><h2>Notices et preuves</h2><ul>{refs}</ul>'''
+            if n['id'] in ('mcu','mcu_plus'):
+                signals=json.loads((ROOT/'docs/hardware/io/TABLEAU_IO_D578.json').read_text())
+                body+='<h2>Les 86 signaux utiles</h2><p>Fonctions et références courantes ; les précisions ouvertes ne retirent pas la validation firmware.</p><table><thead><tr><th>Patte</th><th>GPIO</th><th>Fonction</th><th>Validation / précision</th></tr></thead><tbody>'
+                for sig in signals:
+                    body+='<tr><td>'+x(sig['Patte GD32'])+'</td><td>'+x(sig['Signal GD32'])+'</td><td>'+x(sig['Fonction du signal distant'])+'</td><td>'+x(sig['Validation']+' — '+sig['Précision restante'])+'</td></tr>'
+                body+='</tbody></table>'
             write(target,shell(n['label'],target,body))
         for e in model['edges']:
             target=SITE/'connection'/vid/f"{e['id']}.html"
@@ -438,6 +446,7 @@ def main():
     io_source = ROOT/'docs/hardware/io'
     shutil.copytree(io_source, SITE/'io', dirs_exist_ok=True)
     shutil.copy2(io_source/'TABLEAU_IO_D578.html', SITE/'io/index.html')
+    shutil.copytree(ROOT/'site-assets/audio', SITE/'audio', dirs_exist_ok=True)
     (SITE/'.nojekyll').touch()
     print(f'Built {len(docs)} Markdown pages, {sum(len(m["nodes"]) for m in models)} components, {sum(len(m["edges"]) for m in models)} connections at {SITE}')
     return 0

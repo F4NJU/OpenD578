@@ -2,12 +2,13 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Commandes LCD de facade - OpenD578</title>
+<title>GPIO / LCD de facade - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
 <a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
 <a href="../../simulator/index.html">Simulateur</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
@@ -19,11 +20,11 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison plus-mcu-lcd_plus</div>
-<h1>Commandes LCD de facade</h1>
+<h1>GPIO / LCD de facade</h1>
 <p><a href="../../component/d578uv-plus-carte-am-observations/mcu_plus.html">MCU GD32F303 PLUS</a> &rarr; <a href="../../component/d578uv-plus-carte-am-observations/lcd_plus.html">LCD de facade</a></p>
-<dl class="facts"><dt>Bus</dt><dd>GPIO/ADC/UART selon fonction et version</dd><dt>Niveau de preuve</dt><dd>hypothesis</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
-<p>La fonction physique est validee sur la variante PLUS. La correspondance specifique des broches GD32 PLUS n&#x27;a pas ete extraite ici; le brochage PRO V1.21 est fourni comme reference comparative, sans attribution automatique.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td colspan="3">Aucune broche supplémentaire identifiée pour cette liaison; consulter les fonctions, trames et références OEM.</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li></ul></main>
+<dl class="facts"><dt>Bus</dt><dd>GPIO, parallèle 8080 8 bits</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
+<p>Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PE7</code></td><td>D0 — Bit 0 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE8</code></td><td>D1 — Bit 1 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE9</code></td><td>D2 — Bit 2 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE10</code></td><td>D3 — Bit 3 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE11</code></td><td>D4 — Bit 4 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE12</code></td><td>D5 — Bit 5 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE13</code></td><td>D6 — Bit 6 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PE14</code></td><td>D7 — Bit 7 de l’octet commande/paramètre/pixel</td><td>oem_trace</td></tr><tr><td><code>PB10</code></td><td>WR# — Strobe d’écriture, octet pris au front montant</td><td>oem_trace</td></tr><tr><td><code>PB11</code></td><td>D/C ou A0 — 0=commande, 1=donnée</td><td>oem_trace</td></tr><tr><td><code>PB12</code></td><td>RESET# — Réinitialisation matérielle active basse</td><td>oem_trace</td></tr><tr><td><code>PB13</code></td><td>CS# — Sélection active basse de l’écran</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/VALIDATION_FONCTIONS_OEM.html">D578 : statut des fonctions et cartographie issue du firmware OEM</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/VALIDATION_FONCTIONS_OEM.md">source</a></small></li><li><a href="../../doc/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.html">OpenD578 : façade, boutons, codeur, volumes et éclairages</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/FACADE_GPIO_BOUTONS_CODEUR_VOLUMES_ET_ECLAIRAGES.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

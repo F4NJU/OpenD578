@@ -20,7 +20,7 @@ const lib={Unicorn:NativeStub,ARCH_ARM:1,CPU_ARM_CORTEX_M4:9,MODE_THUMB:16,MODE_
  HOOK_MEM_READ:0x400,HOOK_MEM_WRITE:0x800};
 
 test('RCU ownership stays in startup model, not legacy board IO',()=>{
-  assert.equal(CORE_REVISION,'web0151r3');
+  assert.equal(CORE_REVISION,'web0151r5');
   assert(ownsSystemMmio(RCU_BASE));
   assert(ownsSystemMmio(RCU_BASE+4));
   assert(ownsSystemMmio(FMC_BASE));
@@ -50,10 +50,10 @@ test('unknown system register stays an explicit error, without guessed zeros',()
   assert.match(c.modelError?.reason??'',/RCU lecture non modelisee/);
   assert.equal(c.modelError?.address,RCU_BASE+0x94);
 });
-test('source graph and index request web0151r3 worker and modules',async()=>{
+test('source graph and index request web0151r5 worker and modules',async()=>{
   const base=new URL('../',import.meta.url);
   for(const file of ['index.html','assets/app.mjs','assets/engine.wasm.worker.js','assets/engine.wasm.worker.mjs','assets/wasm-machine.mjs','assets/unicorn-cortex.mjs']){
     const s=await readFile(new URL(file,base),'utf8');
-    assert.match(s,/web0151r3/,`${file} missing build marker`);
+    assert.match(s,/web0151r5/,`${file} missing build marker`);
   }
 });

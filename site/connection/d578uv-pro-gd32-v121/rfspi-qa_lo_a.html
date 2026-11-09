@@ -2,12 +2,13 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
-<title>Banque SPI vers qa_lo_a - OpenD578</title>
+<title>Sélection RF banque 0 : PB5 - OpenD578</title>
 <link rel="stylesheet" href="../../assets/site.css"></head>
 <body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
 <a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
 <a href="../../simulator/index.html">Simulateur</a>
 <a href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
@@ -19,11 +20,11 @@
 <a href="../../sources.html">Code source</a>
 <a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
 <main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison rfspi-qa_lo_a</div>
-<h1>Banque SPI vers qa_lo_a</h1>
-<p><a href="../../component/d578uv-pro-gd32-v121/rf_spi.html">Bus RF 4 sélections</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/qa_lo_a.html">QA4818N candidat LO A</a></p>
-<dl class="facts"><dt>Bus</dt><dd>SPI trois fils à sélectionner</dd><dt>Niveau de preuve</dt><dd>hypothesis</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
-<p>Quatre sélections logiques correspondent à quatre commandes RF, mais le couplage bank→boîtier n’a pas été mesuré. Pinout QA annoncé compatible AT1846S ; signal SENB et adresse à relever.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td colspan="3">Aucune broche supplémentaire identifiée pour cette liaison; consulter les fonctions, trames et références OEM.</td></tr></tbody></table></div>
-<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.html">Quatre LQFP32 grattés : QA4818N, horloges 26 MHz et récepteurs à FI</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_QUATRE_CIRCUITS_26MHZ.md">source</a></small></li><li><a href="../../doc/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.html">QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_RECONSTRUCTION_REGISTRES_PLL_CHAINES_RX_TX.md">source</a></small></li></ul></main>
+<h1>Sélection RF banque 0 : PB5</h1>
+<p><a href="../../component/d578uv-pro-gd32-v121/rf_spi.html">Bus RF 4 sélections</a> &rarr; <a href="../../component/d578uv-pro-gd32-v121/qa_lo_a.html">RF banque 0 / famille QA4818N</a></p>
+<dl class="facts"><dt>Bus</dt><dd>Série GPIO 8+16 bits, MSB-first</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PRO - GD32 V1.21</dd></dl>
+<p>CS banque 0=PB5, CLK PB3, SDIO PB4, validés par instructions OEM. Correspondance logique ; aucune position physique ni fonction LO/FI déduite du numéro de banque.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PB3</code></td><td>CLK du BH2226 et SCLK RF</td><td>oem_trace</td></tr><tr><td><code>PB4</code></td><td>DI du BH2226 ; SDIO RF</td><td>oem_trace</td></tr><tr><td><code>PB5</code></td><td>CS# / sélection active basse — Sélection de la banque logique 0</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/QA4818N_ETAT_OEM_20261109.html">Banques RF / QA4818N — état OEM au 9 novembre 2026</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/QA4818N_ETAT_OEM_20261109.md">source</a></small></li><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
 </body></html>

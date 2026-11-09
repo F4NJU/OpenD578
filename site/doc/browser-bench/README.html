@@ -8,6 +8,7 @@
 <a href="../../index.html">Vue eclatee</a>
 <a href="../../facade.html">Facade</a>
 <a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
 <a href="../../simulator/index.html">Simulateur</a>
 <a class="active" href="../../docs.html">Documents</a>
 <a href="../../cps.html">CPS / USB</a>
@@ -29,6 +30,10 @@
 <p>La suite logicielle intégrée compte 117 tests. La chaîne PCM complète, le ROS physique et la réception APRS analogique via BHT restent ouverts. Voir LIMITES.md, le guide dans index.html et docs/ETAT_CONFIRME_20261109.md à la racine du dépôt. Les essais de routines isolées ne remplacent pas une validation complète sur poste.</p>
 <h2 id="complement-audio-pc0">Complément audio PC0</h2>
 <p>120 tests logiciels réussis après ajout de la source WAV PCM16 vers ADC10. Elle passe par l’ADC/DMA du programme ; il s’agit de l’acquisition de signalisation RX, pas du microphone ni d’un transport voix FM complet. Les acquisitions sont exportables. Les contrats C audio sont intégrés dans firmware/hal/audio_control.c et comparés sur 62 402 cas OEM isolés sans différence. Voir docs/peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md.</p>
+<h2 id="raccordement-du-transfert-u2429">Raccordement du transfert U2429</h2>
+<p>Le panneau de traversée U2429 applique ses commandes série aux échantillons d’un WAV à leurs instants virtuels. Écoute et export OUT1/OUT2 sont disponibles. Aucun canal n’est attribué arbitrairement à un HP. 125 tests Web réussis. Le schéma et les limites sont dans le menu Audio RX/TX et docs/peripherals/09_SCHEMA_AUDIO_RX_TX_ET_RACCORDEMENTS.md.</p>
+<h2 id="programme-audio-alpha-independant">Programme audio alpha indépendant</h2>
+<p>Le bouton dédié charge un programme Cortex-M4 fourni sans sauvegardes OEM. Les réglages A/B, P1/P4, MENU/EXIT et le LCD sont produits par ce programme. Le test suit les trames série jusqu’aux échantillons U2429. Total : 126 tests Web réussis. La RF n’est pas initialisée ; ce n’est pas une radio FM utilisable ni une image CPS qualifiée pour le poste.</p>
 </article></main>
 <footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
 <script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>

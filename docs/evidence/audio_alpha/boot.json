@@ -1,0 +1,32 @@
+{
+  "program": "audio_alpha",
+  "scope": "independent control program in ARM bench; no hardware qualification",
+  "entry": 134242304,
+  "virtualUnits": 7327358,
+  "volumeChannels": [
+    {
+      "channel": 1,
+      "known": true,
+      "code": 117,
+      "mute": false,
+      "attenuationDb": 0,
+      "gain": 1
+    },
+    {
+      "channel": 2,
+      "known": true,
+      "code": 16,
+      "mute": false,
+      "attenuationDb": 23,
+      "gain": 0.0707945784384138
+    }
+  ],
+  "lcdWrites": 20480,
+  "adcTransfers": 114474,
+  "RFtransactions": 0,
+  "gates": {
+    "PE6": false,
+    "PC4": false,
+    "PE0": true
+  }
+}

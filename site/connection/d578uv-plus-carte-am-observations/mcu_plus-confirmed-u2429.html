@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>GPIO / U2429, commande volume - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
+<a href="../../simulator/index.html">Simulateur</a>
+<a href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
+<a href="../../doc/docs/external/INDEX.html">Sources externes</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../f1dmg.html">F1DMG</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu_plus-confirmed-u2429</div>
+<h1>GPIO / U2429, commande volume</h1>
+<p><a href="../../component/d578uv-plus-carte-am-observations/mcu_plus.html">MCU GD32F303 PLUS</a> &rarr; <a href="../../component/d578uv-plus-carte-am-observations/u2429.html">U2429, commande volume</a></p>
+<dl class="facts"><dt>Bus</dt><dd>SWCLK au debug ; série GPIO au fonctionnement / SWDIO au debug ; série GPIO au fonctionnement</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
+<p>Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PA13</code></td><td>SWDIO ; DATA U2429 — Débogage ou données de volume 11 bits</td><td>oem_trace</td></tr><tr><td><code>PA14</code></td><td>SWCLK ; CLOCK U2429 — Horloge du debug ou du contrôleur de volume</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>

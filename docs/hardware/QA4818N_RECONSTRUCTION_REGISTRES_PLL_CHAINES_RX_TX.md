@@ -1,5 +1,9 @@
 # QA4818N x4 : reconstruction du protocole, des fréquences, des banques et des commandes RF
 
+**Correction du 9 novembre 2026 :** lire d’abord [l’état OEM actuel](QA4818N_ETAT_OEM_20261109.md). Les liaisons PB3/PB4 et les quatre CS sont validées par firmware. La fréquence OEM utilise **0x38/0x39**, et non les exemples AT1846S 0x29/0x2A conservés ci-dessous comme historique. Les anciens appels à requalifier physiquement ces bus sont remplacés par cette correction.
+
+## Archive du 6 novembre — ne pas confondre avec le contrat courant
+
 **OpenD578, variante PRO GD32 V1.21, étude du 6 novembre 2026.**
 
 **Statut : pilote de codage et analyseur de trames disponibles, pas de firmware RF matériellement validé.** Les séquences du constructeur *peuvent* être mesurées par le banc `bench/rf_spi.py`, mais **aucune capture complète et authentifiée d'un changement de fréquence RX/TX n'a été retrouvée dans les archives publiques actuellement accessibles**. Les valeurs numériques ci-dessous proviennent soit d'une équation publiée pour l'AT1846S, soit d'un scénario explicitement hypothétique. Il serait incorrect de les appeler « mots observés du D578 » sans enregistrer un `RF_control_spi.frames` ou `radio.frames` exécuté avec l'application OEM.

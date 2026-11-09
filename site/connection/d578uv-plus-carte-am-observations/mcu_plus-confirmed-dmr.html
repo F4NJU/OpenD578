@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>GPIO / Interface SCT3258 - OpenD578</title>
+<link rel="stylesheet" href="../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../index.html">Vue eclatee</a>
+<a href="../../facade.html">Facade</a>
+<a href="../../io/index.html">Tableau IO</a>
+<a href="../../audio/index.html">Audio RX/TX</a>
+<a href="../../simulator/index.html">Simulateur</a>
+<a href="../../docs.html">Documents</a>
+<a href="../../cps.html">CPS / USB</a>
+<a href="../../doc/docs/evidence/INDEX.html">Preuves</a>
+<a href="../../doc/docs/external/INDEX.html">Sources externes</a>
+<a href="../../firmware.html">Firmware</a>
+<a href="../../photos.html">Photos</a>
+<a href="../../f1dmg.html">F1DMG</a>
+<a href="../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../index.html">Vue eclatee</a> / Liaison mcu_plus-confirmed-dmr</div>
+<h1>GPIO / Interface SCT3258</h1>
+<p><a href="../../component/d578uv-plus-carte-am-observations/mcu_plus.html">MCU GD32F303 PLUS</a> &rarr; <a href="../../component/d578uv-plus-carte-am-observations/dmr.html">Interface SCT3258</a></p>
+<dl class="facts"><dt>Bus</dt><dd>GPIO HPI / GPIO de commande SCT / GPIO de démarrage SCT / GPIO de requête SCT / GPIO de strap au démarrage / GPIO de synchronisation SCT / GPIO reset / exécution SCT / GPIO, HPI parallèle asynchrone / GPIO, bus HPI parallèle 8 bits</dd><dt>Niveau de preuve</dt><dd>oem_trace</dd><dt>Variante</dt><dd>AT-D578UV PLUS - GD32, Bluetooth et carte AM (observations)</dd></dl>
+<p>Commandes et fonctions reprises du tableau IO courant. Une liaison établie par firmware est retenue validée ; les précisions non résolues restent dans les notes de chaque signal.</p><h2>Signaux</h2><div class="table-scroll"><table><thead><tr><th>MCU / source</th><th>Signal destination</th><th>Preuve</th></tr></thead><tbody><tr><td><code>PD0</code></td><td>État de synchronisation lu pour autoriser/couper PE6, PC4 et DAC0</td><td>oem_trace</td></tr><tr><td><code>PD1</code></td><td>Impulsion de sollicitation avant attente de réponse du protocole SCT</td><td>oem_trace</td></tr><tr><td><code>PD2</code></td><td>HCSN — Sélection / écriture / lecture / handshake HPI</td><td>oem_trace</td></tr><tr><td><code>PD3</code></td><td>HWRN — Sélection / écriture / lecture / handshake HPI</td><td>oem_trace</td></tr><tr><td><code>PD4</code></td><td>HRDN — Sélection / écriture / lecture / handshake HPI</td><td>oem_trace</td></tr><tr><td><code>PD5</code></td><td>HOBIB / indication de disponibilité HPI</td><td>oem_trace</td></tr><tr><td><code>PD6</code></td><td>Commande de reset/maintien du cœur et libération après bootstrap</td><td>oem_trace</td></tr><tr><td><code>PD7</code></td><td>Impulsion dans une séquence de réinitialisation logique du protocole</td><td>oem_trace</td></tr><tr><td><code>PD8</code></td><td>HPI DATA0 — Bit 0 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD9</code></td><td>HPI DATA1 — Bit 1 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD10</code></td><td>HPI DATA2 — Bit 2 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD11</code></td><td>HPI DATA3 — Bit 3 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD12</code></td><td>HPI DATA4 — Bit 4 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD13</code></td><td>HPI DATA5 — Bit 5 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD14</code></td><td>HPI DATA6 — Bit 6 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PD15</code></td><td>HPI DATA7 — Bit 7 des octets échangés avec le SCT</td><td>oem_trace</td></tr><tr><td><code>PA8</code></td><td>Validation du sous-ensemble au démarrage ; désactivation à l’arrêt</td><td>oem_trace</td></tr><tr><td><code>PC6</code></td><td>Commande d’activation maintenue pendant chargement et exécution</td><td>oem_trace</td></tr><tr><td><code>PC7</code></td><td>Ligne de mode/validation du protocole SCT</td><td>oem_trace</td></tr><tr><td><code>PC12</code></td><td>Strap imposé bas pendant reset/chargement, puis libéré</td><td>oem_trace</td></tr></tbody></table></div>
+<h2>Notices et traces</h2><ul><li><a href="../../doc/docs/hardware/io/TABLEAU_IO_D578.html">OpenD578 — liaisons GD32F303VKT6 résolues par firmware</a> <small><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/hardware/io/TABLEAU_IO_D578.md">source</a></small></li></ul></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../assets/models.js" defer></script><script src="../../assets/search-data.js" defer></script><script src="../../assets/site.js" defer></script>
+</body></html>
