@@ -1,0 +1,235 @@
+{
+  "referenceFlashSHA256": "e2f2483baf60e2bfcab656e25e949670713222591ef4d611d6089054819a750e",
+  "method": "isolated OEM routine differential execution; explicit RAM input fixtures, terminal RF/GPIO calls recorded",
+  "coldBoot": false,
+  "browserGuestStateWritten": false,
+  "routines": {
+    "enable": "0x08090A86",
+    "mute": "0x08090ADC",
+    "mic_path": "0x080929B6",
+    "route_gate": "0x08090A22",
+    "aux_route": "0x08090A4C",
+    "fm_microphone": "0x0806F07C",
+    "volume_quantizer": "0x0808B922",
+    "volume_encoder": "0x0808C3EC"
+  },
+  "passed": {
+    "enable": 12288,
+    "mic_path": 24576,
+    "route_gate": 12288,
+    "aux_route": 8192,
+    "mute": 512,
+    "fm_microphone": 384,
+    "volume_quantizer": 4096,
+    "volume_encoder": 66
+  },
+  "total": 62402,
+  "mismatches": 0,
+  "microphoneExamples": [
+    {
+      "factoryMIC": 54,
+      "userLevel": 1,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          4389,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          952,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    },
+    {
+      "factoryMIC": 54,
+      "userLevel": 2,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          6437,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          928,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    },
+    {
+      "factoryMIC": 54,
+      "userLevel": 3,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          8485,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          944,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    },
+    {
+      "factoryMIC": 54,
+      "userLevel": 4,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          10533,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          944,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    },
+    {
+      "factoryMIC": 54,
+      "userLevel": 5,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          12581,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          952,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    },
+    {
+      "factoryMIC": 54,
+      "userLevel": 6,
+      "OEMoperations": [
+        [
+          0,
+          0,
+          24,
+          14629,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          1,
+          false
+        ],
+        [
+          0,
+          0,
+          23,
+          952,
+          false
+        ],
+        [
+          0,
+          0,
+          127,
+          0,
+          false
+        ]
+      ]
+    }
+  ],
+  "scope": "digital commands, exact order and cached writes; no PCM, analog transfer or new full boot qualification"
+}

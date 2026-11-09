@@ -1,7 +1,7 @@
-import {RfFrequencyCommands} from './rf-commands.mjs?build=web0151r2';
+import {RfFrequencyCommands} from './rf-commands.mjs?build=web0151r3';
 /* Ports of rf_spi.py, fm_i2c.py and sct_hpi.py from the local V11 bench.
  * GPIO wire decoders; no OEM PC hooks. Only DMR responses may be substituted. */
-import { Aic3204ControlObserver,SctAudioControl } from './audio-devices.mjs?build=web0151r2';
+import { Aic3204ControlObserver,SctAudioControl } from './audio-devices.mjs?build=web0151r3';
  export class RfSpi{
  constructor(){this.frequencyCommands=new RfFrequencyCommands();this.bank=null;this.bits=[];this.command=null;this.miso=null;this.pages=[0,0,0,0];this.regs=new Map([0,1,2,3].map(b=>[`${b}:0:68`,255]));this.written=new Set();this.frames=[];this.total=0;this.armed=false;this.externalInputs=new Map();}
  setInputs(bank,registers){if(![0,1].includes(bank)||!registers||typeof registers!=='object')throw Error('Banque RF 0 ou 1 requise');const next={};for(const [key,value]of Object.entries(registers)){const a=Number(key);if(![12,96,97,101,103].includes(a)||!Number.isInteger(value)||value<0||value>65535||(a===101&&value>127)||(a===103&&value>511))throw Error('Échantillon RF hors profil');next[a]=value;}this.externalInputs.set(bank,next);}

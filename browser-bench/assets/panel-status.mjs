@@ -1,5 +1,5 @@
-import {audioControlStatus} from './audio-routing.mjs?build=web0151r2';
-import {qaAudioStatus} from './calibration-status.mjs?build=web0151r2';
+import {audioControlStatus} from './audio-routing.mjs?build=web0151r3';
+import {qaAudioStatus} from './calibration-status.mjs?build=web0151r3';
 /* Observe physical inputs, ADC/DMA conversions and completed output-bus writes.
  * No OEM addresses or derived firmware variables. No audio synthesis. */
 export function panelStatus(board,hardware,flashSha=null){

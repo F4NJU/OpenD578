@@ -1,10 +1,11 @@
+import {AudioPcmInput} from './audio-pcm-input.mjs?build=web0151r3';
 /* Hardware-only I/O model for D578UV PRO GD32. No OEM SRAM variable access.
  * Based on OpenD578 V11.8 mapping; unknown circuits are NOT inferred.
  * Copyright (c) 2026 OpenD578 contributors; GPL-3.0-or-later.
  */
-import { WiredMicrophoneCable } from './wired-microphone.mjs?build=web0151r2';
-import { NandSpi } from './nand-spi.mjs?build=web0151r2';
-import { U2429 } from './audio-devices.mjs?build=web0151r2';
+import { WiredMicrophoneCable } from './wired-microphone.mjs?build=web0151r3';
+import { NandSpi } from './nand-spi.mjs?build=web0151r3';
+import { U2429 } from './audio-devices.mjs?build=web0151r3';
 export const GPIO_BASE = Object.freeze({A:0x40010800,B:0x40010c00,C:0x40011000,D:0x40011400,E:0x40011800,F:0x40011c00,G:0x40012000});
 export const ADC0=0x40012400, USART0=0x40013800, USART1=0x40004400;
 export const AFIO=0x40010000,EXTI=0x40010400;
@@ -50,12 +51,13 @@ export class Lcd8080 {
 }
 export class BoardIO {
   constructor({onChange=null,nandStorage=null}={}) {
-    this.onChange=onChange;
+    this.onChange=onChange;this.audioInput=new AudioPcmInput();
     this.nand=nandStorage?new NandSpi(nandStorage):null;
     this.mic=new WiredMicrophoneCable({rxByteFromWire:b=>this.uartRx.push(b)});
     this.reset();
   }
   reset({preserveInputs=false,preserveExternal=false}={}){
+    if(!preserveExternal)this.audioInput.clear();
     const external=preserveInputs&&this.input?{input:{...this.input},keys:new Set(this.keys),adc:new Map(this.adc)}:null;
     this.out=Object.fromEntries(Object.keys(GPIO_BASE).map(k=>[k,0]));
     if(!preserveExternal)this.nand?.reset();

@@ -3,11 +3,11 @@
  * GPL-3.0-or-later, OpenD578 project. Upstream Unicorn.js GPL-2.0:
  * licensing compatibility must be reviewed before distributing its binary.
  */
-import {BoardRuntime} from './board-runtime.mjs?build=web0151r2';
-import {FLASH_START,FLASH_SIZE,SRAM_START,SRAM_SIZE,checkVector,hex} from './memory.mjs?build=web0151r2';
-import {BoardIO,GPIO_BASE,ADC0,USART0,USART1} from './board-io.mjs?build=web0151r2';
-import {BootPeripherals, RCU_BASE, FMC_BASE, SCB_BASE, BITBAND_RCU} from './startup-peripherals.mjs?build=web0151r2';
-export const CORE_REVISION='web0151r2';
+import {BoardRuntime} from './board-runtime.mjs?build=web0151r3';
+import {FLASH_START,FLASH_SIZE,SRAM_START,SRAM_SIZE,checkVector,hex} from './memory.mjs?build=web0151r3';
+import {BoardIO,GPIO_BASE,ADC0,USART0,USART1} from './board-io.mjs?build=web0151r3';
+import {BootPeripherals, RCU_BASE, FMC_BASE, SCB_BASE, BITBAND_RCU} from './startup-peripherals.mjs?build=web0151r3';
+export const CORE_REVISION='web0151r3';
 export function ownsSystemMmio(a){return (a>=RCU_BASE&&a<RCU_BASE+0x1000)||(a>=FMC_BASE&&a<FMC_BASE+0x1000)||(a>=SCB_BASE&&a<SCB_BASE+0x1000)||(a>=BITBAND_RCU&&a<BITBAND_RCU+0x1000);}
 const toArray=(value)=>value instanceof Uint8Array?value:new Uint8Array(value);
 function bytesOf(value,size){const out=new Uint8Array(size);for(let i=0;i<size;i++)out[i]=(value>>>(8*i))&255;return out;}

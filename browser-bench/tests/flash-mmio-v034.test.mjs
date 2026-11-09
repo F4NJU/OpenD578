@@ -25,7 +25,7 @@ test('unexpected callback on bootloader Flash does not become MMIO error',()=>{
  assert.equal(c.modelError,null);
  assert.equal(c.uc.stopped,false);
  assert.equal(c.uc.mem.has(0x08000500),false);
- assert.equal(CORE_REVISION,'web0151r2');
+ assert.equal(CORE_REVISION,'web0151r3');
 });
 test('RCU read still reaches the actual RCU model',()=>{
  const c=new UnicornCortexM4(api);

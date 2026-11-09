@@ -1,6 +1,6 @@
 /* GD32 single-buffer USBD/PMA, port of V11 usbd_host.py. Host tokens never
  * read Flash/SRAM/NAND. Every response payload is read from firmware PMA. */
-import {UsbIdle} from './timed-devices.mjs?build=web0151r2';
+import {UsbIdle} from './timed-devices.mjs?build=web0151r3';
 export class UsbDevice extends UsbIdle{
  constructor(enabled=()=>true){super();this.enabled=enabled;this.connected=false;this.enumerated=false;this.tokens=[];this.totalTokens=0;this.lastResponse=null;}
  flags(){let f=this.r[0x44]&0x7f00;for(let e=0;e<8;e++){const v=this.r[e*4];if(v&0x8080)return f|0x8000|e|(v&0x8000?16:0);}return f;}

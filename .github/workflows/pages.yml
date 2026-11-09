@@ -48,6 +48,10 @@ jobs:
         run: node bench/web/test_mini_cps.cjs
       - name: Validate browser bench (offline, no npm dependencies)
         run: node --test browser-bench/tests/*.test.mjs
+      - name: Validate audio command contracts
+        run: |
+          cc -std=c11 -Wall -Wextra -Werror -pedantic firmware/hal/audio_control.c firmware/tests/test_audio_control.c -o /tmp/test_audio_control
+          /tmp/test_audio_control
       - name: Validate serial encoders
         run: |
           cc -std=c11 -Wall -Wextra -Werror firmware/hal/serial_command_encoders.c firmware/tests/test_serial_command_encoders.c -o /tmp/test_serial

@@ -1,18 +1,18 @@
-import {powerCalibrationStatus} from './rf-commands.mjs?build=web0151r2';
-import {serviceCalibrationStatus} from './calibration-status.mjs?build=web0151r2';
-import {NandReadProvenance} from './nand-provenance.mjs?build=web0151r2';
+import {powerCalibrationStatus} from './rf-commands.mjs?build=web0151r3';
+import {serviceCalibrationStatus} from './calibration-status.mjs?build=web0151r3';
+import {NandReadProvenance} from './nand-provenance.mjs?build=web0151r3';
 /* Browser WASM runtime. No JavaScript Thumb interpreter is constructed or used.
  * OpenD578 hardware model reuses physical memory and NAND storage contracts.
  * Copyright (c) 2026 OpenD578 contributors; GPL-3.0-or-later.
  */
-import {panelStatus} from './panel-status.mjs?build=web0151r2';
-import {unhex} from './usb-device.mjs?build=web0151r2';
-import {setSensorInputs,sensorStatus} from './sensor-inputs.mjs?build=web0151r2';
-import {MemoryBus,checkVector,FLASH_START,FLASH_SIZE,APPLICATION_DEFAULT,parseAddress,hex} from './memory.mjs?build=web0151r2';
-import {NandOverlay} from './nand.mjs?build=web0151r2';
-import {sha256File} from './sha256.mjs?build=web0151r2';
-import {BoardIO} from './board-io.mjs?build=web0151r2';
-import {UnicornCortexM4} from './unicorn-cortex.mjs?build=web0151r2';
+import {panelStatus} from './panel-status.mjs?build=web0151r3';
+import {unhex} from './usb-device.mjs?build=web0151r3';
+import {setSensorInputs,sensorStatus} from './sensor-inputs.mjs?build=web0151r3';
+import {MemoryBus,checkVector,FLASH_START,FLASH_SIZE,APPLICATION_DEFAULT,parseAddress,hex} from './memory.mjs?build=web0151r3';
+import {NandOverlay} from './nand.mjs?build=web0151r3';
+import {sha256File} from './sha256.mjs?build=web0151r3';
+import {BoardIO} from './board-io.mjs?build=web0151r3';
+import {UnicornCortexM4} from './unicorn-cortex.mjs?build=web0151r3';
 export class WasmMachine {
   constructor({factory,debug=false}={}) {
     this.factory=factory;this.debug=!!debug;this.bus=new MemoryBus({traceWrites:false});
@@ -44,6 +44,8 @@ export class WasmMachine {
     if(nand)this.diagnostics.push('NAND connectee au bus GPIO SPI PB8/PB14/PB15 et PA15; lectures par FileReaderSync dans le Web Worker');
     return this.status();
   }
+  audioInput(config){if(!this.core)throw Error('Charger le firmware');if(config)this.board.audioInput.configure(config,this.core.time);else this.board.audioInput.clear();return this.status();}
+  audioInputCapture(){return {status:this.board.audioInput.status(),samples:this.board.audioInput.observed.slice()};}
   rfInputs(bank,registers){if(!this.core)throw Error('Charger les images');this.core.hardware.rf.setInputs(bank,registers);return this.status();}
   gpsScenario(config){const h=this.core?.hardware;if(!h)throw new Error('Initialiser le CPU');h.gps.configure(config,this.core.time);h.gps.advance(this.core.time,h.serial.get(0x40004400).device);h.nextDevices=this.core.time+1;return this.status();}
   sensorInputs(values){if(!this.core)throw Error('Charger les images avant les mesures ADC');setSensorInputs(this.board,values);return this.status();}
@@ -91,7 +93,7 @@ export class WasmMachine {
   lcd(){const s=this.board.lcd.snapshot();return {...s,backlight:this.board.lcdBacklight};}
   readMemory(addr,length=64){if(!this.core)throw new Error('Core absent');const address=parseAddress(addr);return {address,bytes:Array.from(this.core.memory(address,length)),label:'Memoire physique Unicorn WASM'};}
   filesInfo(){return Object.fromEntries(Object.entries(this.files).map(([role,file])=>[role,file?{name:file.name,size:file.size,sha256:this.hashes[role]??null,hashed:!!this.hashes[role]}:null]));}
-  status(){return {engine:'browser-wasm-d578-0.15.1',capability:'unicorn_arm_thumb2_wasm',debugEnabled:this.debug,
+  status(){return {AUDIO_INPUT:this.board.audioInput.status(),engine:'browser-wasm-d578-0.15.1',capability:'unicorn_arm_thumb2_wasm',debugEnabled:this.debug,
     scope:{dmr:'deferred',dmrSubstitutionAllowed:true,dmrSubstitutionConnected:true,nonDmrSubstitutionAllowed:false},
     RF_COMMANDS:this.core?{frequencies:this.core.hardware.rf.frequencyCommands.status(this.hashes.flash),dac0:this.core.hardware.dac[0x42c]??null,calibration:powerCalibrationStatus(this.nandProvenance,this.hashes.flash)}:null,AUDIO_CALIBRATION:this.nandProvenance?serviceCalibrationStatus(this.nandProvenance,this.hashes.flash):null,NAND_PROVENANCE:this.nandProvenance?.status()??null,FACADE:panelStatus(this.board,this.core?.hardware,this.hashes.flash),SENSORS:sensorStatus(this.board,this.core?.hardware),GPS:this.core?.hardware.gps.status()??null,USB:this.core?{cdc:this.core.hardware.cdc.status(),cps:this.core.hardware.cps.status(),memory:this.core.hardware.cpsEdit.status()}:null,model:'D578UV PRO GD32 (portage peripheriques de demarrage)',entries:this.entries,diagnostics:this.diagnostics,
     files:this.filesInfo(),nand:this.nand.summary(),board:this.board.status(),selectedVector:this.selectedVector,

@@ -1,8 +1,8 @@
 /* Worker runtime: all CPU execution stays on the visitor's machine. */
-import {WasmMachine} from './wasm-machine.mjs?build=web0151r2';
-import {parseAddress} from './memory.mjs?build=web0151r2';
-import {bindPatchSources,validatePatchSources} from './session-patch.mjs?build=web0151r2';
-const WORKER_REVISION='web0151r2';
+import {WasmMachine} from './wasm-machine.mjs?build=web0151r3';
+import {parseAddress} from './memory.mjs?build=web0151r3';
+import {bindPatchSources,validatePatchSources} from './session-patch.mjs?build=web0151r3';
+const WORKER_REVISION='web0151r3';
 let machine = new WasmMachine({factory:()=>self.__wasmFactory()});
 let commandQueue=Promise.resolve();
 self.onmessage=event=>{commandQueue=commandQueue.then(()=>dispatch(event)).catch(error=>self.postMessage({id:event.data?.id,ok:false,error:String(error)}));};
@@ -12,6 +12,8 @@ async function dispatch({data}){
     let result;
     switch(command){
       case 'version':result={build:WORKER_REVISION,engine:machine.status().engine,source:'worker'};break;
+      case 'audioInput':result=machine.audioInput(args.config);break;
+      case 'audioInputCapture':result=machine.audioInputCapture();break;
       case 'status':result=machine.status();break;
       case 'load':{const next=new WasmMachine({factory:()=>self.__wasmFactory(),debug:machine.debug});try{result=await next.attach(args);}catch(error){next.core?.close();throw error;}const previous=machine;machine=next;previous.core?.close();break;}
       case 'setDebug':result=machine.setDebug(args.enabled);break;

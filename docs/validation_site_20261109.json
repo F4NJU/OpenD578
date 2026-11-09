@@ -1,15 +1,19 @@
 {
   "base_commit": "cdef47dcba37f1e886bc301e330e65d7f3a3e79f",
-  "html_pages": 333,
+  "html_pages": 334,
   "models": 2,
   "components": 74,
   "connections": 86,
-  "web_tests_passed": 117,
+  "web_tests_passed": 120,
   "web_tests_failed": 0,
   "python_tests_passed": 36,
   "c_serial_encoders": "passed",
   "c_qa4818n": "passed",
   "mini_cps": "passed",
   "remote_published": false,
-  "publication_blocker": "No GitHub HTTPS write authentication; GitHub connector unavailable"
+  "publication_blocker": "No GitHub HTTPS write authentication; GitHub connector unavailable",
+  "c_audio_control": "passed",
+  "oem_audio_differential_cases": 62402,
+  "oem_audio_differential_mismatches": 0,
+  "full_FM_voice_path": false
 }

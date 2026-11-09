@@ -1,12 +1,12 @@
 /* Independent hardware scheduling. No firmware PC/variable knowledge.
  * Ported from hardware_runner.py; asynchronous events use virtual instruction units. */
-import {GpsInput} from './gps-input.mjs?build=web0151r2';
-import {UsbDevice,CdcHost} from './usb-device.mjs?build=web0151r2';
-import {CpsClient} from './cps-client.mjs?build=web0151r2';
-import {CpsMemory} from './cps-memory.mjs?build=web0151r2';
-import {AdcDma} from './adc-dma.mjs?build=web0151r2';
-import {Timer,Uart,BackupRtc,UsbIdle,FlashCache,Watchdog} from './timed-devices.mjs?build=web0151r2';
-import {RfSpi,FmI2c,SctHpi} from './radio-buses.mjs?build=web0151r2';
+import {GpsInput} from './gps-input.mjs?build=web0151r3';
+import {UsbDevice,CdcHost} from './usb-device.mjs?build=web0151r3';
+import {CpsClient} from './cps-client.mjs?build=web0151r3';
+import {CpsMemory} from './cps-memory.mjs?build=web0151r3';
+import {AdcDma} from './adc-dma.mjs?build=web0151r3';
+import {Timer,Uart,BackupRtc,UsbIdle,FlashCache,Watchdog} from './timed-devices.mjs?build=web0151r3';
+import {RfSpi,FmI2c,SctHpi} from './radio-buses.mjs?build=web0151r3';
 export class BoardRuntime{
  constructor(m){this.m=m;this.boot=m.boot;this.board=m.board;this.reset();}
  reset(){this.adc=new AdcDma(this.m);this.rtc=new BackupRtc(this.boot);this.usb=new UsbDevice(()=>!!(this.boot.clock.get(28)&(1<<23))&&!(this.boot.clock.get(16)&(1<<23)));this.cdc=new CdcHost(this.usb);this.cps=new CpsClient(this.cdc);this.cpsEdit=new CpsMemory(this.cps);this.fmc=new FlashCache(this.m);this.watchdog=new Watchdog();this.timers=new Map();for(const [i,irq] of [[1,28],[2,29],[3,30],[4,50],[5,54],[6,55]]){const bit=i-1;this.timers.set(0x40000000+bit*1024,{irq,device:new Timer(()=>!!(this.boot.clock.get(28)&(1<<bit))&&!(this.boot.clock.get(16)&(1<<bit)))});}this.serial=new Map();this.serialResets=new Map();for(const [base,name,irq,en,reset,bit] of [[0x40013800,'USART0',37,24,12,14],[0x40004400,'USART1',38,28,16,17],[0x40004c00,'UART3',52,28,16,19]]){const consume=base===0x40013800?v=>{this.board.mic.fromRadioTxByte(v);return [];}:base===0x40004400?v=>this.gps.onHostByte(v,this.m.time,this.serial.get(base).device.byteSteps):()=>[];this.serial.set(base,{irq,device:new Uart(name,()=>!!(this.boot.clock.get(en)&(1<<bit))&&!(this.boot.clock.get(reset)&(1<<bit)),consume)});}this.gps=new GpsInput();this.rf=new RfSpi();this.fm=new FmI2c();this.sct=new SctHpi(this.m.sctBoot??null);this.board.hardware=this;this.dac=Object.fromEntries(Array.from({length:13},(_,i)=>[0x400+i*4,0]));this.mmioTotal=0;this.mmioCount={};this.events=[];this.tail=[];this.keyMinimum=new Map();this.keyRelease=new Map();this.encoderEvents=[];this.encoderTail=null;this.powerReleaseAt=Infinity;this.steps=0;this.wraps=0;this.fraction=0;this.nextDevices=0;this.lastDevices=0;this.adcReset=false;}

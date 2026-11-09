@@ -46,3 +46,7 @@ La performance reste insuffisante pour promettre le temps réel : sur les mesure
 - DMR différé, conformément au périmètre retenu.
 
 Le passage général du site vérifie la génération, les modèles, la navigation, les liens locaux et les régressions logicielles. Il ne signifie pas que chaque affirmation historique provenant de sources externes a été démontrée par une nouvelle exécution OEM.
+
+## Complément audio du même jour
+
+Les sources C de commande audio et leur test différentiel sont maintenant intégrés. Une entrée WAV sur PC0/ADC10 traverse le modèle ADC/DMA piloté par l’ARM ; le banc totalise 120 tests réussis. Voir [audio FM, transport et validation](peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md). Ce complément ne revendique pas encore une conversation FM micro→RF→HP de bout en bout.

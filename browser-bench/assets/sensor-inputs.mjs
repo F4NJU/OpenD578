@@ -4,6 +4,7 @@ export const SENSOR_CHANNELS=Object.freeze([6,10,11]);
 export function setSensorInputs(board,values){
  if(!values||typeof values!=='object'||Array.isArray(values)||!Object.keys(values).length)throw Error('Mesures ADC absentes');
  const entries=Object.entries(values);
+ if(board.audioInput?.config&&Object.hasOwn(values,"10"))throw Error("Arrêter la source audio ADC10 avant une mesure statique");
  for(const [key,value] of entries)if(!SENSOR_CHANNELS.map(String).includes(key)||!Number.isInteger(value)||value<0||value>4095)throw Error('Entrées capteurs : ADC6/10/11, entiers 0..4095');
  for(const [key,value] of entries)board.adc.set(Number(key),value);
 }

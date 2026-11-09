@@ -31,7 +31,7 @@ export class U2429 {
   // amplifier, source routing or loudspeaker acoustics are claimed here.
   return Float32Array.from(samples,x=>x*state.gain);
  }
- status(){return {component:'U2429-compatible',DATA:'PA13',CLOCK:'PA14',pinMapping:'OEM GPIO driver; physical continuity unmeasured',channels:this.channels.map((state,i)=>({channel:i+1,known:state!==null,...state})),accepted:this.accepted,rejected:this.rejected,pendingBits:this.bits.length,frames:this.frames,nominalSmallSignalTransfer:true,electricalTimingQualified:false,powerAndLogicLevelTranslationQualified:false,physicalSpeakerNetsQualified:false};}
+ status(){return {component:'U2429-compatible',DATA:'PA13',CLOCK:'PA14',pinMapping:'OEM GPIO driver, validated by firmware',channels:this.channels.map((state,i)=>({channel:i+1,known:state!==null,...state})),accepted:this.accepted,rejected:this.rejected,pendingBits:this.bits.length,frames:this.frames,nominalSmallSignalTransfer:true,electricalTimingQualified:false,powerAndLogicLevelTranslationQualified:false,physicalSpeakerNetsQualified:false};}
 }
 
 export class Aic3204ControlObserver {

@@ -1,7 +1,7 @@
 /* CPS host workflow. Its sole device interface is CpsClient + the CDC connection epoch.
  * It never receives an MCU, SRAM, LCD or NAND object. */
-import {SHA256} from './sha256.mjs?build=web0151r2';
-import {unhex} from './usb-device.mjs?build=web0151r2';
+import {SHA256} from './sha256.mjs?build=web0151r3';
+import {unhex} from './usb-device.mjs?build=web0151r3';
 const BASE=0x800000,SIZE=131072,NAME=35,NAME_SIZE=16;
 const digest=b=>new SHA256().update(b).hex();
 export class CpsMemory {

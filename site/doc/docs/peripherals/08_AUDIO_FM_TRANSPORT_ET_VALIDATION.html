@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpenD578: cartographie materielle, reverse engineering et firmware alternatif D578UV PRO GD32">
+<title>Audio FM : commandes intégrées et transport PCM de test - OpenD578</title>
+<link rel="stylesheet" href="../../../assets/site.css"></head>
+<body><header class="site-header"><div class="brand"><a href="../../../index.html">OpenD578</a><span> | Documentation materielle et firmware</span></div><nav class="nav" aria-label="Navigation">
+<a href="../../../index.html">Vue eclatee</a>
+<a href="../../../facade.html">Facade</a>
+<a href="../../../io/index.html">Tableau IO</a>
+<a href="../../../simulator/index.html">Simulateur</a>
+<a class="active" href="../../../docs.html">Documents</a>
+<a href="../../../cps.html">CPS / USB</a>
+<a href="../evidence/INDEX.html">Preuves</a>
+<a href="../external/INDEX.html">Sources externes</a>
+<a href="../../../firmware.html">Firmware</a>
+<a href="../../../photos.html">Photos</a>
+<a href="../../../f1dmg.html">F1DMG</a>
+<a href="../../../sources.html">Code source</a>
+<a href="https://github.com/Telectroboy/OpenD578" rel="noopener" target="_blank">Depot GitHub</a></nav></header>
+<main class="container"><div class="breadcrumb"><a href="../../../docs.html">Documents</a> / Peripheriques techniques</div>
+<div class="doc-heading"><h1>Audio FM : commandes intégrées et transport PCM de test</h1><div class="doc-actions"><a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md">Modifier sur GitHub</a><a download href="../../../raw/docs/peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md">Telecharger .md</a></div></div>
+<p class="muted small">Source unique : <code>docs/peripherals/08_AUDIO_FM_TRANSPORT_ET_VALIDATION.md</code></p>
+<aside class="notice">État de référence au 9 novembre 2026 : <a href="../ETAT_CONFIRME_20261109.html">résultats confirmés et limites</a>. Les documents historiques conservent leur date ; les corrections IO sont dans le tableau courant.</aside>
+<article class="markdown-body"><h1 id="audio-fm-commandes-integrees-et-transport-pcm-de-test">Audio FM : commandes intégrées et transport PCM de test</h1>
+<p>Jean-Philippe (F4EGM) — 9 novembre 2026.</p>
+<h2 id="ce-qui-est-desormais-integre">Ce qui est désormais intégré</h2>
+<p>Les fonctions C audio auparavant présentes dans le paquet de recherche mais absentes du dépôt intégré sont ajoutées dans <code>firmware/hal/audio_control.c</code> et <code>.h</code>, avec <code>firmware/tests/test_audio_control.c</code>. Elles couvrent les coupures HP poste/micro, les commandes MAIN/SUB et leurs portes contextuelles, le micro FM standard, la quantification et les codes de volume. Le callback de transport arrête le plan à la première erreur et indique le préfixe réellement appliqué.</p>
+<p>La comparaison avec les routines OEM V1.21 a été réexécutée : <strong>62 402 cas, aucune différence</strong>. Les fixtures sont des paramètres de tests isolés, jamais des états injectés dans le banc. Le firmware d’origine est contrôlé par son SHA-256. Script reproductible :</p>
+<pre><code class="language-bash">python3 tools/compare_oem_audio.py /chemin/full_flash_pass1.bin resultat.json
+</code></pre>
+<p>Il nécessite Python Unicorn et <code>cc</code>. Les sources C n’appellent pas l’OEM et ne dépendent pas d’adresses SRAM fixes. Le résultat est conservé dans <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/audio_20261109/differential.json">differential.json</a>.</p>
+<h2 id="nouvelle-entree-audio-effective-sur-pc0">Nouvelle entrée audio effective sur PC0</h2>
+<p>La rubrique Audio de réception PC0 du simulateur charge un <strong>WAV PCM16 mono ou stéréo</strong>, de 8 à 192 kHz et de 12 secondes maximum. Elle produit un stimulus d’entrée ADC10 variant dans le temps. Le traitement suit le chemin :</p>
+<p><strong>WAV → codes d’entrée PC0 → ADC0 canal 10 → DMA configuré par le programme → SRAM → traitement du programme chargé.</strong></p>
+<p>Le banc n’écrit pas directement un buffer audio du firmware. Le programme garde la sélection des rangs ADC, le lancement des conversions, le descripteur DMA et sa destination. Si ADC10 n’est pas acquis, aucun résultat n’apparaît artificiellement dans sa RAM. Une source n’attend pas que l’ADC soit prêt et les échantillons perdus ne sont pas rejoués.</p>
+<p>Pour une source stéréo, le mélange mono précède la conversion. La transformation est explicite :</p>
+<p><code>code = arrondi(polarisation + amplitude × moyenne_PCM16 / 32768)</code>.</p>
+<p>Les valeurs par défaut 2048 et 1024 sont des <strong>paramètres de scénario</strong>, pas des mesures du poste, de son VREF ou d’un conditionnement analogique. Les valeurs hors plage sont refusées. En fin de fichier, la source reprend la polarisation choisie. Déconnecter la source ou effectuer un reset manuel efface aussi sa capture ; exporter les acquisitions auparavant. Un reset système/watchdog conservant le temps et les périphériques externes conserve la source.</p>
+<p>Le calendrier reprend les unités virtuelles existantes : 120 millions d’unités par seconde et 64 unités par conversion dans le modèle ADC. Ce n’est pas une validation des horloges ADC ou de la fidélité en fréquence d’un signal sur le poste réel. L’export JSON contient les instants virtuels et codes réellement convertis ; la capture est bornée à 8192 entrées, avec indicateur de troncature.</p>
+<p><strong>PC0 est une acquisition audio RX utilisée par les décodeurs de signalisation. Ce n’est ni l’entrée du microphone filaire, ni une preuve que la voix FM principale passe par le GD32.</strong> Les potentiomètres et les touches ne sont pas réaffectés pour fabriquer une entrée audio. Une écriture statique ADC10 est refusée tant que cette source est active.</p>
+<h2 id="ce-que-montrent-les-captures-fm-existantes">Ce que montrent les captures FM existantes</h2>
+<p>La reprise de Both RX A, TX VHF Level 4, TX VHF Level 5 et TX UHF Level 5 donne dans chacun des fichiers les mêmes 43 demandes MCU→SCT, avec le même condensat de flux. Les captures indiquent <code>harness_OEM_state_writes=false</code>. Les niveaux micro FM et les calibrations VHF/UHF changent via les commandes RF décrites dans le <a href="AUDIO_LIAISONS_LOGIQUES_OEM_V013.html">contrat audio V0.13</a>, sans changement correspondant de ce flux SCT enregistré.</p>
+<p>Cela établit une commande RF distincte pour ces transitions. <strong>Cela ne démontre ni absence générale du SCT dans tous les modes FM, ni passage de la voix FM dans une interface PCM du GD32.</strong> Le SCT reçoit aussi des commandes de filtres et de codec au démarrage. La documentation de l’interface CT3258 décrit des fonctions d’appel analogique ; leur existence n’attribue pas automatiquement ces routes au D578.</p>
+<p>Voir <a href="https://github.com/Telectroboy/OpenD578/blob/main/docs/evidence/audio_20261109/capture_recheck.json">capture_recheck.json</a> : fichiers sources, empreintes, temps virtuels, compte et condensat des commandes. Ces relevés historiques ne sont pas présentés comme une nouvelle exécution complète de l’OEM.</p>
+<h2 id="perimetre-des-verifications">Périmètre des vérifications</h2>
+<ul>
+<li>Nouvelle entrée WAV : conversion PCM16, mélange stéréo, refus des fichiers tronqués et formats incompatibles, bornes et remplacement atomique.</li>
+<li>Source : cadence sans file de rattrapage, fin de fichier, limite mémoire de capture.</li>
+<li>Moteur ARM WebAssembly réel : le programme de test configure une séquence de sept canaux et un DMA ; ADC10 apparaît au bon demi-mot en SRAM, les autres canaux conservent leurs valeurs. Ce programme indépendant n’est pas un firmware OEM modifié.</li>
+<li>Ensemble du banc : <strong>120 tests logiciels réussis</strong>. Test C des contrats audio compilé avec <code>-Wall -Wextra -Werror -pedantic</code>, réussi.</li>
+<li>Référence OEM : <strong>62 402 comparaisons de routines isolées</strong>, zéro différence.</li>
+</ul>
+<h2 id="chaine-encore-a-fermer">Chaîne encore à fermer</h2>
+<table>
+<thead>
+<tr>
+  <th>Segment</th>
+  <th>Acquis</th>
+  <th>Travail restant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Entrée audio PC0 vers GD32</td>
+  <td>Stimulus PCM, conversions ADC et DMA effectifs</td>
+  <td>Décodeurs OEM et cadence matérielle à qualifier sur de nouveaux scénarios</td>
+</tr>
+<tr>
+  <td>Volumes</td>
+  <td>Commandes U2429 et fonction d’atténuation nominale</td>
+  <td>Attribution de toutes les sources et sorties physiques dans les commutations</td>
+</tr>
+<tr>
+  <td>Micro FM</td>
+  <td>Sélecteur RF et code MIC usine, ordre des écritures, C indépendant</td>
+  <td>Transfert réel de ces codes en gain/déviation dans le modèle RF</td>
+</tr>
+<tr>
+  <td>Codec / SCT</td>
+  <td>Demandes, champs de gain, coefficients EQ et fonction nominale</td>
+  <td>Chemin effectif des échantillons, état DSP, saturation et transitions</td>
+</tr>
+<tr>
+  <td>HP poste, micro et externe</td>
+  <td>Coupures logiques poste/micro</td>
+  <td>Matrice audio effective et contacts de prises externes</td>
+</tr>
+</tbody>
+</table>
+<p>Il reste donc un obstacle concret à un son FM complet fidèle : les commandes sont établies, mais leur raccordement aux échantillons de la chaîne RF/codec et à toutes les sorties n’est pas entièrement déterminé. Aucun mixeur de convenance ni conversion arbitraire des codes usine en dB n’est ajouté pour masquer ce manque. Le DMR reste différé. La nouvelle entrée PC0 est exploitable pour poursuivre cette analyse, mais elle ne clôture pas ce critère de validation.</p>
+</article></main>
+<footer class="site-footer">Documentation evolutive - faits materiels, observations OEM et hypotheses distingues. Pas de firmware installable.</footer>
+<script src="../../../assets/models.js" defer></script><script src="../../../assets/search-data.js" defer></script><script src="../../../assets/site.js" defer></script>
+</body></html>

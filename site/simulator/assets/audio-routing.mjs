@@ -1,8 +1,8 @@
 /* Logical control links from reference OEM V1.21. Passive bus/pin decoding only.
  * No MCU memory access, inferred menu state, audio source injection or PCM route.
- * GPIO/PIO identify firmware commands; physical trace continuity is separate.
+ * GPIO/PIO identify firmware commands; unattributed physical output nets remain unknown.
  */
-import {REFERENCE_FLASH_SHA} from './calibration-status.mjs?build=web0151r2';
+import {REFERENCE_FLASH_SHA} from './calibration-status.mjs?build=web0151r3';
 export function audioControlStatus(board,rf,flashSha){
  const profileQualified=flashSha===REFERENCE_FLASH_SHA;
  const pio25=rf?.written.has('1:0:37')?rf.regs.get('1:0:37'):null;
