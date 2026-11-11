@@ -6,6 +6,9 @@ import { parseChannelsCsv, serializeChannelsCsv } from '../core/csv.ts';
 import { EditorHistory, appendChannels, deleteChannels, moveItem } from '../core/editor.ts';
 import { openBenchPanel } from './bench-panel.ts';
 import { openScanPanel } from './scan-panel.ts';
+import { createChannelSeries, reviewCodeplug } from '../core/channel-tools.ts';
+import { frequencyFields, powerField, readFrequencies, readPower, bindChannelFields } from './channel-fields.ts';
+import { openReviewPanel } from './review-panel.ts';
 
 const STORAGE_KEY = 'opend578.cps.editor.v1';
 const root = document.querySelector<HTMLDivElement>('#app')!;
@@ -86,14 +89,14 @@ function render(): void {
   if (activeZone && !value.zones.some(zone => zone.id === activeZone)) activeZone = null;
   selected = new Set([...selected].filter(id => value.channels.some(channel => channel.id === id)));
   const zone = value.zones.find(item => item.id === activeZone);
-  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.4</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
+  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.5</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
     <div class="workspace">${sidebar(value)}<main>
     <div class="page-heading"><div><p class="eyebrow">Codeplug / ${zone ? 'Zones' : 'Mémoires analogiques'}</p><h1>${escapeHtml(zone?.name ?? 'Tous les canaux')}</h1><p class="subtitle">Préparez vos mémoires, à votre rythme.</p></div>
-    <div class="actions"><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
+    <div class="actions"><button data-action="review">Vérifier</button><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
     <div class="document-bar"><label for="document-name">Document</label><input id="document-name" value="${escapeHtml(value.name)}"><button class="icon" data-action="new">Nouveau</button><button class="icon" data-action="undo" ${disabled(!history.canUndo)} aria-label="Annuler la dernière modification">↶ Annuler</button><button class="icon" data-action="redo" ${disabled(!history.canRedo)} aria-label="Rétablir la modification">↷ Rétablir</button><span class="save-state">${storageProblem ? '⚠ Sauvegarde locale indisponible : exportez un JSON' : dirty() ? 'Session conservée sur ce navigateur · JSON à sauvegarder' : 'JSON à jour · session conservée sur ce navigateur'}</span></div>
     ${notice ? `<div class="notice ${isError ? 'error' : ''}" role="${isError ? 'alert' : 'status'}">${escapeHtml(notice)}</div>` : ''}
     <div class="toolbar"><input type="search" id="search" class="search" aria-label="Rechercher un canal" placeholder="Rechercher un nom, une fréquence…" value="${escapeHtml(query)}">
-    <div class="actions">${zone ? '<button data-action="members">Membres</button><button data-action="rename-zone">Renommer</button><button data-action="delete-zone" class="danger">Supprimer la zone</button>' : ''}<button data-action="duplicate" ${disabled(!selected.size)}>Dupliquer</button><button data-action="bulk" ${disabled(!selected.size)}>Modifier la sélection</button><button data-action="delete" class="danger" ${disabled(!selected.size)}>Supprimer</button><button data-action="new-channel" class="primary">＋ Canal</button></div></div>
+    <div class="actions">${zone ? '<button data-action="members">Membres</button><button data-action="rename-zone">Renommer</button><button data-action="delete-zone" class="danger">Supprimer la zone</button>' : ''}<button data-action="duplicate" ${disabled(!selected.size)}>Dupliquer</button><button data-action="series" ${disabled(selected.size !== 1)}>Créer une série</button><button data-action="bulk" ${disabled(!selected.size)}>Modifier la sélection</button><button data-action="delete" class="danger" ${disabled(!selected.size)}>Supprimer</button><button data-action="new-channel" class="primary">＋ Canal</button></div></div>
     ${table(value)}<p class="bottom-note">Format OpenD578 v2 · Les limites du poste seront vérifiées lors de sa connexion. Le CSV contient les canaux ; le JSON conserve aussi les zones, les listes de scan et le VFO.</p></main></div>`;
   const selectAll = root.querySelector<HTMLInputElement>('#select-visible');
   const visible = visibleChannels(value);
@@ -108,16 +111,16 @@ function openDialog(title: string, body: string, submit: (data: FormData) => voi
     try { submit(new FormData(event.currentTarget as HTMLFormElement)); dialog.close(); }
     catch (error) { const box = dialog.querySelector<HTMLDivElement>('#form-error')!; box.hidden = false; box.textContent = (error as Error).message; }
   });
+  bindChannelFields(dialog);
   dialog.showModal();
 }
 function inputField(label: string, name: string, value: string, extra = ''): string {
   return `<label class="field">${label}<input name="${name}" value="${escapeHtml(value)}" ${extra}></label>`;
 }
 function settingsForm(value: AnalogSettings): string {
-  return `${inputField('Réception · MHz', 'rx', formatMHz(value.rxHz), 'required inputmode="decimal"')}
-    ${inputField('Émission · MHz', 'tx', formatMHz(value.txHz), 'required inputmode="decimal"')}
+  return `${frequencyFields(value)}
     <label class="field">Largeur FM<select name="bandwidth"><option value="narrow" ${value.bandwidth === 'narrow' ? 'selected' : ''}>Étroite</option><option value="wide" ${value.bandwidth === 'wide' ? 'selected' : ''}>Large</option></select></label>
-    ${inputField('Niveau de puissance', 'power', value.power, 'required list="powers"')}<datalist id="powers"><option value="low"><option value="medium"><option value="high"></datalist>
+    ${powerField(value.power, history.value.channels.map(channel => channel.power))}
     ${inputField('CTCSS RX · Hz', 'rxTone', value.rxCtcssDeciHz === null ? '' : toneText(value.rxCtcssDeciHz), 'inputmode="decimal" placeholder="Désactivé"')}
     ${inputField('CTCSS TX · Hz', 'txTone', value.txCtcssDeciHz === null ? '' : toneText(value.txCtcssDeciHz), 'inputmode="decimal" placeholder="Désactivé"')}
     <label class="check-label full"><input type="checkbox" name="inhibit" ${checked(value.txInhibit)}>Réception seule · émission interdite</label>
@@ -129,8 +132,8 @@ function readTone(value: string): number | null {
   return Math.round(Number(value.replace(',', '.')) * 10);
 }
 function readSettings(data: FormData): AnalogSettings {
-  return { mode: 'FM', rxHz: parseMHz(String(data.get('rx'))), txHz: parseMHz(String(data.get('tx'))),
-    bandwidth: data.get('bandwidth') as AnalogSettings['bandwidth'], power: String(data.get('power')).trim(),
+  return { mode: 'FM', ...readFrequencies(data),
+    bandwidth: data.get('bandwidth') as AnalogSettings['bandwidth'], power: readPower(data),
     rxCtcssDeciHz: readTone(String(data.get('rxTone'))), txCtcssDeciHz: readTone(String(data.get('txTone'))), txInhibit: data.has('inhibit') };
 }
 function editChannel(id?: string): void {
@@ -168,10 +171,10 @@ function editMembers(): void {
   });
 }
 function bulkEdit(): void {
-  openDialog(`Modifier ${selected.size} canal(aux)`, `<div class="form-grid"><label class="field">Largeur FM<select name="bandwidth"><option value="">Conserver</option><option value="narrow">Étroite</option><option value="wide">Large</option></select></label>${inputField('Puissance (vide : conserver)', 'power', '')}<label class="field full">Émission<select name="inhibit"><option value="">Conserver</option><option value="true">Réception seule</option><option value="false">Autoriser RX / TX</option></select></label></div>`, data => {
+  openDialog(`Modifier ${selected.size} canal(aux)`, `<div class="form-grid"><label class="field">Largeur FM<select name="bandwidth"><option value="">Conserver</option><option value="narrow">Étroite</option><option value="wide">Large</option></select></label>${powerField('', history.value.channels.map(channel => channel.power), true)}<label class="field full">Émission<select name="inhibit"><option value="">Conserver</option><option value="true">Réception seule</option><option value="false">Autoriser RX / TX</option></select></label></div>`, data => {
     const channels = history.value.channels.map(channel => !selected.has(channel.id) ? channel : {
       ...channel, bandwidth: (data.get('bandwidth') || channel.bandwidth) as Channel['bandwidth'],
-      power: String(data.get('power')).trim() || channel.power,
+      power: readPower(data) || channel.power,
       txInhibit: data.get('inhibit') === '' ? channel.txInhibit : data.get('inhibit') === 'true',
     });
     commit({ ...history.value, channels });
@@ -183,6 +186,22 @@ function duplicateSelected(): void {
   const zones = activeZone ? value.zones.map(zone => zone.id === activeZone ? { ...zone, channelIds: [...zone.channelIds, ...copies.map(channel => channel.id)] } : zone) : value.zones;
   commit({ ...value, channels: [...value.channels, ...copies], zones });
   selected = new Set(copies.map(channel => channel.id)); render();
+}
+function createSeries(): void {
+  if (selected.size !== 1) throw new Error('Sélectionnez exactement un canal modèle.');
+  const templateId = [...selected][0], zoneId = activeZone;
+  const makeSeries = (data: FormData): Codeplug => createChannelSeries(history.value, templateId,
+    Number(data.get('count')), parseMHz(String(data.get('step'))) * (data.get('direction') === 'minus' ? -1 : 1), () => newId('ch'), zoneId);
+  openDialog('Créer une série de canaux', `<p class="help">Le canal sélectionné reste inchangé. Le premier nouveau canal est situé un pas après lui. RX et TX évoluent ensemble, en conservant tons, largeur, puissance et interdiction TX.</p><div class="form-grid">${inputField('Nombre de nouveaux canaux', 'count', '10', 'type="number" min="1" max="256" required')}${inputField('Pas · MHz', 'step', '0.012500', 'inputmode="decimal" required')}<label class="field full">Direction<select name="direction"><option value="plus">Fréquences croissantes</option><option value="minus">Fréquences décroissantes</option></select></label></div><p id="series-preview" class="notice" role="status"></p>`, data => commit(makeSeries(data), 'Série ajoutée. Une seule annulation retire toute la série.'), 'Créer la série');
+  const preview = (): void => {
+    const target = dialog.querySelector('#series-preview')!;
+    try {
+      const before = history.value.channels.length, next = makeSeries(new FormData(dialog.querySelector('form')!));
+      const first = next.channels[before], last = next.channels.at(-1)!;
+      target.textContent = `${next.channels.length - before} nouveaux canaux · RX ${formatMHz(first.rxHz)} → ${formatMHz(last.rxHz)} MHz · noms ${first.name} à ${last.name}${zoneId ? ' · ajoutés à la zone actuelle' : ''}.`;
+    } catch (error) { target.textContent = (error as Error).message; }
+  };
+  dialog.querySelector('form')!.addEventListener('input', preview); preview();
 }
 function moveChannel(id: string, delta: -1 | 1): void {
   const value = history.value;
@@ -196,7 +215,8 @@ function download(text: string, extension: string, mime: string): void {
   anchor.download = `${history.value.name.replace(/[<>:"/\\|?*]/g, '_')}.${extension}`;
   document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-function exportJson(): void {
+function exportJson(reviewed = false): void {
+  if (!reviewed && reviewCodeplug(history.value).length) { openReviewPanel(history.value, () => exportJson(true)); return; }
   const source = serializeCodeplug(history.value); download(source, 'opend578.json', 'application/json');
   exportedSnapshot = source; persist(); notice = 'Export JSON demandé. Vérifiez le fichier dans vos téléchargements.'; isError = false; render();
 }
@@ -228,6 +248,8 @@ root.addEventListener('click', async event => {
     switch (action) {
       case 'bench': openBenchPanel(); break;
       case 'scan-lists': openScanPanel(() => history.value, next => commit(next, 'Listes de scan enregistrées dans la session.')); break;
+      case 'series': createSeries(); break;
+      case 'review': openReviewPanel(history.value); break;
       case 'all': activeZone = null; selected.clear(); render(); break;
       case 'zone': activeZone = id; selected.clear(); render(); break;
       case 'new-channel': editChannel(); break;
@@ -246,7 +268,11 @@ root.addEventListener('click', async event => {
       case 'redo': history.redo(); persist(); notice = 'Modification rétablie.'; isError = false; render(); break;
       case 'new': replaceDocument(createCodeplug(), 'Nouveau document.'); break;
       case 'export': exportJson(); break;
-      case 'csv': download(serializeChannelsCsv(history.value.channels), 'csv', 'text/csv;charset=utf-8'); break;
+      case 'csv': {
+        const proceed = (): void => download(serializeChannelsCsv(history.value.channels), 'csv', 'text/csv;charset=utf-8');
+        if (reviewCodeplug(history.value).length) openReviewPanel(history.value, proceed); else proceed();
+        break;
+      }
       case 'import': fileInput.value = ''; fileInput.click(); break;
       case 'example': {
         const response = await fetch('./examples/analog.opend578.json');
@@ -277,7 +303,7 @@ root.addEventListener('change', event => {
 fileInput.addEventListener('change', () => { const file = fileInput.files?.[0]; if (file) importFile(file).catch(fail); });
 window.addEventListener('beforeunload', event => { if (dirty() || dialog.open) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('keydown', event => {
-  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open || document.querySelector<HTMLDialogElement>('#scan-dialog')!.open) return;
+  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open || document.querySelector<HTMLDialogElement>('#scan-dialog')!.open || document.querySelector<HTMLDialogElement>('#review-dialog')!.open) return;
   if (event.key.toLowerCase() === 's') { event.preventDefault(); exportJson(); return; }
   if ((event.target as HTMLElement).matches('input,select,textarea,[contenteditable]')) return;
   if (event.key.toLowerCase() === 'z') { event.preventDefault(); event.shiftKey ? history.redo() : history.undo(); persist(); render(); }

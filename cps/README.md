@@ -1,6 +1,6 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.4 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.5 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM lit le banc Python existant ; sa qualification avec le firmware
@@ -57,6 +57,23 @@ cette première livraison. Le cœur reste réutilisable par une future interface
 Le répertoire généré `dist/` est ignoré par Git.
 
 ## Fonctions de l'éditeur
+
+- **Puissance** : liste déroulante `low`, `medium`, `high`, `turbo`, complétée par
+  les identifiants personnalisés du document. « Personnalisé… » permet une nouvelle
+  valeur. Disponible aussi en modification groupée avec « Conserver ». Ces niveaux
+  ne correspondent pas à des watts connus ni à des capacités radio certifiées.
+- **Décalage relais** : simplex, positif, négatif ou TX indépendante. RX/TX sont
+  calculées en Hz entiers, sans ajout de champ au format JSON v2.
+- **Créer une série** : cocher exactement un canal modèle, choisir 1 à 256 copies,
+  un pas en MHz et une direction. Le premier nouveau canal est un pas après le
+  modèle ; RX/TX évoluent ensemble, le décalage et les autres paramètres restent
+  identiques. Un aperçu affiche les extrémités. Dans une zone, les copies y sont
+  ajoutées. Une seule annulation retire toute la série. La borne 256 est une limite
+  de cette opération de l'éditeur, pas une capacité annoncée par le poste.
+- **Vérifier** : bilan des erreurs structurelles et avertissements (noms ou
+  fréquences/tons en double, listes vides). Les doublons peuvent être volontaires.
+  Avant export JSON ou CSV, les avertissements demandent une confirmation ; les
+  erreurs bloquent l'export. Le bilan ne certifie pas la validité radio d'un fichier.
 
 - **Listes de scan** : créer, renommer, supprimer, choisir et ordonner les membres,
   définir un canal prioritaire appartenant à la liste. La suppression d'un canal
