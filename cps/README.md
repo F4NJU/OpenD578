@@ -7,6 +7,16 @@ Ce code ne dialogue avec aucun poste et n'écrit aucune mémoire radio.
 
 ## Lancement local
 
+### Version autonome sans serveur
+
+`npm run build:standalone` produit **`dist/OpenD578-CPS.html`**. Ce fichier unique
+contient l'interface, le cœur et l'exemple ; une fois généré, il suffit de le
+copier sur un PC et de l'ouvrir par double-clic dans Chrome ou Edge, sans Node.js.
+Il ne nécessite aucun port réseau. Le stockage local des fichiers HTML dépend
+du navigateur : exporter le JSON pour conserver une sauvegarde fiable.
+
+### Version avec serveur local
+
 Node.js 24 ou ultérieur, aucune dépendance à installer :
 
 ```powershell
