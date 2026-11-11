@@ -217,6 +217,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.end_headers();self.wfile.write(data)
     def do_GET(self):
         path=urlparse(self.path).path
+        if path=='/cps':
+            self.send_response(302);self.send_header('Location','/cps/');self.send_header('Content-Length','0');self.end_headers();return
+        if path.startswith('/cps/'):
+            from cps_assets import read_cps_asset
+            try:data,mime=read_cps_asset(ROOT.parent/'cps'/'dist',path)
+            except (ValueError,FileNotFoundError):
+                self.send(dict(error='CPS absent ou chemin invalide. Depuis le depot : cd cps puis npm run build.'),404);return
+            self.send(data,mime=mime);return
         if path.startswith('/api/audio/'):
             match=re.fullmatch(r'/api/audio/([a-f0-9]{32})/(tx\.sigmf-(?:data|meta)|rx\.sigmf-(?:data|meta)|received\.wav|report\.json)',path)
             if not match:self.send(dict(error='Enregistrement inconnu'),404);return
@@ -336,3 +344,4 @@ def main():
     except KeyboardInterrupt:pass
     finally:lab.close();server.server_close()
 if __name__=='__main__':main()
+

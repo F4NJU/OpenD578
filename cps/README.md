@@ -1,9 +1,27 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.2 : édition des canaux analogiques et du VFO, zones ordonnées,
+Version 0.3 : édition des canaux analogiques et du VFO, zones ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
-Ce code ne dialogue avec aucun poste et n'écrit aucune mémoire radio.
+L'adaptateur OEM lit le banc Python existant ; sa qualification avec le firmware
+exécuté reste à faire. Aucune connexion physique ni écriture radio n'est fournie.
+
+## Connexion au banc émulé
+
+Compiler avec `npm run build`, lancer le banc Python depuis cette branche, puis
+ouvrir son adresse exacte suivie de `/cps/` (exemple :
+http://127.0.0.1:8765/cps/). Cliquer **Banc émulé**, choisir un groupe de 32
+emplacements et **Identifier et lire**. Démarrer préalablement le firmware OEM
+et fermer son CPS intégré et les autres ponts USB. Redémarrer le moteur après
+chaque lecture/END ou interruption. Le fichier autonome peut ouvrir cette page ;
+il ne contourne pas les contrôles d'origine du banc.
+
+Les résultats sont une inspection séparée : noms, RX/TX, modes et puissances
+partiellement décodés ; activité des emplacements et autres paramètres inconnus.
+Aucune importation automatique dans le document éditable, aucune commande W.
+La version GitHub Pages et le firmware RX FM alpha ne sont pas raccordés ici.
+
+Guide et limites : [CPS_WEB_READONLY_BENCH.md](../docs/cps/CPS_WEB_READONLY_BENCH.md).
 
 ## Lancement local
 
