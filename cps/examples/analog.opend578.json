@@ -1,0 +1,44 @@
+{
+  "format": "opend578-codeplug",
+  "schemaVersion": 1,
+  "name": "Exemple synthétique analogique",
+  "channels": [
+    {
+      "id": "simplex-demo",
+      "name": "Simplex demo",
+      "mode": "FM",
+      "rxHz": 145500000,
+      "txHz": 145500000,
+      "bandwidth": "narrow",
+      "power": "low",
+      "rxCtcssDeciHz": null,
+      "txCtcssDeciHz": null,
+      "txInhibit": true
+    },
+    {
+      "id": "repeater-demo",
+      "name": "Relais demo",
+      "mode": "FM",
+      "rxHz": 145600000,
+      "txHz": 145000000,
+      "bandwidth": "narrow",
+      "power": "low",
+      "rxCtcssDeciHz": 1230,
+      "txCtcssDeciHz": 885,
+      "txInhibit": true
+    }
+  ],
+  "zones": [
+    { "id": "zone-demo", "name": "Demonstration", "channelIds": ["simplex-demo", "repeater-demo"] }
+  ],
+  "vfo": {
+    "mode": "FM",
+    "rxHz": 145500000,
+    "txHz": 145500000,
+    "bandwidth": "narrow",
+    "power": "low",
+    "rxCtcssDeciHz": null,
+    "txCtcssDeciHz": null,
+    "txInhibit": true
+  }
+}
