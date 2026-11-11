@@ -80,15 +80,16 @@ function channels(value: unknown, issues: Issues): Set<string> {
   return ids;
 }
 
-function zones(value: unknown, channelIds: Set<string>, issues: Issues): void {
+function zones(value: unknown, channelIds: Set<string>, issues: Issues, scan = false): void {
+  const collection = scan ? 'scanLists' : 'zones';
   if (!Array.isArray(value)) {
-    issue(issues, '$.zones', 'array', 'Tableau de zones attendu.');
+    issue(issues, `$.${collection}`, 'array', 'Tableau de listes attendu.');
     return;
   }
   const ids = new Set<string>();
   Array.from(value).forEach((zone: unknown, index: number) => {
-    const path = `$.zones[${index}]`;
-    if (!record(zone, path, ['id', 'name', 'channelIds'], issues)) return;
+    const path = `$.${collection}[${index}]`;
+    if (!record(zone, path, ['id', 'name', 'channelIds', ...(scan ? ['priorityChannelId'] : [])], issues)) return;
     identifier(zone.id, `${path}.id`, ids, issues);
     text(zone.name, `${path}.name`, issues);
     if (!Array.isArray(zone.channelIds)) {
@@ -103,18 +104,30 @@ function zones(value: unknown, channelIds: Set<string>, issues: Issues): void {
         issue(issues, referencePath, 'missing_channel', 'Canal référencé absent.');
       }
     });
+    if (scan && zone.priorityChannelId !== null && (typeof zone.priorityChannelId !== 'string' || !zone.channelIds.includes(zone.priorityChannelId))) {
+      issue(issues, `${path}.priorityChannelId`, 'priority_member', 'Le canal prioritaire doit appartenir à la liste, ou être null.');
+    }
   });
 }
 
 /** Validate untrusted parsed JSON without changing or dropping any fields. */
 export function validateCodeplug(value: unknown): ValidationIssue[] {
+  return validateDocument(value, 2);
+}
+
+export function validateLegacyCodeplug(value: unknown): ValidationIssue[] {
+  return validateDocument(value, 1);
+}
+
+function validateDocument(value: unknown, version: 1 | 2): ValidationIssue[] {
   const issues: Issues = [];
-  if (!record(value, '$', ['format', 'schemaVersion', 'name', 'channels', 'zones', 'vfo'], issues)) return issues;
+  if (!record(value, '$', ['format', 'schemaVersion', 'name', 'channels', 'zones', 'vfo', ...(version === 2 ? ['scanLists'] : [])], issues)) return issues;
   if (value.format !== 'opend578-codeplug') issue(issues, '$.format', 'format', 'Format OpenD578 attendu.');
-  if (value.schemaVersion !== 1) issue(issues, '$.schemaVersion', 'version', 'Version non prise en charge ; aucune migration implicite.');
+  if (value.schemaVersion !== version) issue(issues, '$.schemaVersion', 'version', 'Version non prise en charge ; conversion v1 explicite requise le cas échéant.');
   text(value.name, '$.name', issues);
   const channelIds = channels(value.channels, issues);
   zones(value.zones, channelIds, issues);
+  if (version === 2) zones(value.scanLists, channelIds, issues, true);
   if (value.vfo !== null && record(value.vfo, '$.vfo', SETTINGS_KEYS, issues)) settings(value.vfo, '$.vfo', issues);
   return issues;
 }

@@ -9,7 +9,7 @@ import { validateForDevice } from '../src/core/capabilities.ts';
 import { parseMHz, formatMHz } from '../src/core/frequency.ts';
 
 function fixture(): Codeplug {
-  return parseCodeplug(readFileSync(new URL('../examples/analog.opend578.json', import.meta.url), 'utf8'));
+  return parseCodeplug(readFileSync(new URL('../examples/analog.opend578.json', import.meta.url), 'utf8'), { upgradeV1: true });
 }
 
 // Deliberately synthetic. These values do not describe an AT-D578's capabilities.
@@ -41,7 +41,7 @@ test('reordering channels preserves zone membership and separate RX/TX tones', (
 
 test('malformed JSON and unsupported versions produce actionable validation errors', () => {
   assert.throws(() => parseCodeplug('{'), CodeplugValidationError);
-  for (const value of [null, [], 42, {}, { ...fixture(), schemaVersion: 2 }]) {
+  for (const value of [null, [], 42, {}, { ...fixture(), schemaVersion: 3 }]) {
     assert.throws(() => parseCodeplug(JSON.stringify(value)), CodeplugValidationError);
   }
 });

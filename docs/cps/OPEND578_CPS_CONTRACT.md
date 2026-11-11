@@ -1,4 +1,30 @@
-# Contrat CPS OpenD578 — proposition 0.1
+# Contrat CPS OpenD578 — proposition 0.2
+
+## Extension actuelle : format PC v2
+
+Le format exporté par le CPS utilise désormais `schemaVersion: 2` et un tableau
+obligatoire `scanLists`, vide autorisé. Une liste contient `id`, `name`,
+`channelIds` ordonnés et `priorityChannelId` (référence à un membre, ou `null`).
+Les identifiants sont uniques parmi les listes ; les membres sont existants et
+sans doublon. Un canal peut appartenir à plusieurs listes. Lors d'une suppression
+de canal, ses références sont retirées et sa priorité éventuelle mise à `null`.
+
+Cette structure est une proposition PC : aucun comportement de scan n'est encore
+implémenté dans le firmware par ce lot. L'affectation d'une liste à un canal, les
+temporisations et la politique de reprise après émission restent à convenir.
+
+Les capacités de cible ajoutent `maxScanLists`, `maxChannelsPerScanList` et
+`supportsScanPriority`. Une capacité absente signifie non pris en charge pour le
+transfert ; rien n'est déduit du comportement du firmware constructeur.
+
+L'import v1 exige l'option explicite `upgradeV1` côté API et une confirmation dans
+l'interface pour les fichiers utilisateur. Le document source est validé avec ses
+règles v1 (champs inconnus refusés), puis copié en v2 avec `scanLists: []`.
+L'original n'est pas écrasé. Les sessions locales anciennes sont converties à la
+restauration avec un avertissement. Aucun export v1 avec perte des listes n'existe.
+
+Les sections ci-dessous conservent le contrat v1 historique ; leurs champs et
+unités restent identiques en v2, auquel s'ajoute `scanLists` décrit ci-dessus.
 
 Statut : format PC implémenté dans ce lot, proposition à relire avec F4EGM.
 Ce document ne décrit pas un protocole déjà implémenté dans le firmware.

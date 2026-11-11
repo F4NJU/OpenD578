@@ -34,7 +34,11 @@ export class EditorHistory {
 export function deleteChannels(value: Codeplug, ids: string[]): Codeplug {
   const removed = new Set(ids);
   return { ...value, channels: value.channels.filter(channel => !removed.has(channel.id)),
-    zones: value.zones.map(zone => ({ ...zone, channelIds: zone.channelIds.filter(id => !removed.has(id)) })) };
+    zones: value.zones.map(zone => ({ ...zone, channelIds: zone.channelIds.filter(id => !removed.has(id)) })),
+    scanLists: value.scanLists.map(list => ({ ...list,
+      channelIds: list.channelIds.filter(id => !removed.has(id)),
+      priorityChannelId: list.priorityChannelId && removed.has(list.priorityChannelId) ? null : list.priorityChannelId,
+    })) };
 }
 
 /** CSV append is atomic and refuses collisions; JSON is the complete backup. */

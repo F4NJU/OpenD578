@@ -36,6 +36,12 @@ export function validateForDevice(codeplug: Codeplug, capabilities: DeviceCapabi
     checkName(zone.name, `$.zones[${index}].name`);
     if (zone.channelIds.length > capabilities.maxChannelsPerZone) add(`$.zones[${index}].channelIds`, 'Trop de canaux dans cette zone.');
   });
+  if (codeplug.scanLists.length > (capabilities.maxScanLists ?? 0)) add('$.scanLists', 'Listes de scan non prises en charge ou trop nombreuses.');
+  codeplug.scanLists.forEach((list, index) => {
+    checkName(list.name, `$.scanLists[${index}].name`);
+    if (list.channelIds.length > (capabilities.maxChannelsPerScanList ?? 0)) add(`$.scanLists[${index}].channelIds`, 'Capacité de scan absente ou dépassée.');
+    if (list.priorityChannelId !== null && capabilities.supportsScanPriority !== true) add(`$.scanLists[${index}].priorityChannelId`, 'Priorité de scan non prise en charge.');
+  });
   if (codeplug.vfo !== null) {
     if (!capabilities.supportsVfo) add('$.vfo', 'Programmation du VFO non prise en charge.');
     checkSettings(codeplug.vfo, '$.vfo');

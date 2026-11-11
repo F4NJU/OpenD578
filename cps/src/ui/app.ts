@@ -5,6 +5,7 @@ import { parseMHz, formatMHz } from '../core/frequency.ts';
 import { parseChannelsCsv, serializeChannelsCsv } from '../core/csv.ts';
 import { EditorHistory, appendChannels, deleteChannels, moveItem } from '../core/editor.ts';
 import { openBenchPanel } from './bench-panel.ts';
+import { openScanPanel } from './scan-panel.ts';
 
 const STORAGE_KEY = 'opend578.cps.editor.v1';
 const root = document.querySelector<HTMLDivElement>('#app')!;
@@ -18,9 +19,9 @@ try {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     const saved = JSON.parse(stored);
-    initial = parseCodeplug(JSON.stringify(saved.codeplug));
+    initial = parseCodeplug(JSON.stringify(saved.codeplug), { upgradeV1: true });
     exportedSnapshot = typeof saved.exportedSnapshot === 'string' ? saved.exportedSnapshot : '';
-    notice = 'Votre dernière session a été restaurée.';
+    notice = saved.codeplug.schemaVersion === 1 ? 'Session v1 convertie en v2 avec listes de scan vides. Exportez un nouveau JSON ; votre ancien fichier reste intact.' : 'Votre dernière session a été restaurée.';
   }
 } catch { notice = 'La session locale est indisponible ou invalide. Importez votre fichier JSON ; les anciennes données locales ne sont pas effacées.'; isError = true; storageProblem = true; }
 const history = new EditorHistory(initial);
@@ -56,6 +57,7 @@ function sidebar(value: Codeplug): string {
     <button data-action="vfo">Réglages VFO <span class="count">${value.vfo ? 'FM' : '—'}</span></button></nav></section>
     <section><p class="eyebrow">Zones · ${value.zones.length}</p><nav class="nav" aria-label="Zones">${value.zones.map(zone => `<button data-action="zone" data-id="${escapeHtml(zone.id)}" class="${activeZone === zone.id ? 'active' : ''}" ${activeZone === zone.id ? 'aria-current="page"' : ''}><span>${escapeHtml(zone.name)}</span><span class="count">${zone.channelIds.length}</span></button>`).join('')}</nav>
     <div class="aside-actions"><button data-action="new-zone">＋ Nouvelle zone</button></div></section>
+    <section><p class="eyebrow">Balayage</p><nav class="nav" aria-label="Scan"><button data-action="scan-lists">Listes de scan <span class="count">${value.scanLists.length}</span></button></nav></section>
     <div class="aside-note"><strong>Votre codeplug reste ici.</strong>Les fichiers sont traités sur ce PC. Exportez un JSON pour conserver une sauvegarde complète.</div></aside>`;
 }
 function channelRow(channel: Channel, index: number): string {
@@ -84,7 +86,7 @@ function render(): void {
   if (activeZone && !value.zones.some(zone => zone.id === activeZone)) activeZone = null;
   selected = new Set([...selected].filter(id => value.channels.some(channel => channel.id === id)));
   const zone = value.zones.find(item => item.id === activeZone);
-  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.3</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
+  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.4</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
     <div class="workspace">${sidebar(value)}<main>
     <div class="page-heading"><div><p class="eyebrow">Codeplug / ${zone ? 'Zones' : 'Mémoires analogiques'}</p><h1>${escapeHtml(zone?.name ?? 'Tous les canaux')}</h1><p class="subtitle">Préparez vos mémoires, à votre rythme.</p></div>
     <div class="actions"><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
@@ -92,7 +94,7 @@ function render(): void {
     ${notice ? `<div class="notice ${isError ? 'error' : ''}" role="${isError ? 'alert' : 'status'}">${escapeHtml(notice)}</div>` : ''}
     <div class="toolbar"><input type="search" id="search" class="search" aria-label="Rechercher un canal" placeholder="Rechercher un nom, une fréquence…" value="${escapeHtml(query)}">
     <div class="actions">${zone ? '<button data-action="members">Membres</button><button data-action="rename-zone">Renommer</button><button data-action="delete-zone" class="danger">Supprimer la zone</button>' : ''}<button data-action="duplicate" ${disabled(!selected.size)}>Dupliquer</button><button data-action="bulk" ${disabled(!selected.size)}>Modifier la sélection</button><button data-action="delete" class="danger" ${disabled(!selected.size)}>Supprimer</button><button data-action="new-channel" class="primary">＋ Canal</button></div></div>
-    ${table(value)}<p class="bottom-note">Format OpenD578 v1 · Les limites du poste seront vérifiées lors de sa connexion. Le CSV contient les canaux ; le JSON conserve aussi les zones et le VFO.</p></main></div>`;
+    ${table(value)}<p class="bottom-note">Format OpenD578 v2 · Les limites du poste seront vérifiées lors de sa connexion. Le CSV contient les canaux ; le JSON conserve aussi les zones, les listes de scan et le VFO.</p></main></div>`;
   const selectAll = root.querySelector<HTMLInputElement>('#select-visible');
   const visible = visibleChannels(value);
   if (selectAll) selectAll.indeterminate = visible.some(channel => selected.has(channel.id)) && !visible.every(channel => selected.has(channel.id));
@@ -210,7 +212,12 @@ async function importFile(file: File): Promise<void> {
     const next = appendChannels(history.value, channels);
     if (!confirm(`Ajouter ${channels.length} canal(aux) au document ? Le CSV ne modifie ni les zones ni le VFO.`)) return;
     commit(next, `${channels.length} canal(aux) importé(s).`);
-  } else replaceDocument(parseCodeplug(text), 'Codeplug JSON importé.');
+  } else {
+    const parsed = parseCodeplug(text, { upgradeV1: true });
+    const legacy = JSON.parse(text).schemaVersion === 1;
+    if (legacy && !confirm('Ce fichier est au format v1. Le convertir en v2 avec des listes de scan vides ? Le fichier original ne sera pas modifié.')) return;
+    replaceDocument(parsed, legacy ? 'Codeplug v1 converti en v2. Sauvegardez un nouveau JSON pour conserver les listes de scan.' : 'Codeplug JSON importé.');
+  }
 }
 
 root.addEventListener('click', async event => {
@@ -220,6 +227,7 @@ root.addEventListener('click', async event => {
   try {
     switch (action) {
       case 'bench': openBenchPanel(); break;
+      case 'scan-lists': openScanPanel(() => history.value, next => commit(next, 'Listes de scan enregistrées dans la session.')); break;
       case 'all': activeZone = null; selected.clear(); render(); break;
       case 'zone': activeZone = id; selected.clear(); render(); break;
       case 'new-channel': editChannel(); break;
@@ -243,7 +251,7 @@ root.addEventListener('click', async event => {
       case 'example': {
         const response = await fetch('./examples/analog.opend578.json');
         if (!response.ok) throw new Error('Exemple indisponible.');
-        replaceDocument(parseCodeplug(await response.text()), 'Exemple synthétique chargé : aucun relais local réel.'); break;
+        replaceDocument(parseCodeplug(await response.text(), { upgradeV1: true }), 'Exemple synthétique chargé : aucun relais local réel.'); break;
       }
     }
   } catch (error) { fail(error); }
@@ -269,7 +277,7 @@ root.addEventListener('change', event => {
 fileInput.addEventListener('change', () => { const file = fileInput.files?.[0]; if (file) importFile(file).catch(fail); });
 window.addEventListener('beforeunload', event => { if (dirty() || dialog.open) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('keydown', event => {
-  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open) return;
+  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open || document.querySelector<HTMLDialogElement>('#scan-dialog')!.open) return;
   if (event.key.toLowerCase() === 's') { event.preventDefault(); exportJson(); return; }
   if ((event.target as HTMLElement).matches('input,select,textarea,[contenteditable]')) return;
   if (event.key.toLowerCase() === 'z') { event.preventDefault(); event.shiftKey ? history.redo() : history.undo(); persist(); render(); }

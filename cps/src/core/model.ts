@@ -21,12 +21,20 @@ export interface Zone {
   channelIds: string[];
 }
 
+export interface ScanList {
+  id: string;
+  name: string;
+  channelIds: string[];
+  priorityChannelId: string | null;
+}
+
 export interface Codeplug {
   format: 'opend578-codeplug';
-  schemaVersion: 1;
+  schemaVersion: 2;
   name: string;
   channels: Channel[];
   zones: Zone[];
+  scanLists: ScanList[];
   vfo: AnalogSettings | null;
 }
 
@@ -42,6 +50,9 @@ export interface DeviceCapabilities {
   powerLevels: string[];
   ctcssDeciHz: number[];
   supportsVfo: boolean;
+  maxScanLists?: number;
+  maxChannelsPerScanList?: number;
+  supportsScanPriority?: boolean;
 }
 
 export interface ValidationIssue {
@@ -52,7 +63,7 @@ export interface ValidationIssue {
 
 export function createCodeplug(name = 'Nouveau codeplug'): Codeplug {
   return {
-    format: 'opend578-codeplug', schemaVersion: 1, name,
-    channels: [], zones: [], vfo: null,
+    format: 'opend578-codeplug', schemaVersion: 2, name,
+    channels: [], zones: [], scanLists: [], vfo: null,
   };
 }

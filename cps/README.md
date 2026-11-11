@@ -1,12 +1,16 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.3 : édition des canaux analogiques et du VFO, zones ordonnées,
+Version 0.4 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM lit le banc Python existant ; sa qualification avec le firmware
 exécuté reste à faire. Aucune connexion physique ni écriture radio n'est fournie.
 
 ## Connexion au banc émulé
+
+**Qualification OEM en attente** : captures privées absentes et blocage local
+Python 3.15 / NumPy 2.3.5. Le développement hors ligne continue. Voir
+[PROJECT_STATUS.md](../docs/cps/PROJECT_STATUS.md) pour la reprise du projet.
 
 Compiler avec `npm run build`, lancer le banc Python depuis cette branche, puis
 ouvrir son adresse exacte suivie de `/cps/` (exemple :
@@ -53,6 +57,17 @@ cette première livraison. Le cœur reste réutilisable par une future interface
 Le répertoire généré `dist/` est ignoré par Git.
 
 ## Fonctions de l'éditeur
+
+- **Listes de scan** : créer, renommer, supprimer, choisir et ordonner les membres,
+  définir un canal prioritaire appartenant à la liste. La suppression d'un canal
+  le retire des zones et listes ; s'il était prioritaire, la priorité est retirée.
+  Annuler restaure le tout. Aucune fonction de scan n'est encore exécutée sur radio.
+- **Format JSON v2** : les listes de scan sont conservées dans le JSON complet.
+  Un import v1 demande confirmation de conversion ; les listes sont initialisées
+  vides et tous les champs existants conservés. L'original reste intact. Une session
+  locale v1 est restaurée avec un avertissement et doit être réexportée en v2.
+  Le CSV ne contient toujours que les canaux. Les anciennes versions du CPS ne
+  peuvent pas ouvrir le JSON v2 ; aucune rétroconversion avec perte n'est faite.
 
 - **Canal** : nom, RX/TX, largeur FM, puissance, CTCSS indépendants et interdiction
   TX. Les nouveaux canaux sont en réception seule par défaut.
