@@ -1,9 +1,74 @@
-# CPS OpenD578 : cœur hors ligne
+# CPS OpenD578 — éditeur web hors ligne
 
-Première livraison : modèle TypeScript, validation, JSON versionné, conversion
-MHz/Hz exacte et validation contre des capacités fournies par un adaptateur.
-L'interface web, le CSV, le faux poste et les transports restent à développer.
+Version 0.2 : édition des canaux analogiques et du VFO, zones ordonnées,
+recherche, sélection multiple, duplication, modifications groupées, suppression,
+annulation/rétablissement et restauration de la dernière session dans le navigateur.
 Ce code ne dialogue avec aucun poste et n'écrit aucune mémoire radio.
+
+## Lancement local
+
+Node.js 24 ou ultérieur, aucune dépendance à installer :
+
+```powershell
+cd cps
+npm start
+```
+
+Ouvrir **http://127.0.0.1:8095** dans Chrome ou Edge. Arrêter avec Ctrl+C.
+Le serveur écoute uniquement sur l'interface locale. Aucun serveur de traitement,
+compte ou ressource CDN n'est nécessaire. Le port est modifiable avec `CPS_PORT`.
+
+`npm run build` produit `dist/`, qui peut être servi par un serveur HTTP statique.
+Éviter le double-clic sur `index.html` : les modules nécessitent HTTP.
+Le client est composé de modules TypeScript et DOM natifs, sans React/Vite pour
+cette première livraison. Le cœur reste réutilisable par une future interface React.
+Le répertoire généré `dist/` est ignoré par Git.
+
+## Fonctions de l'éditeur
+
+- **Canal** : nom, RX/TX, largeur FM, puissance, CTCSS indépendants et interdiction
+  TX. Les nouveaux canaux sont en réception seule par défaut.
+- **Zones** : créer, renommer, supprimer, choisir les membres et les ordonner
+  avec les flèches. Un nouveau canal créé dans une zone lui est ajouté.
+- **Sélection** : duplication, suppression ou modification groupée de la largeur,
+  de la puissance et de l'interdiction TX.
+- **Ordre** : flèches sur le tableau global ou dans une zone ; désactivées pendant
+  une recherche pour éviter un ordre partiel ambigu.
+- **Annuler / Rétablir** : jusqu'à 50 transactions dans la session ouverte.
+  L'historique ne survit pas au rechargement ; le document courant est restauré.
+- **VFO** : paramètres facultatifs ; décocher son inclusion conserve `vfo: null`.
+- **JSON** : sauvegarde complète des canaux, zones et VFO. Ctrl+S demande un export.
+  L'import remplace le document après validation ; annulation possible.
+- **CSV** : export de tous les canaux, même masqués par un filtre ; import par ajout
+  après validation et confirmation du nombre. Les identifiants déjà présents sont
+  refusés sans modification partielle. Les zones et le VFO nécessitent le JSON.
+
+Les téléchargements sont demandés au navigateur : le CPS ne peut pas confirmer
+que l'utilisateur a effectivement conservé le fichier. La session locale dépend
+du navigateur et de l'adresse (origine) ; elle peut être supprimée ou indisponible.
+Un avertissement est alors affiché. Exporter un JSON pour une sauvegarde durable.
+Utiliser une seule fenêtre par origine : les sessions simultanées ne sont pas
+synchronisées et la dernière sauvegarde locale l'emporte. Import limité à 10 Mio.
+
+## CSV v1
+
+En-tête obligatoire, ordre exact :
+
+```csv
+id,name,rx_mhz,tx_mhz,bandwidth,power,rx_ctcss_hz,tx_ctcss_hz,tx_inhibit
+```
+
+Virgule ou point-virgule comme séparateur ; guillemets doubles et BOM acceptés.
+Fréquences en MHz avec au plus six décimales, point ou virgule décimale (mettre
+entre guillemets une virgule décimale dans un fichier séparé par virgules).
+CTCSS en Hz avec au plus une décimale, vide pour désactivé. `bandwidth` vaut
+`narrow` ou `wide`, `tx_inhibit` vaut `true` ou `false`. `power` est un identifiant
+de niveau, pas une puissance calibrée en watts.
+
+À l'export, les champs commençant par `=`, `+`, `-`, `@` ou une apostrophe reçoivent
+une apostrophe de protection pour les tableurs. L'import retire cette protection
+de manière réversible. Les CSV externes utilisant déjà une apostrophe littérale
+devant ces caractères doivent la doubler.
 
 ## Vérification
 
@@ -12,10 +77,23 @@ Node.js 24 ou ultérieur, aucune dépendance à installer :
 ```powershell
 cd cps
 npm test
+npm run build
 ```
 
 Node exécute ici le TypeScript par suppression des annotations. Cela ne remplace
 pas une vérification statique par `tsc`, à ajouter avec l'outillage de l'éditeur.
+
+Les tests couvrent aussi les conversions CSV, les collisions d'import, les
+références des canaux supprimés et l'historique. La validation automatisée dans
+Edge est bloquée dans l'environnement de développement (accès DevTools).
+Le rendu et ces parcours restent à vérifier manuellement :
+
+1. Charger l'exemple, créer un canal puis une zone contenant ce canal.
+2. Modifier l'ordre, dupliquer, supprimer et annuler.
+3. Vérifier la recherche, les modifications groupées et les réglages VFO.
+4. Exporter le JSON, recharger et comparer la session restaurée.
+5. Réimporter JSON/CSV ; vérifier qu'un import invalide conserve le document.
+6. Vérifier clavier, focus du dialogue, Échap, écran étroit et stockage indisponible.
 
 ## Utilisation
 
