@@ -1,6 +1,36 @@
 # �tat du travail CPS - 12 novembre 2026
 
-## Essai HTTP r�el du 12 novembre - d�marrage encore non qualifi�
+## Qualification r�elle OEM/CPS r�ussie - 12 novembre 2026
+
+Le parcours r�el Flash + NAND + SCT, serveur Python HTTP et client TypeScript
+CPS a r�ussi en lecture seule avec le moteur natif interactif du banc.
+Le d�marrage a atteint application_running � 52 270 001 instructions,
+132 707 pixels et 8,445 secondes simul�es. Le moteur publi� est bien native.
+PROGRAM a re�u QX/ACK, l'identit� D578UV a �t� v�rifi�e, 128 r�ponses R de
+16 octets ont pass� les contr�les d'adresse et de checksum : 2 048 octets,
+soit 32 emplacements de la premi�re page. END a re�u ACK.
+Le transport compte 131 trames soumises, aucune W ; les cinq empreintes source
+ont �t� recontr�l�es et restent identiques. Aucun poste physique utilis�.
+
+Les acc�l�rateurs native_gate.c et lcd_bridge.c sont inchang�s. Compilation
+portable Windows par Clang/LLD de Zig 0.15.2 ; sept tests des DLL r�ellement
+charg�es passent (interruptions, affichage et entr�es NAND). Le script de
+construction Windows �vite les probl�mes de cache du pilote Zig/MinGW.
+Les 45 tests CPS et les quatre tests Python pr�c�dents restent leurs r�sultats
+h�te s�par�s : ils ne constituent pas � eux seuls cette qualification r�elle.
+
+Rapport public sans donn�es de canaux :
+`qualification/native-readonly-2026-11-12.json`. Reproduction :
+`NATIVE_WINDOWS_QUALIFICATION.md`. Captures, DLL et r�sultats bruts restent locaux.
+
+Port�e : premi�re page OEM uniquement, identification, transport de lecture et
+END. Le d�codage complet des noms/fr�quences, les autres pages, l'import automatique,
+la reprise fonctionnelle apr�s END, le navigateur graphique et le poste physique
+restent � qualifier. Ne pas assimiler ce r�sultat au CPS du nouveau firmware
+OpenD578 ni � une qualification de la partie DMR. Prochaine �tape : comparer
+les champs d�cod�s � une r�f�rence du CPS du banc avant de proposer leur import.
+
+## Historique : essais Python ant�rieurs au succ�s natif
 
 Le serveur Python et son API HTTP ont �t� ex�cut�s avec les captures authentifi�es
 et le SCT complet. Le client CPS attend le signal `application_running` avant
@@ -26,7 +56,7 @@ par le banc, ou pr�voir un essai Python plus long avec un budget explicite.
 
 ## Reprise de qualification - �tat v�rifi� le 12 novembre
 
-La qualification compl�te USB/CPS reste **en attente**, mais les captures sont
+Lors de la reprise initiale, la qualification USB/CPS �tait en attente ; les captures sont
 d�sormais disponibles et authentifi�es. Le bon chemin est
 `browser-bench/samples/F4EGM.zip` (majuscules), sur Telectroboy/OpenD578, commit
 `391490e21ebedd0edf295d4ed4ccd63ab8f16054`. Le pr�c�dent 404 venait de la casse.
@@ -74,8 +104,8 @@ limites. On peut continuer le CPS hors ligne ind�pendamment de ces points.
 - �diteur TypeScript local et fichier HTML autonome ; JSON/CSV, canaux, zones,
   VFO, s�lection multiple, historique, sauvegarde de session.
 - Adaptateur OEM en lecture seule pour le banc Python, servi sous `/cps/` ;
-  identification et groupes de 32 emplacements. Tests h�te r�ussis, pas de
-  qualification r�elle avec les images priv�es. Aucun W ou acc�s m�moire direct.
+  identification et groupes de 32 emplacements. Tests h�te r�ussis, qualification r�elle de la premi�re page
+  obtenue avec les images priv�es, voir le r�sultat en t�te de ce document. Aucun W ou acc�s m�moire direct.
 - Le firmware autonome RX FM alpha du d�p�t ne poss�de pas encore de CPS.
 
 ## Derni�re livraison hors ligne - CPS 0.6
@@ -92,8 +122,8 @@ limites. On peut continuer le CPS hors ligne ind�pendamment de ces points.
 
 45 tests Node r�ussis ; build modulaire et HTML autonome g�n�r�s, syntaxe du
 bundle v�rifi�e. Les nouveaux parcours graphiques restent � v�rifier dans un
-navigateur ; les calculs et r�gles sont test�s. La qualification OEM compl�te reste en attente ; voir le dernier essai ci-dessus.
+navigateur ; les calculs et r�gles sont test�s. La premi�re lecture OEM est qualifi�e ; les limites restantes sont d�taill�es en t�te.
 
 Prochaines pistes : param�tres g�n�raux � convenir avec F4EGM, essais graphiques
-sur des exports CSV r�els, puis qualification de l'int�gration quand elle
-sera d�bloqu�e. Aucun deuxi�me faux poste n'est � d�velopper : r�utiliser le banc.
+sur des exports CSV r�els, puis comparaison des champs OEM et �largissement
+de la qualification de lecture. Aucun deuxi�me faux poste n'est � d�velopper : r�utiliser le banc.

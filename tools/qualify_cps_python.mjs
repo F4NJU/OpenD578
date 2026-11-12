@@ -13,9 +13,11 @@ const repo=fileURLToPath(new URL('../',import.meta.url));
 const [pythonArg,sourceArg,outputArg]=process.argv.slice(2);
 if(!pythonArg||!sourceArg||!outputArg)throw Error('Usage: node tools/qualify_cps_python.mjs PYTHON CAPTURE_DIR RESULT_DIR');
 const python=path.resolve(pythonArg),source=path.resolve(sourceArg),output=path.resolve(outputArg);
+const engine=process.env.OPEND578_BENCH_ENGINE??'python';
+if(!['python','native','interactive'].includes(engine))throw Error('Invalid bench engine');
 fs.mkdirSync(output,{recursive:true});
 if(fs.existsSync(path.join(output,'stop.request')))throw Error('Choose a fresh result directory.');
-const report={schema:'opend578.real-oem-cps-readonly.v1',passed:false,firmwareExecuted:false,httpExercised:false,physicalRadio:false,usbFramesSubmitted:0,writeCommandsSubmitted:0};
+const report={schema:'opend578.real-oem-cps-readonly.v1',engine,passed:false,firmwareExecuted:false,httpExercised:false,physicalRadio:false,usbFramesSubmitted:0,writeCommandsSubmitted:0};
 const bootTimeout=Number(process.env.OPEND578_BOOT_TIMEOUT_MS??300000);
 if(!Number.isInteger(bootTimeout)||bootTimeout<1000||bootTimeout>600000)throw Error('Invalid boot timeout');
 const deadline=AbortSignal.timeout(bootTimeout+90000);
@@ -49,7 +51,7 @@ try {
     server.stderr.on('data',data=>fs.appendFileSync(path.join(output,'server.log'),data));
   });
   const config=await api('config');token=config.token;report.httpExercised=true;
-  await api('start',{model:'oem',boot:'application',engine:'python',source,persist_nand:false,trace:false,voltage:13.8});
+  await api('start',{model:'oem',boot:'application',engine,source,persist_nand:false,trace:false,voltage:13.8});
   const bootDeadline=Date.now()+bootTimeout;let nextProgress=0;
   while(true){
     deadline.throwIfAborted();const state=await api('status');

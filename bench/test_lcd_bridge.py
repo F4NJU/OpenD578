@@ -2,6 +2,7 @@
 import ctypes as C
 import collections
 import shutil
+import os,shlex
 import subprocess
 import sys
 import tempfile
@@ -18,11 +19,15 @@ from lcd_bridge import LcdBridge
 class LcdFixture:
     @classmethod
     def setUpClass(cls):
-        if not shutil.which('cc'):raise unittest.SkipTest('A C compiler is needed for native dispatcher checks')
+        if os.environ.get('OPEND578_LCD_BRIDGE_LIBRARY'):
+            cls.path=Path(os.environ['OPEND578_LCD_BRIDGE_LIBRARY']).resolve(strict=True)
+            return
+        compiler=shlex.split(os.environ.get('CC','cc'))
+        if not compiler or not shutil.which(compiler[0]):raise unittest.SkipTest('A C compiler is needed for native dispatcher checks')
         cls.temp=tempfile.TemporaryDirectory();cls.addClassCleanup(cls.temp.cleanup)
         cls.path=Path(cls.temp.name)/('lcd.dylib' if sys.platform=='darwin' else 'lcd.so')
         flags=['-dynamiclib','-fPIC'] if sys.platform=='darwin' else ['-shared','-fPIC']
-        subprocess.run(['cc','-O2',*flags,str(Path(__file__).with_name('lcd_bridge.c')),'-o',str(cls.path)],check=True)
+        subprocess.run([*compiler,'-O2',*flags,str(Path(__file__).with_name('lcd_bridge.c')),'-o',str(cls.path)],check=True)
 
     def runner(self):
         cpu=Uc(UC_ARCH_ARM,UC_MODE_THUMB);cpu.mem_map(0x40010000,8192)

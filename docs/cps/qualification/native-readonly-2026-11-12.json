@@ -1,0 +1,41 @@
+{
+  "schema": "opend578.real-oem-cps-readonly.v1",
+  "engine": "interactive",
+  "passed": true,
+  "firmwareExecuted": true,
+  "httpExercised": true,
+  "physicalRadio": false,
+  "usbFramesSubmitted": 131,
+  "writeCommandsSubmitted": 0,
+  "lastBoot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "boot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "model": "D578UV",
+  "slotCount": 32,
+  "endAcknowledged": true,
+  "slotSnapshotSha256": "e854e4bc68c22f16935d17e02fcb7e3f88d514322b12122eaa2b1c7c46fe234e",
+  "executionEngine": "native",
+  "sourceCapturesUnchanged": true,
+  "nativeBridgeTests": {
+    "passed": 7,
+    "skipped": 0
+  },
+  "scope": "OEM page 0 only; no physical radio or new OpenD578 firmware qualification",
+  "nativeSources": {
+    "native_gate.c": "bb9c00c8f1b3e4679462ac60b625218bb2c6391427655f7dafa411fddb0751e7",
+    "lcd_bridge.c": "aac6d39410df685b77b9f56df01b6898a5b2ba48bffb465ba92ec9722323414b"
+  },
+  "nativeBinaries": {
+    "native_gate.dll": "5d1920b2b2f92e9129550e3771de0509b431b18e658db885a7b4a6e6336f30f7",
+    "lcd_bridge.dll": "02b72a1440dc2e0776114ed5d21b7c097d9bc2ebd2544a6ca886ffcf81b8c6b4"
+  }
+}

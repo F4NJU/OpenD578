@@ -1,6 +1,6 @@
 """A pending masked core exception must not cross an unmasking barrier."""
 import ctypes as C
-import shutil,subprocess,tempfile,unittest
+import os,shlex,shutil,subprocess,tempfile,unittest
 from pathlib import Path
 from unicorn import Uc,UC_ARCH_ARM,UC_MODE_THUMB,UC_MODE_MCLASS
 from unicorn.arm_const import UC_ARM_REG_BASEPRI,UC_ARM_REG_PRIMASK,UC_ARM_REG_FAULTMASK
@@ -10,10 +10,13 @@ from native_gate import Gate,NOTIFY,REG_READ
 
 class NativeMaskTests(unittest.TestCase):
     def test_only_eligible_pending_exception_calls_python_at_mask_barrier(self):
-        if not shutil.which('cc'):self.skipTest('C compiler needed')
+        compiler=shlex.split(os.environ.get('CC','cc'))
+        prebuilt=os.environ.get('OPEND578_NATIVE_GATE_LIBRARY')
+        if not prebuilt and (not compiler or not shutil.which(compiler[0])):self.skipTest('C compiler needed')
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'gate.so'
-            subprocess.run(['cc','-O2','-shared','-fPIC',str(Path(__file__).with_name('native_gate.c')),'-o',str(path)],check=True)
+            if prebuilt:path=Path(prebuilt).resolve(strict=True)
+            else:subprocess.run([*compiler,'-O2','-shared','-fPIC',str(Path(__file__).with_name('native_gate.c')),'-o',str(path)],check=True)
             dll=C.CDLL(str(path));dll.gate_code.argtypes=[C.c_void_p,C.c_uint64,C.c_uint32,C.c_void_p]
             cpu=Uc(UC_ARCH_ARM,UC_MODE_THUMB|UC_MODE_MCLASS);bitmap=(C.c_ubyte*128)();bitmap[0]=2
             seen=[];callback=NOTIFY(lambda *args:seen.append(True))

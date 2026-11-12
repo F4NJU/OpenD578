@@ -100,10 +100,11 @@ Les fixtures v�rifient le client h�te, pas un firmware : fragmentation, chec
 identit�, moteur/session, d�bordement, bornes, annulation et absence de W.
 Les tests Python v�rifient le confinement des fichiers et le build absent.
 
-Le firmware OEM et le serveur Python ont depuis �t� ex�cut�s avec les captures
-priv�es authentifi�es. Le d�marrage progresse mais n'a pas atteint le signal
-application pr�te dans les budgets essay�s : aucune lecture CPS r�elle valid�e.
-Le navigateur et le poste physique restent non qualifi�s. Voir PROJECT_STATUS.md.
+Le parcours OEM r�el a r�ussi sur la premi�re page avec le moteur natif :
+identit� D578UV, 32 emplacements, contr�le de chaque r�ponse et ACK de END.
+Aucune W, captures originales inchang�es. Voir PROJECT_STATUS.md et
+NATIVE_WINDOWS_QUALIFICATION.md. D�codage complet, navigateur graphique et
+poste physique restent non qualifi�s.
 
 Essai reproductible depuis la racine du d�p�t (Node 24 et Python avec les
 versions �pingl�es dans bench/requirements.txt) :

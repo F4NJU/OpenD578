@@ -92,3 +92,14 @@ et 100 984 pixels, sans atteindre application_running dans cinq minutes.
 L'API HTTP fonctionne ; aucune transaction CPS n'a �t� lanc�e avant ce signal.
 Voir PROJECT_STATUS.md pour les options exploratoires, limites et v�rifications.
 Les observations anciennes ci-dessus restent l'historique des premiers essais.
+
+
+## Dernier r�sultat : lecture r�elle r�ussie avec le moteur natif
+
+Le 12 novembre, le d�marrage a atteint application_running avec les acc�l�rateurs
+C existants compil�s sous Windows. Le client CPS a identifi� D578UV, lu les
+2 048 octets de la premi�re page (32 emplacements), v�rifi� chaque r�ponse et
+re�u ACK de END. 131 trames soumises, aucune W. Les cinq empreintes sont inchang�es.
+Ce r�sultat remplace l'attente de qualification de transport indiqu�e dans
+l'historique ci-dessus. Voir le rapport qualification/native-readonly-2026-11-12.json
+et NATIVE_WINDOWS_QUALIFICATION.md pour sa port�e limit�e et la reproduction.
