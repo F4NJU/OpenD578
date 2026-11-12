@@ -2,7 +2,8 @@ import type { AnalogSettings, Channel, Codeplug, Zone } from '../core/model.ts';
 import { createCodeplug } from '../core/model.ts';
 import { parseCodeplug, serializeCodeplug } from '../core/json.ts';
 import { parseMHz, formatMHz } from '../core/frequency.ts';
-import { parseChannelsCsv, serializeChannelsCsv } from '../core/csv.ts';
+import { parseChannelsCsv, serializeChannelsCsv, isOpenD578Csv } from '../core/csv.ts';
+import { openCsvImport } from './csv-import-panel.ts';
 import { EditorHistory, appendChannels, deleteChannels, moveItem } from '../core/editor.ts';
 import { openBenchPanel } from './bench-panel.ts';
 import { openScanPanel } from './scan-panel.ts';
@@ -89,7 +90,7 @@ function render(): void {
   if (activeZone && !value.zones.some(zone => zone.id === activeZone)) activeZone = null;
   selected = new Set([...selected].filter(id => value.channels.some(channel => channel.id === id)));
   const zone = value.zones.find(item => item.id === activeZone);
-  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.5</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
+  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.6</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
     <div class="workspace">${sidebar(value)}<main>
     <div class="page-heading"><div><p class="eyebrow">Codeplug / ${zone ? 'Zones' : 'Mémoires analogiques'}</p><h1>${escapeHtml(zone?.name ?? 'Tous les canaux')}</h1><p class="subtitle">Préparez vos mémoires, à votre rythme.</p></div>
     <div class="actions"><button data-action="review">Vérifier</button><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
@@ -226,8 +227,13 @@ function replaceDocument(value: Codeplug, message: string): void {
 }
 async function importFile(file: File): Promise<void> {
   if (file.size > 10 * 1024 * 1024) throw new Error('Fichier trop volumineux : maximum 10 Mio pour cet éditeur.');
-  const text = await file.text();
+  let text: string;
   if (file.name.toLowerCase().endsWith('.csv')) {
+    try { text = new TextDecoder('utf-8', { fatal: true }).decode(await file.arrayBuffer()); }
+    catch { throw new Error('Le CSV doit être encodé en UTF-8. Réexportez-le en CSV UTF-8 depuis votre tableur pour préserver les accents.'); }
+  } else text = await file.text();
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    if (!isOpenD578Csv(text)) { openCsvImport(text, () => history.value, next => commit(next, 'Import CSV externe ajouté. Une seule annulation retire cet import.')); return; }
     const channels = parseChannelsCsv(text);
     const next = appendChannels(history.value, channels);
     if (!confirm(`Ajouter ${channels.length} canal(aux) au document ? Le CSV ne modifie ni les zones ni le VFO.`)) return;
@@ -303,7 +309,7 @@ root.addEventListener('change', event => {
 fileInput.addEventListener('change', () => { const file = fileInput.files?.[0]; if (file) importFile(file).catch(fail); });
 window.addEventListener('beforeunload', event => { if (dirty() || dialog.open) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('keydown', event => {
-  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open || document.querySelector<HTMLDialogElement>('#scan-dialog')!.open || document.querySelector<HTMLDialogElement>('#review-dialog')!.open) return;
+  if (!(event.ctrlKey || event.metaKey) || dialog.open || document.querySelector<HTMLDialogElement>('#bench-dialog')!.open || document.querySelector<HTMLDialogElement>('#scan-dialog')!.open || document.querySelector<HTMLDialogElement>('#review-dialog')!.open || document.querySelector<HTMLDialogElement>('#csv-import-dialog')!.open) return;
   if (event.key.toLowerCase() === 's') { event.preventDefault(); exportJson(); return; }
   if ((event.target as HTMLElement).matches('input,select,textarea,[contenteditable]')) return;
   if (event.key.toLowerCase() === 'z') { event.preventDefault(); event.shiftKey ? history.redo() : history.undo(); persist(); render(); }

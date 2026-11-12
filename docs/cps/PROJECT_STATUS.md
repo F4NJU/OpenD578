@@ -1,4 +1,4 @@
-# État du travail CPS — 11 novembre 2026
+# État du travail CPS — 12 novembre 2026
 
 ## Blocage à conserver lors des prochaines sessions
 
@@ -26,19 +26,22 @@ compatible sont disponibles, ou à la demande explicite de l'utilisateur.
   qualification réelle avec les images privées. Aucun W ou accès mémoire direct.
 - Le firmware autonome RX FM alpha du dépôt ne possède pas encore de CPS.
 
-## Dernière livraison hors ligne — CPS 0.5
+## Dernière livraison hors ligne — CPS 0.6
 
 - Listes de scan : membres ordonnés et priorité optionnelle, édition et validation.
 - Format PC v2 avec conversion explicite des fichiers v1, sans modifier l'original.
 - Puissance en liste déroulante avec niveaux personnalisés conservés ; décalage
   relais et TX indépendante ; création en série avec aperçu ; bilan avant export.
+- Import CSV externe avec association des colonnes, unités explicites, aperçu
+  paginé, erreurs, doublons, sélection des lignes et zone de destination.
+  Identifiants neufs ; ajout atomique annulable. Import natif OpenD578 conservé.
 - Contrat de données destiné au firmware neuf : proposition à relire avec F4EGM,
   et non une déclaration de fonctionnalités déjà disponibles sur le poste.
 
-36 tests Node réussis ; build modulaire et HTML autonome générés, syntaxe du
+45 tests Node réussis ; build modulaire et HTML autonome générés, syntaxe du
 bundle vérifiée. Les nouveaux parcours graphiques restent à vérifier dans un
 navigateur ; les calculs et règles sont testés. Le blocage OEM reste inchangé.
 
-Prochaines pistes : paramètres généraux à convenir avec F4EGM, imports externes
-avec correspondance de colonnes, puis qualification de l'intégration quand elle
+Prochaines pistes : paramètres généraux à convenir avec F4EGM, essais graphiques
+sur des exports CSV réels, puis qualification de l'intégration quand elle
 sera débloquée. Aucun deuxième faux poste n'est à développer : réutiliser le banc.

@@ -11,9 +11,17 @@ function unprotect(value: string): string { return /^'[=+@\-']/.test(value) ? va
 function quote(value: string): string { return `"${protect(value).replaceAll('"', '""')}"`; }
 
 /** RFC4180 subset: comma or semicolon; BOM, CRLF and quoted fields accepted. */
-function rows(source: string): string[][] {
+export function parseCsvRows(source: string, delimiter?: ',' | ';' | '\t', restoreProtection = false): string[][] {
   const text = source.replace(/^\uFEFF/, '');
-  const separator = text.slice(0, text.search(/[\r\n]/) < 0 ? text.length : text.search(/[\r\n]/)).includes(';') ? ';' : ',';
+  let inQuotes = false;
+  const counts = new Map<string, number>([[',', 0], [';', 0], ['\t', 0]]);
+  for (let index = 0; index < text.length; index++) {
+    const char = text[index];
+    if (char === '"') { if (inQuotes && text[index + 1] === '"') index++; else inQuotes = !inQuotes; }
+    else if (!inQuotes && (char === '\r' || char === '\n')) break;
+    else if (!inQuotes && counts.has(char)) counts.set(char, counts.get(char)! + 1);
+  }
+  const separator = delimiter ?? [...counts].sort((a, b) => b[1] - a[1])[0][0];
   const result: string[][] = [];
   let row: string[] = [], field = '', quoted = false, closed = false;
   for (let index = 0; index < text.length; index++) {
@@ -26,7 +34,7 @@ function rows(source: string): string[][] {
       if (field || closed) throw new Error('CSV : guillemet inattendu.');
       quoted = true;
     } else if (char === separator || char === '\n' || char === '\r') {
-      row.push(unprotect(field)); field = ''; closed = false;
+      row.push(restoreProtection ? unprotect(field) : field); field = ''; closed = false;
       if (char !== separator) {
         if (row.some(value => value !== '')) result.push(row);
         row = [];
@@ -38,7 +46,7 @@ function rows(source: string): string[][] {
     }
   }
   if (quoted) throw new Error('CSV : guillemets non fermés.');
-  row.push(unprotect(field));
+  row.push(restoreProtection ? unprotect(field) : field);
   if (row.some(value => value !== '')) result.push(row);
   return result;
 }
@@ -51,7 +59,7 @@ function tone(source: string): number | null {
 }
 
 export function parseChannelsCsv(source: string): Channel[] {
-  const [header, ...data] = rows(source);
+  const [header, ...data] = parseCsvRows(source, undefined, true);
   if (!header || header.join(',') !== HEADERS.join(',')) throw new Error(`En-tête CSV attendu : ${HEADERS.join(',')}`);
   const channels = data.map((row, index): Channel => {
     try {
@@ -66,6 +74,11 @@ export function parseChannelsCsv(source: string): Channel[] {
   });
   assertCodeplug({ ...createCodeplug(), channels });
   return channels;
+}
+
+export function isOpenD578Csv(source: string): boolean {
+  try { return parseCsvRows(source)[0]?.join(',') === HEADERS.join(','); }
+  catch { return false; }
 }
 
 export function serializeChannelsCsv(channels: Channel[]): string {

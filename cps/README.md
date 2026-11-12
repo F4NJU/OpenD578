@@ -1,6 +1,6 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.5 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.6 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM lit le banc Python existant ; sa qualification avec le firmware
@@ -57,6 +57,31 @@ cette première livraison. Le cœur reste réutilisable par une future interface
 Le répertoire généré `dist/` est ignoré par Git.
 
 ## Fonctions de l'éditeur
+
+- **CSV externe avec association des colonnes** : bouton Importer, choisir un CSV
+  UTF-8 avec en-tête. L'assistant propose les associations ; les vérifier puis
+  cliquer Prévisualiser. Nom et RX sont obligatoires. RX/TX et décalage ont leurs
+  unités explicites (MHz/kHz/Hz). Les séparateurs virgule, point-virgule et tabulation
+  sont acceptés, avec choix manuel si l'autodétection ne convient pas.
+  L'aperçu affiche 50 lignes par page, les erreurs et doublons présumés. Les lignes
+  invalides ne sont pas sélectionnables ; les doublons sont décochés par défaut
+  mais peuvent être cochés volontairement. Choisir une zone existante ou la liste
+  globale, puis importer. Toute la sélection constitue une seule transaction annulable.
+  Aucun canal existant n'est modifié et les listes de scan/VFO restent inchangés.
+
+  Les identifiants externes sont ignorés et recréés. Les modes numériques et tons
+  DCS sont refusés quand leurs colonnes sont associées. Les champs non associés
+  sont ignorés : vérifier notamment la colonne mode si le fichier contient aussi
+  du DMR. Sans TX ni décalage, TX = RX. Tons vides = désactivés ; largeur étroite,
+  puissance `low` et RX seul sont les défauts modifiables. Les conflits TX/décalage,
+  signes contradictoires et NFM/largeur large sont signalés. Les fréquences sont
+  converties sans arrondi à l'Hz ; aucune valeur en watts n'est déduite de puissance.
+
+  Le fichier source n'est pas modifié. L'import externe est limité à 10 Mio,
+  10 000 enregistrements et 256 colonnes. Les numéros affichés sont des numéros
+  d'enregistrement CSV (en-tête = 1), pas des lignes physiques en cas de champ
+  multiligne. L'import CSV OpenD578 reconnu conserve son parcours strict existant,
+  avec ses identifiants et ses contrôles de collision.
 
 - **Puissance** : liste déroulante `low`, `medium`, `high`, `turbo`, complétée par
   les identifiants personnalisés du document. « Personnalisé… » permet une nouvelle
