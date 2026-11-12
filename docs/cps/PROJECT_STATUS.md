@@ -1,29 +1,42 @@
 # État du travail CPS — 12 novembre 2026
 
-## Blocage à conserver lors des prochaines sessions
+## Reprise de qualification — état vérifié le 12 novembre
 
-La qualification du raccordement au firmware OEM exécuté est **en attente**.
-Le 12 novembre, F4EGM confirme avoir placé quatre fichiers utiles dans
-`browser-bench/samples/f4egm.zip` sur GitHub. Il précise que l'ancienne archive
-de passation est dépassée : ne plus la présenter comme la fourniture actuelle.
-La vérification API du dépôt Telectroboy/OpenD578 (`main`, commit
-`391490e21ebedd0edf295d4ed4ccd63ab8f16054`) ne trouve cependant pas ce ZIP :
-chemin retournant 404. Obtenir son lien exact ou attendre sa publication avant
-de conclure que les captures sont disponibles. Le contenu et sa compatibilité
-avec le banc Python doivent encore être vérifiés.
+La qualification complète USB/CPS reste **en attente**, mais les captures sont
+désormais disponibles et authentifiées. Le bon chemin est
+`browser-bench/samples/F4EGM.zip` (majuscules), sur Telectroboy/OpenD578, commit
+`391490e21ebedd0edf295d4ed4ccd63ab8f16054`. Le précédent 404 venait de la casse.
+L'archive de passation ancienne est dépassée selon F4EGM.
+
+Le ZIP a été récupéré, son blob Git vérifié et les quatre fichiers contrôlés par
+taille et SHA256 : Flash 3 Mio, NAND 256 Mio, OOB 8 Mio, ECC 128 Kio. L'application
+V1.21 extraite de la Flash correspond aussi à l'empreinte du dépôt. Copies de
+travail locales dans `capture-inputs/`, laissées intactes pendant les essais.
 
 Sur le PC de Maxime, le lancement a aussi échoué : Python 3.15, dépendance
 `numpy==2.3.5` téléchargée sous forme source, compilation impossible faute de
-compilateur. **F4EGM confirme utiliser Python 3.13.5.** Le PC inspecté ne liste
-actuellement que Python 3.14 et 3.15 via `py -0p`. Prévoir un environnement 3.13
-distinct ; l'installation des dépendances n'a pas encore été retestée avec lui.
+compilateur. **F4EGM confirme utiliser Python 3.13.5.** Un Python 3.13.5 portable
+isolé a maintenant été préparé dans `runtime/python3135/`, sans modifier les
+Python système. Toutes les dépendances épinglées du banc y sont installées et
+importables, dont NumPy 2.3.5 (wheel binaire, sans compilation).
 L'indication générale « Python 3.11 ou plus récent » ne garantit pas que toutes
 les dépendances épinglées disposent d'un paquet binaire pour l'interpréteur choisi.
 
-**Décision utilisateur : continuer les fonctions hors ligne.** Ne pas présenter
-l'absence de captures ou ce problème NumPy comme un blocage de tout le CPS.
-Reprendre la qualification OEM lorsque les entrées privées et un environnement
-compatible sont disponibles, ou à la demande explicite de l'utilisateur.
+**Travail repris à la demande de l'utilisateur avec les captures.** Une copie
+complète de `feature/cps-core` est disponible dans `integration/`.
+Les obstacles observés sont maintenant précis :
+
+- Le banc Python OEM historique exige encore
+  `SCT3258TD_UpdateFlash_V2_01_07BF.hex`, absent de l'archive à quatre fichiers.
+  Ne pas confondre ce fichier avec les 2048 octets de bootstrap présents en Flash.
+- Un essai réel par `run_hardware.py`, moteur Python, a exécuté 69 119 instructions
+  puis s'est arrêté sur `RF SPI has multiple active chip selects`, PC 0x0800870C,
+  écriture GPIOB 0x40010C00. Ne pas masquer cette limite par une réponse inventée.
+- Le chemin WebAssembly a été initialisé mais l'essai a été interrompu sans
+  lecture CPS complète ; ne pas le présenter comme une qualification réussie.
+
+Voir `F4EGM_CAPTURE_CHECK.md` pour les empreintes, le protocole d'essai et les
+limites. On peut continuer le CPS hors ligne indépendamment de ces points.
 
 ## Ce qui existe
 
@@ -53,4 +66,3 @@ navigateur ; les calculs et règles sont testés. Le blocage OEM reste inchangé
 Prochaines pistes : paramètres généraux à convenir avec F4EGM, essais graphiques
 sur des exports CSV réels, puis qualification de l'intégration quand elle
 sera débloquée. Aucun deuxième faux poste n'est à développer : réutiliser le banc.
-

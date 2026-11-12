@@ -6,9 +6,17 @@ Le nouveau panneau est une inspection OEM distincte du codeplug éditable.
 
 ## Préparation
 
+**Actualisation du 12 novembre** : F4EGM a fourni les quatre captures dans
+`browser-bench/samples/F4EGM.zip` sur son dépôt. Leurs empreintes sont vérifiées.
+Ce jeu satisfait les captures Flash/NAND, mais pas la référence SCT complète
+encore exigée par ce parcours Python historique. Python 3.13.5 et les paquets
+épinglés sont prêts dans un environnement local isolé. Consulter
+[F4EGM_CAPTURE_CHECK.md](F4EGM_CAPTURE_CHECK.md) avant de poursuivre : ni le CPS
+ni ce parcours de démarrage ne sont encore qualifiés de bout en bout.
+
 Utiliser une copie locale complète de la branche `feature/cps-core` du fork
-F4NJU/OpenD578, avec les entrées privées déjà nécessaires au banc. Le dépôt
-public et le fichier HTML autonome ne contiennent aucune image OEM.
+F4NJU/OpenD578, avec les entrées nécessaires au banc. Le fichier HTML autonome
+ne contient aucune image OEM ; les captures sont à récupérer séparément.
 
 Depuis la racine, compiler le CPS avec Node.js 24 ou ultérieur :
 

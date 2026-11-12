@@ -8,8 +8,11 @@ exécuté reste à faire. Aucune connexion physique ni écriture radio n'est fou
 
 ## Connexion au banc émulé
 
-**Qualification OEM en attente** : captures privées absentes et blocage local
-Python 3.15 / NumPy 2.3.5. Le développement hors ligne continue. Voir
+**Qualification OEM en attente** : les quatre captures F4EGM sont maintenant
+authentifiées et Python 3.13.5 est prêt avec les dépendances exactes. Le banc
+Python historique attend encore sa référence SCT ; un essai matériel réel a
+atteint une limite du modèle RF à 69 119 instructions. Le CPS reste développable
+hors ligne. Voir [F4EGM_CAPTURE_CHECK.md](../docs/cps/F4EGM_CAPTURE_CHECK.md) et
 [PROJECT_STATUS.md](../docs/cps/PROJECT_STATUS.md) pour la reprise du projet.
 
 Compiler avec `npm run build`, lancer le banc Python depuis cette branche, puis
