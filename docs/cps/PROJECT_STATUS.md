@@ -26,9 +26,16 @@ les dépendances épinglées disposent d'un paquet binaire pour l'interpréteur 
 complète de `feature/cps-core` est disponible dans `integration/`.
 Les obstacles observés sont maintenant précis :
 
-- Le banc Python OEM historique exige encore
-  `SCT3258TD_UpdateFlash_V2_01_07BF.hex`, absent de l'archive à quatre fichiers.
-  Ne pas confondre ce fichier avec les 2048 octets de bootstrap présents en Flash.
+- **Prérequis SCT résolu** : `SCT3258TD_UpdateFlash_V2_01_07BF.hex` est fourni
+  séparément dans `browser-bench/samples/` du dépôt amont, commit
+  `8c7f2b5ff4df83fa9bef7a64fc5a597d61ace57f`. Téléchargé et authentifié par le
+  banc (603 102 octets, SHA256 d5ada473af891b6c707978f0b9dde81324afcc4af27348d3bcdf70615ab19407).
+  Tous les contrôles d'entrées du parcours OEM Python passent désormais. Ce fichier
+  est une référence du modèle de composant ; aucun développement DMR n'est entrepris.
+- Le parcours OEM `run_lcd.py`, moteur Python 3.13.5, a maintenant exécuté
+  200 000 instructions et atteint son budget prévu (PC 0x0808ADFA), avec sept
+  buffers NAND. Aucun pixel ni lecture CPS complète à ce stade : poursuivre la
+  qualification du démarrage, puis USB. Ne plus demander ce fichier à F4EGM.
 - Un essai réel par `run_hardware.py`, moteur Python, a exécuté 69 119 instructions
   puis s'est arrêté sur `RF SPI has multiple active chip selects`, PC 0x0800870C,
   écriture GPIOB 0x40010C00. Ne pas masquer cette limite par une réponse inventée.

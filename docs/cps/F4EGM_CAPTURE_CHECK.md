@@ -41,6 +41,20 @@ de sa distribution ; les dépendances épinglées ont été contrôlées par mé
 
 ## Essais et limites distinctes
 
+**Actualisation : fichier SCT retrouvé et validé.** F4EGM l'a fourni séparément
+dans `browser-bench/samples/SCT3258TD_UpdateFlash_V2_01_07BF.hex` (amont
+`8c7f2b5ff4df83fa9bef7a64fc5a597d61ace57f`). Taille 603 102 octets, SHA256
+`d5ada473af891b6c707978f0b9dde81324afcc4af27348d3bcdf70615ab19407`.
+`check_inputs()` et `prepare_sct_reference()` passent. Le blocage d'entrée du
+paragraphe 1 ci-dessous est historique et résolu ; le ZIP conserve bien quatre
+captures et le SCT est un cinquième fichier séparé. Ce contrôle de référence
+n'implique pas de développer ou de qualifier le DMR.
+
+Après ajout du SCT, `run_lcd.py` (moteur Python, sans accélération LCD native,
+budget 200 000 instructions) s'arrête normalement sur `instruction_budget`,
+PC `0x0808ADFA`, avec sept buffers NAND, aucun pixel et sans lecture CPS.
+C'est une exécution OEM limitée réussie, pas un démarrage complet qualifié.
+
 1. **Banc Python OEM historique (`run_lcd.py`)** : sa vérification préalable
    demande encore `SCT3258TD_UpdateFlash_V2_01_07BF.hex`. Ce fichier n'est pas
    dans le ZIP. Le dossier de quatre captures ne satisfait donc pas à lui seul

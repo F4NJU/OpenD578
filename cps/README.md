@@ -10,7 +10,8 @@ exécuté reste à faire. Aucune connexion physique ni écriture radio n'est fou
 
 **Qualification OEM en attente** : les quatre captures F4EGM sont maintenant
 authentifiées et Python 3.13.5 est prêt avec les dépendances exactes. Le banc
-Python historique attend encore sa référence SCT ; un essai matériel réel a
+Python historique possède désormais sa référence SCT authentifiée et a exécuté
+un essai OEM borné à 200 000 instructions. Un autre essai matériel réel a
 atteint une limite du modèle RF à 69 119 instructions. Le CPS reste développable
 hors ligne. Voir [F4EGM_CAPTURE_CHECK.md](../docs/cps/F4EGM_CAPTURE_CHECK.md) et
 [PROJECT_STATUS.md](../docs/cps/PROJECT_STATUS.md) pour la reprise du projet.
