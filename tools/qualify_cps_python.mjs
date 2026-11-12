@@ -8,6 +8,7 @@ import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {BenchHttpApi} from '../cps/src/device/bench-http.ts';
 import {OemReadOnlyClient,assertOemReadOnly} from '../cps/src/device/oem-readonly.ts';
+import {compareOemPage,pageFromReplies} from './compare_oem_page.mjs';
 
 const repo=fileURLToPath(new URL('../',import.meta.url));
 const [pythonArg,sourceArg,outputArg]=process.argv.slice(2);
@@ -23,6 +24,7 @@ if(!Number.isInteger(bootTimeout)||bootTimeout<1000||bootTimeout>600000)throw Er
 const deadline=AbortSignal.timeout(bootTimeout+90000);
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let origin='',token='',server;
+const compare=process.env.OPEND578_COMPARE_OEM==='1',received=new Map();
 // Plain HTTP transport to the locally spawned server, without an environment proxy.
 function request(url,init={}) {
   if(new URL(url).pathname==='/api/usb/write'){
@@ -64,7 +66,15 @@ try {
   }
   const transport=new BenchHttpApi({signal:deadline,fetcher:(route,init)=>request(origin+route,{...init,headers:{...init.headers,Origin:origin}})});
   await transport.initialize();
-  const snapshot=await new OemReadOnlyClient((route,data)=>transport.request(route,data),{signal:deadline,progress:(done,total)=>{if(done%512===0)console.log(JSON.stringify({phase:'read',done,total}));}}).readPage(0);
+  const snapshot=await new OemReadOnlyClient(async(route,data)=>{
+    const reply=await transport.request(route,data);
+    if(compare&&route.startsWith('usb/cdc?cursor=')&&typeof reply.received_hex==='string'&&Number.isSafeInteger(reply.received_base)){
+      const bytes=Buffer.from(reply.received_hex,'hex');
+      bytes.forEach((byte,index)=>received.set(reply.received_base+index,byte));
+    }
+    return reply;
+  },{signal:deadline,progress:(done,total)=>{if(done%512===0)console.log(JSON.stringify({phase:'read',done,total}));}}).readPage(0);
+  if(compare)report.decoderComparison=compareOemPage(pageFromReplies(received),snapshot.slots,path.join(repo,'bench/web/mini_cps_protocol.js'));
   report.passed=true;report.model=snapshot.model;report.slotCount=snapshot.slots.length;report.endAcknowledged=snapshot.endAcknowledged;
   report.slotSnapshotSha256=crypto.createHash('sha256').update(JSON.stringify(snapshot.slots)).digest('hex');
 }catch(error){report.error=error.message;}

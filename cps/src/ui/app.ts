@@ -90,7 +90,7 @@ function render(): void {
   if (activeZone && !value.zones.some(zone => zone.id === activeZone)) activeZone = null;
   selected = new Set([...selected].filter(id => value.channels.some(channel => channel.id === id)));
   const zone = value.zones.find(item => item.id === activeZone);
-  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.6</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
+  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.7</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
     <div class="workspace">${sidebar(value)}<main>
     <div class="page-heading"><div><p class="eyebrow">Codeplug / ${zone ? 'Zones' : 'Mémoires analogiques'}</p><h1>${escapeHtml(zone?.name ?? 'Tous les canaux')}</h1><p class="subtitle">Préparez vos mémoires, à votre rythme.</p></div>
     <div class="actions"><button data-action="review">Vérifier</button><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
@@ -252,7 +252,7 @@ root.addEventListener('click', async event => {
   const action = button.dataset.action, id = button.dataset.id!;
   try {
     switch (action) {
-      case 'bench': openBenchPanel(); break;
+      case 'bench': openBenchPanel(() => history.value, next => commit(next, 'Canaux OEM ajoutés en réception seule. Une annulation retire cet import ; vérifiez les réglages de préparation.')); break;
       case 'scan-lists': openScanPanel(() => history.value, next => commit(next, 'Listes de scan enregistrées dans la session.')); break;
       case 'series': createSeries(); break;
       case 'review': openReviewPanel(history.value); break;

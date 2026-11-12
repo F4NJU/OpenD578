@@ -1,0 +1,36 @@
+{
+  "schema": "opend578.real-oem-cps-readonly.v1",
+  "engine": "interactive",
+  "passed": true,
+  "firmwareExecuted": true,
+  "httpExercised": true,
+  "physicalRadio": false,
+  "usbFramesSubmitted": 131,
+  "writeCommandsSubmitted": 0,
+  "lastBoot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "boot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "decoderComparison": {
+    "comparedSlots": 32,
+    "comparedFieldsPerSlot": 5,
+    "mismatches": 0,
+    "conservativeUnknowns": 0,
+    "referenceSha256": "3bba2dcd3af5c0e5beb6b34ce978b674f20f6d2741412b9cbbc88cb696506640"
+  },
+  "model": "D578UV",
+  "slotCount": 32,
+  "endAcknowledged": true,
+  "slotSnapshotSha256": "e854e4bc68c22f16935d17e02fcb7e3f88d514322b12122eaa2b1c7c46fe234e",
+  "executionEngine": "native",
+  "sourceCapturesUnchanged": true,
+  "scope": "Page zero, comparison with existing bench decoder; not manufacturer or physical-radio qualification"
+}

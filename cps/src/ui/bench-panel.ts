@@ -2,6 +2,9 @@ import { BenchHttpApi, benchOrigin } from '../device/bench-http.ts';
 import { OemReadOnlyClient } from '../device/oem-readonly.ts';
 import type { OemSnapshot } from '../device/oem-readonly.ts';
 import { formatMHz } from '../core/frequency.ts';
+import { appendOemSlots, oemImportReason } from '../core/oem-import.ts';
+import type { Codeplug } from '../core/model.ts';
+import { powerField, readPower, bindChannelFields } from './channel-fields.ts';
 
 const benchDialog = document.querySelector<HTMLDialogElement>('#bench-dialog')!;
 const SPENT_ENGINE_KEY = 'opend578.cps.oem.spent-engine.v1';
@@ -9,6 +12,8 @@ let benchBusy = false;
 let benchAbort: AbortController | null = null;
 let oemSnapshot: OemSnapshot | null = null;
 let oemSpentEngine: string | null = null;
+let benchGetDocument: (() => Codeplug) | null = null;
+let benchCommitDocument: ((next: Codeplug) => void) | null = null;
 const benchEscape = (value: unknown): string => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 
 function isBenchPage(): boolean {
@@ -30,7 +35,32 @@ function renderOemSnapshot(): void {
   const snapshot = oemSnapshot;
   target.innerHTML = `<p class="help">Instantané du ${benchEscape(new Date(snapshot.readAt).toLocaleString('fr-FR'))} · modèle déclaré : ${snapshot.model} · version non décodée · moteur ${benchEscape(snapshot.engine)}. END acquitté.</p>
     <div class="table-scroll"><table aria-label="Emplacements OEM en lecture seule"><thead><tr><th>Slot</th><th>Nom</th><th>RX · MHz</th><th>TX · MHz</th><th>Mode · bits OEM</th><th>Puissance · bits OEM</th></tr></thead><tbody>${snapshot.slots.map(slot => `<tr><td>${slot.slot}</td><td>${benchEscape(slot.name ?? 'Nom non interprétable')}</td><td class="freq">${slot.rxHz === null ? 'Inconnue' : formatMHz(slot.rxHz)}</td><td class="freq">${slot.txHz === null ? 'Inconnue' : formatMHz(slot.txHz)}</td><td>${benchEscape(slot.mode)}</td><td>${benchEscape(slot.power)}</td></tr>`).join('')}</tbody></table></div>
-    <p class="help">32 emplacements bruts, pas une liste certifiée de canaux actifs. CTCSS, largeur, zones et interdiction TX ne sont pas décodés. Aucune donnée n’est injectée dans votre codeplug éditable.</p>`;
+    <p class="help">32 emplacements bruts, pas une liste certifiée de canaux actifs. CTCSS, largeur, zones et interdiction TX ne sont pas décodés.</p>
+    <form id="bench-import-form"><h3>Préparer des canaux FM dans le document</h3>
+    <p class="help">Sélectionnez les emplacements voulus. Leur nom et leurs fréquences seront copiés. Les modes mixtes/DMR et les valeurs inconnues sont exclus. Aucun transfert vers le poste n'est effectué.</p>
+    <button type="button" id="bench-select-fm">Sélectionner les FM interprétables</button>
+    <div>${snapshot.slots.map(slot => { const reason = oemImportReason(slot); return `<label><input type="checkbox" name="oem-slot" value="${slot.slot}" ${reason ? 'disabled' : ''}> ${slot.slot} · ${benchEscape(slot.name ?? 'Sans nom')} ${reason ? `— ${benchEscape(reason)}` : ''}</label><br>`; }).join('')}</div>
+    <label class="field">Largeur à utiliser — non lue dans le poste<select name="bandwidth" required><option value="">Choisir</option><option value="narrow">Étroite</option><option value="wide">Large</option></select></label>
+    ${powerField('low')}
+    <p class="help">La puissance choisie ci-dessus est un identifiant du document PC, indépendant des bits OEM affichés. Les CTCSS sont préparés sans tonalité. L'émission sera désactivée pour tous les canaux ajoutés ; vérifiez ces réglages avant de la réactiver. Zones, scans et VFO restent conservés.</p>
+    <label><input type="checkbox" name="reviewed" required> J'ai vérifié la sélection et ces réglages de préparation.</label>
+    <button type="submit" class="primary">Ajouter la sélection en réception seule</button></form>`;
+  const form = target.querySelector<HTMLFormElement>('#bench-import-form')!;
+  bindChannelFields(form);
+  form.querySelector('#bench-select-fm')!.addEventListener('click', () => {
+    form.querySelectorAll<HTMLInputElement>('input[name="oem-slot"]:not(:disabled)').forEach(input => { input.checked = true; });
+  });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (benchBusy || !form.reportValidity() || !benchGetDocument || !benchCommitDocument) return;
+    try {
+      const data = new FormData(form);
+      const next = appendOemSlots(benchGetDocument(), snapshot, data.getAll('oem-slot').map(Number), {
+        bandwidth: String(data.get('bandwidth')) as 'narrow' | 'wide', power: readPower(data),
+      });
+      benchCommitDocument(next); benchDialog.close();
+    } catch (error) { benchMessage((error as Error).message, true); }
+  });
 }
 function benchControls(busy: boolean): void {
   benchDialog.querySelectorAll<HTMLButtonElement | HTMLSelectElement>('#bench-read, #bench-page, #bench-export').forEach(control => { control.disabled = busy || (control.id === 'bench-export' && !oemSnapshot); });
@@ -40,6 +70,7 @@ function benchControls(busy: boolean): void {
 async function readBenchPage(): Promise<void> {
   if (benchBusy) return;
   const page = Number(benchDialog.querySelector<HTMLSelectElement>('#bench-page')!.value);
+  oemSnapshot = null; renderOemSnapshot();
   benchBusy = true; benchAbort = new AbortController(); benchControls(true);
   const progress = benchDialog.querySelector<HTMLProgressElement>('#bench-progress')!;
   progress.value = 0;
@@ -66,7 +97,8 @@ function exportOemSnapshot(): void {
   document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function openBenchPanel(): void {
+export function openBenchPanel(getDocument: () => Codeplug, commitDocument: (next: Codeplug) => void): void {
+  benchGetDocument = getDocument; benchCommitDocument = commitDocument;
   const sameOrigin = isBenchPage();
   benchDialog.innerHTML = `<div class="dialog-head"><h2 id="bench-title">Banc émulé · lecture OEM</h2><button data-bench-close aria-label="Fermer">×</button></div>
     <div class="dialog-body"><p class="help">Adaptateur de recherche D578UV, profil OEM V1.21. Le firmware RX FM alpha ne fournit pas encore les commandes CPS. Fermez le CPS intégré et tout pont externe : un seul client USB à la fois.</p>

@@ -1,10 +1,10 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.6 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.7 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
-L'adaptateur OEM lit le banc Python existant ; sa qualification avec le firmware
-exécuté reste à faire. Aucune connexion physique ni écriture radio n'est fournie.
+L'adaptateur OEM a été qualifié sur la première page du firmware exécuté dans
+le banc natif ; les cinq champs décodés concordent avec le décodeur du banc. Aucune connexion physique ni écriture radio n'est fournie.
 
 ## Connexion au banc émulé
 
@@ -212,3 +212,13 @@ Le cœur est indépendant du banc et du firmware. Les évolutions sont préparé
 sur une branche dédiée du fork avant proposition au dépôt amont.
 Le contrat PC est implémenté ; les décisions firmware et protocole restent à
 convenir avec F4EGM avant l'intégration à l'émulateur.
+
+
+## CPS 0.7 : préparation depuis une lecture OEM
+
+Le panneau Banc émulé permet de sélectionner les emplacements FM interprétables
+après une lecture réelle et END acquitté. L'import copie nom et RX/TX avec des
+identifiants neufs ; les choix de préparation sont explicites et TX reste inhibée.
+Modes mixtes/DMR et valeurs inconnues sont refusés. Une annulation retire l'ajout.
+Voir ../docs/cps/OEM_IMPORT.md et le rapport de comparaison des deux décodeurs.
+Les champs constructeur non décodés ne sont pas présentés comme récupérés.
