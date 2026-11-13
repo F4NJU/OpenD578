@@ -1,3 +1,5 @@
+import { OEM_CAPACITY, OEM_BITMAP, OEM_BITMAP_BYTES, oemChannelAddress, oemReadableAddress, oemActiveSlots, decodeOemTone } from './oem-profile.ts';
+import type { OemTone } from './oem-profile.ts';
 /** OEM V1.21 research profile: host-side transactions, never NAND/MCU access. */
 export const OEM_BASE = 0x00800000;
 const PAGE_BYTES = 2048;
@@ -12,11 +14,14 @@ export interface OemSlot {
   txHz: number | null;
   mode: string;
   power: string;
+  rxTone: OemTone;
+  txTone: OemTone;
 }
 export interface OemSnapshot {
   engine: string;
   model: 'D578UV';
   page: number;
+  scope?: 'active-channels' | 'collected-pages';
   readAt: string;
   slots: OemSlot[];
   endAcknowledged: boolean;
@@ -44,7 +49,7 @@ function checkCdc(value: BenchReply, withBytes: boolean): CdcState {
 }
 
 export function oemReadCommand(address: number): Uint8Array {
-  if (!Number.isInteger(address) || address < OEM_BASE || address >= OEM_BASE + 8192 || address % 16) throw new Error('Lecture hors des 128 premiers emplacements.');
+  if (!oemReadableAddress(address)) throw new Error('Lecture hors des canaux et du bitmap OEM autorisés.');
   return new Uint8Array([82, address >>> 24, (address >>> 16) & 255, (address >>> 8) & 255, address & 255, 16]);
 }
 /** Strict allowlist also applied at the HTTP transport boundary. No W command. */
@@ -71,19 +76,21 @@ function oemBcd(bytes: Uint8Array): number | null {
 }
 export function decodeOemPage(bytes: Uint8Array, page: number): OemSlot[] {
   if (bytes.length !== PAGE_BYTES || !Number.isInteger(page) || page < 0 || page > 3) throw new Error('Page OEM invalide.');
-  return Array.from({ length: 32 }, (_, index) => {
-    const record = bytes.slice(index * 64, (index + 1) * 64), nameBytes = record.slice(35, 51);
+  return Array.from({ length: 32 }, (_, index) => decodeOemRecord(bytes.slice(index * 64, (index + 1) * 64), page * 32 + index + 1));
+}
+export function decodeOemRecord(record: Uint8Array, slot: number): OemSlot {
+  if (record.length !== 64 || !Number.isInteger(slot) || slot < 1 || slot > OEM_CAPACITY) throw new Error('Canal OEM invalide.');
+  const nameBytes = record.slice(35, 51);
     const end = nameBytes.indexOf(0), rawName = end < 0 ? nameBytes : nameBytes.slice(0, end);
     const rx = oemBcd(record.slice(0, 4));
     // Offset zero is valid, whereas an all-zero RX does not identify a usable channel.
     const offset = record.slice(4, 8).every(byte => byte === 0) ? 0 : oemBcd(record.slice(4, 8));
     const shift = record[8] >> 6;
     const tx = rx === null || offset === null || shift === 3 ? null : rx + (shift === 0 ? 0 : shift === 1 ? offset : -offset);
-    return { slot: page * 32 + index + 1,
+    return { slot,
       name: rawName.length && rawName.every(byte => byte >= 32 && byte <= 126) ? String.fromCharCode(...rawName) : null,
       rxHz: rx, txHz: tx !== null && tx > 0 ? tx : null,
-      mode: MODELS[record[8] & 3], power: POWER_NAMES[(record[8] >> 2) & 3] };
-  });
+      mode: MODELS[record[8] & 3], power: POWER_NAMES[(record[8] >> 2) & 3], rxTone: decodeOemTone(record, 'rx'), txTone: decodeOemTone(record, 'tx') };
 }
 
 /** Read sessions may span pages; END or ambiguous failures require a fresh engine. */
@@ -170,12 +177,8 @@ export class OemReadOnlyClient {
     catch (error) { this.faulted = true; this.programming = false; throw error; }
     finally { this.busy = false; }
   }
-  async readPage(page: number, options: { keepSession?: boolean } = {}): Promise<OemSnapshot> {
-    if (this.busy) throw new Error('Une lecture est déjà en cours.');
-    if (!Number.isInteger(page) || page < 0 || page > 3) throw new Error('Choisir un groupe de 32 emplacements entre 1 et 128.');
-    this.busy = true;
-    try {
-      if (this.faulted) throw new Error('Session interrompue : redémarrez le banc.');
+  private async beginSession(): Promise<void> {
+    if (this.faulted) throw new Error('Session interrompue : redémarrez le banc.');
       if (!this.programming) {
         await this.connect(); this.checkAbort();
         this.spent = this.engine; this.markEngine(this.engine);
@@ -187,6 +190,42 @@ export class OemReadOnlyClient {
       } else {
         await this.checkOwnedSession();
       }
+  }
+  async readAll(options: { keepSession?: boolean } = {}): Promise<OemSnapshot> {
+    if (this.busy) throw new Error('Une lecture est déjà en cours.');
+    this.busy = true;
+    try {
+      await this.beginSession();
+      const bitmap = new Uint8Array(OEM_BITMAP_BYTES);
+      for (let offset = 0; offset < bitmap.length; offset += 16) {
+        const address = OEM_BITMAP + offset;
+        bitmap.set(checkOemResponse(await this.exchange(oemReadCommand(address), 24), address), offset);
+        this.progress(offset + 16, OEM_BITMAP_BYTES + OEM_CAPACITY * 64);
+      }
+      const active = oemActiveSlots(bitmap), slots: OemSlot[] = [];
+      const total = OEM_BITMAP_BYTES + active.length * 64;
+      this.progress(OEM_BITMAP_BYTES, total);
+      for (const slot of active) {
+        const record = new Uint8Array(64), base = oemChannelAddress(slot);
+        for (let offset = 0; offset < 64; offset += 16) {
+          const address = base + offset;
+          record.set(checkOemResponse(await this.exchange(oemReadCommand(address), 24), address), offset);
+        }
+        slots.push(decodeOemRecord(record, slot));
+        this.progress(OEM_BITMAP_BYTES + slots.length * 64, total);
+      }
+      if (!options.keepSession) await this.finishSession();
+      return { engine: this.engine, model: 'D578UV', page: -1, scope: 'active-channels', readAt: new Date().toISOString(), slots, endAcknowledged: !options.keepSession };
+    } catch (error) { this.faulted = true; this.programming = false; throw error; }
+    finally { this.busy = false; }
+  }
+  async readPage(page: number, options: { keepSession?: boolean } = {}): Promise<OemSnapshot> {
+    if (this.busy) throw new Error('Une lecture est déjà en cours.');
+    if (!Number.isInteger(page) || page < 0 || page > 3) throw new Error('Choisir un groupe de 32 emplacements entre 1 et 128.');
+    this.busy = true;
+    try {
+      if (this.faulted) throw new Error('Session interrompue : redémarrez le banc.');
+      await this.beginSession();
       const bytes = new Uint8Array(PAGE_BYTES);
       for (let offset = 0; offset < PAGE_BYTES; offset += 16) {
         const address = OEM_BASE + page * PAGE_BYTES + offset;

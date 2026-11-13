@@ -5,7 +5,7 @@ import { root, output } from './build.mjs';
 
 // Dependency order is explicit: this small bundle has no external imports.
 const modules = ['model', 'frequency', 'validation', 'json', 'editor', 'csv', 'channel-tools', 'csv-mapping', 'oem-import'];
-const paths = [...modules.map(name => `src/core/${name}.ts`), 'src/device/oem-readonly.ts', 'src/device/bench-http.ts', 'src/ui/bench-panel.ts', 'src/ui/scan-panel.ts', 'src/ui/channel-fields.ts', 'src/ui/review-panel.ts', 'src/ui/csv-import-panel.ts', 'src/ui/app.ts'];
+const paths = [...modules.map(name => `src/core/${name}.ts`), 'src/device/oem-profile.ts', 'src/device/oem-readonly.ts', 'src/device/bench-http.ts', 'src/ui/bench-panel.ts', 'src/ui/scan-panel.ts', 'src/ui/channel-fields.ts', 'src/ui/review-panel.ts', 'src/ui/csv-import-panel.ts', 'src/ui/app.ts'];
 const example = JSON.parse(await readFile(path.join(root, 'examples/analog.opend578.json'), 'utf8'));
 const parts = [];
 for (const sourcePath of paths) {

@@ -1,0 +1,75 @@
+{
+  "schema": "opend578.real-oem-cps-readonly.v1",
+  "engine": "interactive",
+  "passed": true,
+  "firmwareExecuted": true,
+  "httpExercised": true,
+  "physicalRadio": false,
+  "usbFramesSubmitted": 931,
+  "writeCommandsSubmitted": 0,
+  "lastBoot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "boot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "reads": [
+    {
+      "page": -1,
+      "engine": "0459078979728898",
+      "endAcknowledged": false,
+      "slotCount": 224,
+      "slotSnapshotSha256": "8cd6836dd66b3ff8316c30adb8597dffdf357e090e560c09112f122594f7ac66",
+      "scope": "active-channels"
+    }
+  ],
+  "sessionClosedAtEnd": true,
+  "tones": {
+    "rx": {
+      "none": 167,
+      "ctcss": 56,
+      "dcs": 1
+    },
+    "tx": {
+      "ctcss": 110,
+      "none": 112,
+      "dcs": 2
+    }
+  },
+  "model": "D578UV",
+  "slotCount": 224,
+  "endAcknowledged": true,
+  "slotSnapshotSha256": "8cd6836dd66b3ff8316c30adb8597dffdf357e090e560c09112f122594f7ac66",
+  "scope": "All bitmap-enabled channel records for OEM V1.21; not full device memory or physical radio",
+  "sourceCapturesUnchanged": true,
+  "independentVerification": {
+    "passed": true,
+    "activeChannels": 224,
+    "maxSlot": 224,
+    "banksRead": [
+      0,
+      1
+    ],
+    "verifiedReadReplies": 928,
+    "tones": {
+      "rx": {
+        "none": 167,
+        "ctcss": 56,
+        "dcs": 1
+      },
+      "tx": {
+        "ctcss": 110,
+        "none": 112,
+        "dcs": 2
+      }
+    },
+    "slotSnapshotSha256": "8cd6836dd66b3ff8316c30adb8597dffdf357e090e560c09112f122594f7ac66",
+    "referenceSha256": "4b3e4efb52d43d5ae5e79b318e33bb689d8115d23ccc3c3feb3e448592ff4b7a"
+  }
+}

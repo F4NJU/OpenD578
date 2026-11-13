@@ -1,6 +1,6 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.8 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.9 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM a été qualifié sur la première page du firmware exécuté dans
@@ -230,3 +230,12 @@ La session du banc reste ouverte entre les lectures. Relire ou changer de groupe
 sans redémarrer ; Terminer la session envoie END, débloque l'import puis permet
 de fermer le panneau. Après END ou une interruption, un redémarrage est requis
 car le watchdog OEM n'est pas relancé automatiquement dans le banc.
+
+
+## CPS 0.9 : tous les canaux actifs et CTCSS RX/TX
+
+Lire tous les canaux actifs utilise le bitmap OEM (capacité 4000), les banques de
+canaux, puis un seul END. 224 canaux de la capture qualifiés, avec CTCSS séparés
+RX/TX conservés lors de l'import. Aperçu unique et cumul des groupes manuels.
+Les DCS sont affichés mais non importables dans le schéma FM actuel. Voir
+../docs/cps/OEM_GLOBAL_READ.md pour les sources, la preuve et les limites.

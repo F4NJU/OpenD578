@@ -1,4 +1,4 @@
-# Préparer des canaux depuis le banc OEM — CPS 0.8
+# Préparer des canaux depuis le banc OEM — CPS 0.9
 
 Ouvrir le CPS depuis `/cps/` sur le serveur Python du banc, puis **Banc émulé**.
 Les lectures successives gardent la session ouverte. Cliquer sur Terminer la session envoie END ; après cet acquittement, la préparation d’un import est disponible.
@@ -72,3 +72,18 @@ passer au suivant ; ils ne sont pas automatiquement cumulés dans le document.
 Reproduction : OPEND578_READ_SEQUENCE='0,0,1' avec OPEND578_BENCH_ENGINE='interactive'
 pour tools/qualify_cps_python.mjs. Désactiver OPEND578_COMPARE_OEM pour une
 séquence multi-page ; cette comparaison ne concerne qu'une page zéro isolée.
+
+
+## Mise à jour 0.9 : lecture globale et conservation des tonalités
+
+Utiliser Lire tous les canaux actifs pour une seule lecture globale ; le CPS
+lit l'index et les canaux actifs puis envoie END automatiquement. Le résultat
+regroupe tous les canaux lus dans un seul aperçu d'import. Les groupes manuels
+se cumulent avant Terminer la session ; les sélections restent cochées.
+
+Les CTCSS RX et TX décodés sont conservés. « Aucune » est un état explicite,
+différent d'une tonalité inconnue. DCS et valeurs inconnues bloquent l'import
+plutôt que de devenir silencieusement « sans tonalité ». Largeur et puissance
+PC sont toujours choisies ; les nouveaux canaux restent en réception seule.
+Cette mise à jour remplace les indications anciennes de préparation sans CTCSS
+et de remplacement systématique du dernier groupe. Voir OEM_GLOBAL_READ.md.

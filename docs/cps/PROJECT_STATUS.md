@@ -1,5 +1,38 @@
 # État du travail CPS — 12 novembre 2026
 
+## CPS 0.9 — lecture globale et CTCSS, 13 novembre
+
+Le bouton Lire tous les canaux actifs lit le bitmap des 4000 emplacements OEM,
+puis seulement les records actifs dans les banques espacées. Il ferme la session
+avec un unique END et présente un aperçu d'import cumulé. Il ne lit pas les zones,
+contacts, réglages généraux ou calibrations. Les groupes manuels restent possibles ;
+ils sont cumulés et une relecture remplace les valeurs du même emplacement.
+La sélection peut être préparée pendant une session ouverte et survit à END.
+L'import reste interdit jusqu'à END acquitté.
+
+CTCSS RX/TX sont désormais indépendants et conservés à l'import, y compris
+l'absence explicite de tonalité. Les DCS sont reconnus/affichés mais leur import
+est refusé car le document FM ne les représente pas. Les codes inconnus et les
+CTCSS personnalisés hors plage conservatrice restent inconnus, jamais supprimés
+silencieusement. La largeur et la puissance PC restent des choix de préparation ;
+TX est toujours inhibée. Les modes mixtes/DMR ne sont pas convertis vers FM.
+
+Qualification réelle réussie : 224 canaux actifs (numéros 1 à 224, deux banques),
+bitmap et 928 réponses R vérifiées, 931 trames soumises dont un seul END, aucune W.
+166 CTCSS décodés : 56 RX et 110 TX ; également 1 DCS RX et 2 DCS TX.
+Un vérificateur Python indépendant a repris le flux USB observé et la table XML
+V1.21 publiée : le SHA256 de tous les champs des 224 canaux concorde exactement
+avec le résultat TypeScript. Rapport : qualification/native-global-tones-2026-11-13.json.
+La carte complète jusqu'à 4000 est bornée/testée synthétiquement ; seules les deux
+banques actives de cette capture ont été exécutées. Il ne s'agit pas d'un essai
+sur radio physique ni d'une qualification des CTCSS à la réception RF.
+
+60 tests hôte passent. Builds modulaire et autonome générés ; syntaxe vérifiée.
+Les captures source sont inchangées. Contrôle visuel des nouvelles commandes à
+confirmer dans le navigateur utilisateur. Sources, adresses et reproduction :
+OEM_GLOBAL_READ.md. Les descriptions des versions antérieures ci-dessous sont
+historiques, notamment la limite de 128 et l'absence de décodage des tonalités.
+
 ## CPS 0.8 — lectures successives dans une session, 13 novembre
 
 Le firmware OEM demande un reset watchdog après END. L'essai de deux sessions
