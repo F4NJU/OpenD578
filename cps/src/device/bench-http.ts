@@ -15,7 +15,10 @@ export class BenchHttpApi {
   private signal: AbortSignal;
   private fetcher: typeof fetch;
   constructor(options: { signal?: AbortSignal; fetcher?: typeof fetch } = {}) {
-    this.signal = options.signal ?? new AbortController().signal; this.fetcher = options.fetcher ?? fetch;
+    this.signal = options.signal ?? new AbortController().signal;
+    // Browser fetch requires its Window/Worker receiver. Calling an unbound
+    // function as this.fetcher(...) supplies the adapter as receiver instead.
+    this.fetcher = options.fetcher ?? globalThis.fetch.bind(globalThis);
   }
   async initialize(): Promise<void> {
     const config = await this.request('config');

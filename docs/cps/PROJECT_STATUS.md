@@ -1,5 +1,16 @@
 # État du travail CPS — 12 novembre 2026
 
+## Correctif navigateur du 13 novembre : contexte de fetch
+
+Le serveur du banc répondait mais le CPS affichait une API inaccessible. Le
+transport conservait fetch sans liaison puis l'appelait comme méthode de
+BenchHttpApi, fournissant le mauvais receveur à la fonction du navigateur.
+La fonction par défaut est maintenant liée à globalThis ; les transports
+injectés gardent leur comportement. Un test reproduit le contrôle du receveur
+exigé par le navigateur. La copie servie sous /cps/ est reconstruite et mise à
+jour sans redémarrer le firmware. La confirmation du parcours dans le navigateur
+utilisateur reste attendue ; les essais Node antérieurs ne prouvaient pas ce point.
+
 ## CPS 0.7 — comparaison de décodage et préparation d'import
 
 Une nouvelle exécution réelle sur le banc natif a comparé le décodeur TypeScript
