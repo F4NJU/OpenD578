@@ -16,6 +16,8 @@ if(!pythonArg||!sourceArg||!outputArg)throw Error('Usage: node tools/qualify_cps
 const python=path.resolve(pythonArg),source=path.resolve(sourceArg),output=path.resolve(outputArg);
 const engine=process.env.OPEND578_BENCH_ENGINE??'python';
 if(!['python','native','interactive'].includes(engine))throw Error('Invalid bench engine');
+const pages=(process.env.OPEND578_READ_SEQUENCE??'0').split(',').map(Number);
+if(!pages.length||pages.length>5||pages.some(page=>!Number.isInteger(page)||page<0||page>3))throw Error('Invalid page sequence');
 fs.mkdirSync(output,{recursive:true});
 if(fs.existsSync(path.join(output,'stop.request')))throw Error('Choose a fresh result directory.');
 const report={schema:'opend578.real-oem-cps-readonly.v1',engine,passed:false,firmwareExecuted:false,httpExercised:false,physicalRadio:false,usbFramesSubmitted:0,writeCommandsSubmitted:0};
@@ -25,6 +27,7 @@ const deadline=AbortSignal.timeout(bootTimeout+90000);
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let origin='',token='',server;
 const compare=process.env.OPEND578_COMPARE_OEM==='1',received=new Map();
+if(compare&&(pages.length!==1||pages[0]!==0))throw Error('Decoder comparison supports a single page-zero read');
 // Plain HTTP transport to the locally spawned server, without an environment proxy.
 function request(url,init={}) {
   if(new URL(url).pathname==='/api/usb/write'){
@@ -66,14 +69,23 @@ try {
   }
   const transport=new BenchHttpApi({signal:deadline,fetcher:(route,init)=>request(origin+route,{...init,headers:{...init.headers,Origin:origin}})});
   await transport.initialize();
-  const snapshot=await new OemReadOnlyClient(async(route,data)=>{
+  report.reads=[];
+  let snapshot;
+  const client=new OemReadOnlyClient(async(route,data)=>{
     const reply=await transport.request(route,data);
     if(compare&&route.startsWith('usb/cdc?cursor=')&&typeof reply.received_hex==='string'&&Number.isSafeInteger(reply.received_base)){
       const bytes=Buffer.from(reply.received_hex,'hex');
       bytes.forEach((byte,index)=>received.set(reply.received_base+index,byte));
     }
     return reply;
-  },{signal:deadline,progress:(done,total)=>{if(done%512===0)console.log(JSON.stringify({phase:'read',done,total}));}}).readPage(0);
+  },{signal:deadline,progress:(done,total)=>{if(done%512===0)console.log(JSON.stringify({phase:'read',done,total}));}});
+  for(const page of pages){
+  received.clear();
+  snapshot=await client.readPage(page,{keepSession:true});
+  report.reads.push({page,engine:snapshot.engine,endAcknowledged:snapshot.endAcknowledged,slotCount:snapshot.slots.length,slotSnapshotSha256:crypto.createHash('sha256').update(JSON.stringify(snapshot.slots)).digest('hex')});
+  }
+  await client.endSession();
+  report.sessionClosedAtEnd=true; snapshot={...snapshot,endAcknowledged:true};
   if(compare)report.decoderComparison=compareOemPage(pageFromReplies(received),snapshot.slots,path.join(repo,'bench/web/mini_cps_protocol.js'));
   report.passed=true;report.model=snapshot.model;report.slotCount=snapshot.slots.length;report.endAcknowledged=snapshot.endAcknowledged;
   report.slotSnapshotSha256=crypto.createHash('sha256').update(JSON.stringify(snapshot.slots)).digest('hex');

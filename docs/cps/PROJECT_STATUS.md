@@ -1,5 +1,32 @@
 # État du travail CPS — 12 novembre 2026
 
+## CPS 0.8 — lectures successives dans une session, 13 novembre
+
+Le firmware OEM demande un reset watchdog après END. L'essai de deux sessions
+PROGRAM/lecture/END successives sur le même moteur a été arrêté sur
+watchdog reset requested (FWDGT, PC 0x08099FD0, automatic_reboot false).
+L'ACK de END ne permet donc pas de rouvrir immédiatement une session.
+
+Le CPS conserve désormais PROGRAM ouvert entre les lectures. Le bouton
+Terminer la session envoie END une seule fois. Import et fermeture du panneau
+sont disponibles après cet ACK ; jusque-là on peut relire un groupe ou en changer.
+Annulation, perte de session, compteur USB inattendu ou END invalide imposent
+un redémarrage ; aucun renvoi automatique, aucun contournement du watchdog.
+Après Terminer, une nouvelle session exige toujours le redémarrage du moteur.
+
+Qualification réelle réussie : pages 0, 0 et 1 sur le même moteur et la même
+connexion, un PROGRAM, une identité, 384 R, un END, 387 trames soumises, aucune W.
+Les deux lectures de la page 0 ont la même empreinte. Rapport :
+qualification/native-repeat-2026-11-13.json. Ce test qualifie les lectures
+successives avant END ; il ne qualifie pas le redémarrage automatique après END.
+Les deux groupes ont été lus, pas une validation constructeur des champs RF.
+
+55 tests hôte réussis : dont 12 contrôles protocole vérifiant la réutilisation,
+la fin unique, les erreurs, l'abandon et les clients concurrents. Builds modulaire
+et autonome générés. Le nouveau parcours graphique reste à confirmer par
+l'utilisateur. Une session déjà fermée/abandonnée sous l'ancienne version doit
+être redémarrée une dernière fois avant d'utiliser les lectures successives.
+
 ## Correctif navigateur du 13 novembre : contexte de fetch
 
 Le serveur du banc répondait mais le CPS affichait une API inaccessible. Le

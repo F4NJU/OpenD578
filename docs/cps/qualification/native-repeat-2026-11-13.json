@@ -1,0 +1,51 @@
+{
+  "schema": "opend578.real-oem-cps-readonly.v1",
+  "engine": "interactive",
+  "passed": true,
+  "firmwareExecuted": true,
+  "httpExercised": true,
+  "physicalRadio": false,
+  "usbFramesSubmitted": 387,
+  "writeCommandsSubmitted": 0,
+  "lastBoot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "boot": {
+    "steps": 52270001,
+    "pixels": 132707,
+    "modelSeconds": 8.445,
+    "applicationRunning": true
+  },
+  "reads": [
+    {
+      "page": 0,
+      "engine": "7bb03ff72f810fb1",
+      "endAcknowledged": false,
+      "slotCount": 32,
+      "slotSnapshotSha256": "e854e4bc68c22f16935d17e02fcb7e3f88d514322b12122eaa2b1c7c46fe234e"
+    },
+    {
+      "page": 0,
+      "engine": "7bb03ff72f810fb1",
+      "endAcknowledged": false,
+      "slotCount": 32,
+      "slotSnapshotSha256": "e854e4bc68c22f16935d17e02fcb7e3f88d514322b12122eaa2b1c7c46fe234e"
+    },
+    {
+      "page": 1,
+      "engine": "7bb03ff72f810fb1",
+      "endAcknowledged": false,
+      "slotCount": 32,
+      "slotSnapshotSha256": "4915a7c4513226dd4971a9eef87604a3cf2af03a01ffa703d320ab12cd1bd741"
+    }
+  ],
+  "sessionClosedAtEnd": true,
+  "model": "D578UV",
+  "slotCount": 32,
+  "endAcknowledged": true,
+  "slotSnapshotSha256": "4915a7c4513226dd4971a9eef87604a3cf2af03a01ffa703d320ab12cd1bd741",
+  "scope": "Same open PROGRAM session, pages 0,0,1, single final END; no physical radio"
+}

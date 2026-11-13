@@ -1,7 +1,7 @@
-# Préparer des canaux depuis le banc OEM — CPS 0.7
+# Préparer des canaux depuis le banc OEM — CPS 0.8
 
 Ouvrir le CPS depuis `/cps/` sur le serveur Python du banc, puis **Banc émulé**.
-Après une lecture et END acquitté, le panneau propose la préparation d'un import.
+Les lectures successives gardent la session ouverte. Cliquer sur Terminer la session envoie END ; après cet acquittement, la préparation d’un import est disponible.
 Depuis le HTML autonome, le bouton du banc ouvre le CPS connecté dans un autre
 onglet ; les documents des deux onglets restent dans leurs sessions respectives.
 Exporter le JSON pour déplacer le document entre ces sessions.
@@ -51,3 +51,24 @@ TX inhibée, refus de conversion numérique vers FM, annulation/rétablissement,
 sauvegarde JSON et comparaison synthétique des décodeurs. Les autres pages,
 les fonctions après END, le poste physique et le nouveau firmware restent à
 qualifier. Le nouveau parcours graphique reste à vérifier manuellement.
+
+
+## Relire sans redémarrer — version 0.8
+
+Après Identifier et lire, cliquer de nouveau pour relire le même groupe, ou
+changer le groupe puis lire. Le même client conserve la session USB et contrôle
+ses compteurs avant la suite. Cliquer Terminer la session seulement quand les
+lectures sont finies : le firmware demande ensuite son reset, qui n'est pas
+automatiquement exécuté par le banc. Une nouvelle session après END requiert
+un redémarrage. Ne pas recharger l'onglet au milieu d'une session ; sa perte ou
+une annulation impose également un redémarrage. Aucun END n'est renvoyé après
+un échec ambigu.
+
+Les instantanés exportés avant fermeture portent endAcknowledged: false.
+L'import dans le document reste désactivé jusqu'à END acquitté, puis utilise
+le dernier groupe lu. Les groupes précédents peuvent être exportés avant de
+passer au suivant ; ils ne sont pas automatiquement cumulés dans le document.
+
+Reproduction : OPEND578_READ_SEQUENCE='0,0,1' avec OPEND578_BENCH_ENGINE='interactive'
+pour tools/qualify_cps_python.mjs. Désactiver OPEND578_COMPARE_OEM pour une
+séquence multi-page ; cette comparaison ne concerne qu'une page zéro isolée.

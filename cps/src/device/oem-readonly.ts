@@ -19,7 +19,7 @@ export interface OemSnapshot {
   page: number;
   readAt: string;
   slots: OemSlot[];
-  endAcknowledged: true;
+  endAcknowledged: boolean;
 }
 interface CdcState {
   state: string; engine_instance: string; session: string;
@@ -86,16 +86,19 @@ export function decodeOemPage(bytes: Uint8Array, page: number): OemSlot[] {
   });
 }
 
-/** A single identify/read/END transaction; subsequent attempts require an engine restart. */
+/** Read sessions may span pages; END or ambiguous failures require a fresh engine. */
 export class OemReadOnlyClient {
   private api: BenchApi;
   private signal: AbortSignal;
   private progress: (done: number, total: number) => void;
-  private markEngine: (engine: string) => void;
+  private markEngine: (engine: string | null) => void;
   private spent: string | null;
+  private programming = false;
+  private faulted = false;
+  get sessionOpen(): boolean { return this.programming && !this.faulted; }
   private engine = ''; private session = ''; private cursor = 0; private sent = 0; private busy = false;
 
-  constructor(api: BenchApi, options: { signal?: AbortSignal; progress?: (done: number, total: number) => void; spentEngine?: string | null; markEngine?: (engine: string) => void } = {}) {
+  constructor(api: BenchApi, options: { signal?: AbortSignal; progress?: (done: number, total: number) => void; spentEngine?: string | null; markEngine?: (engine: string | null) => void } = {}) {
     this.api = api; this.signal = options.signal ?? new AbortController().signal;
     this.progress = options.progress ?? (() => {}); this.spent = options.spentEngine ?? null;
     this.markEngine = options.markEngine ?? (() => {});
@@ -148,25 +151,50 @@ export class OemReadOnlyClient {
     }
     throw new Error('Délai de réponse OEM dépassé. Aucune commande n’est répétée ; redémarrez le banc.');
   }
-  async readPage(page: number): Promise<OemSnapshot> {
+  private async finishSession(): Promise<void> {
+    await this.checkOwnedSession();
+    if (oemHex(await this.exchange(new TextEncoder().encode('END'), 1)) !== '06') throw new Error('END non acquitté ; redémarrez le banc.');
+    this.programming = false;
+  }
+  private async checkOwnedSession(): Promise<void> {
+    const state = await this.status();
+    if (state.state !== 'ready' || state.retryable || state.engine_instance !== this.engine || state.session !== this.session ||
+      state.sent_total !== this.sent || state.received_total !== this.cursor || state.queued_bytes !== 0) throw new Error('Session USB modifiée : redémarrez le banc.');
+  }
+  async endSession(): Promise<void> {
+    if (this.busy) throw new Error('Une lecture est déjà en cours.');
+    if (this.faulted) throw new Error('Session interrompue : redémarrez le banc.');
+    if (!this.programming) return;
+    this.busy = true;
+    try { await this.finishSession(); }
+    catch (error) { this.faulted = true; this.programming = false; throw error; }
+    finally { this.busy = false; }
+  }
+  async readPage(page: number, options: { keepSession?: boolean } = {}): Promise<OemSnapshot> {
     if (this.busy) throw new Error('Une lecture est déjà en cours.');
     if (!Number.isInteger(page) || page < 0 || page > 3) throw new Error('Choisir un groupe de 32 emplacements entre 1 et 128.');
     this.busy = true;
     try {
-      await this.connect(); this.checkAbort();
-      this.spent = this.engine; this.markEngine(this.engine);
-      const response = await this.exchange(new TextEncoder().encode('PROGRAM'), 3);
-      if (oemHex(response) !== '515806') throw new Error('Réponse PROGRAM non reconnue.');
-      const identity = await this.exchange(new Uint8Array([2]), 16);
-      if (oemHex(identity.slice(0, 8)) !== '4944353738555600' || identity[15] !== 6) throw new Error('Identité OEM D578UV non reconnue : lecture refusée.');
+      if (this.faulted) throw new Error('Session interrompue : redémarrez le banc.');
+      if (!this.programming) {
+        await this.connect(); this.checkAbort();
+        this.spent = this.engine; this.markEngine(this.engine);
+        const response = await this.exchange(new TextEncoder().encode('PROGRAM'), 3);
+        if (oemHex(response) !== '515806') throw new Error('Réponse PROGRAM non reconnue.');
+        const identity = await this.exchange(new Uint8Array([2]), 16);
+        if (oemHex(identity.slice(0, 8)) !== '4944353738555600' || identity[15] !== 6) throw new Error('Identité OEM D578UV non reconnue : lecture refusée.');
+        this.programming = true;
+      } else {
+        await this.checkOwnedSession();
+      }
       const bytes = new Uint8Array(PAGE_BYTES);
       for (let offset = 0; offset < PAGE_BYTES; offset += 16) {
         const address = OEM_BASE + page * PAGE_BYTES + offset;
         bytes.set(checkOemResponse(await this.exchange(oemReadCommand(address), 24), address), offset);
         this.progress(offset + 16, PAGE_BYTES);
       }
-      if (oemHex(await this.exchange(new TextEncoder().encode('END'), 1)) !== '06') throw new Error('END non acquitté ; redémarrez le banc.');
-      return { engine: this.engine, model: 'D578UV', page, readAt: new Date().toISOString(), slots: decodeOemPage(bytes, page), endAcknowledged: true };
-    } finally { this.busy = false; }
+      if (!options.keepSession) await this.finishSession();
+      return { engine: this.engine, model: 'D578UV', page, readAt: new Date().toISOString(), slots: decodeOemPage(bytes, page), endAcknowledged: !options.keepSession };
+    } catch (error) { this.faulted = true; this.programming = false; throw error; } finally { this.busy = false; }
   }
 }

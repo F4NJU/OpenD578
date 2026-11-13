@@ -14,7 +14,7 @@ function samplePage(): Uint8Array {
 }
 
 // Host protocol fixtures only: these canned replies do not qualify a firmware or emulator.
-function wire(options: { corrupt?: boolean; wrongId?: boolean; extra?: boolean; reset?: boolean; overflow?: boolean; split?: boolean } = {}) {
+function wire(options: { corrupt?: boolean; wrongId?: boolean; extra?: boolean; reset?: boolean; overflow?: boolean; split?: boolean; badEnd?: boolean } = {}) {
   const requests: Uint8Array[] = [];
   const source = samplePage();
   let sent = 0, total = 0, engine = 'engine-a', polls = 0;
@@ -33,7 +33,7 @@ function wire(options: { corrupt?: boolean; wrongId?: boolean; extra?: boolean; 
         pending.set(source.slice((address - OEM_BASE) % 2048, (address - OEM_BASE) % 2048 + 16), 6);
         pending[22] = pending.slice(1, 22).reduce((sum, byte) => sum + byte, 0) & 255; pending[23] = 6;
         if (options.corrupt) pending[22] ^= 1;
-      } else pending = new Uint8Array([6]);
+      } else pending = new Uint8Array([options.badEnd ? 0 : 6]);
       if (options.extra && requests.length === 1) pending = new Uint8Array([...pending, 42]);
       return { queued: true };
     }
@@ -50,7 +50,7 @@ function wire(options: { corrupt?: boolean; wrongId?: boolean; extra?: boolean; 
 }
 
 test('bounded transaction identifies and reads exactly 32 slots then sends END, with no W frames', async () => {
-  const fixture = wire(); let marked = ''; let done = 0;
+  const fixture = wire(); let marked: string | null = ''; let done = 0;
   const client = new OemReadOnlyClient(fixture.api, { markEngine: engine => { marked = engine; }, progress: count => { done = count; } });
   const result = await client.readPage(3);
   assert.equal(result.model, 'D578UV'); assert.equal(result.slots[0].slot, 97);
@@ -71,6 +71,62 @@ test('fragmented USB replies are reassembled without assuming one HTTP poll per 
   const fixture = wire({ split: true });
   const result = await new OemReadOnlyClient(fixture.api).readPage(0);
   assert.equal(result.slots[0].rxHz, 145500000);
+});
+
+test('failed sessions, including invalid END, remain blocked across clients', async () => {
+  for (const options of [{ wrongId: true }, { corrupt: true }, { badEnd: true }]) {
+    const fixture = wire(options); let blocked: string | null = null;
+    const client = new OemReadOnlyClient(fixture.api, { markEngine: engine => { blocked = engine; } });
+    await assert.rejects(client.readPage(0));
+    assert.equal(blocked, 'engine-a');
+    const before = fixture.requests.length;
+    await assert.rejects(client.readPage(1), /redémarrez/i);
+    await assert.rejects(new OemReadOnlyClient(fixture.api, { spentEngine: blocked }).readPage(1), /Redémarrez/);
+    assert.equal(fixture.requests.length, before);
+  }
+});
+
+test('successive pages reuse PROGRAM and identity; END is sent once on explicit finish', async () => {
+  const fixture = wire(); const client = new OemReadOnlyClient(fixture.api);
+  const first = client.readPage(0, { keepSession: true });
+  await assert.rejects(client.readPage(1), /cours/);
+  assert.equal((await first).endAcknowledged, false);
+  assert.equal(client.sessionOpen, true);
+  const again = await client.readPage(0, { keepSession: true });
+  const next = await client.readPage(1, { keepSession: true });
+  assert.equal(next.slots[0].slot, 33); assert.equal(again.endAcknowledged, false);
+  assert.equal(fixture.requests.filter(bytes => bytes[0] === 80).length, 1);
+  assert.equal(fixture.requests.filter(bytes => bytes[0] === 82).length, 384);
+  assert.equal(fixture.requests.filter(bytes => bytes[0] === 69).length, 0);
+  await client.endSession(); await client.endSession();
+  assert.equal(client.sessionOpen, false); assert.equal(fixture.requests.length, 387);
+  const before = fixture.requests.length;
+  await assert.rejects(client.readPage(0), /Redémarrez/);
+  assert.equal(fixture.requests.length, before);
+});
+
+test('abandoning an open session never allows a fresh client to bypass quarantine', async () => {
+  const fixture = wire(); let blocked: string | null = null;
+  const client = new OemReadOnlyClient(fixture.api, { markEngine: engine => { blocked = engine; } });
+  await client.readPage(0, { keepSession: true });
+  await assert.rejects(new OemReadOnlyClient(fixture.api, { spentEngine: blocked }).readPage(0), /Redémarrez/);
+  assert.equal(fixture.requests.length, 130);
+});
+
+test('foreign traffic between pages blocks both another read and END without sending a command', async () => {
+  for (const action of ['read', 'end']) {
+    const fixture = wire(); let foreign = false;
+    const api = async (path: string, data?: Record<string, unknown>): Promise<BenchReply> => {
+      const reply = await fixture.api(path, data);
+      return foreign && path.endsWith('view=summary') ? { ...reply, sent_total: Number(reply.sent_total) + 1 } : reply;
+    };
+    const client = new OemReadOnlyClient(api);
+    await client.readPage(0, { keepSession: true }); foreign = true;
+    const before = fixture.requests.length;
+    await assert.rejects(action === 'read' ? client.readPage(1, { keepSession: true }) : client.endSession(), /modifiée/);
+    assert.equal(fixture.requests.length, before);
+    assert.equal(client.sessionOpen, false);
+  }
 });
 
 test('bad checksum, unrecognized identity, extra bytes, engine reset and overflow stop the transaction', async () => {

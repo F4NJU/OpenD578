@@ -1,6 +1,6 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.7 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.8 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM a été qualifié sur la première page du firmware exécuté dans
@@ -222,3 +222,11 @@ identifiants neufs ; les choix de préparation sont explicites et TX reste inhib
 Modes mixtes/DMR et valeurs inconnues sont refusés. Une annulation retire l'ajout.
 Voir ../docs/cps/OEM_IMPORT.md et le rapport de comparaison des deux décodeurs.
 Les champs constructeur non décodés ne sont pas présentés comme récupérés.
+
+
+## CPS 0.8 : lectures successives
+
+La session du banc reste ouverte entre les lectures. Relire ou changer de groupe
+sans redémarrer ; Terminer la session envoie END, débloque l'import puis permet
+de fermer le panneau. Après END ou une interruption, un redémarrage est requis
+car le watchdog OEM n'est pas relancé automatiquement dans le banc.
