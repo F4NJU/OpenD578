@@ -18,6 +18,19 @@ def radio_bits(ram,address):
     return value
 
 class HardwareFirmwareTests(unittest.TestCase):
+    def test_sleep_allowance_renews_after_real_CPU_progress(self):
+        image=bytearray(0x108)
+        struct.pack_into('<II',image,0,0x20018000,0x08006101)
+        struct.pack_into('<I',image,15*4,0x08006105)
+        # Genuine thread WFI/branch and SysTick BX LR; no OEM addresses/ABI.
+        struct.pack_into('<HHH',image,0x100,0xBF30,0xE7FD,0x4770)
+        r=make_runner(bytes(image));r.systick.update({0x10:7,0x14:49999,0x18:49999})
+        # A long succession of short scheduled steps must not consume a
+        # lifetime quota across interrupts which actually execute instructions.
+        r.next_event_delay=lambda:1
+        report,_=r.run_hardware(20)
+        self.assertEqual(report['stop']['kind'],'instruction_budget')
+        self.assertGreater(r.virtual_units,100000)
     def test_non_OEM_image_draws_pixels_and_executes_top_SRAM(self):
         r=make_runner();report,ram=r.run_hardware(12000)
         self.assertEqual(report['stop']['kind'],'instruction_budget')

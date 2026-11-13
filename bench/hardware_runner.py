@@ -421,9 +421,14 @@ class HardwareRunner(FrontRunner):
                             self.publish();self.last_wait_publish=time.monotonic()
                         time.sleep(.02);continue
                     self.halt('waiting for interrupt or event');break
+            before_steps=self.steps
             try:self.cpu.emu_start(self.cpu.reg_read(UC_ARM_REG_PC)|1,0,count=min(10000,limit-self.steps))
             except UcError as error:
                 if self.stop is None:self.halt('CPU execution stopped',error=str(error))
+            # Bound a stretch with no CPU progress, not the whole lifetime of
+            # an interactive run. Otherwise a healthy SysTick/WFI application
+            # eventually exhausts this allowance and stops advancing time.
+            if self.steps>before_steps:idle_budget=100000
             if self.stop and self.stop['kind']=='hardware interrupt delivery required':
                 exception=self.stop['exception'];self.stop=None;self.deliver_systick(exception)
             if self.stop and self.stop['kind']=='waiting for interrupt or event':self.stop=None

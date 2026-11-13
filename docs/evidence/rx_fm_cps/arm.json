@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "scope": "Actual independent ARM firmware + GD32 USB model; no physical radio",
+  "binarySHA256": "d18ec821d63b82bce2b0d7ab18696093dd9376a738e580ca7116fefca6bd1acd",
+  "firmware": "rx-fm-alpha-cps-ro.1",
+  "capabilities": {
+    "vfoRead": true,
+    "vfoWrite": false,
+    "memories": false,
+    "ctcss": false,
+    "dcs": false,
+    "tx": false,
+    "persistent": false
+  },
+  "initial": {
+    "protocol": "opend578-cps",
+    "version": 1,
+    "id": 2,
+    "selected": "A",
+    "vfos": [
+      {
+        "id": "A",
+        "rxHz": 145500000,
+        "bandwidth": "wide",
+        "txInhibit": true
+      },
+      {
+        "id": "B",
+        "rxHz": 435000000,
+        "bandwidth": "wide",
+        "txInhibit": true
+      }
+    ]
+  },
+  "encoderChanged": {
+    "protocol": "opend578-cps",
+    "version": 1,
+    "id": 3,
+    "selected": "A",
+    "vfos": [
+      {
+        "id": "A",
+        "rxHz": 145512500,
+        "bandwidth": "wide",
+        "txInhibit": true
+      },
+      {
+        "id": "B",
+        "rxHz": 435000000,
+        "bandwidth": "wide",
+        "txInhibit": true
+      }
+    ]
+  },
+  "writeRejected": true,
+  "txGateSetObservations": 0,
+  "steps": 11560000,
+  "USB": {
+    "state": "ready",
+    "sentBytes": 62,
+    "receivedBytes": 678
+  },
+  "OEM_PC_hooks": false,
+  "OEM_RAM_ABI": false
+}
