@@ -13,6 +13,8 @@ if(!pythonArg||!binaryArg||!outputArg)throw Error('Usage: node tools/qualify_ope
 const python=path.resolve(pythonArg),binary=path.resolve(binaryArg),output=path.resolve(outputArg);
 fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'stop.request')))throw Error('Choose a fresh result directory');
 const bytes=fs.readFileSync(binary),signal=AbortSignal.timeout(180000);
+const endpointFile=path.join(repo,'bench/work/web_endpoint.json');
+const previousEndpoint=fs.existsSync(endpointFile)?fs.readFileSync(endpointFile):null;
 const report={passed:false,scope:'HTTP/CDC/independent ARM bench; no physical radio',binarySHA256:crypto.createHash('sha256').update(bytes).digest('hex'),nativeCommands:[]};
 let origin='',token='',server;
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -59,5 +61,9 @@ try{
 finally{
  fs.writeFileSync(path.join(output,'stop.request'),'stop');
  if(origin&&token){try{await api('shutdown',{});}catch{}}
- server?.kill();fs.writeFileSync(path.join(output,'qualification.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
+ server?.kill();
+ // Do not leave the bench's discovery record pointing at this closed test
+ // server, and do not overwrite a newer endpoint created by somebody else.
+ try{if(origin&&JSON.parse(fs.readFileSync(endpointFile,'utf8')).url===origin){if(previousEndpoint)fs.writeFileSync(endpointFile,previousEndpoint);else fs.unlinkSync(endpointFile);}}catch{}
+ fs.writeFileSync(path.join(output,'qualification.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
 }

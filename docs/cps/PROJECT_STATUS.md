@@ -1,5 +1,15 @@
 # État du travail CPS — 12 novembre 2026
 
+## Livraison firmware/CPS — branches et PR
+
+La liaison native est publiée sur F4NJU/OpenD578, feature/cps-core, commit
+39c868f045baf15e27b796b739dd2f2ba1422660. Les seuls changements firmware/runner
+sont isolés sur feature/opend578-cps-readonly, commit
+c9dd7d50e1a5369f7b772a83ead24311b29981c1, pour faciliter la relecture.
+Aucune PR amont n'a été ouverte : attendre l'autorisation explicite de Maxime
+pour cette action qui notifie le dépôt de F4EGM. Le texte proposé est conservé
+dans OPEND578_FIRMWARE_PR_DRAFT.md. Ne pas confondre branche publiée et PR ouverte.
+
 ## CPS 0.10 — première liaison avec le firmware neuf, 13 novembre
 
 Le panneau OpenD578 · VFO est distinct du panneau Banc OEM. Une variante
