@@ -1,6 +1,6 @@
 # CPS OpenD578 — éditeur web hors ligne
 
-Version 0.9 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
+Version 0.10 : édition des canaux analogiques et du VFO, zones et listes de scan ordonnées,
 recherche, sélection multiple, duplication, modifications groupées, suppression,
 annulation/rétablissement et restauration de la dernière session dans le navigateur.
 L'adaptateur OEM a été qualifié sur la première page du firmware exécuté dans
@@ -239,3 +239,11 @@ canaux, puis un seul END. 224 canaux de la capture qualifiés, avec CTCSS sépar
 RX/TX conservés lors de l'import. Aperçu unique et cumul des groupes manuels.
 Les DCS sont affichés mais non importables dans le schéma FM actuel. Voir
 ../docs/cps/OEM_GLOBAL_READ.md pour les sources, la preuve et les limites.
+
+
+## CPS 0.10 : premier lien avec le firmware OpenD578
+
+OpenD578 · VFO identifie la variante rx_fm_cps et lit A/B via son propre protocole
+USB, sans OEM. Lecture seule, réitérable. Mémoires, écriture, CTCSS/DCS, émission
+et persistance sont explicitement indisponibles dans cette alpha. Voir
+../docs/cps/OPEND578_FIRST_LINK.md. Le panneau OEM reste séparé.

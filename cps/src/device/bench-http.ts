@@ -1,4 +1,5 @@
 import { assertOemReadOnly } from './oem-readonly.ts';
+import { assertOpenD578ReadOnly } from './opend578-readonly.ts';
 import type { BenchReply } from './oem-readonly.ts';
 
 export function benchOrigin(value: string): string {
@@ -14,11 +15,13 @@ export class BenchHttpApi {
   private token = '';
   private signal: AbortSignal;
   private fetcher: typeof fetch;
-  constructor(options: { signal?: AbortSignal; fetcher?: typeof fetch } = {}) {
+  private validateWrite: (bytes: Uint8Array) => void;
+  constructor(options: { signal?: AbortSignal; fetcher?: typeof fetch; protocol?: 'oem' | 'opend578-ro' } = {}) {
     this.signal = options.signal ?? new AbortController().signal;
     // Browser fetch requires its Window/Worker receiver. Calling an unbound
     // function as this.fetcher(...) supplies the adapter as receiver instead.
     this.fetcher = options.fetcher ?? globalThis.fetch.bind(globalThis);
+    this.validateWrite = options.protocol === 'opend578-ro' ? assertOpenD578ReadOnly : assertOemReadOnly;
   }
   async initialize(): Promise<void> {
     const config = await this.request('config');
@@ -35,7 +38,7 @@ export class BenchHttpApi {
     if (data !== undefined && !this.token) throw new Error('Banc non identifié.');
     if (path === 'usb/write') {
       if (typeof data?.hex !== 'string' || !/^(?:[a-f0-9]{2})+$/i.test(data.hex)) throw new Error('Commande hexadécimale invalide.');
-      assertOemReadOnly(Uint8Array.from(data.hex.match(/../g)!, byte => parseInt(byte, 16)));
+      this.validateWrite(Uint8Array.from(data.hex.match(/../g)!, byte => parseInt(byte, 16)));
     }
     let response: Response;
     try {

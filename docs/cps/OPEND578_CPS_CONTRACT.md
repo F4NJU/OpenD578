@@ -1,5 +1,11 @@
 # Contrat CPS OpenD578 — proposition 0.2
 
+> État 0.10 : un premier service expérimental OpenD578 en lecture seule est
+> maintenant implémenté dans la variante rx_fm_cps de l'alpha : HELLO/VFOS.
+> Voir OPEND578_FIRST_LINK.md. Le contrat complet de mémoires et d'écriture
+> ci-dessous reste une proposition ; il n'est pas annoncé comme disponible.
+
+
 ## Extension actuelle : format PC v2
 
 Le format exporté par le CPS utilise désormais `schemaVersion: 2` et un tableau

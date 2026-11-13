@@ -5,6 +5,19 @@
 #include <stddef.h>
 #include "../../hal/audio_control.h"
 #include "../../rf/rx_fm.h"
+#ifdef OPEND578_CPS_READONLY
+#include "../../hal/usb_cdc_poll.h"
+#include "../../cps/readonly_protocol.h"
+static d578_cps_parser cps_parser;
+static unsigned cps_generation;
+static int cps_emit(void *user,const uint8_t *data,size_t size){(void)user;return d578_usb_write(data,size);}
+static void cps_poll(const uint32_t *frequency,const uint8_t *width,uint8_t active){
+ d578_usb_poll();unsigned generation=d578_usb_generation();
+ if(generation!=cps_generation){cps_parser.length=0;cps_parser.overflow=0;cps_generation=generation;}
+ uint8_t bytes[64];size_t n=d578_usb_read(bytes,sizeof(bytes));
+ if(n){d578_cps_state state={{frequency[0]*10,frequency[1]*10},{width[0],width[1]},active};d578_cps_feed(&cps_parser,bytes,n,&state,cps_emit,0);}
+}
+#endif
 #define R(a) (*(volatile uint32_t *)(uintptr_t)(a))
 #define A 0x40010800u
 #define B 0x40010c00u
@@ -135,6 +148,9 @@ void Reset_Handler(void){
  for(unsigned i=10;i<=13;i++){pin(B,i,1);mode(B,i,3);}for(unsigned i=7;i<=14;i++)mode(E,i,3);
  pin(A,5,1);mode(A,5,3);pin(B,3,0);pin(B,4,0);mode(B,3,3);mode(B,4,3);backlight();
  if(!clock_120mhz())Default_Handler();
+#ifdef OPEND578_CPS_READONLY
+ d578_usb_init();
+#endif
  R(0xe000e014)=119999;R(0xe000e018)=0;R(0xe000e010)=7;
  pin(B,12,0);delay_ms(10);pin(B,12,1);delay_ms(120);
  cmd(0x11);delay_ms(120);cmd(0x3a);dat(0x55);cmd(0x36);dat(0x48);cmd(0x29);
@@ -154,6 +170,9 @@ void Reset_Handler(void){
  uint32_t last_poll=ticks;uint8_t previous_speaker=255,previous_audible=255,previous_led=255;
  for(;;){
   uint32_t iteration=ticks;unsigned redraw=0;
+#ifdef OPEND578_CPS_READONLY
+  cps_poll(frequencies,narrow,selected);
+#endif
   unsigned k=key(samples[0],samples[1]);if(k==stable_key){if(key_count<4)key_count++;}else{stable_key=(uint8_t)k;key_count=0;}
   if(key_count==4&&k!=last_key){last_key=(uint8_t)k;
    if(k==1){selected^=1;redraw|=16;}

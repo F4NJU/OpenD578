@@ -1,3 +1,4 @@
+import { openOpenD578Panel } from './opend578-panel.ts';
 import type { AnalogSettings, Channel, Codeplug, Zone } from '../core/model.ts';
 import { createCodeplug } from '../core/model.ts';
 import { parseCodeplug, serializeCodeplug } from '../core/json.ts';
@@ -90,10 +91,10 @@ function render(): void {
   if (activeZone && !value.zones.some(zone => zone.id === activeZone)) activeZone = null;
   selected = new Set([...selected].filter(id => value.channels.some(channel => channel.id === id)));
   const zone = value.zones.find(item => item.id === activeZone);
-  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.9</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
+  root.innerHTML = `<header><div class="brand"><div class="mark" aria-hidden="true">D578</div><div><strong>OpenD578</strong><small>Channel programming software</small></div></div><div class="header-right"><span>Éditeur de codeplug · v0.10</span><span class="badge">● Éditeur local · aucune écriture radio</span></div></header>
     <div class="workspace">${sidebar(value)}<main>
     <div class="page-heading"><div><p class="eyebrow">Codeplug / ${zone ? 'Zones' : 'Mémoires analogiques'}</p><h1>${escapeHtml(zone?.name ?? 'Tous les canaux')}</h1><p class="subtitle">Préparez vos mémoires, à votre rythme.</p></div>
-    <div class="actions"><button data-action="review">Vérifier</button><button data-action="bench">Banc émulé</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
+    <div class="actions"><button data-action="review">Vérifier</button><button data-action="native-bench">OpenD578 · VFO</button><button data-action="bench">Banc OEM</button><button data-action="import">Importer</button><button data-action="csv">Exporter CSV</button><button data-action="export" class="primary">↓ Sauvegarder JSON</button></div></div>
     <div class="document-bar"><label for="document-name">Document</label><input id="document-name" value="${escapeHtml(value.name)}"><button class="icon" data-action="new">Nouveau</button><button class="icon" data-action="undo" ${disabled(!history.canUndo)} aria-label="Annuler la dernière modification">↶ Annuler</button><button class="icon" data-action="redo" ${disabled(!history.canRedo)} aria-label="Rétablir la modification">↷ Rétablir</button><span class="save-state">${storageProblem ? '⚠ Sauvegarde locale indisponible : exportez un JSON' : dirty() ? 'Session conservée sur ce navigateur · JSON à sauvegarder' : 'JSON à jour · session conservée sur ce navigateur'}</span></div>
     ${notice ? `<div class="notice ${isError ? 'error' : ''}" role="${isError ? 'alert' : 'status'}">${escapeHtml(notice)}</div>` : ''}
     <div class="toolbar"><input type="search" id="search" class="search" aria-label="Rechercher un canal" placeholder="Rechercher un nom, une fréquence…" value="${escapeHtml(query)}">
@@ -252,6 +253,7 @@ root.addEventListener('click', async event => {
   const action = button.dataset.action, id = button.dataset.id!;
   try {
     switch (action) {
+      case 'native-bench': openOpenD578Panel(); break;
       case 'bench': openBenchPanel(() => history.value, next => commit(next, 'Canaux OEM ajoutés en réception seule. Une annulation retire cet import ; vérifiez les réglages de préparation.')); break;
       case 'scan-lists': openScanPanel(() => history.value, next => commit(next, 'Listes de scan enregistrées dans la session.')); break;
       case 'series': createSeries(); break;

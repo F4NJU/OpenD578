@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "scope": "HTTP/CDC/independent ARM bench; no physical radio",
+  "binarySHA256": "d18ec821d63b82bce2b0d7ab18696093dd9376a738e580ca7116fefca6bd1acd",
+  "nativeCommands": [
+    "HELLO",
+    "VFOS",
+    "HELLO",
+    "VFOS"
+  ],
+  "boot": {
+    "steps": 7900000,
+    "pixels": 20480,
+    "engine": "native hardware"
+  },
+  "firmware": "rx-fm-alpha-cps-ro.1",
+  "capabilities": {
+    "vfoRead": true,
+    "vfoWrite": false,
+    "memories": false,
+    "ctcss": false,
+    "dcs": false,
+    "tx": false,
+    "persistent": false
+  },
+  "vfos": [
+    {
+      "id": "A",
+      "rxHz": 145500000,
+      "bandwidth": "wide",
+      "txInhibit": true
+    },
+    {
+      "id": "B",
+      "rxHz": 435000000,
+      "bandwidth": "wide",
+      "txInhibit": true
+    }
+  ],
+  "sameEngineReadCount": 2
+}

@@ -6,6 +6,12 @@ Ce programme ARM indépendant initialise les quatre banques RF et commande deux 
 
 **Livraison : programme de commandes RX vérifié dans le banc, pas encore une réception FM validée sur le poste.** L'émulateur ne démodule pas un signal RF. Les entrées de détecteurs et WAV restent des sources d'essai explicites. Le binaire brut n'est pas un paquet CPS à installer.
 
+## Variante CPS en lecture seule
+
+Le binaire de référence décrit ci-dessous reste inchangé. Une variante opt-in
+rx_fm_cps ajoute l'identification USB et la lecture des deux VFO, sans commandes
+OEM. Voir [CPS_READONLY.md](CPS_READONLY.md). Elle reste réservée au banc.
+
 ## Essayer
 
 Dans le simulateur Web, cliquer sur **Essayer la réception FM alpha**. Aucune sauvegarde OEM n'est nécessaire. Les fréquences initiales sont A = 145,500 MHz et B = 435,000 MHz.

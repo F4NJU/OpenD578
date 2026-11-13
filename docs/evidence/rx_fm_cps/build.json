@@ -1,0 +1,16 @@
+{
+  "scope": "Independent RX FM + read-only USB bench experiment; not a flashable OEM package",
+  "target": "Cortex-M4 soft-float",
+  "loadAddress": "0x08006000",
+  "binaryBytes": 12007,
+  "binarySHA256": "d18ec821d63b82bce2b0d7ab18696093dd9376a738e580ca7116fefca6bd1acd",
+  "sources": {
+    "firmware/experiments/rx_fm_alpha/main.c": "cb6a0b8eb605a4970ae6ad8ddb92cd0d41ed44726a8ec9b22b1700b18c32c89f",
+    "firmware/hal/audio_control.c": "198a9ece1a1d640f04b31fd10e0c4d0ea03c08616caf08ab116f9247369890e3",
+    "firmware/rf/rx_fm.c": "cceefa3fd9012647851eebd57357c45c602f90db9fe6802af8c3c58a8d65cc73",
+    "firmware/cps/readonly_protocol.c": "fb1b910e1c2dbc12cd84a95dfb3a9d7d8433eaa7623161002627231a27d635e0",
+    "firmware/hal/usb_cdc_poll.c": "3d8cf47cbba532c4dcc5618ef47e44336ef2cf20b06af15d350173f87a686803",
+    "firmware/hal/freestanding_memory.c": "b66571d0927a52dda908786160bdf781e4a8e2f71866818c285ec67b8b4032d1"
+  },
+  "compiler": "0.15.2"
+}

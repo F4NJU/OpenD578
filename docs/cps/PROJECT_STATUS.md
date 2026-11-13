@@ -1,5 +1,34 @@
 # État du travail CPS — 12 novembre 2026
 
+## CPS 0.10 — première liaison avec le firmware neuf, 13 novembre
+
+Le panneau OpenD578 · VFO est distinct du panneau Banc OEM. Une variante
+opt-in de rx_fm_alpha ajoute un pilote USBD CDC polling et un service ASCII/JSON
+versionné en lecture seule : HELLO puis VFOS. Les valeurs proviennent des variables
+propres à l'alpha ; aucune routine OEM, adresse de codeplug ou capture NAND.
+Les binaires alpha existants ne sont pas remplacés. La nouvelle variante se nomme
+rx_fm_cps.bin ; elle est réservée au banc et n'est pas un paquet à flasher.
+
+Preuves réelles : USB énuméré par le programme ARM, A=145,500 et B=435,000 MHz,
+valeur A=145,5125 après une action sur le codeur émulé ; commande WRITE refusée,
+aucune observation de commande levant PE6 ou PC4. Le test HTTP a traversé le
+serveur, l'adaptateur TypeScript, le CDC et l'ARM avec deux lectures sur le même
+moteur. Seuls HELLO/VFOS ont été envoyés par le CPS. Le firmware annonce explicitement
+l'absence de modification VFO, mémoires, CTCSS, DCS, TX et persistance.
+
+Un blocage du runner matériel a aussi été corrigé : son quota d'attente était
+consommé sur toute une exécution longue malgré la progression CPU/SysTick.
+Le quota est renouvelé uniquement après des instructions réellement exécutées.
+Aucun événement n'est sauté ni réponse USB fabriquée. Une régression Thumb
+synthétique et une exécution ARM continue de 10 millions d'instructions passent.
+
+63 tests Node CPS, 8 contrôles du parseur C hôte et 8 tests du runner matériel
+passent. Les tests hôte restent distincts des preuves ARM/HTTP. Les rapports sont
+dans docs/evidence/rx_fm_cps ; le parcours graphique reste à confirmer visuellement.
+Voir OPEND578_FIRST_LINK.md et firmware/experiments/rx_fm_alpha/CPS_READONLY.md.
+Mémoires/écriture, persistance et portage CTCSS restent les étapes suivantes ;
+le succès sur firmware OEM ne les implémente pas dans le firmware neuf.
+
 ## CPS 0.9 — lecture globale et CTCSS, 13 novembre
 
 Le bouton Lire tous les canaux actifs lit le bitmap des 4000 emplacements OEM,
